@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/MicroFish91/portfolio-instruments-api/cmd/api"
+	"github.com/MicroFish91/portfolio-instruments-api/api"
 	"github.com/MicroFish91/portfolio-instruments-api/db"
 )
 

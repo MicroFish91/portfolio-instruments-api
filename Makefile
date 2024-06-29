@@ -1,11 +1,11 @@
 build:
-	@go build -o bin/portfolioinstruments cmd/main.go 
+	@go build -o bin/portfolioinstruments cmd/api/main.go 
 
 run: build
 	@./bin/portfolioinstruments	
 
 migration:
-	@migrate create -ext sql -dir cmd/migrate/migrations $(filter-out $@,$(MAKECMDGOALS))
+	@migrate create -ext sql -dir migrations $(filter-out $@,$(MAKECMDGOALS))
 
 migrate-up:
 	@go run cmd/migrate/main.go up 
@@ -17,4 +17,4 @@ config-up:
 	@docker-compose up
 
 config-down:
-	@docker-compose down -v
+	@docker-compose down

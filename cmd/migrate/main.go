@@ -24,7 +24,7 @@ func main() {
 	}
 
 	m, err := migrate.NewWithDatabaseInstance(
-		"file://cmd/migrate/migrations",
+		"file://migrations",
 		"postgres",
 		driver,
 	)

@@ -1,6 +1,8 @@
 package api
 
 import (
+	"github.com/MicroFish91/portfolio-instruments-api/api/routes"
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/user"
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5"
 )
@@ -20,11 +22,12 @@ func NewApiServer(addr string, db *pgx.Conn) *ApiServer {
 func (s *ApiServer) Run() error {
 	app := fiber.New()
 
-	app.Get("/ping", func(c fiber.Ctx) error {
-		return c.Status(fiber.StatusOK).JSON(map[string]string{"data": "pong"})
-	})
+	// Initialize stores
+	userStore := user.NewPostgresUserStore(s.db)
 
-	// apiv1 := app.Group("/api/v1")
+	// Initialize handlers
+	userHandler := user.NewUserHandler(userStore)
 
+	routes.RegisterRoutes(app, userHandler)
 	return app.Listen(s.addr)
 }

@@ -1,3 +1,7 @@
+# Migrations
+
+Guide to running db migrations (entrypoint: `cmd/migrate/`).
+
 ### Installation 
 
 Follow the instructions to install the migrate CLI [here](https://github.com/golang-migrate/migrate/blob/master/cmd/migrate/README.md).
@@ -27,10 +31,10 @@ func main() {
 
 ### Examples of Running
 
-- `make migration create-user-table`
+- `make migration create-user-table` (Scaffolds a .sql migration file)
 - `make migrate-up`
 - `make migrate-down`
 
 ### Issues
 
-Had to use the [pg](https://github.com/lib/pq) database driver for migrations specifically due to a legacy issue where migrate hasn't been able to fully support pgx driver yet. pg is no longer actively maintained and the creators have explicitly said to go use pgx instead, which is why I'm using pgx in the actual api implementation.
+Had to use the [pg](https://github.com/lib/pq) database driver for migrations specifically due to a legacy issue where migrate hasn't been able to fully support pgx driver yet. pg is no longer actively maintained and the creators have explicitly said to go use pgx instead, which is why I'm using pgx in the actual api implementation. pg will only be used temporarily here for migrates only.
