@@ -24,3 +24,14 @@ func (s *PostgresUserStore) CreateUser(u *types.User) error {
 	}
 	return nil
 }
+
+func (s *PostgresUserStore) GetUserByEmail(email string) (*types.User, error) {
+	var u types.User
+
+	row := s.db.QueryRow(context.Background(), "SELECT * FROM users WHERE email = $1", email)
+	if err := row.Scan(&u.User_id, &u.Email, &u.Enc_password, &u.Created_at, &u.Updated_at); err != nil {
+		return nil, err
+	}
+
+	return &u, nil
+}

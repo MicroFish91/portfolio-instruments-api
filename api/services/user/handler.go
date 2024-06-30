@@ -1,6 +1,9 @@
 package user
 
 import (
+	"fmt"
+
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 	"github.com/gofiber/fiber/v3"
@@ -24,11 +27,22 @@ func (h *UserHandlerImpl) HandleRegisterUser(c fiber.Ctx) error {
 	}
 
 	// Todo add request validation
-	// Todo add check for existing user
 
-	err := h.store.CreateUser(&types.User{
+	user, _ := h.store.GetUserByEmail(userPayload.Email)
+	if user != nil {
+		// Todo return a properly formatted error
+		return fmt.Errorf("user with provided email already exists")
+	}
+
+	encPassword, err := auth.HashPassword(userPayload.Password)
+	if err != nil {
+		// Todo return a properly formatted error
+		return err
+	}
+
+	err = h.store.CreateUser(&types.User{
 		Email:        userPayload.Email,
-		Enc_password: userPayload.Password, // Todo Needs encryption
+		Enc_password: encPassword,
 	})
 
 	if err != nil {
