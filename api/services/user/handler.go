@@ -3,9 +3,9 @@ package user
 import (
 	"fmt"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -20,13 +20,10 @@ func NewUserHandler(store types.UserStore) *UserHandlerImpl {
 }
 
 func (h *UserHandlerImpl) HandleRegisterUser(c fiber.Ctx) error {
-	var userPayload RegisterUserPayload
-	if err := utils.ParseRequestBody(c, &userPayload); err != nil {
-		// Todo return a properly formatted error
-		return err
+	userPayload, ok := c.Locals(constants.LOCALS_REQ_BODY).(RegisterUserPayload)
+	if !ok {
+		return fmt.Errorf("unable to parse valid user request body")
 	}
-
-	// Todo add request validation
 
 	user, _ := h.store.GetUserByEmail(userPayload.Email)
 	if user != nil {
@@ -34,7 +31,7 @@ func (h *UserHandlerImpl) HandleRegisterUser(c fiber.Ctx) error {
 		return fmt.Errorf("user with provided email already exists")
 	}
 
-	encPassword, err := auth.HashPassword(userPayload.Password)
+	encpw, err := auth.HashPassword(userPayload.Password)
 	if err != nil {
 		// Todo return a properly formatted error
 		return err
@@ -42,7 +39,7 @@ func (h *UserHandlerImpl) HandleRegisterUser(c fiber.Ctx) error {
 
 	err = h.store.CreateUser(&types.User{
 		Email:        userPayload.Email,
-		Enc_password: encPassword,
+		Enc_password: encpw,
 	})
 
 	if err != nil {

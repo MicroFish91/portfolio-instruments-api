@@ -12,7 +12,5 @@ func RegisterRoutes(app *fiber.App, userHandler types.UserHandler) {
 	})
 
 	v1 := app.Group("/api/v1")
-
-	// Register v1 service routes
 	registerUserRoutes(v1, userHandler)
 }

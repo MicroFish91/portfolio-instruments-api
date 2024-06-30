@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func ParseRequestBody(c fiber.Ctx, targetPayload any) error {
+func ParseRequestBody(c fiber.Ctx, targetPayload interface{}) error {
 	b := c.Body()
 	if b == nil {
 		return fmt.Errorf("missing request body")
