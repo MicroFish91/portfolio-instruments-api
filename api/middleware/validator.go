@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"errors"
 	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
@@ -14,21 +15,18 @@ type Validator interface {
 
 func AddRequestBodyValidator[T any]() fiber.Handler {
 	return func(c fiber.Ctx) error {
-		// Parse request body
 		var body T
 		if err := utils.ParseRequestBody(c, &body); err != nil {
-			return err
+			return utils.SendError(c, fiber.StatusBadRequest, fmt.Errorf("error parsing request payload: %v", err.Error()))
 		}
 
-		// Verify implementation of Validator interface
 		v, ok := any(body).(Validator)
 		if !ok {
-			return fmt.Errorf("validation requires a implementation of the Validator interface")
+			return utils.SendError(c, fiber.StatusInternalServerError, errors.New("internal: request payload validation requires an implementation of the Validator interface"))
 		}
 
-		// Validate
 		if err := v.Validate(); err != nil {
-			return err
+			return utils.SendError(c, fiber.StatusBadRequest, fmt.Errorf("invalid request payload: %v", err.Error()))
 		}
 
 		c.Locals(constants.LOCALS_REQ_BODY, body)

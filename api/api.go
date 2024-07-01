@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/MicroFish91/portfolio-instruments-api/api/middleware"
 	"github.com/MicroFish91/portfolio-instruments-api/api/routes"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/user"
 	"github.com/gofiber/fiber/v3"
@@ -20,7 +21,10 @@ func NewApiServer(addr string, db *pgx.Conn) *ApiServer {
 }
 
 func (s *ApiServer) Run() error {
-	app := fiber.New()
+	fconfig := fiber.Config{
+		ErrorHandler: middleware.FallbackHandler,
+	}
+	app := fiber.New(fconfig)
 
 	// Initialize stores
 	userStore := user.NewPostgresUserStore(s.db)

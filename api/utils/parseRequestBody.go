@@ -12,6 +12,5 @@ func ParseRequestBody(c fiber.Ctx, targetPayload interface{}) error {
 	if b == nil {
 		return fmt.Errorf("missing request body")
 	}
-
 	return json.Unmarshal(b, targetPayload)
 }
