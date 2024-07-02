@@ -21,9 +21,7 @@ func GenerateSignedJwt(userId string, email string) (string, error) {
 		Email:  email,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "https://portfolioinstruments.com/api",
-			Subject:   email,
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 2)),
-			NotBefore: jwt.NewNumericDate(time.Now()),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
 	}
@@ -47,12 +45,12 @@ func VerifyJwt(tokenString string) (*JwtClaims, error) {
 
 	claims, ok := t.Claims.(*JwtClaims)
 	if !ok {
-		return nil, errors.New("invalid jwt claims")
+		return nil, errors.New("failed to parse jwt claims")
 	}
 
 	ok = claims.ExpiresAt.After(time.Now())
 	if !ok {
-		return nil, errors.New("provided token has already expired")
+		return nil, errors.New("the provided token has expired")
 	}
 
 	return claims, nil
