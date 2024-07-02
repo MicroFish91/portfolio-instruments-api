@@ -49,7 +49,7 @@ Todo
     | account_id     | UUID      | ✅       | ✅          |
     | name           | TEXT      | ✅       |             |
     | description    | TEXT      |          |             |
-    | tax_shelter    | ENUM      | ✅       |             |
+    | shelter_type   | ENUM      | ✅       |             |
     | institution    | TEXT      | ✅       |             |
     | user_id        | INTEGER   | ✅       |             |
     | created_at     | TIMESTAMP | ✅       |             |
@@ -58,10 +58,12 @@ Todo
 
     Example:  
         account_id = 1
-        description = Savings account ending in 0408
+        name = FID-0904
+        description = Fidelity investment account ending in 0904
         <!-- account_type = savings -->
-        tax_shelter = Taxable | Traditional | Roth | HSA 
+        tax_shelter = Taxable | Traditional | Roth | HSA | 529
         institution = Fidelity
+        user_id = 1
         
 #### Holdings:
 When querying, users should be able to see the global-defined holdings as well as the user-defined holdings.
@@ -71,7 +73,7 @@ When querying, users should be able to see the global-defined holdings as well a
     | holding_id     | UUID      | ✅       | ✅          |
     | name           | TEXT      |          |             |
     | ticker         | TEXT      | ✅       |             |
-    | category       | TEXT      | ✅       |             |
+    | category       | ENUM      | ✅       |             |
     | expense_ratio  | DECIMAL   | ✅       |             |
     | user_id        | INTEGER   | ✅       |             |
     | created_at     | TIMESTAMP | ✅       |             |

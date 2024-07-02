@@ -3,6 +3,7 @@ package api
 import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/middleware"
 	"github.com/MicroFish91/portfolio-instruments-api/api/routes"
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/account"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/user"
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5"
@@ -28,10 +29,12 @@ func (s *ApiServer) Run() error {
 
 	// Initialize stores
 	userStore := user.NewPostgresUserStore(s.db)
+	accountStore := account.NewPostgresAccountStore(s.db)
 
 	// Initialize handlers
 	userHandler := user.NewUserHandler(userStore)
+	accountHandler := account.NewAccountHandler(accountStore)
 
-	routes.RegisterRoutes(app, userHandler)
+	routes.RegisterRoutes(app, userHandler, accountHandler)
 	return app.Listen(s.addr)
 }

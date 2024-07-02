@@ -1,20 +1,31 @@
 package auth
 
 import (
+	"errors"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
 )
 
-const JWT_SECRET = "the-not-so-secret-placeholder-secret"
+const JWT_SECRET = "the-not-so-secret-jwt-secret"
 
-func GenerateSignedJwt(email string) (string, error) {
-	claims := jwt.RegisteredClaims{
-		Issuer:    "https://portfolioinstruments.com/api",
-		Subject:   email,
-		ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 2)),
-		NotBefore: jwt.NewNumericDate(time.Now()),
-		IssuedAt:  jwt.NewNumericDate(time.Now()),
+type JwtClaims struct {
+	UserId string
+	Email  string
+	jwt.RegisteredClaims
+}
+
+func GenerateSignedJwt(userId string, email string) (string, error) {
+	claims := JwtClaims{
+		UserId: userId,
+		Email:  email,
+		RegisteredClaims: jwt.RegisteredClaims{
+			Issuer:    "https://portfolioinstruments.com/api",
+			Subject:   email,
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 2)),
+			NotBefore: jwt.NewNumericDate(time.Now()),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
+		},
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
@@ -24,4 +35,25 @@ func GenerateSignedJwt(email string) (string, error) {
 	}
 
 	return tokenString, err
+}
+
+func VerifyJwt(tokenString string) (*JwtClaims, error) {
+	t, err := jwt.ParseWithClaims(tokenString, &JwtClaims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte(JWT_SECRET), nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := t.Claims.(*JwtClaims)
+	if !ok {
+		return nil, errors.New("invalid jwt claims")
+	}
+
+	ok = claims.ExpiresAt.After(time.Now())
+	if !ok {
+		return nil, errors.New("provided token has already expired")
+	}
+
+	return claims, nil
 }

@@ -6,3 +6,7 @@ type UserHandler interface {
 	HandleLoginUser(fiber.Ctx) error
 	HandleRegisterUser(fiber.Ctx) error
 }
+
+type AccountHandler interface {
+	HandleCreateAccount(fiber.Ctx) error
+}
