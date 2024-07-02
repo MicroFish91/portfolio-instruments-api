@@ -32,11 +32,11 @@ func (h *AccountHandlerImpl) HandleCreateAccount(c fiber.Ctx) error {
 	}
 
 	err := h.store.CreateAccount(&types.Account{
-		Name:         accountPayload.Name,
-		Description:  accountPayload.Description,
-		Shelter_type: accountPayload.Shelter_type,
-		Institution:  accountPayload.Institution,
-		User_id:      userPayload.User_id,
+		Name:        accountPayload.Name,
+		Description: accountPayload.Description,
+		Tax_Shelter: accountPayload.Shelter_type,
+		Institution: accountPayload.Institution,
+		User_id:     userPayload.User_id,
 	})
 
 	if err != nil {

@@ -21,9 +21,9 @@ func (s *PostgresAccountStore) CreateAccount(a *types.Account) error {
 	_, err := s.db.Exec(
 		context.Background(),
 		`INSERT INTO accounts
-		(name, description, shelter_type, institution, user_id)
+		(name, description, tax_shelter, institution, user_id)
 		VALUES ($1, $2, $3, $4, $5)`,
-		a.Name, a.Description, a.Shelter_type, a.Institution, a.User_id,
+		a.Name, a.Description, a.Tax_Shelter, a.Institution, a.User_id,
 	)
 	if err != nil {
 		return err
