@@ -1,5 +1,7 @@
 ## 🗄 Database Design
 
+- Using _'s in model props so as to correspond directly with the SQL database values.  This allows us to easily marshal values using `row.Scan()` in our store logic.
+
 #### Users: 
 
     | Column Name    | Datatype  | Not Null | Primary Key |

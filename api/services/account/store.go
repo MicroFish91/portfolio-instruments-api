@@ -22,8 +22,7 @@ func (s *PostgresAccountStore) CreateAccount(a *types.Account) error {
 		context.Background(),
 		`INSERT INTO accounts
 		(name, description, shelter_type, institution, user_id)
-		VALUES ($1, $2, $3, $4, $5)
-		`,
+		VALUES ($1, $2, $3, $4, $5)`,
 		a.Name, a.Description, a.Shelter_type, a.Institution, a.User_id,
 	)
 	if err != nil {
