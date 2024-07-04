@@ -7,4 +7,5 @@ type UserStore interface {
 
 type AccountStore interface {
 	CreateAccount(*Account) error
+	GetAccounts(userId int) (*[]Account, error)
 }

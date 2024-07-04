@@ -10,12 +10,12 @@ import (
 const JWT_SECRET = "the-not-so-secret-jwt-secret"
 
 type JwtClaims struct {
-	UserId string
+	UserId int
 	Email  string
 	jwt.RegisteredClaims
 }
 
-func GenerateSignedJwt(userId string, email string) (string, error) {
+func GenerateSignedJwt(userId int, email string) (string, error) {
 	claims := JwtClaims{
 		UserId: userId,
 		Email:  email,
@@ -31,7 +31,6 @@ func GenerateSignedJwt(userId string, email string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	return tokenString, err
 }
 

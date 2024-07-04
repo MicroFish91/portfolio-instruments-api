@@ -8,5 +8,6 @@ import (
 )
 
 func registerAccountRoutes(r fiber.Router, h types.AccountHandler) {
+	r.Get("/accounts", h.HandleGetAccounts, middleware.AuthValidator)
 	r.Post("/accounts", h.HandleCreateAccount, middleware.AuthValidator, middleware.AddRequestBodyValidator[account.CreateAccountPayload]())
 }

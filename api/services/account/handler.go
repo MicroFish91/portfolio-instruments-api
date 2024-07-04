@@ -34,14 +34,28 @@ func (h *AccountHandlerImpl) HandleCreateAccount(c fiber.Ctx) error {
 	err := h.store.CreateAccount(&types.Account{
 		Name:        accountPayload.Name,
 		Description: accountPayload.Description,
-		Tax_Shelter: accountPayload.Shelter_type,
+		Tax_shelter: accountPayload.Tax_shelter,
 		Institution: accountPayload.Institution,
+		Is_closed:   accountPayload.Is_closed,
 		User_id:     userPayload.User_id,
 	})
 
 	if err != nil {
 		return utils.SendError(c, fiber.StatusInternalServerError, err)
 	}
-
 	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{})
+}
+
+func (h *AccountHandlerImpl) HandleGetAccounts(c fiber.Ctx) error {
+	userPayload, ok := c.Locals(constants.LOCALS_REQ_USER).(auth.AuthUserPayload)
+	if !ok {
+		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("unable to parse valid user from token"))
+	}
+
+	accounts, err := h.store.GetAccounts(userPayload.User_id)
+	if err != nil {
+		return utils.SendError(c, fiber.StatusInternalServerError, err)
+	}
+
+	return utils.SendJSON(c, fiber.StatusOK, accounts)
 }
