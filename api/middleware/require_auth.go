@@ -12,7 +12,7 @@ import (
 )
 
 // Todo: Add support for verifying different roles
-func AuthValidator(c fiber.Ctx) error {
+func RequireAuth(c fiber.Ctx) error {
 	authHeader := c.Get("Authorization")
 
 	p, err := regexp.Compile(`^Bearer\s(\S+)`)
