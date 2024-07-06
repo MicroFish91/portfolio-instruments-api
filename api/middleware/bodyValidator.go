@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 
@@ -9,14 +10,10 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-type Validator interface {
-	Validate() error
-}
-
-func AddRequestBodyValidator[T any]() fiber.Handler {
+func AddBodyValidator[T any]() fiber.Handler {
 	return func(c fiber.Ctx) error {
 		var body T
-		if err := utils.ParseRequestBody(c, &body); err != nil {
+		if err := parseRequestBody(c, &body); err != nil {
 			return utils.SendError(c, fiber.StatusBadRequest, fmt.Errorf("error parsing request payload: %v", err.Error()))
 		}
 
@@ -32,4 +29,12 @@ func AddRequestBodyValidator[T any]() fiber.Handler {
 		c.Locals(constants.LOCALS_REQ_BODY, body)
 		return c.Next()
 	}
+}
+
+func parseRequestBody(c fiber.Ctx, targetPayload interface{}) error {
+	b := c.Body()
+	if b == nil {
+		return fmt.Errorf("missing request body")
+	}
+	return json.Unmarshal(b, targetPayload)
 }

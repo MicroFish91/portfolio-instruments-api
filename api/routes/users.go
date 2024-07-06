@@ -7,10 +7,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func registerUserRoutes(r fiber.Router, h types.UserHandler) {
-	// GET /me or /users/:id
-	// DEL /users/:id
-	// PUT & PATCH /users/:id
-	r.Post("/login", h.HandleLoginUser, middleware.AddRequestBodyValidator[user.LoginUserPayload]())
-	r.Post("/register", h.HandleRegisterUser, middleware.AddRequestBodyValidator[user.RegisterUserPayload]())
+func registerAuthRoutes(r fiber.Router, h types.UserHandler) {
+	r.Post("/login", h.HandleLoginUser, middleware.AddBodyValidator[user.LoginUserPayload]())
+	r.Post("/register", h.HandleRegisterUser, middleware.AddBodyValidator[user.RegisterUserPayload]())
 }

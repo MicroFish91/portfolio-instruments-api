@@ -10,4 +10,5 @@ type UserHandler interface {
 type AccountHandler interface {
 	HandleCreateAccount(fiber.Ctx) error
 	HandleGetAccounts(fiber.Ctx) error
+	HandleGetAccountById(fiber.Ctx) error
 }

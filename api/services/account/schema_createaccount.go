@@ -1,9 +1,8 @@
 package account
 
 import (
-	validation "github.com/go-ozzo/ozzo-validation/v4"
-
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 type CreateAccountPayload struct {
