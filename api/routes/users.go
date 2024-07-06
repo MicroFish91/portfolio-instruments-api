@@ -8,6 +8,6 @@ import (
 )
 
 func registerAuthRoutes(r fiber.Router, h types.UserHandler) {
-	r.Post("/login", h.HandleLoginUser, middleware.AddBodyValidator[user.LoginUserPayload]())
-	r.Post("/register", h.HandleRegisterUser, middleware.AddBodyValidator[user.RegisterUserPayload]())
+	r.Post("/login", h.LoginUser, middleware.AddBodyValidator[user.LoginUserPayload]())
+	r.Post("/register", h.RegisterUser, middleware.AddBodyValidator[user.RegisterUserPayload]())
 }

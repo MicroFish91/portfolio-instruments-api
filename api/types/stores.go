@@ -1,7 +1,7 @@
 package types
 
 type UserStore interface {
-	CreateUser(*User) error
+	RegisterUser(*User) error
 	GetUserByEmail(email string) (*User, error)
 }
 

@@ -9,7 +9,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func (h *AccountHandlerImpl) HandleGetAccounts(c fiber.Ctx) error {
+func (h *AccountHandlerImpl) GetAccounts(c fiber.Ctx) error {
 	userPayload, ok := c.Locals(constants.LOCALS_REQ_USER).(auth.AuthUserPayload)
 	if !ok {
 		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("unable to parse valid user from token"))

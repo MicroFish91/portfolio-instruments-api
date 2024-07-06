@@ -3,12 +3,12 @@ package types
 import "github.com/gofiber/fiber/v3"
 
 type UserHandler interface {
-	HandleLoginUser(fiber.Ctx) error
-	HandleRegisterUser(fiber.Ctx) error
+	LoginUser(fiber.Ctx) error
+	RegisterUser(fiber.Ctx) error
 }
 
 type AccountHandler interface {
-	HandleCreateAccount(fiber.Ctx) error
-	HandleGetAccounts(fiber.Ctx) error
-	HandleGetAccountById(fiber.Ctx) error
+	CreateAccount(fiber.Ctx) error
+	GetAccounts(fiber.Ctx) error
+	GetAccountById(fiber.Ctx) error
 }

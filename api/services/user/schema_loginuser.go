@@ -16,15 +16,3 @@ func (p LoginUserPayload) Validate() error {
 		validation.Field(&p.Password, validation.Required, validation.Length(5, 60)),
 	)
 }
-
-type RegisterUserPayload struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
-}
-
-func (p RegisterUserPayload) Validate() error {
-	return validation.ValidateStruct(&p,
-		validation.Field(&p.Email, validation.Required, is.Email),
-		validation.Field(&p.Password, validation.Required, validation.Length(5, 60)),
-	)
-}
