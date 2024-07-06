@@ -22,12 +22,12 @@ func (h *AccountHandlerImpl) CreateAccount(c fiber.Ctx) error {
 	}
 
 	err := h.store.CreateAccount(&types.Account{
-		Name:        accountPayload.Name,
-		Description: accountPayload.Description,
-		Tax_shelter: accountPayload.Tax_shelter,
-		Institution: accountPayload.Institution,
-		Is_closed:   accountPayload.Is_closed,
-		User_id:     userPayload.User_id,
+		Name:          accountPayload.Name,
+		Description:   accountPayload.Description,
+		Tax_shelter:   accountPayload.Tax_shelter,
+		Institution:   accountPayload.Institution,
+		Is_deprecated: accountPayload.Is_deprecated,
+		User_id:       userPayload.User_id,
 	})
 
 	if err != nil {

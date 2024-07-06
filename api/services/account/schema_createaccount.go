@@ -6,11 +6,11 @@ import (
 )
 
 type CreateAccountPayload struct {
-	Name        string           `json:"name"`
-	Description string           `json:"description"`
-	Tax_shelter types.TaxShelter `json:"tax_shelter"`
-	Institution string           `json:"institution"`
-	Is_closed   bool             `json:"is_closed"`
+	Name          string           `json:"name"`
+	Description   string           `json:"description"`
+	Tax_shelter   types.TaxShelter `json:"tax_shelter"`
+	Institution   string           `json:"institution"`
+	Is_deprecated bool             `json:"is_deprecated"`
 }
 
 func (p CreateAccountPayload) Validate() error {
@@ -19,6 +19,6 @@ func (p CreateAccountPayload) Validate() error {
 		validation.Field(&p.Description, validation.Length(1, 1024)),
 		validation.Field(&p.Tax_shelter, validation.Required, validation.In(types.TAXABLE, types.TRADITIONAL, types.ROTH, types.HSA, types.FIVE_TWENTY_NINE)),
 		validation.Field(&p.Institution, validation.Required, validation.Length(1, 64)),
-		validation.Field(&p.Is_closed, validation.In(true, false)),
+		validation.Field(&p.Is_deprecated, validation.In(true, false)),
 	)
 }

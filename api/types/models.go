@@ -23,13 +23,13 @@ type User struct {
 }
 
 type Account struct {
-	Account_id  int        `json:"account_id,omitempty"`
-	Name        string     `json:"name"`
-	Description string     `json:"description,omitempty"`
-	Tax_shelter TaxShelter `json:"shelter_type"`
-	Institution string     `json:"institution"`
-	Is_closed   bool       `json:"is_closed"`
-	User_id     int        `json:"user_id"`
-	Created_at  time.Time  `json:"created_at"`
-	Updated_at  time.Time  `json:"updated_at"`
+	Account_id    int        `json:"account_id,omitempty"`
+	Name          string     `json:"name"`
+	Description   string     `json:"description,omitempty"`
+	Tax_shelter   TaxShelter `json:"shelter_type"`
+	Institution   string     `json:"institution"`
+	Is_deprecated bool       `json:"is_deprecated"`
+	User_id       int        `json:"user_id"`
+	Created_at    time.Time  `json:"created_at"`
+	Updated_at    time.Time  `json:"updated_at"`
 }

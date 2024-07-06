@@ -22,10 +22,10 @@ func (h *AccountHandlerImpl) GetAccounts(c fiber.Ctx) error {
 	}
 
 	accounts, err := h.store.GetAccounts(userPayload.User_id, types.GetAccountsStoreOptions{
-		AccountIds:  queryPayload.Ids,
-		TaxShelter:  queryPayload.Tax_shelter,
-		Institution: queryPayload.Institution,
-		Is_closed:   queryPayload.Is_closed,
+		AccountIds:    queryPayload.Ids,
+		TaxShelter:    queryPayload.Tax_shelter,
+		Institution:   queryPayload.Institution,
+		Is_deprecated: queryPayload.Is_deprecated,
 	})
 
 	if err != nil {

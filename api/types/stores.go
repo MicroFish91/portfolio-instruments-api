@@ -6,10 +6,10 @@ type UserStore interface {
 }
 
 type GetAccountsStoreOptions struct {
-	AccountIds  []int
-	TaxShelter  TaxShelter
-	Institution string
-	Is_closed   string
+	AccountIds    []int
+	TaxShelter    TaxShelter
+	Institution   string
+	Is_deprecated string
 }
 
 type AccountStore interface {

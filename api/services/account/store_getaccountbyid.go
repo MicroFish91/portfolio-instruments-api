@@ -16,7 +16,7 @@ func (s *PostgresAccountStore) GetAccountById(userId int, accountId int) (*types
 	)
 
 	var a types.Account
-	err := row.Scan(&a.Account_id, &a.Name, &a.Description, &a.Tax_shelter, &a.Institution, &a.Is_closed, &a.User_id, &a.Created_at, &a.Updated_at)
+	err := row.Scan(&a.Account_id, &a.Name, &a.Description, &a.Tax_shelter, &a.Institution, &a.Is_deprecated, &a.User_id, &a.Created_at, &a.Updated_at)
 
 	if err != nil {
 		return nil, err

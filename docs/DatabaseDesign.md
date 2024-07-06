@@ -51,20 +51,20 @@ Todo
     | account_id     | UUID      | ✅       | ✅          |
     | name           | TEXT      | ✅       |             |
     | description    | TEXT      |          |             |
-    | shelter_type   | ENUM      | ✅       |             |
+    | tax_shelter    | ENUM      | ✅       |             |
     | institution    | TEXT      | ✅       |             |
+    | is_deprecated  | BOOLEAN   | ✅       |             |
     | user_id        | INTEGER   | ✅       |             |
     | created_at     | TIMESTAMP | ✅       |             |
     | updated_at     | TIMESTAMP | ✅       |             |
-    | deleted_at     | TIMESTAMP |          |             |
 
     Example:  
         account_id = 1
         name = FID-0904
         description = Fidelity investment account ending in 0904
-        <!-- account_type = savings -->
         tax_shelter = Taxable | Traditional | Roth | HSA | 529
         institution = Fidelity
+        is_deprecated = false
         user_id = 1
         
 #### Holdings:
@@ -73,19 +73,20 @@ When querying, users should be able to see the global-defined holdings as well a
     | Column Name    | Datatype  | Not Null | Primary Key |
     |----------------|-----------|----------|-------------|
     | holding_id     | UUID      | ✅       | ✅          |
-    | name           | TEXT      |          |             |
+    | name           | TEXT      | ✅       |             |
     | ticker         | TEXT      | ✅       |             |
-    | category       | ENUM      | ✅       |             |
-    | expense_ratio  | DECIMAL   | ✅       |             |
+    | asset_category | ENUM      | ✅       |             |
+    | expense_ratio  | REAL      | ✅       |             |
+    | is_deprecated  | BOOLEAN   | ✅       |             |
     | user_id        | INTEGER   | ✅       |             |
     | created_at     | TIMESTAMP | ✅       |             |
     | updated_at     | TIMESTAMP | ✅       |             |
-    | deleted_at     | TIMESTAMP |          |             |
     
     Example:
         holding_id = 1
         name = Vanguard Total Stock Market Index
         ticker = VTSAX
-        category = TSM,DLCB 
+        asset_category = TSM,DLCB 
         expense_ratio = 0.08
+        is_deprecated = false
         user_id = 1   

@@ -20,8 +20,8 @@ func (s *PostgresAccountStore) GetAccounts(userId int, options types.GetAccounts
 	if options.TaxShelter != "" {
 		err = pgxb.AddWhere("AND tax_shelter = $x", []any{options.TaxShelter})
 	}
-	if options.Is_closed != "" {
-		err = pgxb.AddWhere("AND is_closed = $x", []any{options.Is_closed})
+	if options.Is_deprecated != "" {
+		err = pgxb.AddWhere("AND is_deprecated = $x", []any{options.Is_deprecated})
 	}
 
 	if len(options.AccountIds) > 0 {
@@ -45,7 +45,7 @@ func (s *PostgresAccountStore) GetAccounts(userId int, options types.GetAccounts
 	var accounts []types.Account
 	for rows.Next() {
 		var a types.Account
-		if err := rows.Scan(&a.Account_id, &a.Name, &a.Description, &a.Tax_shelter, &a.Institution, &a.Is_closed, &a.User_id, &a.Created_at, &a.Updated_at); err != nil {
+		if err := rows.Scan(&a.Account_id, &a.Name, &a.Description, &a.Tax_shelter, &a.Institution, &a.Is_deprecated, &a.User_id, &a.Created_at, &a.Updated_at); err != nil {
 			return nil, err
 		}
 

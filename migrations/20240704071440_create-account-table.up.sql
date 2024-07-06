@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS accounts (
     description varchar(1024),
     tax_shelter shelter_type NOT NULL, 
     institution varchar(64) NOT NULL,
-    is_closed boolean NOT NULL DEFAULT false,
+    is_deprecated boolean NOT NULL DEFAULT false,
     user_id integer NOT NULL,
     created_at timestamp DEFAULT current_timestamp,
     updated_at timestamp DEFAULT current_timestamp
