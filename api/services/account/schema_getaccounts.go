@@ -1,9 +1,21 @@
 package account
 
+import (
+	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+)
+
 type GetAccountsQuery struct {
-	Ids []int `json:"ids"`
+	Ids         []int            `json:"ids"`
+	Tax_shelter types.TaxShelter `json:"tax_shelter"`
+	Institution string           `json:"institution"`
+	Is_closed   string           `json:"is_closed"`
 }
 
-func (p GetAccountsQuery) Validate() error {
-	return nil
+func (q GetAccountsQuery) Validate() error {
+	return validation.ValidateStruct(&q,
+		validation.Field(&q.Tax_shelter, validation.In(types.TAXABLE, types.TRADITIONAL, types.ROTH, types.HSA, types.FIVE_TWENTY_NINE)),
+		validation.Field(&q.Institution, validation.Length(1, 64)),
+		validation.Field(&q.Is_closed, validation.In("true", "false")),
+	)
 }

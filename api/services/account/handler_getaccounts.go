@@ -5,6 +5,7 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
+	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -20,7 +21,13 @@ func (h *AccountHandlerImpl) GetAccounts(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid query params from request"))
 	}
 
-	accounts, err := h.store.GetAccounts(userPayload.User_id, queryPayload.Ids)
+	accounts, err := h.store.GetAccounts(userPayload.User_id, types.GetAccountsStoreOptions{
+		AccountIds:  queryPayload.Ids,
+		TaxShelter:  queryPayload.Tax_shelter,
+		Institution: queryPayload.Institution,
+		Is_closed:   queryPayload.Is_closed,
+	})
+
 	if err != nil {
 		return utils.SendError(c, fiber.StatusInternalServerError, err)
 	}

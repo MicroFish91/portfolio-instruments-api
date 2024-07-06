@@ -3,21 +3,39 @@ package account
 import (
 	"context"
 	"fmt"
-	"strings"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/jackc/pgx/v5"
+	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 )
 
-func (s *PostgresAccountStore) GetAccounts(userId int, accountIds []int) (*[]types.Account, error) {
-	var rows pgx.Rows
-	var err error
-	if len(accountIds) == 0 {
-		rows, err = s.getAllAccountsRows(userId)
-	} else {
-		rows, err = s.getSomeAccountsRows(userId, accountIds)
+func (s *PostgresAccountStore) GetAccounts(userId int, options types.GetAccountsStoreOptions) (*[]types.Account, error) {
+	pgxb := querybuilder.NewPgxQueryBuilder()
+	pgxb.AddRaw("SELECT * FROM accounts")
+	err := pgxb.AddWhere("WHERE user_id = $x", []any{userId})
+
+	if options.Institution != "" {
+		err = pgxb.AddWhere("AND institution = $x", []any{options.Institution})
+	}
+	if options.TaxShelter != "" {
+		err = pgxb.AddWhere("AND tax_shelter = $x", []any{options.TaxShelter})
+	}
+	if options.Is_closed != "" {
+		err = pgxb.AddWhere("AND is_closed = $x", []any{options.Is_closed})
 	}
 
+	if len(options.AccountIds) > 0 {
+		err = pgxb.AddWhere(
+			fmt.Sprintf("AND account_id IN (%s)", querybuilder.FillWithPositionals(len(options.AccountIds))),
+			utils.IntSliceToAnySlice(options.AccountIds),
+		)
+	}
+
+	if err != nil {
+		return nil, fmt.Errorf("error formatting sql query using query builder: %s", err.Error())
+	}
+
+	rows, err := s.db.Query(context.Background(), pgxb.Query, pgxb.QueryParams...)
 	if err != nil {
 		return nil, err
 	}
@@ -39,37 +57,4 @@ func (s *PostgresAccountStore) GetAccounts(userId int, accountIds []int) (*[]typ
 	}
 
 	return &accounts, nil
-}
-
-func (s *PostgresAccountStore) getAllAccountsRows(userId int) (pgx.Rows, error) {
-	return s.db.Query(
-		context.Background(),
-		`SELECT *
-		FROM accounts
-		WHERE user_id = $1`,
-		userId,
-	)
-}
-
-func (s *PostgresAccountStore) getSomeAccountsRows(userId int, accountIds []int) (pgx.Rows, error) {
-	inParams := make([]string, len(accountIds))
-
-	queryArgs := make([]interface{}, len(accountIds)+1)
-	queryArgs[0] = userId
-
-	for i := 0; i < len(accountIds); i += 1 {
-		p := fmt.Sprintf("$%d", i+2)
-		inParams[i] = p
-		queryArgs[i+1] = accountIds[i]
-	}
-
-	query := fmt.Sprintf(
-		`SELECT *
-		FROM accounts
-		WHERE user_id = $1
-		AND account_id IN (%s)`,
-		strings.Join(inParams, ", "),
-	)
-
-	return s.db.Query(context.Background(), query, queryArgs...)
 }
