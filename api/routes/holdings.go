@@ -8,5 +8,6 @@ import (
 )
 
 func RegisterHoldingRoutes(r fiber.Router, h types.HoldingHandler) {
+	r.Get("/holdings", h.GetHoldings, middleware.RequireAuth)
 	r.Post("/holdings", h.CreateHolding, middleware.RequireAuth, middleware.AddBodyValidator[holding.CreateHoldingPayload]())
 }
