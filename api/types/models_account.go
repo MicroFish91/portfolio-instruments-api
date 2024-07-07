@@ -7,20 +7,12 @@ import (
 type TaxShelter = string
 
 const (
-	TAXABLE          TaxShelter = "TAXABLE"
-	TRADITIONAL      TaxShelter = "TRADITIONAL"
-	ROTH             TaxShelter = "ROTH"
-	HSA              TaxShelter = "HSA"
+	TAXABLE          TaxShelter = "taxable"
+	TRADITIONAL      TaxShelter = "traditional"
+	ROTH             TaxShelter = "roth"
+	HSA              TaxShelter = "hsa"
 	FIVE_TWENTY_NINE TaxShelter = "529"
 )
-
-type User struct {
-	User_id      int       `json:"user_id,omitempty"`
-	Email        string    `json:"email"`
-	Enc_password string    `json:"-"`
-	Created_at   time.Time `json:"created_at"`
-	Updated_at   time.Time `json:"updated_at"`
-}
 
 type Account struct {
 	Account_id    int        `json:"account_id,omitempty"`

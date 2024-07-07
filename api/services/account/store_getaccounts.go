@@ -27,7 +27,7 @@ func (s *PostgresAccountStore) GetAccounts(userId int, options types.GetAccounts
 	if len(options.AccountIds) > 0 {
 		err = pgxb.AddWhere(
 			fmt.Sprintf("AND account_id IN (%s)", querybuilder.FillWithPositionals(len(options.AccountIds))),
-			utils.IntSliceToAnySlice(options.AccountIds),
+			utils.IntSliceToAny(options.AccountIds),
 		)
 	}
 

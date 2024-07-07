@@ -1,6 +1,31 @@
 CREATE TYPE asset_type AS ENUM (
-    'TSM',
-    'DLCB'
+    'cash',
+    'bills',
+    'stb',
+    'itb',
+    'ltb',
+    'commodities',
+    'gold',
+    'reits',
+    'tsm',
+    'dlcb',
+    'dlcg',
+    'dlcv',
+    'dmcb',
+    'dmcg',
+    'dmcv',
+    'dscg',
+    'dscb',
+    'dscv',
+    'ilcb',
+    'ilcg',
+    'ilcv',
+    'imcb',
+    'imcg',
+    'imcv',
+    'iscb',
+    'iscg',
+    'iscv'
 );
 
 CREATE TABLE IF NOT EXISTS holdings (

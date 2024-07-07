@@ -1,8 +1,8 @@
 CREATE TYPE shelter_type AS ENUM (
-    'TAXABLE',
-    'TRADITIONAL',
-    'ROTH',
-    'HSA',
+    'taxable',
+    'traditional',
+    'roth',
+    'hsa',
     '529'
 );
 

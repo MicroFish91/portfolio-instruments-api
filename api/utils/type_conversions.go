@@ -1,6 +1,6 @@
 package utils
 
-func IntSliceToAnySlice(intSlice []int) []any {
+func IntSliceToAny(intSlice []int) []any {
 	anySlice := make([]any, len(intSlice))
 	for i, v := range intSlice {
 		anySlice[i] = v

@@ -17,7 +17,7 @@ func (p CreateAccountPayload) Validate() error {
 	return validation.ValidateStruct(&p,
 		validation.Field(&p.Name, validation.Required, validation.Length(1, 64)),
 		validation.Field(&p.Description, validation.Length(1, 1024)),
-		validation.Field(&p.Tax_shelter, validation.Required, validation.In(types.TAXABLE, types.TRADITIONAL, types.ROTH, types.HSA, types.FIVE_TWENTY_NINE)),
+		validation.Field(&p.Tax_shelter, validation.Required),
 		validation.Field(&p.Institution, validation.Required, validation.Length(1, 64)),
 		validation.Field(&p.Is_deprecated, validation.In(true, false)),
 	)

@@ -1,10 +1,5 @@
 package types
 
-type UserStore interface {
-	RegisterUser(*User) error
-	GetUserByEmail(email string) (*User, error)
-}
-
 type GetAccountsStoreOptions struct {
 	AccountIds    []int
 	TaxShelter    TaxShelter
