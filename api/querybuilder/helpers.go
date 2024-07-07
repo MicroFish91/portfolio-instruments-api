@@ -2,7 +2,7 @@ package querybuilder
 
 import "strings"
 
-func FillWithPositionals(length int) string {
+func FillWithEmptyPositionals(length int) string {
 	p := make([]string, length)
 	for i := range p {
 		p[i] = "$x"

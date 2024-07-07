@@ -15,11 +15,11 @@ func NewPgxQueryBuilder() *PgxQueryBuilder {
 	return &PgxQueryBuilder{}
 }
 
-func (q *PgxQueryBuilder) AddRaw(s string) {
+func (q *PgxQueryBuilder) AddQuery(s string) {
 	q.Query = fmt.Sprintf("%s\n%s", q.Query, s)
 }
 
-func (q *PgxQueryBuilder) AddWhere(query string, values []any) error {
+func (q *PgxQueryBuilder) AddQueryWithPositionals(query string, values []any) error {
 	query, n := q.replaceWithIncrementingPositionals(query)
 	if n != len(values) {
 		return fmt.Errorf("internal: found %d positional params, but only %d matching values", n, len(values))

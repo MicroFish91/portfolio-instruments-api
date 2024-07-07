@@ -11,22 +11,22 @@ import (
 
 func (s *PostgresAccountStore) GetAccounts(userId int, options types.GetAccountsStoreOptions) (*[]types.Account, error) {
 	pgxb := querybuilder.NewPgxQueryBuilder()
-	pgxb.AddRaw("SELECT * FROM accounts")
-	err := pgxb.AddWhere("WHERE user_id = $x", []any{userId})
+	pgxb.AddQuery("SELECT * FROM accounts")
+	err := pgxb.AddQueryWithPositionals("WHERE user_id = $x", []any{userId})
 
 	if options.Institution != "" {
-		err = pgxb.AddWhere("AND institution = $x", []any{options.Institution})
+		err = pgxb.AddQueryWithPositionals("AND institution = $x", []any{options.Institution})
 	}
 	if options.TaxShelter != "" {
-		err = pgxb.AddWhere("AND tax_shelter = $x", []any{options.TaxShelter})
+		err = pgxb.AddQueryWithPositionals("AND tax_shelter = $x", []any{options.TaxShelter})
 	}
 	if options.Is_deprecated != "" {
-		err = pgxb.AddWhere("AND is_deprecated = $x", []any{options.Is_deprecated})
+		err = pgxb.AddQueryWithPositionals("AND is_deprecated = $x", []any{options.Is_deprecated})
 	}
 
 	if len(options.AccountIds) > 0 {
-		err = pgxb.AddWhere(
-			fmt.Sprintf("AND account_id IN (%s)", querybuilder.FillWithPositionals(len(options.AccountIds))),
+		err = pgxb.AddQueryWithPositionals(
+			fmt.Sprintf("AND account_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.AccountIds))),
 			utils.IntSliceToAny(options.AccountIds),
 		)
 	}
