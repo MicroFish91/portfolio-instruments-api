@@ -14,7 +14,7 @@ type GetAccountsQuery struct {
 
 func (q GetAccountsQuery) Validate() error {
 	return validation.ValidateStruct(&q,
-		validation.Field(&q.Tax_shelter, validation.In(types.TAXABLE, types.TRADITIONAL, types.ROTH, types.HSA, types.FIVE_TWENTY_NINE)),
+		validation.Field(&q.Tax_shelter),
 		validation.Field(&q.Institution, validation.Length(1, 64)),
 		validation.Field(&q.Is_deprecated, validation.In("true", "false")),
 	)

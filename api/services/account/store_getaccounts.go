@@ -9,13 +9,13 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 )
 
-func (s *PostgresAccountStore) GetAccounts(userId int, options types.GetAccountsStoreOptions) (*[]types.Account, error) {
+func (s *PostgresAccountStore) GetAccounts(userId int, options *types.GetAccountsStoreOptions) (*[]types.Account, error) {
 	pgxb := querybuilder.NewPgxQueryBuilder()
 	pgxb.AddQuery("SELECT * FROM accounts")
 	err := pgxb.AddQueryWithPositionals("WHERE user_id = $x", []any{userId})
 
 	if options.Institution != "" {
-		err = pgxb.AddQueryWithPositionals("AND institution = $x", []any{options.Institution})
+		err = pgxb.AddQueryWithPositionals("AND institution ~* $x", []any{options.Institution})
 	}
 	if options.TaxShelter != "" {
 		err = pgxb.AddQueryWithPositionals("AND tax_shelter = $x", []any{options.TaxShelter})
