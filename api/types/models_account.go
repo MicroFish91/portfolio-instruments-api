@@ -7,10 +7,10 @@ import (
 type TaxShelter = string
 
 const (
-	TAXABLE          TaxShelter = "taxable"
-	TRADITIONAL      TaxShelter = "traditional"
-	ROTH             TaxShelter = "roth"
-	HSA              TaxShelter = "hsa"
+	TAXABLE          TaxShelter = "TAXABLE"
+	TRADITIONAL      TaxShelter = "TRADITIONAL"
+	ROTH             TaxShelter = "ROTH"
+	HSA              TaxShelter = "HSA"
 	FIVE_TWENTY_NINE TaxShelter = "529"
 )
 
