@@ -4,6 +4,9 @@ build:
 run: build
 	@./bin/portfolioinstruments	
 
+test:
+	@go test -v ./...
+
 migration:
 	@migrate create -ext sql -dir migrations $(filter-out $@,$(MAKECMDGOALS))
 

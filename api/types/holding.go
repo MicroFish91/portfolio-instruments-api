@@ -1,6 +1,10 @@
 package types
 
-import "time"
+import (
+	"time"
+
+	"github.com/gofiber/fiber/v3"
+)
 
 type AssetCategory = string
 
@@ -44,4 +48,23 @@ type Holding struct {
 	User_id        int           `json:"user_id"`
 	Created_at     time.Time     `json:"created_at"`
 	Updated_at     time.Time     `json:"updated_at"`
+}
+
+type HoldingHandler interface {
+	CreateHolding(fiber.Ctx) error
+	GetHoldings(fiber.Ctx) error
+	GetHoldingById(fiber.Ctx) error
+}
+
+type HoldingStore interface {
+	CreateHolding(*Holding) error
+	GetHoldings(int, *GetHoldingsStoreOptions) (*[]Holding, error)
+	GetHoldingById(int, int) (*Holding, error)
+}
+
+type GetHoldingsStoreOptions struct {
+	Holding_ids    []int
+	Ticker         string
+	Asset_category AssetCategory
+	Is_deprecated  string
 }

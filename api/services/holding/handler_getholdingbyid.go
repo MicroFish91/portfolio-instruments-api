@@ -17,7 +17,7 @@ func (h *HoldingHandlerImpl) GetHoldingById(c fiber.Ctx) error {
 
 	holdingParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(GetHoldingByIdParams)
 	if !ok {
-		return utils.SendError(c, fiber.StatusBadRequest, errors.New("uanble to parse valid holding params from request"))
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid holding params from request"))
 	}
 
 	holding, err := h.store.GetHoldingById(userPayload.User_id, holdingParams.Id)

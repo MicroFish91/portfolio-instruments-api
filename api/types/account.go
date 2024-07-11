@@ -2,6 +2,8 @@ package types
 
 import (
 	"time"
+
+	"github.com/gofiber/fiber/v3"
 )
 
 type TaxShelter = string
@@ -24,4 +26,23 @@ type Account struct {
 	User_id       int        `json:"user_id"`
 	Created_at    time.Time  `json:"created_at"`
 	Updated_at    time.Time  `json:"updated_at"`
+}
+
+type AccountHandler interface {
+	CreateAccount(fiber.Ctx) error
+	GetAccounts(fiber.Ctx) error
+	GetAccountById(fiber.Ctx) error
+}
+
+type AccountStore interface {
+	CreateAccount(*Account) error
+	GetAccounts(userId int, options *GetAccountsStoreOptions) (*[]Account, error)
+	GetAccountById(userId int, accountId int) (*Account, error)
+}
+
+type GetAccountsStoreOptions struct {
+	AccountIds    []int
+	TaxShelter    TaxShelter
+	Institution   string
+	Is_deprecated string
 }

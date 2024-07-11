@@ -24,19 +24,46 @@
     | Column Name    | Datatype  | Not Null | Primary Key |
     |----------------|-----------|----------|-------------|
     | setting_id     | UUID      | ✅       | ✅          |
-    | reb_threshold  | DECIMAL   | ✅       |             |
-    | vp_threshold   | DECIMAL   | ✅       |             |
+    | reb_thresh_pct | INTEGER   | ✅       |             |
+    | vp_thresh_pct  | INTEGER   | ✅       |             |
+    | vp_enabled     | BOOLEAN   | ✅       |             |
+    | user_id        | INTEGER   | ✅       |             |
+    | benchmark_id   | INTEGER   |          |             |
     | created_at     | TIMESTAMP | ✅       |             |
     | updated_at     | TIMESTAMP | ✅       |             |
 
     Example:
         setting_id = 1
-        reb_threshold = 0.15
-        vp_threshold = 0.1
+        reb_thresh_pct = 10
+        vp_thresh_pct = 10
+        vp_enabled = true
+        user_id = 1
+        benchmark_id = 5
 
 #### Benchmarks:
-Todo
-Similar idea to holdings below.  Need global and user-defined benchmark support.
+
+    | Column Name    | Datatype  | Not Null | Primary Key |
+    |----------------|-----------|----------|-------------|
+    | benchmark_id   | UUID      | ✅       | ✅          |
+    | name           | TEXT      | ✅       |             |
+    | description    | TEXT      |          |             |
+    | std_dev_pct    | REAL      |          |             |
+    | real_return_pct| REAL      |          |             |
+    | drawdown_yrs   | INTEGER   |          |             |
+    | is_deprecated  | BOOLEAN   | ✅       |             |
+    | user_id        | INTEGER   | ✅       |             |
+    | created_at     | TIMESTAMP | ✅       |             |
+    | updated_at     | TIMESTAMP | ✅       |             |
+
+    Example:
+        benchmark_id = 1
+        name = "Golden Butterfly"
+        description: "A higher return portfolio based around the philosophies of the Permanent Portfolio"
+        std_dev_pct: 11.2 
+        real_return_pct: 7.4
+        drawdown_yrs: 3
+        is_deprecated: false
+        user_id = 1
 
 #### Snapshots
 Todo
