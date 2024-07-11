@@ -13,47 +13,69 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+type CreateBenchmarkTestCases struct {
+	Title       string
+	Payloads    []benchmark.CreateBenchmarkPayload
+	StatusCode  int
+	ExcludeAuth bool
+}
+
+var createBenchmarkTestCases = []CreateBenchmarkTestCases{
+	{
+		Title: "should successfully handle benchmark creation",
+		Payloads: []benchmark.CreateBenchmarkPayload{
+			{
+				Name:        "Golden Butterfly",
+				Description: "A juiced up Permanent Portfolio",
+				Asset_allocation: []types.AssetAllocation{
+					{
+						Category: "TSM",
+						Percent:  50,
+					},
+					{
+						Category: "ITB",
+						Percent:  50,
+					},
+				},
+				Std_dev_pct:     0.5,
+				Real_return_pct: 0.1,
+				Drawdown_yrs:    3,
+				Is_deprecated:   false,
+			},
+		},
+		StatusCode: fiber.StatusCreated,
+	},
+}
+
 func TestCreateBenchmarkHandler(t *testing.T) {
 	app := registerAppWithBenchmarks()
 
-	t.Run("should successfully handle benchmark creation", func(t *testing.T) {
-		payload := benchmark.CreateBenchmarkPayload{
-			Name:        "Golden Butterfly",
-			Description: "A juiced up Permanent Portfolio",
-			Asset_allocation: []types.AssetAllocation{
-				{
-					Category: "TSM",
-					Percent:  50,
-				},
-				{
-					Category: "ITB",
-					Percent:  50,
-				},
-			},
-			Std_dev_pct:     0.5,
-			Real_return_pct: 0.1,
-			Drawdown_yrs:    3,
-			Is_deprecated:   false,
-		}
+	for _, testCase := range createBenchmarkTestCases {
+		t.Run(testCase.Title, func(t *testing.T) {
+			for _, payload := range testCase.Payloads {
+				body, err := json.Marshal(payload)
+				if err != nil {
+					t.Fatal(err)
+				}
 
-		body, err := json.Marshal(payload)
-		if err != nil {
-			t.Fatal(err)
-		}
+				req, err := http.NewRequest(http.MethodPost, "/api/v1/benchmarks", bytes.NewBuffer(body))
+				if err != nil {
+					t.Fatal(err)
+				}
 
-		req, err := http.NewRequest(http.MethodPost, "/api/v1/benchmarks", bytes.NewBuffer(body))
-		if err != nil {
-			t.Fatal(err)
-		}
+				req.Header.Set("Content-Type", "application/json")
 
-		req.Header.Set("Content-Type", "application/json")
-		mocks.MockAuthRequestHeaders(req)
+				if !testCase.ExcludeAuth {
+					mocks.MockAuthRequestHeaders(req)
+				}
 
-		res, err := app.Test(req)
-		if err != nil {
-			t.Fatal(err)
-		}
+				res, err := app.Test(req)
+				if err != nil {
+					t.Fatal(err)
+				}
 
-		assert.Equal(t, fiber.StatusCreated, res.StatusCode)
-	})
+				assert.Equal(t, testCase.StatusCode, res.StatusCode)
+			}
+		})
+	}
 }
