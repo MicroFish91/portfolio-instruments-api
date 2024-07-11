@@ -14,6 +14,6 @@ func RegisterRoutes(app *fiber.App, userHandler types.UserHandler, accountHandle
 	v1 := app.Group("/api/v1")
 	registerAuthRoutes(v1, userHandler)
 	registerAccountRoutes(v1, accountHandler)
-	RegisterHoldingRoutes(v1, holdingHandler)
+	registerHoldingRoutes(v1, holdingHandler)
 	RegisterBenchmarkRoutes(v1, benchmarkHandler)
 }

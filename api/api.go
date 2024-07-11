@@ -23,11 +23,14 @@ func NewApiServer(addr string, db *pgx.Conn) *ApiServer {
 	}
 }
 
-func (s *ApiServer) Run() error {
-	fconfig := fiber.Config{
+func GetFiberConfig() fiber.Config {
+	return fiber.Config{
 		ErrorHandler: middleware.FallbackHandler,
 	}
-	app := fiber.New(fconfig)
+}
+
+func (s *ApiServer) Run() error {
+	app := fiber.New(GetFiberConfig())
 
 	// Initialize stores
 	userStore := user.NewPostgresUserStore(s.db)

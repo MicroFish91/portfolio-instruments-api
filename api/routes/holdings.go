@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func RegisterHoldingRoutes(r fiber.Router, h types.HoldingHandler) {
+func registerHoldingRoutes(r fiber.Router, h types.HoldingHandler) {
 	r.Get("/holdings", h.GetHoldings, middleware.RequireAuth, middleware.AddQueryValidator[holding.GetHoldingsQuery]())
 	r.Get("/holdings/:id", h.GetHoldingById, middleware.RequireAuth, middleware.AddParamsValidator[holding.GetHoldingByIdParams]())
 	r.Post("/holdings", h.CreateHolding, middleware.RequireAuth, middleware.AddBodyValidator[holding.CreateHoldingPayload]())
