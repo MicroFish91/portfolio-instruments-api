@@ -1,6 +1,9 @@
 package benchmark
 
 import (
+	"errors"
+	"fmt"
+
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	validation "github.com/go-ozzo/ozzo-validation"
 )
@@ -16,6 +19,19 @@ type CreateBenchmarkPayload struct {
 }
 
 func (p CreateBenchmarkPayload) Validate() error {
+	var sum int
+	for _, allocation := range p.Asset_allocation {
+		if allocation.Percent == 0 {
+			return errors.New("should not specify an asset with allocation of 0")
+		}
+
+		sum += allocation.Percent
+	}
+
+	if sum != 100 {
+		return fmt.Errorf("asset allocation must sum to 100 but was %d", sum)
+	}
+
 	return validation.ValidateStruct(&p,
 		validation.Field(&p.Name, validation.Required, validation.Length(1, 64)),
 		validation.Field(&p.Description),
