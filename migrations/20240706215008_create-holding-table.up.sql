@@ -25,7 +25,8 @@ CREATE TYPE asset_type AS ENUM (
     'IMCV',
     'ISCB',
     'ISCG',
-    'ISCV'
+    'ISCV',
+    'OTHER'
 );
 
 CREATE TABLE IF NOT EXISTS holdings (

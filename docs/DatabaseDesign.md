@@ -95,15 +95,17 @@ Todo
         user_id = 1
         
 #### Holdings:
-When querying, users should be able to see the global-defined holdings as well as the user-defined holdings.
+A generalized data type typically used to represent a mutual fund/ETF holding, individual stock, bond, or other asset 
 
     | Column Name    | Datatype  | Not Null | Primary Key |
     |----------------|-----------|----------|-------------|
     | holding_id     | UUID      | ✅       | ✅          |
     | name           | TEXT      | ✅       |             |
-    | ticker         | TEXT      | ✅       |             |
+    | ticker         | TEXT      |          |             |
     | asset_category | ENUM      | ✅       |             |
-    | expense_ratio  | REAL      | ✅       |             |
+    | expense_ratio  | REAL      |          |             |
+    | maturation_date| TEXT      |          |             |
+    | interest_rate  | REAL      |          |             |
     | is_deprecated  | BOOLEAN   | ✅       |             |
     | user_id        | INTEGER   | ✅       |             |
     | created_at     | TIMESTAMP | ✅       |             |
@@ -113,7 +115,16 @@ When querying, users should be able to see the global-defined holdings as well a
         holding_id = 1
         name = Vanguard Total Stock Market Index
         ticker = VTSAX
-        asset_category = TSM,DLCB 
+        asset_category = TSM 
         expense_ratio = 0.08
         is_deprecated = false
         user_id = 1   
+
+    Example:
+        holding_id = 2
+        name = OTC Bond 05/2026
+        asset_category = STB
+        maturation_date = 05/01/2026
+        interest_rate = 4.5
+        is_deprecated = false
+        user_id = 1

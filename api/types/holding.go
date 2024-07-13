@@ -36,12 +36,13 @@ const (
 	ISCB        AssetCategory = "ISCB"
 	ISCG        AssetCategory = "ISCG"
 	ISCV        AssetCategory = "ISCV"
+	OTHER       AssetCategory = "OTHER"
 )
 
 var ValidAssetCategories = []interface{}{
 	CASH, BILLS, STB, ITB, LTB, COMMODITIES, GOLD, REITS, TSM,
 	DLCB, DLCG, DLCV, DMCB, DMCG, DMCV, DSCG, DSCB, DSCV,
-	ILCB, ILCG, ILCV, IMCB, IMCG, IMCV, ISCB, ISCG, ISCV,
+	ILCB, ILCG, ILCV, IMCB, IMCG, IMCV, ISCB, ISCG, ISCV, OTHER,
 }
 
 type Holding struct {
