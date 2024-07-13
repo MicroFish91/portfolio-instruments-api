@@ -1,7 +1,6 @@
 package benchmark
 
 import (
-	"errors"
 	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -21,8 +20,13 @@ type CreateBenchmarkPayload struct {
 func (p CreateBenchmarkPayload) Validate() error {
 	var sum int
 	for _, allocation := range p.Asset_allocation {
-		if allocation.Percent == 0 {
-			return errors.New("should not specify an asset with allocation of 0")
+		err := validation.ValidateStruct(&allocation,
+			validation.Field(&allocation.Category, validation.Required, validation.In(types.ValidAssetCategories...).Error("includes an unrecognized asset category")),
+			validation.Field(&allocation.Percent, validation.Min(1).Error("asset allocation percent must be a whole number greater than 0")),
+		)
+
+		if err != nil {
+			return err
 		}
 
 		sum += allocation.Percent
@@ -35,10 +39,9 @@ func (p CreateBenchmarkPayload) Validate() error {
 	return validation.ValidateStruct(&p,
 		validation.Field(&p.Name, validation.Required, validation.Length(1, 64)),
 		validation.Field(&p.Description),
-		validation.Field(&p.Asset_allocation, validation.Required),
 		validation.Field(&p.Std_dev_pct, validation.Min(float32(0)), validation.Max(float32(100))),
 		validation.Field(&p.Real_return_pct, validation.Min(float32(0)), validation.Max(float32(100))),
 		validation.Field(&p.Drawdown_yrs, validation.Min(0), validation.Max(50)),
-		validation.Field(&p.Is_deprecated, validation.In(true, false)),
+		validation.Field(&p.Is_deprecated),
 	)
 }

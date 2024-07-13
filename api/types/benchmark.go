@@ -27,8 +27,20 @@ type Benchmark struct {
 
 type BenchmarkHandler interface {
 	CreateBenchmark(fiber.Ctx) error
+	GetBenchmarks(fiber.Ctx) error
+	GetBenchmarkById(fiber.Ctx) error
 }
 
 type BenchmarkStore interface {
 	CreateBenchmark(*Benchmark) error
+	GetBenchmarks(userId int, options *GetBenchmarksStoreOptions) (*[]Benchmark, *PaginationMetadata, error)
+	GetBenchmarkById(userId, benchmarkId int) (*Benchmark, error)
+}
+
+type GetBenchmarksStoreOptions struct {
+	Benchmark_ids []int
+	Name          string
+	Is_deprecated string
+	Current_page  int
+	Page_size     int
 }

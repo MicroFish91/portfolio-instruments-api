@@ -20,6 +20,6 @@ type UserHandler interface {
 }
 
 type UserStore interface {
-	RegisterUser(*User) error
+	RegisterUser(user *User) error
 	GetUserByEmail(email string) (*User, error)
 }

@@ -38,6 +38,12 @@ const (
 	ISCV        AssetCategory = "ISCV"
 )
 
+var ValidAssetCategories = []interface{}{
+	CASH, BILLS, STB, ITB, LTB, COMMODITIES, GOLD, REITS, TSM,
+	DLCB, DLCG, DLCV, DMCB, DMCG, DMCV, DSCG, DSCB, DSCV,
+	ILCB, ILCG, ILCV, IMCB, IMCG, IMCV, ISCB, ISCG, ISCV,
+}
+
 type Holding struct {
 	Holding_id     int           `json:"holding_id,omitempty"`
 	Name           string        `json:"name"`
@@ -57,9 +63,9 @@ type HoldingHandler interface {
 }
 
 type HoldingStore interface {
-	CreateHolding(*Holding) error
-	GetHoldings(int, *GetHoldingsStoreOptions) (*[]Holding, error)
-	GetHoldingById(int, int) (*Holding, error)
+	CreateHolding(holding *Holding) error
+	GetHoldings(userId int, options *GetHoldingsStoreOptions) (*[]Holding, error)
+	GetHoldingById(userId, benchmarkId int) (*Holding, error)
 }
 
 type GetHoldingsStoreOptions struct {

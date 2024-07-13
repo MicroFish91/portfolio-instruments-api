@@ -35,7 +35,7 @@ type AccountHandler interface {
 }
 
 type AccountStore interface {
-	CreateAccount(*Account) error
+	CreateAccount(account *Account) error
 	GetAccounts(userId int, options *GetAccountsStoreOptions) (*[]Account, error)
 	GetAccountById(userId int, accountId int) (*Account, error)
 }
