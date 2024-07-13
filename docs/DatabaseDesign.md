@@ -6,7 +6,7 @@
 
     | Column Name    | Datatype  | Not Null | Primary Key |
     |----------------|-----------|----------|-------------|
-    | user_id        | UUID      | ✅       | ✅          |
+    | user_id        | PKEY      | ✅       | ✅          |
     | email          | TEXT      | ✅       |             |
     | password_hash  | TEXT      | ✅       |             |
     | role           | ENUM      | ✅       |             |
@@ -23,7 +23,7 @@
 
     | Column Name    | Datatype  | Not Null | Primary Key |
     |----------------|-----------|----------|-------------|
-    | setting_id     | UUID      | ✅       | ✅          |
+    | setting_id     | PKEY      | ✅       | ✅          |
     | reb_thresh_pct | INTEGER   | ✅       |             |
     | vp_thresh_pct  | INTEGER   | ✅       |             |
     | vp_enabled     | BOOLEAN   | ✅       |             |
@@ -44,7 +44,7 @@
 
     | Column Name    | Datatype  | Not Null | Primary Key |
     |----------------|-----------|----------|-------------|
-    | benchmark_id   | UUID      | ✅       | ✅          |
+    | benchmark_id   | PKEY      | ✅       | ✅          |
     | name           | TEXT      | ✅       |             |
     | description    | TEXT      |          |             |
     | std_dev_pct    | REAL      |          |             |
@@ -75,7 +75,7 @@ Todo
 
     | Column Name    | Datatype  | Not Null | Primary Key |
     |----------------|-----------|----------|-------------|
-    | account_id     | UUID      | ✅       | ✅          |
+    | account_id     | PKEY      | ✅       | ✅          |
     | name           | TEXT      | ✅       |             |
     | description    | TEXT      |          |             |
     | tax_shelter    | ENUM      | ✅       |             |
@@ -99,7 +99,7 @@ A generalized data type typically used to represent a mutual fund/ETF holding, i
 
     | Column Name    | Datatype  | Not Null | Primary Key |
     |----------------|-----------|----------|-------------|
-    | holding_id     | UUID      | ✅       | ✅          |
+    | holding_id     | PKEY      | ✅       | ✅          |
     | name           | TEXT      | ✅       |             |
     | ticker         | TEXT      |          |             |
     | asset_category | ENUM      | ✅       |             |
