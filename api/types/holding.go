@@ -64,7 +64,7 @@ type HoldingHandler interface {
 
 type HoldingStore interface {
 	CreateHolding(holding *Holding) error
-	GetHoldings(userId int, options *GetHoldingsStoreOptions) (*[]Holding, error)
+	GetHoldings(userId int, options *GetHoldingsStoreOptions) (*[]Holding, *PaginationMetadata, error)
 	GetHoldingById(userId, benchmarkId int) (*Holding, error)
 }
 
@@ -73,4 +73,6 @@ type GetHoldingsStoreOptions struct {
 	Ticker         string
 	Asset_category AssetCategory
 	Is_deprecated  string
+	Current_page   int
+	Page_size      int
 }

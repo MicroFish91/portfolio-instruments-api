@@ -10,9 +10,16 @@ type GetHoldingsQuery struct {
 	Ticker         string              `json:"ticker"`
 	Asset_category types.AssetCategory `json:"asset_category"`
 	Is_deprecated  string              `json:"is_deprecated"`
+
+	types.PaginationQuery
 }
 
 func (q GetHoldingsQuery) Validate() error {
+	err := q.PaginationQuery.Validate()
+	if err != nil {
+		return err
+	}
+
 	return validation.ValidateStruct(&q,
 		validation.Field(&q.Holding_ids),
 		validation.Field(&q.Ticker, validation.Length(1, 32)),
