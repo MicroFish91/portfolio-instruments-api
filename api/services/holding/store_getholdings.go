@@ -9,6 +9,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 )
 
+// Add store options to search by maturation dates
+// Add store options to sort by interest rate
+// Add sql side validation for maturation date to follow mm/dd/yyyy
 func (s *PostgresHoldingStore) GetHoldings(userId int, options *types.GetHoldingsStoreOptions) (*[]types.Holding, *types.PaginationMetadata, error) {
 	currentPage := 1
 	if options.Current_page > 1 {
@@ -57,7 +60,7 @@ func (s *PostgresHoldingStore) GetHoldings(userId int, options *types.GetHolding
 
 	for rows.Next() {
 		var h types.Holding
-		if err = rows.Scan(&h.Holding_id, &h.Name, &h.Ticker, &h.Asset_category, &h.Expense_ratio, &h.Is_deprecated, &h.User_id, &h.Created_at, &h.Updated_at, &total_items); err != nil {
+		if err = rows.Scan(&h.Holding_id, &h.Name, &h.Ticker, &h.Asset_category, &h.Expense_ratio, &h.Maturation_date, &h.Interest_rate, &h.Is_deprecated, &h.User_id, &h.Created_at, &h.Updated_at, &total_items); err != nil {
 			return nil, nil, err
 		}
 		holdings = append(holdings, h)

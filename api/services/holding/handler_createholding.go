@@ -22,12 +22,14 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 	}
 
 	err := h.store.CreateHolding(&types.Holding{
-		Name:           holdingPayload.Name,
-		Ticker:         holdingPayload.Ticker,
-		Asset_category: holdingPayload.Asset_category,
-		Expense_ratio:  holdingPayload.Expense_ratio,
-		Is_deprecated:  holdingPayload.Is_deprecated,
-		User_id:        userPayload.User_id,
+		Name:            holdingPayload.Name,
+		Ticker:          holdingPayload.Ticker,
+		Asset_category:  holdingPayload.Asset_category,
+		Expense_ratio:   holdingPayload.Expense_ratio,
+		Maturation_date: holdingPayload.Maturation_date,
+		Interest_rate:   holdingPayload.Interest_rate,
+		Is_deprecated:   holdingPayload.Is_deprecated,
+		User_id:         userPayload.User_id,
 	})
 
 	if err != nil {
