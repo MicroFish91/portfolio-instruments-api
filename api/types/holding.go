@@ -71,10 +71,11 @@ type HoldingStore interface {
 }
 
 type GetHoldingsStoreOptions struct {
-	Holding_ids    []int
-	Ticker         string
-	Asset_category AssetCategory
-	Is_deprecated  string
-	Current_page   int
-	Page_size      int
+	Holding_ids              []int
+	Ticker                   string
+	Asset_category           AssetCategory
+	Has_maturation_remaining string // String representation of a bool
+	Is_deprecated            string // String representation of a bool
+	Current_page             int
+	Page_size                int
 }

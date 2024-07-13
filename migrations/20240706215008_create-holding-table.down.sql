@@ -1,2 +1,2 @@
-DROP TYPE IF EXISTS asset_type;
 DROP TABLE IF EXISTS holdings;
+DROP TYPE IF EXISTS asset_type;

@@ -22,12 +22,13 @@ func (h *HoldingHandlerImpl) GetHoldings(c fiber.Ctx) error {
 	}
 
 	holdings, pagination, err := h.store.GetHoldings(userPayload.User_id, &types.GetHoldingsStoreOptions{
-		Holding_ids:    queryPayload.Holding_ids,
-		Ticker:         queryPayload.Ticker,
-		Asset_category: queryPayload.Asset_category,
-		Is_deprecated:  queryPayload.Is_deprecated,
-		Current_page:   queryPayload.Current_page,
-		Page_size:      queryPayload.Page_size,
+		Holding_ids:              queryPayload.Holding_ids,
+		Ticker:                   queryPayload.Ticker,
+		Asset_category:           queryPayload.Asset_category,
+		Has_maturation_remaining: queryPayload.Has_maturation_remaining,
+		Is_deprecated:            queryPayload.Is_deprecated,
+		Current_page:             queryPayload.Current_page,
+		Page_size:                queryPayload.Page_size,
 	})
 
 	if err != nil {

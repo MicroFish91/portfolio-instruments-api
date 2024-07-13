@@ -3,15 +3,13 @@ package holding
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 )
 
-// Add store options to search by maturation dates
-// Add store options to sort by interest rate
-// Add sql side validation for maturation date to follow mm/dd/yyyy
 func (s *PostgresHoldingStore) GetHoldings(userId int, options *types.GetHoldingsStoreOptions) (*[]types.Holding, *types.PaginationMetadata, error) {
 	currentPage := 1
 	if options.Current_page > 1 {
@@ -40,6 +38,17 @@ func (s *PostgresHoldingStore) GetHoldings(userId int, options *types.GetHolding
 		pgxb.AddQueryWithPositionals("AND is_deprecated = $x", []any{options.Is_deprecated})
 	}
 
+	if options.Has_maturation_remaining != "" {
+		now := time.Now()
+		currentDate := now.Format("01/02/2006")
+
+		if options.Has_maturation_remaining == "true" {
+			pgxb.AddQueryWithPositionals("AND maturation_date != '' AND TO_DATE(maturation_date, 'MM/DD/YYYY') >= TO_DATE($x, 'MM/DD/YYYY')", []any{currentDate})
+		} else {
+			pgxb.AddQueryWithPositionals("AND maturation_date != '' AND TO_DATE(maturation_date, 'MM/DD/YYYY') < TO_DATE($x, 'MM/DD/YYYY')", []any{currentDate})
+		}
+	}
+
 	if options.Holding_ids != nil && len(options.Holding_ids) > 0 {
 		pgxb.AddQueryWithPositionals(
 			fmt.Sprintf("AND holding_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.Holding_ids))),
@@ -48,7 +57,7 @@ func (s *PostgresHoldingStore) GetHoldings(userId int, options *types.GetHolding
 	}
 
 	pgxb.AddQuery("ORDER BY created_at ASC")
-	pgxb.AddQuery(fmt.Sprintf("LIMIT %d OFFSET %d", pageSize, (currentPage-1)*pageSize))
+	pgxb.AddQueryWithPositionals("LIMIT $x OFFSET $x", []any{pageSize, (currentPage - 1) * pageSize})
 
 	rows, err := s.db.Query(context.Background(), pgxb.Query, pgxb.QueryParams...)
 	if err != nil {
@@ -65,6 +74,7 @@ func (s *PostgresHoldingStore) GetHoldings(userId int, options *types.GetHolding
 		}
 		holdings = append(holdings, h)
 	}
+
 	return &holdings, &types.PaginationMetadata{
 		Current_page: currentPage,
 		Page_size:    pageSize,
