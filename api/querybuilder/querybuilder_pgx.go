@@ -15,10 +15,14 @@ func NewPgxQueryBuilder() *PgxQueryBuilder {
 	return &PgxQueryBuilder{}
 }
 
+// Appends a new SQL query raw without any positional parameters
 func (q *PgxQueryBuilder) AddQuery(s string) {
 	q.Query = fmt.Sprintf("%s\n%s", q.Query, s)
 }
 
+// Appends a new SQL query with positional parameters
+// to the existing query in PgxQueryBuilder. It first replaces placeholders
+// in the format "$x" with incrementing positional parameters (e.g., "$1", "$2", etc.)
 func (q *PgxQueryBuilder) AddQueryWithPositionals(query string, values []any) error {
 	query, n := q.replaceWithIncrementingPositionals(query)
 	if n != len(values) {
