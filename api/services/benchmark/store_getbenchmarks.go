@@ -6,6 +6,7 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 )
 
 func (s *PostgresBenchmarkStore) GetBenchmarks(userId int, options *types.GetBenchmarksStoreOptions) (*[]types.Benchmark, *types.PaginationMetadata, error) {
@@ -20,7 +21,6 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(userId int, options *types.GetBen
 	}
 
 	pgxb := querybuilder.NewPgxQueryBuilder()
-
 	pgxb.AddQuery("SELECT *, COUNT(*) OVER() as total_items")
 	pgxb.AddQuery("FROM benchmarks")
 	pgxb.AddQueryWithPositionals("WHERE user_id = $x", []any{userId})
@@ -36,7 +36,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(userId int, options *types.GetBen
 	if options.Benchmark_ids != nil && len(options.Benchmark_ids) > 0 {
 		pgxb.AddQueryWithPositionals(
 			fmt.Sprintf("AND benchmark_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.Benchmark_ids))),
-			[]any{options.Benchmark_ids},
+			utils.IntSliceToAny(options.Benchmark_ids),
 		)
 	}
 
