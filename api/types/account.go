@@ -16,6 +16,10 @@ const (
 	FIVE_TWENTY_NINE TaxShelter = "529"
 )
 
+var ValidTaxShelters = []interface{}{
+	TAXABLE, TRADITIONAL, ROTH, HSA, FIVE_TWENTY_NINE,
+}
+
 type Account struct {
 	Account_id    int        `json:"account_id,omitempty"`
 	Name          string     `json:"name"`
@@ -36,7 +40,7 @@ type AccountHandler interface {
 
 type AccountStore interface {
 	CreateAccount(account *Account) error
-	GetAccounts(userId int, options *GetAccountsStoreOptions) (*[]Account, error)
+	GetAccounts(userId int, options *GetAccountsStoreOptions) (*[]Account, *PaginationMetadata, error)
 	GetAccountById(userId int, accountId int) (*Account, error)
 }
 
@@ -45,4 +49,6 @@ type GetAccountsStoreOptions struct {
 	TaxShelter    TaxShelter
 	Institution   string
 	Is_deprecated string
+	Current_page  int
+	Page_size     int
 }

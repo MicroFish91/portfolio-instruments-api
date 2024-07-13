@@ -21,16 +21,21 @@ func (h *AccountHandlerImpl) GetAccounts(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid query params from request"))
 	}
 
-	accounts, err := h.store.GetAccounts(userPayload.User_id, &types.GetAccountsStoreOptions{
+	accounts, pagination, err := h.store.GetAccounts(userPayload.User_id, &types.GetAccountsStoreOptions{
 		AccountIds:    queryPayload.Ids,
 		TaxShelter:    queryPayload.Tax_shelter,
 		Institution:   queryPayload.Institution,
 		Is_deprecated: queryPayload.Is_deprecated,
+		Current_page:  queryPayload.Current_page,
+		Page_size:     queryPayload.Page_size,
 	})
 
 	if err != nil {
 		return utils.SendError(c, fiber.StatusInternalServerError, err)
 	}
 
-	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"accounts": accounts})
+	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
+		"accounts":   accounts,
+		"pagination": pagination,
+	})
 }

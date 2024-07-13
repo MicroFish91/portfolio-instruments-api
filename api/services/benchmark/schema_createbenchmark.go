@@ -21,7 +21,7 @@ func (p CreateBenchmarkPayload) Validate() error {
 	var sum int
 	for _, allocation := range p.Asset_allocation {
 		err := validation.ValidateStruct(&allocation,
-			validation.Field(&allocation.Category, validation.Required, validation.In(types.ValidAssetCategories...).Error("includes an unrecognized asset category")),
+			validation.Field(&allocation.Category, validation.Required, validation.In(types.ValidAssetCategories...).Error("use a recognized asset category in all caps")),
 			validation.Field(&allocation.Percent, validation.Min(1).Error("asset allocation percent must be a whole number greater than 0")),
 		)
 

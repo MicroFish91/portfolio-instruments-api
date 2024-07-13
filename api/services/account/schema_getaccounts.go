@@ -10,9 +10,16 @@ type GetAccountsQuery struct {
 	Tax_shelter   types.TaxShelter `json:"tax_shelter"`
 	Institution   string           `json:"institution"`
 	Is_deprecated string           `json:"is_deprecated"`
+
+	types.PaginationQuery
 }
 
 func (q GetAccountsQuery) Validate() error {
+	err := q.PaginationQuery.Validate()
+	if err != nil {
+		return err
+	}
+
 	return validation.ValidateStruct(&q,
 		validation.Field(&q.Tax_shelter),
 		validation.Field(&q.Institution, validation.Length(1, 64)),
