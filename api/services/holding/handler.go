@@ -1,13 +1,19 @@
 package holding
 
-import "github.com/MicroFish91/portfolio-instruments-api/api/types"
+import (
+	"log/slog"
+
+	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+)
 
 type HoldingHandlerImpl struct {
-	store types.HoldingStore
+	store  types.HoldingStore
+	logger *slog.Logger
 }
 
-func NewHoldingHandler(store types.HoldingStore) *HoldingHandlerImpl {
+func NewHoldingHandler(store types.HoldingStore, logger *slog.Logger) *HoldingHandlerImpl {
 	return &HoldingHandlerImpl{
-		store: store,
+		store:  store,
+		logger: logger,
 	}
 }

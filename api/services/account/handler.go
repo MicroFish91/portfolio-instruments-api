@@ -1,15 +1,19 @@
 package account
 
 import (
+	"log/slog"
+
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 type AccountHandlerImpl struct {
-	store types.AccountStore
+	store  types.AccountStore
+	logger *slog.Logger
 }
 
-func NewAccountHandler(store types.AccountStore) *AccountHandlerImpl {
+func NewAccountHandler(store types.AccountStore, logger *slog.Logger) *AccountHandlerImpl {
 	return &AccountHandlerImpl{
-		store: store,
+		store:  store,
+		logger: logger,
 	}
 }

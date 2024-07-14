@@ -1,6 +1,8 @@
 package api
 
 import (
+	"log/slog"
+
 	"github.com/MicroFish91/portfolio-instruments-api/api/middleware"
 	"github.com/MicroFish91/portfolio-instruments-api/api/routes"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/account"
@@ -12,14 +14,16 @@ import (
 )
 
 type ApiServer struct {
-	addr string
-	db   *pgx.Conn
+	addr   string
+	db     *pgx.Conn
+	logger *slog.Logger
 }
 
-func NewApiServer(addr string, db *pgx.Conn) *ApiServer {
+func NewApiServer(addr string, db *pgx.Conn, logger *slog.Logger) *ApiServer {
 	return &ApiServer{
-		addr: addr,
-		db:   db,
+		addr:   addr,
+		db:     db,
+		logger: logger,
 	}
 }
 
@@ -32,17 +36,21 @@ func GetFiberConfig() fiber.Config {
 func (s *ApiServer) Run() error {
 	app := fiber.New(GetFiberConfig())
 
+	// Middleware pipeline
+	app.Use(middleware.AddIncomingTrafficLogger(s.logger))
+	app.Use(middleware.AddLocalsContextLogger(s.logger))
+
 	// Initialize stores
-	userStore := user.NewPostgresUserStore(s.db)
-	accountStore := account.NewPostgresAccountStore(s.db)
-	holdingStore := holding.NewPostgresHoldingStore(s.db)
-	benchmarkStore := benchmark.NewPostgresBenchmarkStore(s.db)
+	userStore := user.NewPostgresUserStore(s.db, s.logger)
+	accountStore := account.NewPostgresAccountStore(s.db, s.logger)
+	holdingStore := holding.NewPostgresHoldingStore(s.db, s.logger)
+	benchmarkStore := benchmark.NewPostgresBenchmarkStore(s.db, s.logger)
 
 	// Initialize handlers
-	userHandler := user.NewUserHandler(userStore)
-	accountHandler := account.NewAccountHandler(accountStore)
-	holdingHandler := holding.NewHoldingHandler(holdingStore)
-	benchmarkHandler := benchmark.NewBenchmarkHandler(benchmarkStore)
+	userHandler := user.NewUserHandler(userStore, s.logger)
+	accountHandler := account.NewAccountHandler(accountStore, s.logger)
+	holdingHandler := holding.NewHoldingHandler(holdingStore, s.logger)
+	benchmarkHandler := benchmark.NewBenchmarkHandler(benchmarkStore, s.logger)
 
 	routes.RegisterRoutes(app, userHandler, accountHandler, holdingHandler, benchmarkHandler)
 	return app.Listen(s.addr)

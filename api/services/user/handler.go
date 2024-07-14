@@ -1,15 +1,19 @@
 package user
 
 import (
+	"log/slog"
+
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 type UserHandlerImpl struct {
-	store types.UserStore
+	store  types.UserStore
+	logger *slog.Logger
 }
 
-func NewUserHandler(store types.UserStore) *UserHandlerImpl {
+func NewUserHandler(store types.UserStore, logger *slog.Logger) *UserHandlerImpl {
 	return &UserHandlerImpl{
-		store: store,
+		store:  store,
+		logger: logger,
 	}
 }

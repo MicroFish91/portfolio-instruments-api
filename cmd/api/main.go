@@ -6,6 +6,7 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api"
 	"github.com/MicroFish91/portfolio-instruments-api/db"
+	"github.com/MicroFish91/portfolio-instruments-api/logger"
 )
 
 func main() {
@@ -15,7 +16,9 @@ func main() {
 	}
 	defer db.Close(context.Background())
 
-	server := api.NewApiServer(":3000", db)
+	logger := logger.NewLogger()
+
+	server := api.NewApiServer(":3000", db, logger)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
