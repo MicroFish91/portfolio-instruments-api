@@ -40,5 +40,7 @@ CREATE TABLE IF NOT EXISTS holdings (
     is_deprecated boolean NOT NULL,
     user_id integer NOT NULL,
     created_at timestamp DEFAULT current_timestamp,
-    updated_at timestamp DEFAULT current_timestamp
+    updated_at timestamp DEFAULT current_timestamp,
+
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
 );

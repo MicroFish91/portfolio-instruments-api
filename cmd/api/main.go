@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"log/slog"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api"
 	"github.com/MicroFish91/portfolio-instruments-api/db"
@@ -16,7 +17,7 @@ func main() {
 	}
 	defer db.Close(context.Background())
 
-	logger := logger.NewLogger()
+	logger := logger.NewLogger(slog.LevelDebug) // Todo: Set log level via environment variable
 
 	server := api.NewApiServer(":3000", db, logger)
 	if err := server.Run(); err != nil {

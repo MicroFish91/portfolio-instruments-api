@@ -1,6 +1,8 @@
 package benchmark
 
 import (
+	"log/slog"
+
 	"github.com/MicroFish91/portfolio-instruments-api/api"
 	"github.com/MicroFish91/portfolio-instruments-api/api/routes"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/benchmark"
@@ -16,7 +18,7 @@ func registerAppWithBenchmarks() *fiber.App {
 		return app
 	}
 
-	logger := mocks.NewMockLogger()
+	logger := mocks.NewMockLogger(slog.LevelDebug)
 	app = fiber.New(api.GetFiberConfig())
 
 	benchmarkStore := mocks.NewMockBenchmarkStore()

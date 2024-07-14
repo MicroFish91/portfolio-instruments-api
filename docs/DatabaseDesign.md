@@ -66,10 +66,44 @@
         user_id = 1
 
 #### Snapshots
-Todo
+
+    | Column Name    | Datatype  | Not Null | Primary Key |
+    |----------------|-----------|----------|-------------|
+    | snap_id        | PKEY      | ✅       | ✅          |
+    | snap_date      | DATE      | ✅       |             |
+    | total          | REAL      | ✅       |             |
+    | user_id        | INTEGER   | ✅       |             |
+    | created_at     | TIMESTAMP | ✅       |             |
+    | updated_at     | TIMESTAMP | ✅       |             |
+
+    Example:
+        snapshot_id = 1
+        snapshot_date = 07/14/2024
+        total = 100.00
+        user_id = 1
 
 #### SnapshotValues
-Todo 
+
+    | Column Name    | Datatype  | Not Null | Primary Key |
+    |----------------|-----------|----------|-------------|
+    | snap_val_id    | PKEY      | ✅       | ✅          |
+    | snap_id        | INTEGER   | ✅       |             |
+    | account_id     | INTEGER   | ✅       |             |
+    | holding_id     | INTEGER   | ✅       |             |
+    | total          | REAL      | ✅       |             |
+    | skip_rebalance | BOOLEAN   | ✅       |             |
+    | user_id        | INTEGER   | ✅       |             |
+    | created_at     | TIMESTAMP | ✅       |             |
+    | updated_at     | TIMESTAMP | ✅       |             |
+
+    Example:
+        snap_val_id = 1
+        snapshot_id = 1
+        account_id = 1
+        holding_id = 2 
+        total = 5750.45
+        skip_rebalance = false // We want to rebalance by default
+        user_id = 1
 
 #### Accounts:
 
@@ -95,6 +129,7 @@ Todo
         user_id = 1
         
 #### Holdings:
+
 A generalized data type typically used to represent a mutual fund/ETF holding, individual stock, bond, or other asset 
 
     | Column Name    | Datatype  | Not Null | Primary Key |

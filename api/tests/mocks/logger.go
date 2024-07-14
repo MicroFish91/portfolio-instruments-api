@@ -5,9 +5,9 @@ import (
 	"os"
 )
 
-func NewMockLogger() *slog.Logger {
+func NewMockLogger(logLevel slog.Level) *slog.Logger {
 	logHandler := slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
-		Level: slog.LevelDebug,
+		Level: logLevel,
 	})
 	logger := slog.New(logHandler)
 	slog.SetDefault(logger)

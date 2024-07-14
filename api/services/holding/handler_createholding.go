@@ -21,6 +21,8 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid holding payload from request body"))
 	}
 
+	// Todo: Add check to ensure tickers and names are unique
+
 	err := h.store.CreateHolding(&types.Holding{
 		Name:            holdingPayload.Name,
 		Ticker:          holdingPayload.Ticker,
