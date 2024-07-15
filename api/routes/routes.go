@@ -5,15 +5,22 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func RegisterRoutes(app *fiber.App, userHandler types.UserHandler, accountHandler types.AccountHandler, holdingHandler types.HoldingHandler, benchmarkHandler types.BenchmarkHandler) {
-
+func RegisterRoutes(
+	app *fiber.App,
+	userHandler types.UserHandler,
+	accountHandler types.AccountHandler,
+	holdingHandler types.HoldingHandler,
+	benchmarkHandler types.BenchmarkHandler,
+	snapshotHandler types.SnapshotHandler,
+) {
 	app.Get("/ping", func(c fiber.Ctx) error {
 		return c.Status(fiber.StatusOK).JSON(map[string]string{"data": "pong"})
 	})
 
 	v1 := app.Group("/api/v1")
-	registerAuthRoutes(v1, userHandler)
+	registerUserRoutes(v1, userHandler)
+	RegisterBenchmarkRoutes(v1, benchmarkHandler)
 	registerAccountRoutes(v1, accountHandler)
 	registerHoldingRoutes(v1, holdingHandler)
-	RegisterBenchmarkRoutes(v1, benchmarkHandler)
+	registerSnapshotRoutes(v1, snapshotHandler)
 }

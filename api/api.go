@@ -8,6 +8,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/account"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/benchmark"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/holding"
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/user"
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5"
@@ -45,13 +46,15 @@ func (s *ApiServer) Run() error {
 	accountStore := account.NewPostgresAccountStore(s.db, s.logger)
 	holdingStore := holding.NewPostgresHoldingStore(s.db, s.logger)
 	benchmarkStore := benchmark.NewPostgresBenchmarkStore(s.db, s.logger)
+	snapshotStore := snapshot.NewPostgresSnapshotStore(s.db, s.logger)
 
 	// Initialize handlers
 	userHandler := user.NewUserHandler(userStore, s.logger)
 	accountHandler := account.NewAccountHandler(accountStore, s.logger)
 	holdingHandler := holding.NewHoldingHandler(holdingStore, s.logger)
 	benchmarkHandler := benchmark.NewBenchmarkHandler(benchmarkStore, s.logger)
+	snapshotHandler := snapshot.NewSnapshotHandler(snapshotStore, s.logger)
 
-	routes.RegisterRoutes(app, userHandler, accountHandler, holdingHandler, benchmarkHandler)
+	routes.RegisterRoutes(app, userHandler, accountHandler, holdingHandler, benchmarkHandler, snapshotHandler)
 	return app.Listen(s.addr)
 }

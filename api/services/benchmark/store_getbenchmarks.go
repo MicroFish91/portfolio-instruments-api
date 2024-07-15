@@ -52,6 +52,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(userId int, options *types.GetBen
 	if err != nil {
 		return nil, nil, err
 	}
+	defer rows.Close()
 
 	var total_items int
 	var benchmarks []types.Benchmark

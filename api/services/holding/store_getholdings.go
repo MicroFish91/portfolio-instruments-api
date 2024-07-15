@@ -63,6 +63,7 @@ func (s *PostgresHoldingStore) GetHoldings(userId int, options *types.GetHolding
 	if err != nil {
 		return nil, nil, err
 	}
+	defer rows.Close()
 
 	var total_items int
 	var holdings []types.Holding

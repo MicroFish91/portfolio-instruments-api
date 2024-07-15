@@ -32,7 +32,7 @@ type SnapshotHandler interface {
 }
 
 type SnapshotStore interface {
-	CreateSnapshot(*Snapshot) error
-	CreateSnapshotValues(*SnapshotValues) error
-	RefreshSnapshotTotal(snapshotId int) error
+	CreateSnapshot(*Snapshot) (*Snapshot, error)
+	CreateSnapshotValues(*SnapshotValues) (*SnapshotValues, error)
+	RefreshSnapshotTotal(userId, snapshotId int) (float64, error)
 }
