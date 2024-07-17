@@ -8,6 +8,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
+	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, options *types.GetHoldingsStoreOptions) (*[]types.Holding, *types.PaginationMetadata, error) {
@@ -68,20 +69,44 @@ func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, opti
 	}
 	defer rows.Close()
 
+	holdings, total_items, err := s.parseRowsIntoHoldings(rows)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return holdings, &types.PaginationMetadata{
+		Current_page: currentPage,
+		Page_size:    pageSize,
+		Total_items:  total_items,
+	}, nil
+}
+
+func (s *PostgresHoldingStore) parseRowsIntoHoldings(rows pgx.Rows) (*[]types.Holding, int, error) {
 	var total_items int
 	var holdings []types.Holding
 
 	for rows.Next() {
 		var h types.Holding
-		if err = rows.Scan(&h.Holding_id, &h.Name, &h.Ticker, &h.Asset_category, &h.Expense_ratio, &h.Maturation_date, &h.Interest_rate, &h.Is_deprecated, &h.User_id, &h.Created_at, &h.Updated_at, &total_items); err != nil {
-			return nil, nil, err
+		err := rows.Scan(
+			&h.Holding_id,
+			&h.Name,
+			&h.Ticker,
+			&h.Asset_category,
+			&h.Expense_ratio,
+			&h.Maturation_date,
+			&h.Interest_rate,
+			&h.Is_deprecated,
+			&h.User_id,
+			&h.Created_at,
+			&h.Updated_at,
+			&total_items,
+		)
+
+		if err != nil {
+			return nil, 0, err
 		}
 		holdings = append(holdings, h)
 	}
 
-	return &holdings, &types.PaginationMetadata{
-		Current_page: currentPage,
-		Page_size:    pageSize,
-		Total_items:  total_items,
-	}, nil
+	return &holdings, total_items, nil
 }

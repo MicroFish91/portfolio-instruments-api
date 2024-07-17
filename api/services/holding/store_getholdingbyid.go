@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId int, holdingId int) (*types.Holding, error) {
@@ -19,6 +20,15 @@ func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId int, h
 		userId, holdingId,
 	)
 
+	holding, err := s.parseRowIntoHolding(row)
+	if err != nil {
+		return nil, err
+	}
+
+	return holding, nil
+}
+
+func (s *PostgresHoldingStore) parseRowIntoHolding(row pgx.Row) (*types.Holding, error) {
 	var holding types.Holding
 	err := row.Scan(
 		&holding.Holding_id,
