@@ -23,7 +23,7 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 
 	// Todo: Add check to ensure tickers and names are unique
 
-	err := h.store.CreateHolding(
+	holding, err := h.store.CreateHolding(
 		c.Context(),
 		&types.Holding{
 			Name:            holdingPayload.Name,
@@ -41,5 +41,5 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{})
+	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{"holding": holding})
 }

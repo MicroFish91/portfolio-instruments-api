@@ -47,6 +47,5 @@ func (s *PostgresHoldingStore) parseRowIntoHolding(row pgx.Row) (*types.Holding,
 	if err != nil {
 		return nil, err
 	}
-
 	return &holding, nil
 }
