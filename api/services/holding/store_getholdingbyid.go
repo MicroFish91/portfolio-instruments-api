@@ -2,13 +2,17 @@ package holding
 
 import (
 	"context"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId int, holdingId int) (*types.Holding, error) {
+	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
 	row := s.db.QueryRow(
-		ctx,
+		c,
 		`SELECT *
 		FROM holdings
 		WHERE user_id = $1 AND holding_id = $2`,

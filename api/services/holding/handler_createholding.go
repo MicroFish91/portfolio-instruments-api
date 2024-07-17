@@ -1,9 +1,7 @@
 package holding
 
 import (
-	"context"
 	"errors"
-	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -25,11 +23,8 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 
 	// Todo: Add check to ensure tickers and names are unique
 
-	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
-	defer cancel()
-
 	err := h.store.CreateHolding(
-		ctx,
+		c.Context(),
 		&types.Holding{
 			Name:            holdingPayload.Name,
 			Ticker:          holdingPayload.Ticker,

@@ -1,9 +1,7 @@
 package account
 
 import (
-	"context"
 	"errors"
-	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -23,11 +21,8 @@ func (h *AccountHandlerImpl) CreateAccount(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid account request body"))
 	}
 
-	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
-	defer cancel()
-
 	err := h.store.CreateAccount(
-		ctx,
+		c.Context(),
 		&types.Account{
 			Name:          accountPayload.Name,
 			Description:   accountPayload.Description,

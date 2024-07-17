@@ -2,13 +2,17 @@ package user
 
 import (
 	"context"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (*types.User, error) {
+	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
 	row := s.db.QueryRow(
-		ctx,
+		c,
 		`SELECT user_id, email, enc_password, created_at, updated_at 
 		FROM users 
 		WHERE email = $1`,

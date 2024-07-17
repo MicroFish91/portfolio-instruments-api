@@ -2,13 +2,17 @@ package account
 
 import (
 	"context"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresAccountStore) GetAccountById(ctx context.Context, userId int, accountId int) (*types.Account, error) {
+	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
 	row := s.db.QueryRow(
-		ctx,
+		c,
 		`SELECT *
 		FROM accounts
 		WHERE user_id = $1 AND account_id = $2`,

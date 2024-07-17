@@ -59,7 +59,10 @@ func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, opti
 	pgxb.AddQuery("ORDER BY created_at ASC")
 	pgxb.AddQueryWithPositionals("LIMIT $x OFFSET $x", []any{pageSize, (currentPage - 1) * pageSize})
 
-	rows, err := s.db.Query(ctx, pgxb.Query, pgxb.QueryParams...)
+	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
+	rows, err := s.db.Query(c, pgxb.Query, pgxb.QueryParams...)
 	if err != nil {
 		return nil, nil, err
 	}

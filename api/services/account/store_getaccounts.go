@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -49,7 +50,10 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 		return nil, nil, fmt.Errorf("error formatting sql query using query builder: %s", err.Error())
 	}
 
-	rows, err := s.db.Query(ctx, pgxb.Query, pgxb.QueryParams...)
+	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
+	rows, err := s.db.Query(c, pgxb.Query, pgxb.QueryParams...)
 	if err != nil {
 		return nil, nil, err
 	}

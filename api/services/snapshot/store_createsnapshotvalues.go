@@ -2,13 +2,17 @@ package snapshot
 
 import (
 	"context"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresSnapshotStore) CreateSnapshotValues(ctx context.Context, snapVals *types.SnapshotValues) (*types.SnapshotValues, error) {
+	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
 	row := s.db.QueryRow(
-		ctx,
+		c,
 		`INSERT INTO snapshots_values
 		(snap_id, account_id, holding_id, total, skip_rebalance, user_id)
 		VALUES ($1, $2, $3, $4, $5, $6)
@@ -32,6 +36,5 @@ func (s *PostgresSnapshotStore) CreateSnapshotValues(ctx context.Context, snapVa
 	if err != nil {
 		return nil, err
 	}
-
 	return &sv, nil
 }

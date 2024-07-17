@@ -1,9 +1,7 @@
 package holding
 
 import (
-	"context"
 	"errors"
-	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -23,11 +21,8 @@ func (h *HoldingHandlerImpl) GetHoldings(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid query params from request"))
 	}
 
-	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
-	defer cancel()
-
 	holdings, pagination, err := h.store.GetHoldings(
-		ctx,
+		c.Context(),
 		userPayload.User_id,
 		&types.GetHoldingsStoreOptions{
 			Holding_ids:              queryPayload.Holding_ids,

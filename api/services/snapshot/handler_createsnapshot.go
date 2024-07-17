@@ -1,9 +1,7 @@
 package snapshot
 
 import (
-	"context"
 	"errors"
-	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -25,11 +23,8 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 
 	// Todo: Should we check that all accounts and holdings exist first?
 
-	createSnapshotCtx, cancelSnapshot := context.WithTimeout(c.Context(), time.Second*5)
-	defer cancelSnapshot()
-
 	snapshot, err := h.store.CreateSnapshot(
-		createSnapshotCtx,
+		c.Context(),
 		&types.Snapshot{
 			Snap_date: snapshotPayload.Snap_date,
 			User_id:   userPayload.User_id,
@@ -39,13 +34,10 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	createSnapshotValsCtx, cancelSnapshotVals := context.WithTimeout(createSnapshotCtx, time.Second*5)
-	defer cancelSnapshotVals()
-
 	var snapshotValues []types.SnapshotValues
 	for _, sv := range snapshotPayload.Snapshot_values {
 		snapshotVal, err := h.store.CreateSnapshotValues(
-			createSnapshotValsCtx,
+			c.Context(),
 			&types.SnapshotValues{
 				Snap_id:        snapshot.Snap_id,
 				Account_id:     sv.Account_id,
@@ -61,10 +53,7 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		snapshotValues = append(snapshotValues, *snapshotVal)
 	}
 
-	refreshSnapshotCtx, cancelRefresh := context.WithTimeout(createSnapshotValsCtx, time.Second*10)
-	defer cancelRefresh()
-
-	total, err := h.store.RefreshSnapshotTotal(refreshSnapshotCtx, userPayload.User_id, snapshot.Snap_id)
+	total, err := h.store.RefreshSnapshotTotal(c.Context(), userPayload.User_id, snapshot.Snap_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}

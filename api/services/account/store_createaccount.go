@@ -2,13 +2,17 @@ package account
 
 import (
 	"context"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresAccountStore) CreateAccount(ctx context.Context, a *types.Account) error {
+	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
 	_, err := s.db.Exec(
-		ctx,
+		c,
 		`INSERT INTO accounts
 		(name, description, tax_shelter, institution, is_deprecated, user_id)
 		VALUES ($1, $2, $3, $4, $5, $6)`,

@@ -2,13 +2,17 @@ package benchmark
 
 import (
 	"context"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, benchmarkId int) (*types.Benchmark, error) {
+	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	defer cancel()
+
 	row := s.db.QueryRow(
-		ctx,
+		c,
 		`SELECT * FROM benchmarks
 		WHERE benchmark_id = $1
 		AND user_id = $2`,

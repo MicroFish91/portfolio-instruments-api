@@ -1,9 +1,7 @@
 package benchmark
 
 import (
-	"context"
 	"errors"
-	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -23,11 +21,8 @@ func (h *BenchmarkHandlerImpl) CreateBenchmark(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid benchmark payload from request"))
 	}
 
-	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
-	defer cancel()
-
 	err := h.store.CreateBenchmark(
-		ctx,
+		c.Context(),
 		&types.Benchmark{
 			Name:             benchmarkPayload.Name,
 			Description:      benchmarkPayload.Description,

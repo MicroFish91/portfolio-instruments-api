@@ -29,10 +29,12 @@ type SnapshotValues struct {
 }
 
 type SnapshotHandler interface {
+	GetSnapshots(fiber.Ctx) error
 	CreateSnapshot(fiber.Ctx) error
 }
 
 type SnapshotStore interface {
+	GetSnapshots(ctx context.Context, userId int) (*[]Snapshot, error)
 	CreateSnapshot(context.Context, *Snapshot) (*Snapshot, error)
 	CreateSnapshotValues(context.Context, *SnapshotValues) (*SnapshotValues, error)
 	RefreshSnapshotTotal(ctx context.Context, userId, snapshotId int) (float64, error)
