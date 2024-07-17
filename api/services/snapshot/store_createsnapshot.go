@@ -6,9 +6,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresSnapshotStore) CreateSnapshot(snapshot *types.Snapshot) (*types.Snapshot, error) {
+func (s *PostgresSnapshotStore) CreateSnapshot(ctx context.Context, snapshot *types.Snapshot) (*types.Snapshot, error) {
 	row := s.db.QueryRow(
-		context.Background(),
+		ctx,
 		`INSERT INTO snapshots
 		(snap_date, user_id)
 		VALUES ($1, $2)

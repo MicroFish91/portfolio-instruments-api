@@ -10,7 +10,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 )
 
-func (s *PostgresHoldingStore) GetHoldings(userId int, options *types.GetHoldingsStoreOptions) (*[]types.Holding, *types.PaginationMetadata, error) {
+func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, options *types.GetHoldingsStoreOptions) (*[]types.Holding, *types.PaginationMetadata, error) {
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page
@@ -59,7 +59,7 @@ func (s *PostgresHoldingStore) GetHoldings(userId int, options *types.GetHolding
 	pgxb.AddQuery("ORDER BY created_at ASC")
 	pgxb.AddQueryWithPositionals("LIMIT $x OFFSET $x", []any{pageSize, (currentPage - 1) * pageSize})
 
-	rows, err := s.db.Query(context.Background(), pgxb.Query, pgxb.QueryParams...)
+	rows, err := s.db.Query(ctx, pgxb.Query, pgxb.QueryParams...)
 	if err != nil {
 		return nil, nil, err
 	}

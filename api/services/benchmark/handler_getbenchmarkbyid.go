@@ -1,7 +1,9 @@
 package benchmark
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -20,9 +22,12 @@ func (h *BenchmarkHandlerImpl) GetBenchmarkById(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid account params from request"))
 	}
 
-	benchmark, err := h.store.GetBenchmarkById(userPayload.User_id, benchmarkParams.Id)
+	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
+	defer cancel()
+
+	benchmark, err := h.store.GetBenchmarkById(ctx, userPayload.User_id, benchmarkParams.Id)
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"benchmark": benchmark})

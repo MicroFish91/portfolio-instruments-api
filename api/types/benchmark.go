@@ -1,6 +1,7 @@
 package types
 
 import (
+	"context"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
@@ -32,9 +33,9 @@ type BenchmarkHandler interface {
 }
 
 type BenchmarkStore interface {
-	CreateBenchmark(*Benchmark) error
-	GetBenchmarks(userId int, options *GetBenchmarksStoreOptions) (*[]Benchmark, *PaginationMetadata, error)
-	GetBenchmarkById(userId, benchmarkId int) (*Benchmark, error)
+	CreateBenchmark(context.Context, *Benchmark) error
+	GetBenchmarks(ctx context.Context, userId int, options *GetBenchmarksStoreOptions) (*[]Benchmark, *PaginationMetadata, error)
+	GetBenchmarkById(ctx context.Context, userId, benchmarkId int) (*Benchmark, error)
 }
 
 type GetBenchmarksStoreOptions struct {

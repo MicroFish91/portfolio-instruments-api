@@ -1,7 +1,9 @@
 package snapshot
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -23,36 +25,48 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 
 	// Todo: Should we check that all accounts and holdings exist first?
 
-	snapshot, err := h.store.CreateSnapshot(&types.Snapshot{
-		Snap_date: snapshotPayload.Snap_date,
-		User_id:   userPayload.User_id,
-	})
+	createSnapshotCtx, cancelSnapshot := context.WithTimeout(c.Context(), time.Second*5)
+	defer cancelSnapshot()
 
+	snapshot, err := h.store.CreateSnapshot(
+		createSnapshotCtx,
+		&types.Snapshot{
+			Snap_date: snapshotPayload.Snap_date,
+			User_id:   userPayload.User_id,
+		},
+	)
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
+
+	createSnapshotValsCtx, cancelSnapshotVals := context.WithTimeout(createSnapshotCtx, time.Second*5)
+	defer cancelSnapshotVals()
 
 	var snapshotValues []types.SnapshotValues
 	for _, sv := range snapshotPayload.Snapshot_values {
-		snapshotVal, err := h.store.CreateSnapshotValues(&types.SnapshotValues{
-			Snap_id:        snapshot.Snap_id,
-			Account_id:     sv.Account_id,
-			Holding_id:     sv.Holding_id,
-			Total:          sv.Total,
-			Skip_rebalance: sv.Skip_rebalance,
-			User_id:        userPayload.User_id,
-		})
-
+		snapshotVal, err := h.store.CreateSnapshotValues(
+			createSnapshotValsCtx,
+			&types.SnapshotValues{
+				Snap_id:        snapshot.Snap_id,
+				Account_id:     sv.Account_id,
+				Holding_id:     sv.Holding_id,
+				Total:          sv.Total,
+				Skip_rebalance: sv.Skip_rebalance,
+				User_id:        userPayload.User_id,
+			},
+		)
 		if err != nil {
-			return utils.SendError(c, fiber.StatusInternalServerError, err)
+			return utils.SendError(c, utils.StatusCodeFromError(err), err)
 		}
-
 		snapshotValues = append(snapshotValues, *snapshotVal)
 	}
 
-	total, err := h.store.RefreshSnapshotTotal(userPayload.User_id, snapshot.Snap_id)
+	refreshSnapshotCtx, cancelRefresh := context.WithTimeout(createSnapshotValsCtx, time.Second*10)
+	defer cancelRefresh()
+
+	total, err := h.store.RefreshSnapshotTotal(refreshSnapshotCtx, userPayload.User_id, snapshot.Snap_id)
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	snapshot.Total = total

@@ -1,7 +1,9 @@
 package holding
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -21,18 +23,25 @@ func (h *HoldingHandlerImpl) GetHoldings(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid query params from request"))
 	}
 
-	holdings, pagination, err := h.store.GetHoldings(userPayload.User_id, &types.GetHoldingsStoreOptions{
-		Holding_ids:              queryPayload.Holding_ids,
-		Ticker:                   queryPayload.Ticker,
-		Asset_category:           queryPayload.Asset_category,
-		Has_maturation_remaining: queryPayload.Has_maturation_remaining,
-		Is_deprecated:            queryPayload.Is_deprecated,
-		Current_page:             queryPayload.Current_page,
-		Page_size:                queryPayload.Page_size,
-	})
+	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
+	defer cancel()
+
+	holdings, pagination, err := h.store.GetHoldings(
+		ctx,
+		userPayload.User_id,
+		&types.GetHoldingsStoreOptions{
+			Holding_ids:              queryPayload.Holding_ids,
+			Ticker:                   queryPayload.Ticker,
+			Asset_category:           queryPayload.Asset_category,
+			Has_maturation_remaining: queryPayload.Has_maturation_remaining,
+			Is_deprecated:            queryPayload.Is_deprecated,
+			Current_page:             queryPayload.Current_page,
+			Page_size:                queryPayload.Page_size,
+		},
+	)
 
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{

@@ -2,10 +2,10 @@ package snapshot
 
 import "context"
 
-func (s *PostgresSnapshotStore) RefreshSnapshotTotal(userId, snapshotId int) (float64, error) {
+func (s *PostgresSnapshotStore) RefreshSnapshotTotal(ctx context.Context, userId, snapshotId int) (float64, error) {
 	// Use an aggregate function to sum row totals
 	rows, err := s.db.Query(
-		context.Background(),
+		ctx,
 		`SELECT SUM(total) AS snapshot_total
 		FROM snapshots_values
 		WHERE user_id = $1
@@ -27,7 +27,7 @@ func (s *PostgresSnapshotStore) RefreshSnapshotTotal(userId, snapshotId int) (fl
 
 	// Update snapshots with the new total
 	_, err = s.db.Exec(
-		context.Background(),
+		ctx,
 		`UPDATE snapshots
 		SET total = $1
 		WHERE user_id = $2

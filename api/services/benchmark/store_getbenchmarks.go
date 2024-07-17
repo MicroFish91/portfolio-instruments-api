@@ -9,7 +9,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 )
 
-func (s *PostgresBenchmarkStore) GetBenchmarks(userId int, options *types.GetBenchmarksStoreOptions) (*[]types.Benchmark, *types.PaginationMetadata, error) {
+func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, options *types.GetBenchmarksStoreOptions) (*[]types.Benchmark, *types.PaginationMetadata, error) {
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page
@@ -44,7 +44,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(userId int, options *types.GetBen
 	pgxb.AddQuery(fmt.Sprintf("LIMIT %d OFFSET %d", pageSize, (currentPage-1)*pageSize))
 
 	rows, err := s.db.Query(
-		context.Background(),
+		ctx,
 		pgxb.Query,
 		pgxb.QueryParams...,
 	)
@@ -56,10 +56,8 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(userId int, options *types.GetBen
 
 	var total_items int
 	var benchmarks []types.Benchmark
-
 	for rows.Next() {
 		var b types.Benchmark
-
 		err = rows.Scan(
 			&b.Benchmark_id,
 			&b.Name,
@@ -78,7 +76,6 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(userId int, options *types.GetBen
 		if err != nil {
 			return nil, nil, err
 		}
-
 		benchmarks = append(benchmarks, b)
 	}
 

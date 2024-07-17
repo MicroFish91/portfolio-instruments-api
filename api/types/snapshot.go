@@ -1,6 +1,7 @@
 package types
 
 import (
+	"context"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
@@ -32,7 +33,7 @@ type SnapshotHandler interface {
 }
 
 type SnapshotStore interface {
-	CreateSnapshot(*Snapshot) (*Snapshot, error)
-	CreateSnapshotValues(*SnapshotValues) (*SnapshotValues, error)
-	RefreshSnapshotTotal(userId, snapshotId int) (float64, error)
+	CreateSnapshot(context.Context, *Snapshot) (*Snapshot, error)
+	CreateSnapshotValues(context.Context, *SnapshotValues) (*SnapshotValues, error)
+	RefreshSnapshotTotal(ctx context.Context, userId, snapshotId int) (float64, error)
 }

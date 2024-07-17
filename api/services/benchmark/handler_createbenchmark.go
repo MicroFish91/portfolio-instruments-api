@@ -1,7 +1,9 @@
 package benchmark
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -21,19 +23,25 @@ func (h *BenchmarkHandlerImpl) CreateBenchmark(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid benchmark payload from request"))
 	}
 
-	err := h.store.CreateBenchmark(&types.Benchmark{
-		Name:             benchmarkPayload.Name,
-		Description:      benchmarkPayload.Description,
-		Asset_allocation: benchmarkPayload.Asset_allocation,
-		Std_dev_pct:      benchmarkPayload.Std_dev_pct,
-		Real_return_pct:  benchmarkPayload.Real_return_pct,
-		Drawdown_yrs:     benchmarkPayload.Drawdown_yrs,
-		Is_deprecated:    benchmarkPayload.Is_deprecated,
-		User_id:          userPayload.User_id,
-	})
+	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
+	defer cancel()
+
+	err := h.store.CreateBenchmark(
+		ctx,
+		&types.Benchmark{
+			Name:             benchmarkPayload.Name,
+			Description:      benchmarkPayload.Description,
+			Asset_allocation: benchmarkPayload.Asset_allocation,
+			Std_dev_pct:      benchmarkPayload.Std_dev_pct,
+			Real_return_pct:  benchmarkPayload.Real_return_pct,
+			Drawdown_yrs:     benchmarkPayload.Drawdown_yrs,
+			Is_deprecated:    benchmarkPayload.Is_deprecated,
+			User_id:          userPayload.User_id,
+		},
+	)
 
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{})

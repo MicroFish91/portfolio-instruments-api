@@ -1,7 +1,9 @@
 package holding
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -23,19 +25,25 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 
 	// Todo: Add check to ensure tickers and names are unique
 
-	err := h.store.CreateHolding(&types.Holding{
-		Name:            holdingPayload.Name,
-		Ticker:          holdingPayload.Ticker,
-		Asset_category:  holdingPayload.Asset_category,
-		Expense_ratio:   holdingPayload.Expense_ratio,
-		Maturation_date: holdingPayload.Maturation_date,
-		Interest_rate:   holdingPayload.Interest_rate,
-		Is_deprecated:   holdingPayload.Is_deprecated,
-		User_id:         userPayload.User_id,
-	})
+	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
+	defer cancel()
+
+	err := h.store.CreateHolding(
+		ctx,
+		&types.Holding{
+			Name:            holdingPayload.Name,
+			Ticker:          holdingPayload.Ticker,
+			Asset_category:  holdingPayload.Asset_category,
+			Expense_ratio:   holdingPayload.Expense_ratio,
+			Maturation_date: holdingPayload.Maturation_date,
+			Interest_rate:   holdingPayload.Interest_rate,
+			Is_deprecated:   holdingPayload.Is_deprecated,
+			User_id:         userPayload.User_id,
+		},
+	)
 
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{})

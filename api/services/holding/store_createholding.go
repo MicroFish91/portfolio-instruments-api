@@ -6,9 +6,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresHoldingStore) CreateHolding(h *types.Holding) error {
+func (s *PostgresHoldingStore) CreateHolding(ctx context.Context, h *types.Holding) error {
 	_, err := s.db.Exec(
-		context.Background(),
+		ctx,
 		`INSERT INTO holdings
 		(name, ticker, asset_category, expense_ratio, maturation_date, interest_rate, is_deprecated, user_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,

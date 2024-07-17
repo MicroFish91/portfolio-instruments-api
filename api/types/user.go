@@ -1,6 +1,7 @@
 package types
 
 import (
+	"context"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
@@ -20,6 +21,6 @@ type UserHandler interface {
 }
 
 type UserStore interface {
-	RegisterUser(user *User) error
-	GetUserByEmail(email string) (*User, error)
+	RegisterUser(context.Context, *User) error
+	GetUserByEmail(ctx context.Context, email string) (*User, error)
 }

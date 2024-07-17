@@ -1,7 +1,9 @@
 package holding
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -20,9 +22,12 @@ func (h *HoldingHandlerImpl) GetHoldingById(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid holding params from request"))
 	}
 
-	holding, err := h.store.GetHoldingById(userPayload.User_id, holdingParams.Id)
+	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
+	defer cancel()
+
+	holding, err := h.store.GetHoldingById(ctx, userPayload.User_id, holdingParams.Id)
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"holding": holding})

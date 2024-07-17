@@ -1,6 +1,7 @@
 package types
 
 import (
+	"context"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
@@ -66,9 +67,9 @@ type HoldingHandler interface {
 }
 
 type HoldingStore interface {
-	CreateHolding(holding *Holding) error
-	GetHoldings(userId int, options *GetHoldingsStoreOptions) (*[]Holding, *PaginationMetadata, error)
-	GetHoldingById(userId, benchmarkId int) (*Holding, error)
+	CreateHolding(context.Context, *Holding) error
+	GetHoldings(ctx context.Context, userId int, options *GetHoldingsStoreOptions) (*[]Holding, *PaginationMetadata, error)
+	GetHoldingById(ctx context.Context, userId, benchmarkId int) (*Holding, error)
 }
 
 type GetHoldingsStoreOptions struct {

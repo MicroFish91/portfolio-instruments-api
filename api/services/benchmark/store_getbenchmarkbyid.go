@@ -6,9 +6,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresBenchmarkStore) GetBenchmarkById(userId, benchmarkId int) (*types.Benchmark, error) {
+func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, benchmarkId int) (*types.Benchmark, error) {
 	row := s.db.QueryRow(
-		context.Background(),
+		ctx,
 		`SELECT * FROM benchmarks
 		WHERE benchmark_id = $1
 		AND user_id = $2`,

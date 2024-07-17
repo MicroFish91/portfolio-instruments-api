@@ -1,7 +1,9 @@
 package benchmark
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -21,16 +23,23 @@ func (h *BenchmarkHandlerImpl) GetBenchmarks(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid query params from request"))
 	}
 
-	benchmarks, pagination, err := h.store.GetBenchmarks(userPayload.User_id, &types.GetBenchmarksStoreOptions{
-		Benchmark_ids: queryPayload.Benchmark_ids,
-		Name:          queryPayload.Name,
-		Is_deprecated: queryPayload.Is_deprecated,
-		Current_page:  queryPayload.Current_page,
-		Page_size:     queryPayload.Page_size,
-	})
+	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
+	defer cancel()
+
+	benchmarks, pagination, err := h.store.GetBenchmarks(
+		ctx,
+		userPayload.User_id,
+		&types.GetBenchmarksStoreOptions{
+			Benchmark_ids: queryPayload.Benchmark_ids,
+			Name:          queryPayload.Name,
+			Is_deprecated: queryPayload.Is_deprecated,
+			Current_page:  queryPayload.Current_page,
+			Page_size:     queryPayload.Page_size,
+		},
+	)
 
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{

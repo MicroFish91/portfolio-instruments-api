@@ -27,7 +27,7 @@ func (h *AccountHandlerImpl) GetAccountById(c fiber.Ctx) error {
 
 	account, err := h.store.GetAccountById(ctx, userPayload.User_id, accountParams.Id)
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"account": account})

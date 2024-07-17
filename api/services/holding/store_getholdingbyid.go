@@ -6,9 +6,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresHoldingStore) GetHoldingById(userId int, holdingId int) (*types.Holding, error) {
+func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId int, holdingId int) (*types.Holding, error) {
 	row := s.db.QueryRow(
-		context.Background(),
+		ctx,
 		`SELECT *
 		FROM holdings
 		WHERE user_id = $1 AND holding_id = $2`,

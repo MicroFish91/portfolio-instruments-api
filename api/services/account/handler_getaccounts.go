@@ -3,7 +3,6 @@ package account
 import (
 	"context"
 	"errors"
-	"regexp"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
@@ -41,10 +40,7 @@ func (h *AccountHandlerImpl) GetAccounts(c fiber.Ctx) error {
 	)
 
 	if err != nil {
-		if regexp.MustCompile(`deadline[\s]*exceeded`).Match([]byte(err.Error())) {
-			return utils.SendError(c, fiber.StatusGatewayTimeout, err)
-		}
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{

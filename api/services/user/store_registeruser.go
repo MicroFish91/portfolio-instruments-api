@@ -6,9 +6,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresUserStore) RegisterUser(u *types.User) error {
+func (s *PostgresUserStore) RegisterUser(ctx context.Context, u *types.User) error {
 	_, err := s.db.Exec(
-		context.Background(),
+		ctx,
 		`INSERT INTO users 
 		(email, enc_password) 
 		VALUES ($1, $2)`,

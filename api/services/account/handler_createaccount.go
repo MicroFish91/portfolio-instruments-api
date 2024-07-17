@@ -39,7 +39,7 @@ func (h *AccountHandlerImpl) CreateAccount(c fiber.Ctx) error {
 	)
 
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{})
 }

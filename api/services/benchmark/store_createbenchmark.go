@@ -6,9 +6,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresBenchmarkStore) CreateBenchmark(b *types.Benchmark) error {
+func (s *PostgresBenchmarkStore) CreateBenchmark(ctx context.Context, b *types.Benchmark) error {
 	_, err := s.db.Exec(
-		context.Background(),
+		ctx,
 		`INSERT INTO benchmarks
 		(name, description, asset_allocation, std_dev_pct, real_return_pct, drawdown_yrs, is_deprecated, user_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`,

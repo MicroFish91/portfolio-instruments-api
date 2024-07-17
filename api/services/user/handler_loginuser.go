@@ -1,7 +1,9 @@
 package user
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -15,9 +17,12 @@ func (h *UserHandlerImpl) LoginUser(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user request body"))
 	}
 
-	user, err := h.store.GetUserByEmail(userPayload.Email)
+	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
+	defer cancel()
+
+	user, err := h.store.GetUserByEmail(ctx, userPayload.Email)
 	if err != nil {
-		return utils.SendError(c, fiber.StatusInternalServerError, err)
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	if err := auth.CompareHashAndPassword(user.Enc_password, userPayload.Password); err != nil {
