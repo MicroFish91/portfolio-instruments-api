@@ -3,15 +3,15 @@ package account
 import (
 	"log/slog"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type PostgresAccountStore struct {
-	db     *pgx.Conn // Todo swap with pgxpool
+	db     *pgxpool.Pool // Todo swap with pgxpool
 	logger *slog.Logger
 }
 
-func NewPostgresAccountStore(postgresDb *pgx.Conn, logger *slog.Logger) *PostgresAccountStore {
+func NewPostgresAccountStore(postgresDb *pgxpool.Pool, logger *slog.Logger) *PostgresAccountStore {
 	return &PostgresAccountStore{
 		db:     postgresDb,
 		logger: logger,

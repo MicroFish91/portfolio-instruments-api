@@ -3,15 +3,15 @@ package snapshot
 import (
 	"log/slog"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type PostgresSnapshotStore struct {
-	db     *pgx.Conn
+	db     *pgxpool.Pool
 	logger *slog.Logger
 }
 
-func NewPostgresSnapshotStore(db *pgx.Conn, logger *slog.Logger) *PostgresSnapshotStore {
+func NewPostgresSnapshotStore(db *pgxpool.Pool, logger *slog.Logger) *PostgresSnapshotStore {
 	return &PostgresSnapshotStore{
 		db:     db,
 		logger: logger,

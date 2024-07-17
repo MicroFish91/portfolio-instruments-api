@@ -11,16 +11,16 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/user"
 	"github.com/gofiber/fiber/v3"
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type ApiServer struct {
 	addr   string
-	db     *pgx.Conn
+	db     *pgxpool.Pool
 	logger *slog.Logger
 }
 
-func NewApiServer(addr string, db *pgx.Conn, logger *slog.Logger) *ApiServer {
+func NewApiServer(addr string, db *pgxpool.Pool, logger *slog.Logger) *ApiServer {
 	return &ApiServer{
 		addr:   addr,
 		db:     db,

@@ -6,9 +6,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresAccountStore) GetAccountById(userId int, accountId int) (*types.Account, error) {
+func (s *PostgresAccountStore) GetAccountById(ctx context.Context, userId int, accountId int) (*types.Account, error) {
 	row := s.db.QueryRow(
-		context.Background(),
+		ctx,
 		`SELECT *
 		FROM accounts
 		WHERE user_id = $1 AND account_id = $2`,

@@ -9,7 +9,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 )
 
-func (s *PostgresAccountStore) GetAccounts(userId int, options *types.GetAccountsStoreOptions) (*[]types.Account, *types.PaginationMetadata, error) {
+func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, options *types.GetAccountsStoreOptions) (*[]types.Account, *types.PaginationMetadata, error) {
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page
@@ -49,7 +49,7 @@ func (s *PostgresAccountStore) GetAccounts(userId int, options *types.GetAccount
 		return nil, nil, fmt.Errorf("error formatting sql query using query builder: %s", err.Error())
 	}
 
-	rows, err := s.db.Query(context.Background(), pgxb.Query, pgxb.QueryParams...)
+	rows, err := s.db.Query(ctx, pgxb.Query, pgxb.QueryParams...)
 	if err != nil {
 		return nil, nil, err
 	}

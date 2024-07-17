@@ -1,6 +1,7 @@
 package types
 
 import (
+	"context"
 	"time"
 
 	"github.com/gofiber/fiber/v3"
@@ -39,9 +40,9 @@ type AccountHandler interface {
 }
 
 type AccountStore interface {
-	CreateAccount(account *Account) error
-	GetAccounts(userId int, options *GetAccountsStoreOptions) (*[]Account, *PaginationMetadata, error)
-	GetAccountById(userId int, accountId int) (*Account, error)
+	CreateAccount(context.Context, *Account) error
+	GetAccounts(ctx context.Context, userId int, options *GetAccountsStoreOptions) (*[]Account, *PaginationMetadata, error)
+	GetAccountById(ctx context.Context, userId int, accountId int) (*Account, error)
 }
 
 type GetAccountsStoreOptions struct {

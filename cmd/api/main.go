@@ -1,7 +1,6 @@
 package main
 
 import (
-	"context"
 	"log"
 	"log/slog"
 
@@ -15,7 +14,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close(context.Background())
+	defer db.Close()
 
 	logger := logger.NewLogger(slog.LevelDebug) // Todo: Set log level via environment variable
 

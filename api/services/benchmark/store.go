@@ -3,15 +3,15 @@ package benchmark
 import (
 	"log/slog"
 
-	"github.com/jackc/pgx/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
 )
 
 type PostgresBenchmarkStore struct {
-	db     *pgx.Conn
+	db     *pgxpool.Pool
 	logger *slog.Logger
 }
 
-func NewPostgresBenchmarkStore(db *pgx.Conn, logger *slog.Logger) *PostgresBenchmarkStore {
+func NewPostgresBenchmarkStore(db *pgxpool.Pool, logger *slog.Logger) *PostgresBenchmarkStore {
 	return &PostgresBenchmarkStore{
 		db:     db,
 		logger: logger,

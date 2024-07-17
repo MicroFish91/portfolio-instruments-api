@@ -1,7 +1,9 @@
 package account
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -20,7 +22,10 @@ func (h *AccountHandlerImpl) GetAccountById(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid account params from request"))
 	}
 
-	account, err := h.store.GetAccountById(userPayload.User_id, accountParams.Id)
+	ctx, cancel := context.WithTimeout(c.Context(), time.Second*5)
+	defer cancel()
+
+	account, err := h.store.GetAccountById(ctx, userPayload.User_id, accountParams.Id)
 	if err != nil {
 		return utils.SendError(c, fiber.StatusInternalServerError, err)
 	}

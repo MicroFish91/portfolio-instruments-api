@@ -6,9 +6,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresAccountStore) CreateAccount(a *types.Account) error {
+func (s *PostgresAccountStore) CreateAccount(ctx context.Context, a *types.Account) error {
 	_, err := s.db.Exec(
-		context.Background(),
+		ctx,
 		`INSERT INTO accounts
 		(name, description, tax_shelter, institution, is_deprecated, user_id)
 		VALUES ($1, $2, $3, $4, $5, $6)`,
