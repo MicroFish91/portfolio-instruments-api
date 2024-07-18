@@ -8,6 +8,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
+	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, options *types.GetAccountsStoreOptions) (*[]types.Account, *types.PaginationMetadata, error) {
@@ -57,9 +58,21 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 	if err != nil {
 		return nil, nil, err
 	}
-
 	defer rows.Close()
 
+	accounts, total_items, err := s.parseRowsIntoAccounts(rows)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return accounts, &types.PaginationMetadata{
+		Current_page: currentPage,
+		Page_size:    pageSize,
+		Total_items:  total_items,
+	}, nil
+}
+
+func (s *PostgresAccountStore) parseRowsIntoAccounts(rows pgx.Rows) (*[]types.Account, int, error) {
 	var total_items int
 	var accounts []types.Account
 
@@ -79,18 +92,10 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 		)
 
 		if err != nil {
-			return nil, nil, err
+			return nil, 0, err
 		}
 		accounts = append(accounts, a)
 	}
 
-	if err := rows.Err(); err != nil {
-		return nil, nil, err
-	}
-
-	return &accounts, &types.PaginationMetadata{
-		Current_page: currentPage,
-		Page_size:    pageSize,
-		Total_items:  total_items,
-	}, nil
+	return &accounts, total_items, nil
 }

@@ -7,19 +7,23 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresAccountStore) CreateAccount(ctx context.Context, a *types.Account) error {
+func (s *PostgresAccountStore) CreateAccount(ctx context.Context, a *types.Account) (*types.Account, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	_, err := s.db.Exec(
+	row := s.db.QueryRow(
 		c,
 		`INSERT INTO accounts
 		(name, description, tax_shelter, institution, is_deprecated, user_id)
-		VALUES ($1, $2, $3, $4, $5, $6)`,
+		VALUES ($1, $2, $3, $4, $5, $6)
+		RETURNING *`,
 		a.Name, a.Description, a.Tax_shelter, a.Institution, a.Is_deprecated, a.User_id,
 	)
+
+	account, err := s.parseRowIntoAccount(row)
+
 	if err != nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return account, nil
 }

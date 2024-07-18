@@ -21,7 +21,7 @@ func (h *AccountHandlerImpl) CreateAccount(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid account request body"))
 	}
 
-	err := h.store.CreateAccount(
+	account, err := h.store.CreateAccount(
 		c.Context(),
 		&types.Account{
 			Name:          accountPayload.Name,
@@ -36,5 +36,5 @@ func (h *AccountHandlerImpl) CreateAccount(c fiber.Ctx) error {
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
-	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{})
+	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{"account": account})
 }
