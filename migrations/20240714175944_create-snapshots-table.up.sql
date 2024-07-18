@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS snapshots (
     snap_id serial PRIMARY KEY,
-    -- description text,
+    description text,
     snap_date varchar(10) CHECK (snap_date ~ '^\d{2}/\d{2}/\d{4}$') NOT NULL, -- MM/DD/YYYY,
     total numeric(13, 2) DEFAULT 0,
     user_id integer NOT NULL,

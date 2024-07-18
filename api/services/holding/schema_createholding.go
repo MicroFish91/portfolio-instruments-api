@@ -18,14 +18,12 @@ type CreateHoldingPayload struct {
 	Is_deprecated   bool                `json:"is_deprecated"`
 }
 
-// Todo: Add better server and sql validation for expense ratio and interest rate
-
 func (p CreateHoldingPayload) Validate() error {
 	if p.Maturation_date != "" {
 		pattern := regexp.MustCompile(`^\d{2}/\d{2}/\d{4}$`)
 		ok := pattern.Match([]byte(p.Maturation_date))
 		if !ok {
-			return errors.New("maturation date needs to follow string format mm/dd/yyyy")
+			return errors.New("maturation date must to follow string format mm/dd/yyyy")
 		}
 	}
 

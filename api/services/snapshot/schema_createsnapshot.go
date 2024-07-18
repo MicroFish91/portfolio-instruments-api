@@ -1,6 +1,11 @@
 package snapshot
 
-import validation "github.com/go-ozzo/ozzo-validation/v4"
+import (
+	"errors"
+	"regexp"
+
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+)
 
 type CreateSnapshotPayload struct {
 	Snap_date       string                        `json:"snap_date"`
@@ -21,8 +26,12 @@ func (p CreateSnapshotPayload) Validate() error {
 		}
 	}
 
+	if !regexp.MustCompile(`^\d{2}/\d{2}\d{4}$`).Match([]byte(p.Snap_date)) {
+		return errors.New("maturation date must to follow string format mm/dd/yyyy")
+	}
+
 	return validation.ValidateStruct(&p,
-		validation.Field(&p.Snap_date, validation.Required),
+		validation.Field(&p.Snap_date, validation.Length(10, 10)),
 		validation.Field(&p.Snapshot_values),
 	)
 }
