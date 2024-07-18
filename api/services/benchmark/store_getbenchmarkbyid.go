@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, benchmarkId int) (*types.Benchmark, error) {
@@ -19,6 +20,15 @@ func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, b
 		benchmarkId, userId,
 	)
 
+	benchmark, err := s.parseRowIntoBenchmark(row)
+
+	if err != nil {
+		return nil, err
+	}
+	return benchmark, nil
+}
+
+func (s *PostgresBenchmarkStore) parseRowIntoBenchmark(row pgx.Row) (*types.Benchmark, error) {
 	var b types.Benchmark
 	err := row.Scan(
 		&b.Benchmark_id,
@@ -37,6 +47,5 @@ func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, b
 	if err != nil {
 		return nil, err
 	}
-
 	return &b, nil
 }

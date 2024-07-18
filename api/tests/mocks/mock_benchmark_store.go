@@ -12,8 +12,8 @@ func NewMockBenchmarkStore() *MockBenchmarkStore {
 	return &MockBenchmarkStore{}
 }
 
-func (s *MockBenchmarkStore) CreateBenchmark(ctx context.Context, b *types.Benchmark) error {
-	return nil
+func (s *MockBenchmarkStore) CreateBenchmark(ctx context.Context, b *types.Benchmark) (*types.Benchmark, error) {
+	return &types.Benchmark{}, nil
 }
 
 func (s *MockBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, options *types.GetBenchmarksStoreOptions) (*[]types.Benchmark, *types.PaginationMetadata, error) {

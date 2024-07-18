@@ -21,7 +21,7 @@ func (h *BenchmarkHandlerImpl) CreateBenchmark(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid benchmark payload from request"))
 	}
 
-	err := h.store.CreateBenchmark(
+	benchmark, err := h.store.CreateBenchmark(
 		c.Context(),
 		&types.Benchmark{
 			Name:             benchmarkPayload.Name,
@@ -38,6 +38,5 @@ func (h *BenchmarkHandlerImpl) CreateBenchmark(c fiber.Ctx) error {
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
-
-	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{})
+	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{"benchmark": benchmark})
 }

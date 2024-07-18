@@ -8,6 +8,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
+	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, options *types.GetBenchmarksStoreOptions) (*[]types.Benchmark, *types.PaginationMetadata, error) {
@@ -58,11 +59,25 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 	}
 	defer rows.Close()
 
+	benchmarks, total_items, err := s.parseRowsIntoBenchmarks(rows)
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return benchmarks, &types.PaginationMetadata{
+		Current_page: currentPage,
+		Page_size:    pageSize,
+		Total_items:  total_items,
+	}, nil
+}
+
+func (s *PostgresBenchmarkStore) parseRowsIntoBenchmarks(rows pgx.Rows) (*[]types.Benchmark, int, error) {
 	var total_items int
 	var benchmarks []types.Benchmark
+
 	for rows.Next() {
 		var b types.Benchmark
-		err = rows.Scan(
+		err := rows.Scan(
 			&b.Benchmark_id,
 			&b.Name,
 			&b.Description,
@@ -78,14 +93,10 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 		)
 
 		if err != nil {
-			return nil, nil, err
+			return nil, 0, err
 		}
 		benchmarks = append(benchmarks, b)
 	}
 
-	return &benchmarks, &types.PaginationMetadata{
-		Current_page: currentPage,
-		Page_size:    pageSize,
-		Total_items:  total_items,
-	}, nil
+	return &benchmarks, total_items, nil
 }
