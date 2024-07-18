@@ -23,7 +23,7 @@ func (p CreateHoldingPayload) Validate() error {
 		pattern := regexp.MustCompile(`^\d{2}/\d{2}/\d{4}$`)
 		ok := pattern.Match([]byte(p.Maturation_date))
 		if !ok {
-			return errors.New("maturation date must to follow string format mm/dd/yyyy")
+			return errors.New("maturation_date must follow string format mm/dd/yyyy")
 		}
 	}
 

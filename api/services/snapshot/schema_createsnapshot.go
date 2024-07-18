@@ -27,8 +27,8 @@ func (p CreateSnapshotPayload) Validate() error {
 		}
 	}
 
-	if !regexp.MustCompile(`^\d{2}/\d{2}\d{4}$`).Match([]byte(p.Snap_date)) {
-		return errors.New("maturation date must to follow string format mm/dd/yyyy")
+	if !regexp.MustCompile(`^\d{2}/\d{2}/\d{4}$`).Match([]byte(p.Snap_date)) {
+		return errors.New("snap_date must follow string format mm/dd/yyyy")
 	}
 
 	return validation.ValidateStruct(&p,
