@@ -7,6 +7,7 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
+// Add current benchmark to snapshot
 type CreateSnapshotPayload struct {
 	Snap_date       string                        `json:"snap_date"`
 	Snapshot_values []CreateSnapshotValuesPayload `json:"snapshot_values"`

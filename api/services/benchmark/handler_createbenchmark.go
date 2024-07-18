@@ -2,6 +2,7 @@ package benchmark
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -19,6 +20,12 @@ func (h *BenchmarkHandlerImpl) CreateBenchmark(c fiber.Ctx) error {
 	benchmarkPayload, ok := c.Locals(constants.LOCALS_REQ_BODY).(CreateBenchmarkPayload)
 	if !ok {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid benchmark payload from request"))
+	}
+
+	// Ensure benchmark name is unique per user
+	existingBenchmark, _ := h.store.GetBenchmarkByName(c.Context(), benchmarkPayload.Name, userPayload.User_id)
+	if existingBenchmark != nil {
+		return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has existing benchmark with name "%s"`, existingBenchmark.Name))
 	}
 
 	benchmark, err := h.store.CreateBenchmark(

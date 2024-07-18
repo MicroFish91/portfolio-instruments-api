@@ -43,6 +43,7 @@ type AccountStore interface {
 	CreateAccount(context.Context, *Account) (*Account, error)
 	GetAccounts(ctx context.Context, userId int, options *GetAccountsStoreOptions) (*[]Account, *PaginationMetadata, error)
 	GetAccountById(ctx context.Context, userId int, accountId int) (*Account, error)
+	GetAccountByName(ctx context.Context, name string, userId int) (*Account, error)
 }
 
 type GetAccountsStoreOptions struct {

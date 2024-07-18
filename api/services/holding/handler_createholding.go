@@ -2,6 +2,7 @@ package holding
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -21,7 +22,13 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid holding payload from request body"))
 	}
 
-	// Todo: Add check to ensure tickers and names are unique
+	// Ensure ticker holdings are unique per user
+	if holdingPayload.Ticker != "" {
+		existingHolding, _ := h.store.GetHoldingByTicker(c.Context(), holdingPayload.Ticker, userPayload.User_id)
+		if existingHolding != nil {
+			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has holding with ticker symbol "%s"`, existingHolding.Ticker))
+		}
+	}
 
 	holding, err := h.store.CreateHolding(
 		c.Context(),

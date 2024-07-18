@@ -2,6 +2,7 @@ package account
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -19,6 +20,12 @@ func (h *AccountHandlerImpl) CreateAccount(c fiber.Ctx) error {
 	accountPayload, ok := c.Locals(constants.LOCALS_REQ_BODY).(CreateAccountPayload)
 	if !ok {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid account request body"))
+	}
+
+	// Ensure account name is unique per user
+	existingAccount, _ := h.store.GetAccountByName(c.Context(), accountPayload.Name, userPayload.User_id)
+	if existingAccount != nil {
+		return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has account with name "%s"`, existingAccount.Name))
 	}
 
 	account, err := h.store.CreateAccount(
