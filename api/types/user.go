@@ -21,6 +21,6 @@ type UserHandler interface {
 }
 
 type UserStore interface {
-	RegisterUser(context.Context, *User) error
+	RegisterUser(context.Context, *User) (*User, error)
 	GetUserByEmail(ctx context.Context, email string) (*User, error)
 }

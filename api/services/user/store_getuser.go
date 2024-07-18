@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (*types.User, error) {
@@ -19,8 +20,19 @@ func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (*
 		email,
 	)
 
+	user, err := s.parseRowIntoUser(row)
+
+	if err != nil {
+		return nil, err
+	}
+	return user, nil
+}
+
+func (s *PostgresUserStore) parseRowIntoUser(row pgx.Row) (*types.User, error) {
 	var u types.User
-	if err := row.Scan(&u.User_id, &u.Email, &u.Enc_password, &u.Created_at, &u.Updated_at); err != nil {
+	err := row.Scan(&u.User_id, &u.Email, &u.Enc_password, &u.Created_at, &u.Updated_at)
+
+	if err != nil {
 		return nil, err
 	}
 	return &u, nil
