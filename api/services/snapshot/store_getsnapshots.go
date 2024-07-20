@@ -15,7 +15,8 @@ func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int) (*
 	rows, err := s.db.Query(
 		c,
 		`SELECT * FROM snapshots
-		WHERE user_id = $1`,
+		WHERE user_id = $1
+		ORDER BY TO_DATE(snap_date, 'MM/DD/YYYY') DESC`,
 		userId,
 	)
 	if err != nil {
