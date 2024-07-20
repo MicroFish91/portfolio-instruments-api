@@ -23,9 +23,9 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	}
 
 	// Verify accounts exist
-	var accId int
+	accIdsSet := map[int]struct{}{}
 	for _, svpayload := range snapshotPayload.Snapshot_values {
-		if accId == svpayload.Account_id {
+		if _, checked := accIdsSet[svpayload.Account_id]; checked {
 			continue
 		}
 
@@ -33,21 +33,21 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		if acc == nil {
 			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`specified account with id "%d" does not exist`, svpayload.Account_id))
 		}
-		accId = svpayload.Account_id
+		accIdsSet[svpayload.Account_id] = struct{}{}
 	}
 
 	// Verify holdings exist
-	var holdId int
-	for _, svPayload := range snapshotPayload.Snapshot_values {
-		if holdId == svPayload.Holding_id {
+	holdIdsSet := map[int]struct{}{}
+	for _, svpayload := range snapshotPayload.Snapshot_values {
+		if _, checked := holdIdsSet[svpayload.Holding_id]; checked {
 			continue
 		}
 
-		hold, _ := h.holdingStore.GetHoldingById(c.Context(), userPayload.User_id, svPayload.Holding_id)
+		hold, _ := h.holdingStore.GetHoldingById(c.Context(), userPayload.User_id, svpayload.Holding_id)
 		if hold == nil {
-			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`specified holding with id "%d" does not exist`, svPayload.Holding_id))
+			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`specified holding with id "%d" does not exist`, svpayload.Holding_id))
 		}
-		holdId = svPayload.Holding_id
+		holdIdsSet[svpayload.Holding_id] = struct{}{}
 	}
 
 	// Create snapshot
