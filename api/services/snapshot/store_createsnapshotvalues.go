@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresSnapshotStore) CreateSnapshotValues(ctx context.Context, snapVals *types.SnapshotValues) (*types.SnapshotValues, error) {
@@ -20,6 +21,15 @@ func (s *PostgresSnapshotStore) CreateSnapshotValues(ctx context.Context, snapVa
 		snapVals.Snap_id, snapVals.Account_id, snapVals.Holding_id, snapVals.Total, snapVals.Skip_rebalance, snapVals.User_id,
 	)
 
+	sv, err := s.parseRowIntoSnapshotValues(row)
+
+	if err != nil {
+		return nil, err
+	}
+	return sv, nil
+}
+
+func (s *PostgresSnapshotStore) parseRowIntoSnapshotValues(row pgx.Row) (*types.SnapshotValues, error) {
 	var sv types.SnapshotValues
 	err := row.Scan(
 		&sv.Snap_val_id,

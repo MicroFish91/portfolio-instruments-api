@@ -10,6 +10,7 @@ import (
 // Add current benchmark to snapshot
 type CreateSnapshotPayload struct {
 	Snap_date       string                        `json:"snap_date"`
+	Description     string                        `json:"description"`
 	Snapshot_values []CreateSnapshotValuesPayload `json:"snapshot_values"`
 }
 
@@ -33,6 +34,7 @@ func (p CreateSnapshotPayload) Validate() error {
 
 	return validation.ValidateStruct(&p,
 		validation.Field(&p.Snap_date, validation.Length(10, 10)),
+		validation.Field(&p.Description, validation.Length(1, 1024)),
 		validation.Field(&p.Snapshot_values),
 	)
 }

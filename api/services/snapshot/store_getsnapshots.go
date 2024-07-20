@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int) (*[]types.Snapshot, error) {
@@ -21,11 +22,21 @@ func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int) (*
 		return nil, err
 	}
 
+	snapshots, err := s.parseRowsIntoSnapshots(rows)
+	if err != nil {
+		return nil, err
+	}
+
+	return snapshots, nil
+}
+
+func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) (*[]types.Snapshot, error) {
 	var snapshots []types.Snapshot
 	for rows.Next() {
 		var s types.Snapshot
 		err := rows.Scan(
 			&s.Snap_id,
+			&s.Description,
 			&s.Snap_date,
 			&s.Total,
 			&s.User_id,

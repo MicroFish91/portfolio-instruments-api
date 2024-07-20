@@ -26,8 +26,9 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	snapshot, err := h.store.CreateSnapshot(
 		c.Context(),
 		&types.Snapshot{
-			Snap_date: snapshotPayload.Snap_date,
-			User_id:   userPayload.User_id,
+			Snap_date:   snapshotPayload.Snap_date,
+			Description: snapshotPayload.Description,
+			User_id:     userPayload.User_id,
 		},
 	)
 	if err != nil {

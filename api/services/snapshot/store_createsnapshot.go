@@ -14,25 +14,16 @@ func (s *PostgresSnapshotStore) CreateSnapshot(ctx context.Context, snapshot *ty
 	row := s.db.QueryRow(
 		c,
 		`INSERT INTO snapshots
-		(snap_date, user_id)
-		VALUES ($1, $2)
+		(snap_date, description, user_id)
+		VALUES ($1, $2, $3)
 		RETURNING *`,
-		snapshot.Snap_date, snapshot.User_id,
+		snapshot.Snap_date, snapshot.Description, snapshot.User_id,
 	)
 
-	var snap types.Snapshot
-	err := row.Scan(
-		&snap.Snap_id,
-		&snap.Snap_date,
-		&snap.Total,
-		&snap.User_id,
-		&snap.Created_at,
-		&snap.Updated_at,
-	)
+	snapshot, err := s.parseRowIntoSnapshot(row)
 
 	if err != nil {
 		return nil, err
 	}
-
-	return &snap, nil
+	return snapshot, nil
 }

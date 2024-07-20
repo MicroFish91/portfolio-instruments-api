@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS benchmarks (
     description text,
     asset_allocation jsonb NOT NULL,
     std_dev_pct numeric(3,2),
-    real_return_pct (3,2),
+    real_return_pct numeric(3,2),
     drawdown_yrs int,
     is_deprecated boolean NOT NULL,
     user_id integer NOT NULL,

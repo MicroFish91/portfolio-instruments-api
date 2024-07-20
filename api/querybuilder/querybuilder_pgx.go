@@ -20,6 +20,8 @@ func (q *PgxQueryBuilder) AddQuery(s string) {
 	q.Query = fmt.Sprintf("%s\n%s", q.Query, s)
 }
 
+// Todo: Add better error handling
+
 // Appends a new SQL query with positional parameters
 // to the existing query in PgxQueryBuilder. It first replaces placeholders
 // in the format "$x" with incrementing positional parameters (e.g., "$1", "$2", etc.)

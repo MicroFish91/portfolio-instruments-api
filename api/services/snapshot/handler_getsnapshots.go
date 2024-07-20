@@ -16,7 +16,6 @@ func (h *SnapshotHandlerImpl) GetSnapshots(c fiber.Ctx) error {
 	}
 
 	// Todo: Add pagination later
-	// Todo: Add way to expand all account/holdings
 	snapshots, err := h.store.GetSnapshots(c.Context(), userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
