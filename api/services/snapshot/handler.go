@@ -7,13 +7,23 @@ import (
 )
 
 type SnapshotHandlerImpl struct {
-	store  types.SnapshotStore
-	logger *slog.Logger
+	accountStore  types.AccountStore
+	holdingStore  types.HoldingStore
+	snapshotStore types.SnapshotStore
+	logger        *slog.Logger
 }
 
-func NewSnapshotHandler(store types.SnapshotStore, logger *slog.Logger) *SnapshotHandlerImpl {
+func NewSnapshotHandler(
+	accountStore types.AccountStore,
+	holdingStore types.HoldingStore,
+	snapshotStore types.SnapshotStore,
+	logger *slog.Logger,
+) *SnapshotHandlerImpl {
+
 	return &SnapshotHandlerImpl{
-		store:  store,
-		logger: logger,
+		accountStore:  accountStore,
+		holdingStore:  holdingStore,
+		snapshotStore: snapshotStore,
+		logger:        logger,
 	}
 }

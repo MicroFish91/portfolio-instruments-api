@@ -20,7 +20,7 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
-	snapshot, snapshotValues, err := h.store.GetSnapshotById(c.Context(), snapshotParams.Id, userPayload.User_id)
+	snapshot, snapshotValues, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotParams.Id, userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}

@@ -16,7 +16,7 @@ func (h *SnapshotHandlerImpl) GetSnapshots(c fiber.Ctx) error {
 	}
 
 	// Todo: Add pagination later
-	snapshots, err := h.store.GetSnapshots(c.Context(), userPayload.User_id)
+	snapshots, err := h.snapshotStore.GetSnapshots(c.Context(), userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}

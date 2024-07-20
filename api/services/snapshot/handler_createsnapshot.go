@@ -2,6 +2,7 @@ package snapshot
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -21,9 +22,36 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot payload from request body"))
 	}
 
-	// Todo: Should we check that all accounts and holdings exist first?
+	// Verify accounts exist
+	var accId int
+	for _, svpayload := range snapshotPayload.Snapshot_values {
+		if accId == svpayload.Account_id {
+			continue
+		}
 
-	snapshot, err := h.store.CreateSnapshot(
+		acc, _ := h.accountStore.GetAccountById(c.Context(), userPayload.User_id, svpayload.Account_id)
+		if acc == nil {
+			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`specified account with id "%d" does not exist`, svpayload.Account_id))
+		}
+		accId = svpayload.Account_id
+	}
+
+	// Verify holdings exist
+	var holdId int
+	for _, svPayload := range snapshotPayload.Snapshot_values {
+		if holdId == svPayload.Holding_id {
+			continue
+		}
+
+		hold, _ := h.holdingStore.GetHoldingById(c.Context(), userPayload.User_id, svPayload.Holding_id)
+		if hold == nil {
+			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`specified holding with id "%d" does not exist`, svPayload.Holding_id))
+		}
+		holdId = svPayload.Holding_id
+	}
+
+	// Create snapshot
+	snapshot, err := h.snapshotStore.CreateSnapshot(
 		c.Context(),
 		&types.Snapshot{
 			Snap_date:   snapshotPayload.Snap_date,
@@ -35,9 +63,10 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
+	// Create snapshot values
 	var snapshotValues []types.SnapshotValues
 	for _, sv := range snapshotPayload.Snapshot_values {
-		snapshotVal, err := h.store.CreateSnapshotValues(
+		snapshotVal, err := h.snapshotStore.CreateSnapshotValues(
 			c.Context(),
 			&types.SnapshotValues{
 				Snap_id:        snapshot.Snap_id,
@@ -54,12 +83,13 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		snapshotValues = append(snapshotValues, *snapshotVal)
 	}
 
-	total, err := h.store.RefreshSnapshotTotal(c.Context(), userPayload.User_id, snapshot.Snap_id)
+	// Acquire snapshot total
+	total, err := h.snapshotStore.RefreshSnapshotTotal(c.Context(), userPayload.User_id, snapshot.Snap_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
-
 	snapshot.Total = total
+
 	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{
 		"snapshot":        snapshot,
 		"snapshot_values": snapshotValues,
