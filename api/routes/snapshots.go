@@ -8,7 +8,7 @@ import (
 )
 
 func registerSnapshotRoutes(r fiber.Router, h types.SnapshotHandler) {
-	r.Get("/snapshots", h.GetSnapshots, middleware.RequireAuth)
+	r.Get("/snapshots", h.GetSnapshots, middleware.RequireAuth, middleware.AddQueryValidator[snapshot.GetSnapshotsQuery]())
 	r.Get("/snapshots/:id", h.GetSnapshotById, middleware.RequireAuth, middleware.AddParamsValidator[snapshot.GetSnapshotByIdParams]())
 	r.Post("/snapshots", h.CreateSnapshot, middleware.RequireAuth, middleware.AddBodyValidator[snapshot.CreateSnapshotPayload]())
 }

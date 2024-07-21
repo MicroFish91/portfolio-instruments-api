@@ -80,6 +80,7 @@ func (h *SnapshotHandlerImpl) getSnapshotHoldings(c fiber.Ctx, holdingIds *[]int
 func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues *[]types.SnapshotValues) (accIds *[]int, holdIds *[]int) {
 	accIdsSet := map[int]struct{}{}
 	holdIdsSet := map[int]struct{}{}
+
 	for _, sv := range *snapshotValues {
 		accIdsSet[sv.Account_id] = struct{}{}
 		holdIdsSet[sv.Holding_id] = struct{}{}

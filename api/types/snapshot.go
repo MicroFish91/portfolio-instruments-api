@@ -36,9 +36,18 @@ type SnapshotHandler interface {
 }
 
 type SnapshotStore interface {
-	GetSnapshots(ctx context.Context, userId int) (*[]Snapshot, error)
+	GetSnapshots(ctx context.Context, userId int, options *GetSnapshotsStoreOptions) (*[]Snapshot, *PaginationMetadata, error)
 	GetSnapshotById(ctx context.Context, snapshotId, userId int) (*Snapshot, *[]SnapshotValues, error)
 	CreateSnapshot(context.Context, *Snapshot) (*Snapshot, error)
 	CreateSnapshotValues(context.Context, *SnapshotValues) (*SnapshotValues, error)
 	RefreshSnapshotTotal(ctx context.Context, userId, snapshotId int) (float64, error)
+}
+
+type GetSnapshotsStoreOptions struct {
+	Snap_ids        []int
+	Snap_date_lower string
+	Snap_date_upper string
+	Order_date_by   string
+	Current_page    int
+	Page_size       int
 }
