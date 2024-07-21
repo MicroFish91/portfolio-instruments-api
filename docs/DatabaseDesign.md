@@ -70,6 +70,7 @@
     | Column Name    | Datatype  | Not Null | Primary Key |
     |----------------|-----------|----------|-------------|
     | snap_id        | PKEY      | ✅       | ✅          |
+    | description    | TEXT      |          |             |
     | snap_date      | DATE      | ✅       |             |
     | total          | REAL      | ✅       |             |
     | user_id        | INTEGER   | ✅       |             |
