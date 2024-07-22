@@ -7,15 +7,13 @@ import (
 )
 
 type UserHandlerImpl struct {
-	userStore     types.UserStore
-	settingsStore types.SettingsStore
-	logger        *slog.Logger
+	store  types.UserStore
+	logger *slog.Logger
 }
 
-func NewUserHandler(userStore types.UserStore, settingsStore types.SettingsStore, logger *slog.Logger) *UserHandlerImpl {
+func NewUserHandler(store types.UserStore, logger *slog.Logger) *UserHandlerImpl {
 	return &UserHandlerImpl{
-		userStore:     userStore,
-		settingsStore: settingsStore,
-		logger:        logger,
+		store:  store,
+		logger: logger,
 	}
 }

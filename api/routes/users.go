@@ -8,6 +8,11 @@ import (
 )
 
 func registerUserRoutes(r fiber.Router, h types.UserHandler) {
+	// Auth
 	r.Post("/login", h.LoginUser, middleware.AddBodyValidator[user.LoginUserPayload]())
 	r.Post("/register", h.RegisterUser, middleware.AddBodyValidator[user.RegisterUserPayload]())
+
+	// Settings
+	r.Get("/users/settings", h.GetSettings, middleware.RequireAuth)
+	r.Get("/users/:id/settings", h.GetSettings, middleware.RequireAuth)
 }

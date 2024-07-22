@@ -1,4 +1,4 @@
-package settings
+package user
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSettingsStore) CreateSettings(ctx context.Context, settings *types.Settings) (*types.Settings, error) {
+func (s *PostgresUserStore) CreateSettings(ctx context.Context, settings *types.Settings) (*types.Settings, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -30,7 +30,7 @@ func (s *PostgresSettingsStore) CreateSettings(ctx context.Context, settings *ty
 	return settings, nil
 }
 
-func (s *PostgresSettingsStore) parseRowIntoSettings(row pgx.Row) (*types.Settings, error) {
+func (s *PostgresUserStore) parseRowIntoSettings(row pgx.Row) (*types.Settings, error) {
 	var setting types.Settings
 	var benchmark_id sql.NullInt64
 
