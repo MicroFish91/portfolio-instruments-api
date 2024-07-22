@@ -17,10 +17,10 @@ func RegisterRoutes(
 		return c.Status(fiber.StatusOK).JSON(map[string]string{"data": "pong"})
 	})
 
-	v1 := app.Group("/api/v1")
-	registerUserRoutes(v1, userHandler)
-	RegisterBenchmarkRoutes(v1, benchmarkHandler)
-	registerAccountRoutes(v1, accountHandler)
-	registerHoldingRoutes(v1, holdingHandler)
-	registerSnapshotRoutes(v1, snapshotHandler)
+	routerV1 := app.Group("/api/v1")
+	registerUserRoutes(routerV1, userHandler)
+	RegisterBenchmarkRoutes(routerV1, benchmarkHandler)
+	registerAccountRoutes(routerV1, accountHandler)
+	registerHoldingRoutes(routerV1, holdingHandler)
+	registerSnapshotRoutes(routerV1, snapshotHandler)
 }
