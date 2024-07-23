@@ -22,6 +22,8 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot payload from request body"))
 	}
 
+	// Todo: If benchmark_id provided, ensure that it already exists
+
 	// Verify accounts exist
 	accIdsSet := map[int]struct{}{}
 	for _, svpayload := range snapshotPayload.Snapshot_values {
@@ -54,9 +56,10 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	snapshot, err := h.snapshotStore.CreateSnapshot(
 		c.Context(),
 		&types.Snapshot{
-			Snap_date:   snapshotPayload.Snap_date,
-			Description: snapshotPayload.Description,
-			User_id:     userPayload.User_id,
+			Snap_date:    snapshotPayload.Snap_date,
+			Description:  snapshotPayload.Description,
+			User_id:      userPayload.User_id,
+			Benchmark_id: snapshotPayload.Benchmark_id,
 		},
 	)
 	if err != nil {

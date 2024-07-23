@@ -2,6 +2,7 @@ package snapshot
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -49,11 +50,14 @@ func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId,
 
 func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (*types.Snapshot, error) {
 	var snap types.Snapshot
+	var benchmark_id sql.NullInt64
+
 	err := row.Scan(
 		&snap.Snap_id,
 		&snap.Description,
 		&snap.Snap_date,
 		&snap.Total,
+		&benchmark_id,
 		&snap.User_id,
 		&snap.Created_at,
 		&snap.Updated_at,
@@ -62,6 +66,13 @@ func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (*types.Snapsh
 	if err != nil {
 		return nil, err
 	}
+
+	if benchmark_id.Valid {
+		snap.Benchmark_id = int(benchmark_id.Int64)
+	} else {
+		snap.Benchmark_id = 0
+	}
+
 	return &snap, nil
 }
 

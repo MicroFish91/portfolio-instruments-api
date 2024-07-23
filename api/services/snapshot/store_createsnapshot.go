@@ -20,10 +20,26 @@ func (s *PostgresSnapshotStore) CreateSnapshot(ctx context.Context, snapshot *ty
 		snapshot.Snap_date, snapshot.Description, snapshot.User_id,
 	)
 
-	snapshot, err := s.parseRowIntoSnapshot(row)
-
+	snap, err := s.parseRowIntoSnapshot(row)
 	if err != nil {
 		return nil, err
 	}
-	return snapshot, nil
+
+	if snapshot.Benchmark_id != 0 {
+		row = s.db.QueryRow(
+			c,
+			`UPDATE snapshots
+			SET benchmark_id = $1
+			WHERE snap_id = $2
+			RETURNING *`,
+			snapshot.Benchmark_id, snap.Snap_id,
+		)
+
+		snap, err = s.parseRowIntoSnapshot(row)
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	return snap, nil
 }

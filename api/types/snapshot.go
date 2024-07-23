@@ -8,13 +8,14 @@ import (
 )
 
 type Snapshot struct {
-	Snap_id     int       `json:"snap_id"`
-	Description string    `json:"description,omitempty"`
-	Snap_date   string    `json:"snap_date"`
-	Total       float64   `json:"total"`
-	User_id     int       `json:"user_id"`
-	Created_at  time.Time `json:"created_at"`
-	Updated_at  time.Time `json:"updated_at"`
+	Snap_id      int       `json:"snap_id"`
+	Description  string    `json:"description,omitempty"`
+	Snap_date    string    `json:"snap_date"`
+	Total        float64   `json:"total"`
+	Benchmark_id int       `json:"benchmark_id,omitempty"`
+	User_id      int       `json:"user_id"`
+	Created_at   time.Time `json:"created_at"`
+	Updated_at   time.Time `json:"updated_at"`
 }
 
 type SnapshotValues struct {

@@ -2,6 +2,7 @@ package snapshot
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"time"
 
@@ -83,11 +84,14 @@ func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) (*[]types.
 
 	for rows.Next() {
 		var s types.Snapshot
+		var benchmark_id sql.NullInt64
+
 		err := rows.Scan(
 			&s.Snap_id,
 			&s.Description,
 			&s.Snap_date,
 			&s.Total,
+			&benchmark_id,
 			&s.User_id,
 			&s.Created_at,
 			&s.Updated_at,
@@ -97,6 +101,13 @@ func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) (*[]types.
 		if err != nil {
 			return nil, 0, err
 		}
+
+		if benchmark_id.Valid {
+			s.Benchmark_id = int(benchmark_id.Int64)
+		} else {
+			s.Benchmark_id = 0
+		}
+
 		snapshots = append(snapshots, s)
 	}
 
