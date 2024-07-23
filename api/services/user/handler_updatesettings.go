@@ -10,7 +10,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func (h *UserHandlerImpl) PatchSettings(c fiber.Ctx) error {
+func (h *UserHandlerImpl) UpdateSettings(c fiber.Ctx) error {
 	userPayload, ok := c.Locals(constants.LOCALS_REQ_USER).(auth.AuthUserPayload)
 	if !ok {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user from token"))
@@ -21,8 +21,8 @@ func (h *UserHandlerImpl) PatchSettings(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid settings request body"))
 	}
 
-	if err := h.verifyAuthorizedUserId(c, userPayload.User_id); err != nil {
-		return err
+	if err := h.hasAuthorizedUserId(c, userPayload.User_id); err != nil {
+		return utils.SendError(c, fiber.StatusUnauthorized, err)
 	}
 
 	if settingsPayload.Benchmark_id != 0 {

@@ -30,7 +30,7 @@ type UserHandler interface {
 	LoginUser(fiber.Ctx) error
 	RegisterUser(fiber.Ctx) error
 	GetSettings(fiber.Ctx) error
-	PatchSettings(fiber.Ctx) error
+	UpdateSettings(fiber.Ctx) error
 }
 
 type UserStore interface {
