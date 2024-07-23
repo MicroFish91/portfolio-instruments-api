@@ -16,7 +16,7 @@ func (h *UserHandlerImpl) RegisterUser(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user request body"))
 	}
 
-	u, _ := h.store.GetUserByEmail(c.Context(), userPayload.Email)
+	u, _ := h.userStore.GetUserByEmail(c.Context(), userPayload.Email)
 	if u != nil {
 		return utils.SendError(c, fiber.StatusConflict, errors.New("user with provided email already exists"))
 	}
@@ -26,7 +26,7 @@ func (h *UserHandlerImpl) RegisterUser(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusInternalServerError, err)
 	}
 
-	user, err := h.store.RegisterUser(
+	user, err := h.userStore.RegisterUser(
 		c.Context(),
 		&types.User{
 			Email:        userPayload.Email,
@@ -38,7 +38,7 @@ func (h *UserHandlerImpl) RegisterUser(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	settings, err := h.store.CreateSettings(c.Context(), &types.Settings{
+	settings, err := h.userStore.CreateSettings(c.Context(), &types.Settings{
 		Reb_thresh_pct: 10,
 		Vp_thresh_pct:  0,
 		Vp_enabled:     false,

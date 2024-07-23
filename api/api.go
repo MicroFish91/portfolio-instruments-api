@@ -49,7 +49,7 @@ func (s *ApiServer) Run() error {
 	snapshotStore := snapshot.NewPostgresSnapshotStore(s.db, s.logger)
 
 	// Initialize handlers
-	userHandler := user.NewUserHandler(userStore, s.logger)
+	userHandler := user.NewUserHandler(userStore, benchmarkStore, s.logger)
 	accountHandler := account.NewAccountHandler(accountStore, s.logger)
 	holdingHandler := holding.NewHoldingHandler(holdingStore, s.logger)
 	benchmarkHandler := benchmark.NewBenchmarkHandler(benchmarkStore, s.logger)

@@ -16,6 +16,19 @@ func (h *UserHandlerImpl) GetSettings(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user request body"))
 	}
 
+	if err := h.verifyAuthorizedUserId(c, userPayload.User_id); err != nil {
+		return err
+	}
+
+	settings, err := h.userStore.GetSettings(c.Context(), userPayload.User_id)
+	if err != nil {
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
+	}
+
+	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"settings": settings})
+}
+
+func (h *UserHandlerImpl) verifyAuthorizedUserId(c fiber.Ctx, tokenUserId int) error {
 	uid := c.Params("id", "")
 	if uid != "" {
 		userId, err := strconv.Atoi(uid)
@@ -23,15 +36,9 @@ func (h *UserHandlerImpl) GetSettings(c fiber.Ctx) error {
 			return utils.SendError(c, fiber.StatusBadRequest, errors.New("user id must be an integer"))
 		}
 
-		if userId != userPayload.User_id {
+		if userId != tokenUserId {
 			return utils.SendError(c, fiber.StatusUnauthorized, errors.New("provided token does not correspond with the requested user"))
 		}
 	}
-
-	settings, err := h.store.GetSettings(c.Context(), userPayload.User_id)
-	if err != nil {
-		return utils.SendError(c, utils.StatusCodeFromError(err), err)
-	}
-
-	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"settings": settings})
+	return nil
 }

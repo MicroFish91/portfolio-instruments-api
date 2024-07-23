@@ -30,6 +30,7 @@ type UserHandler interface {
 	LoginUser(fiber.Ctx) error
 	RegisterUser(fiber.Ctx) error
 	GetSettings(fiber.Ctx) error
+	PatchSettings(fiber.Ctx) error
 }
 
 type UserStore interface {
@@ -37,4 +38,5 @@ type UserStore interface {
 	GetUserByEmail(ctx context.Context, email string) (*User, error)
 	CreateSettings(context.Context, *Settings) (*Settings, error)
 	GetSettings(ctx context.Context, userId int) (*Settings, error)
+	UpdateSettings(context.Context, *Settings) (*Settings, error)
 }
