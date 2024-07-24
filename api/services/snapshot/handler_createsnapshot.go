@@ -22,7 +22,13 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot payload from request body"))
 	}
 
-	// Todo: If benchmark_id provided, ensure that it already exists
+	// Verify benchmark_id if provided
+	if snapshotPayload.Benchmark_id != 0 {
+		benchmark, _ := h.benchmarkStore.GetBenchmarkById(c.Context(), userPayload.User_id, snapshotPayload.Benchmark_id)
+		if benchmark == nil {
+			return utils.SendError(c, fiber.StatusConflict, errors.New("benchmark with the provided id does not exist"))
+		}
+	}
 
 	// Verify accounts exist
 	accIdsSet := map[int]struct{}{}
