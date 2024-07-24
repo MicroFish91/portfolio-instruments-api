@@ -16,11 +16,22 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("unable to parse valid user from token"))
 	}
 
+	queryPayload, ok := c.Locals(constants.LOCALS_REQ_QUERY).(GetSnapshotByIdQuery)
+	if !ok {
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid query params from request"))
+	}
+
 	snapshotParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(GetSnapshotByIdParams)
 	if !ok {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
+	// Todo: finish adding cases to cover the various tally scenarios
+	if queryPayload.Tally_by != "" {
+		return h.tallyBySnapshotHandler(c, queryPayload.Tally_by, snapshotParams.Id, userPayload.User_id)
+	}
+
+	// snapshot, snapshotValues
 	snapshot, snapshotValues, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotParams.Id, userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
@@ -28,11 +39,13 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 
 	accountIds, holdingIds := h.gatherSnapshotResourceIds(snapshotValues)
 
+	// accounts
 	accounts, err := h.getSnapshotAccounts(c, accountIds, userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
+	// holdings
 	holdings, err := h.getSnapshotHoldings(c, holdingIds, userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
@@ -97,4 +110,20 @@ func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues *[]types.
 	}
 
 	return &accountIds, &holdingIds
+}
+
+func (h *SnapshotHandlerImpl) tallyBySnapshotHandler(c fiber.Ctx, tc TallyCategory, snapId, userId int) error {
+	switch tc {
+	case BY_ACCOUNT:
+		// Todo: Add store method
+		return nil
+	case BY_TAX_SHELTER:
+		// Todo: Add store method
+		return nil
+	case BY_ASSET_CATEGORY:
+		// Todo: Add store method
+		return nil
+	default:
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("provided an unsupported tally_by category"))
+	}
 }

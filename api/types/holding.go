@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-type AssetCategory = string
+type AssetCategory string
 
 const (
 	CASH        AssetCategory = "CASH"

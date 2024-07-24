@@ -10,9 +10,9 @@ import (
 
 type GetSnapshotsQuery struct {
 	Snap_ids        []int  `json:"snap_ids"`
-	Snap_date_lower string `json:"snap_date_lower"`
-	Snap_date_upper string `json:"snap_date_upper"`
-	Order_date_by   string `json:"order_date"`
+	Snap_date_lower string `json:"snap_date_lower"` // mm/dd/yyyy
+	Snap_date_upper string `json:"snap_date_upper"` // mm/dd/yyyy
+	Order_date_by   string `json:"order_date_by"`   // ASC or DESC
 
 	types.PaginationQuery
 }
