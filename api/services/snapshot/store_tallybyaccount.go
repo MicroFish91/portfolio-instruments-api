@@ -10,7 +10,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) TallyAccountBy(ctx context.Context, snapId, userId int, options *types.GetTallyByAccountStoreOptions) (*types.AccountsGrouped, error) {
+func (s *PostgresSnapshotStore) TallyByAccount(ctx context.Context, snapId, userId int, options *types.GetTallyByAccountStoreOptions) (*types.AccountsGrouped, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 

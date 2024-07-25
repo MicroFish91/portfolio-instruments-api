@@ -124,7 +124,7 @@ func (h *SnapshotHandlerImpl) tallyBySnapshotHandler(c fiber.Ctx, tc string, sna
 			tallyBy = types.BY_ACCOUNT_INSTITUTION
 		}
 
-		accountsGrouped, err := h.snapshotStore.TallyAccountBy(c.Context(), snapId, userId, &types.GetTallyByAccountStoreOptions{
+		accountsGrouped, err := h.snapshotStore.TallyByAccount(c.Context(), snapId, userId, &types.GetTallyByAccountStoreOptions{
 			Tally_by: tallyBy,
 		})
 

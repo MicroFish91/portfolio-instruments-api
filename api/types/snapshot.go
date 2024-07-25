@@ -42,7 +42,7 @@ type SnapshotStore interface {
 	CreateSnapshot(context.Context, *Snapshot) (*Snapshot, error)
 	CreateSnapshotValues(context.Context, *SnapshotValues) (*SnapshotValues, error)
 	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (float64, error)
-	TallyAccountBy(ctx context.Context, userId, snapId int, options *GetTallyByAccountStoreOptions) (*AccountsGrouped, error)
+	TallyByAccount(ctx context.Context, userId, snapId int, options *GetTallyByAccountStoreOptions) (*AccountsGrouped, error)
 }
 
 type GetSnapshotsStoreOptions struct {
