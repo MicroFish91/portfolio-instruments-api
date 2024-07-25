@@ -28,7 +28,7 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 
 	// Handler for special "tally_by" request queries
 	if queryPayload.Tally_by != "" {
-		return h.tallyBySnapshotHandler(c, queryPayload.Tally_by, snapshotParams.Id, userPayload.User_id)
+		return h.handleResourceTally(c, queryPayload.Tally_by, snapshotParams.Id, userPayload.User_id)
 	}
 
 	// snapshot, snapshotValues
@@ -112,7 +112,7 @@ func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues *[]types.
 	return &accountIds, &holdingIds
 }
 
-func (h *SnapshotHandlerImpl) tallyBySnapshotHandler(c fiber.Ctx, tc string, snapId, userId int) error {
+func (h *SnapshotHandlerImpl) handleResourceTally(c fiber.Ctx, tc string, snapId, userId int) error {
 	switch TallyCategory(tc) {
 
 	case BY_ACCOUNT_NAME, BY_ACCOUNT_INSTITUTION:
