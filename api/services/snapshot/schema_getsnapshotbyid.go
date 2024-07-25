@@ -1,19 +1,22 @@
 package snapshot
 
-import validation "github.com/go-ozzo/ozzo-validation/v4"
+import (
+	"errors"
+
+	validation "github.com/go-ozzo/ozzo-validation/v4"
+)
 
 type TallyCategory string
 
 const (
-	BY_ACCOUNT        TallyCategory = "BY_ACCOUNT"
-	BY_TAX_SHELTER    TallyCategory = "BY_TAX_SHELTER"
-	BY_ASSET_CATEGORY TallyCategory = "BY_ASSET_CATEGORY"
+	BY_ACCOUNT_NAME        TallyCategory = "ACCOUNT_NAME"
+	BY_ACCOUNT_INSTITUTION TallyCategory = "ACCOUNT_INSTITUTION"
+	BY_TAX_SHELTER         TallyCategory = "TAX_SHELTER"
+	BY_ASSET_CATEGORY      TallyCategory = "ASSET_CATEGORY"
 )
 
-var validTallyCategories = []any{BY_ACCOUNT, BY_TAX_SHELTER, BY_ASSET_CATEGORY}
-
 type GetSnapshotByIdQuery struct {
-	Tally_by TallyCategory `json:"tally_by"`
+	Tally_by string `json:"tally_by"` // Easier to analyze this as a string so we don't have to worry about setting up a reflection case for this as an enum
 }
 
 type GetSnapshotByIdParams struct {
@@ -27,7 +30,20 @@ func (p GetSnapshotByIdParams) Validate() error {
 }
 
 func (q GetSnapshotByIdQuery) Validate() error {
-	return validation.ValidateStruct(&q,
-		validation.Field(&q.Tally_by, validation.In(validTallyCategories...)),
-	)
+	switch {
+	case q.Tally_by == "":
+		break
+	case TallyCategory(q.Tally_by) == BY_ACCOUNT_NAME:
+		break
+	case TallyCategory(q.Tally_by) == BY_ACCOUNT_INSTITUTION:
+		break
+	case TallyCategory(q.Tally_by) == BY_TAX_SHELTER:
+		break
+	case TallyCategory(q.Tally_by) == BY_ASSET_CATEGORY:
+		break
+	default:
+		return errors.New("provide a valid tally_by category in all caps")
+	}
+
+	return nil
 }

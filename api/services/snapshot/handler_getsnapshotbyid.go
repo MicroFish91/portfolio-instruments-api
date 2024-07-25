@@ -26,7 +26,7 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
-	// Todo: finish adding cases to cover the various tally scenarios
+	// Handler for special "tally_by" request queries
 	if queryPayload.Tally_by != "" {
 		return h.tallyBySnapshotHandler(c, queryPayload.Tally_by, snapshotParams.Id, userPayload.User_id)
 	}
@@ -112,11 +112,30 @@ func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues *[]types.
 	return &accountIds, &holdingIds
 }
 
-func (h *SnapshotHandlerImpl) tallyBySnapshotHandler(c fiber.Ctx, tc TallyCategory, snapId, userId int) error {
-	switch tc {
-	case BY_ACCOUNT:
-		// Todo: Add store method
-		return nil
+func (h *SnapshotHandlerImpl) tallyBySnapshotHandler(c fiber.Ctx, tc string, snapId, userId int) error {
+	switch TallyCategory(tc) {
+
+	case BY_ACCOUNT_NAME, BY_ACCOUNT_INSTITUTION:
+
+		var tallyBy types.TallyCategory
+		if TallyCategory(tc) == BY_ACCOUNT_NAME {
+			tallyBy = types.BY_ACCOUNT_NAME
+		} else {
+			tallyBy = types.BY_ACCOUNT_INSTITUTION
+		}
+
+		accountsGrouped, err := h.snapshotStore.TallyAccountBy(c.Context(), snapId, userId, &types.GetTallyByAccountStoreOptions{
+			Tally_by: tallyBy,
+		})
+
+		if err != nil {
+			return utils.SendError(c, utils.StatusCodeFromError(err), err)
+		}
+		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
+			"accounts_grouped": accountsGrouped,
+			"field_type":       TallyCategory(tallyBy),
+		})
+
 	case BY_TAX_SHELTER:
 		// Todo: Add store method
 		return nil

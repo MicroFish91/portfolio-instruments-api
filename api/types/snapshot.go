@@ -41,7 +41,8 @@ type SnapshotStore interface {
 	GetSnapshotById(ctx context.Context, snapshotId, userId int) (*Snapshot, *[]SnapshotValues, error)
 	CreateSnapshot(context.Context, *Snapshot) (*Snapshot, error)
 	CreateSnapshotValues(context.Context, *SnapshotValues) (*SnapshotValues, error)
-	RefreshSnapshotTotal(ctx context.Context, userId, snapshotId int) (float64, error)
+	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (float64, error)
+	TallyAccountBy(ctx context.Context, userId, snapId int, options *GetTallyByAccountStoreOptions) (*AccountsGrouped, error)
 }
 
 type GetSnapshotsStoreOptions struct {
@@ -51,4 +52,20 @@ type GetSnapshotsStoreOptions struct {
 	Order_date_by   string
 	Current_page    int
 	Page_size       int
+}
+
+type TallyCategory string
+
+const (
+	BY_ACCOUNT_NAME        TallyCategory = "ACCOUNT_NAME"
+	BY_ACCOUNT_INSTITUTION TallyCategory = "ACCOUNT_INSTITUTION"
+)
+
+type GetTallyByAccountStoreOptions struct {
+	Tally_by TallyCategory
+}
+
+type AccountsGrouped struct {
+	Fields []string  `json:"fields"`
+	Total  []float64 `json:"total"`
 }
