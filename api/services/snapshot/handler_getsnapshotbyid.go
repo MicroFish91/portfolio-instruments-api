@@ -114,14 +114,15 @@ func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues *[]types.
 
 func (h *SnapshotHandlerImpl) handleResourceTally(c fiber.Ctx, tc string, snapId, userId int) error {
 	switch TallyCategory(tc) {
+	case BY_ACCOUNT_NAME, BY_ACCOUNT_INSTITUTION, BY_TAX_SHELTER:
 
-	case BY_ACCOUNT_NAME, BY_ACCOUNT_INSTITUTION:
-
-		var tallyBy types.TallyCategory
+		var tallyBy types.AccountsTallyCategory
 		if TallyCategory(tc) == BY_ACCOUNT_NAME {
 			tallyBy = types.BY_ACCOUNT_NAME
-		} else {
+		} else if TallyCategory(tc) == BY_ACCOUNT_INSTITUTION {
 			tallyBy = types.BY_ACCOUNT_INSTITUTION
+		} else {
+			tallyBy = types.BY_TAX_SHELTER
 		}
 
 		accountsGrouped, err := h.snapshotStore.TallyByAccount(c.Context(), snapId, userId, &types.GetTallyByAccountStoreOptions{
@@ -136,13 +137,26 @@ func (h *SnapshotHandlerImpl) handleResourceTally(c fiber.Ctx, tc string, snapId
 			"field_type":       TallyCategory(tallyBy),
 		})
 
-	case BY_TAX_SHELTER:
-		// Todo: Add store method
-		return nil
 	case BY_ASSET_CATEGORY:
-		// Todo: Add store method
-		return nil
+
+		var tallyBy types.HoldingsTallyCategory
+		if TallyCategory(tc) == BY_ASSET_CATEGORY {
+			tallyBy = types.BY_ASSET_CATEGORY
+		}
+
+		holdingsGrouped, err := h.snapshotStore.TallyByHolding(c.Context(), userId, snapId, &types.GetTallyByHoldingStoreOptions{
+			Tally_by: tallyBy,
+		})
+
+		if err != nil {
+			return utils.SendError(c, utils.StatusCodeFromError(err), err)
+		}
+		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
+			"holdings_grouped": holdingsGrouped,
+			"field_type":       TallyCategory(tc),
+		})
+
 	default:
-		return utils.SendError(c, fiber.StatusBadRequest, errors.New("provided an unsupported tally_by category"))
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("provided an unsupported tally_by request category"))
 	}
 }

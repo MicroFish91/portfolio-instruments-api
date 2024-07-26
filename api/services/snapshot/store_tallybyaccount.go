@@ -10,11 +10,11 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) TallyByAccount(ctx context.Context, snapId, userId int, options *types.GetTallyByAccountStoreOptions) (*types.AccountsGrouped, error) {
+func (s *PostgresSnapshotStore) TallyByAccount(ctx context.Context, snapId, userId int, options *types.GetTallyByAccountStoreOptions) (*types.ResourcesGrouped, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	if options == nil {
+	if options == nil || options.Tally_by == "" {
 		return nil, errors.New("required to designate a tally_by options parameter")
 	}
 
@@ -23,6 +23,8 @@ func (s *PostgresSnapshotStore) TallyByAccount(ctx context.Context, snapId, user
 		field = "name"
 	} else if options.Tally_by == types.BY_ACCOUNT_INSTITUTION {
 		field = "institution"
+	} else {
+		field = "tax_shelter"
 	}
 
 	rows, err := s.db.Query(
@@ -54,13 +56,13 @@ func (s *PostgresSnapshotStore) TallyByAccount(ctx context.Context, snapId, user
 	return accountsGrouped, nil
 }
 
-func (s *PostgresSnapshotStore) parseRowsIntoAccountsGrouped(rows pgx.Rows) (*types.AccountsGrouped, error) {
+func (s *PostgresSnapshotStore) parseRowsIntoAccountsGrouped(rows pgx.Rows) (*types.ResourcesGrouped, error) {
 	type AccountGrouped struct {
 		Field string
 		Total float64
 	}
 
-	var ags types.AccountsGrouped
+	var ags types.ResourcesGrouped
 	for rows.Next() {
 		var ag AccountGrouped
 		err := rows.Scan(

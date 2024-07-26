@@ -42,7 +42,8 @@ type SnapshotStore interface {
 	CreateSnapshot(context.Context, *Snapshot) (*Snapshot, error)
 	CreateSnapshotValues(context.Context, *SnapshotValues) (*SnapshotValues, error)
 	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (float64, error)
-	TallyByAccount(ctx context.Context, userId, snapId int, options *GetTallyByAccountStoreOptions) (*AccountsGrouped, error)
+	TallyByAccount(ctx context.Context, userId, snapId int, options *GetTallyByAccountStoreOptions) (*ResourcesGrouped, error)
+	TallyByHolding(ctx context.Context, userId, snapId int, options *GetTallyByHoldingStoreOptions) (*ResourcesGrouped, error)
 }
 
 type GetSnapshotsStoreOptions struct {
@@ -54,18 +55,29 @@ type GetSnapshotsStoreOptions struct {
 	Page_size       int
 }
 
-type TallyCategory string
+type AccountsTallyCategory string
 
 const (
-	BY_ACCOUNT_NAME        TallyCategory = "ACCOUNT_NAME"
-	BY_ACCOUNT_INSTITUTION TallyCategory = "ACCOUNT_INSTITUTION"
+	BY_ACCOUNT_NAME        AccountsTallyCategory = "ACCOUNT_NAME"
+	BY_ACCOUNT_INSTITUTION AccountsTallyCategory = "ACCOUNT_INSTITUTION"
+	BY_TAX_SHELTER         AccountsTallyCategory = "TAX_SHELTER"
+)
+
+type HoldingsTallyCategory string
+
+const (
+	BY_ASSET_CATEGORY HoldingsTallyCategory = "ASSET_CATEGORY"
 )
 
 type GetTallyByAccountStoreOptions struct {
-	Tally_by TallyCategory
+	Tally_by AccountsTallyCategory
 }
 
-type AccountsGrouped struct {
+type GetTallyByHoldingStoreOptions struct {
+	Tally_by HoldingsTallyCategory
+}
+
+type ResourcesGrouped struct {
 	Fields []string  `json:"fields"`
 	Total  []float64 `json:"total"`
 }
