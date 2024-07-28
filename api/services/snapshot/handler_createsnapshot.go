@@ -99,6 +99,13 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	}
 	snapshot.Total = total
 
+	// Acquire weighted expense ratio
+	expenseRatio, err := h.snapshotStore.RefreshSnapshotWeightedER(c.Context(), userPayload.User_id, snapshot.Snap_id)
+	if err != nil {
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
+	}
+	snapshot.Weighted_er = expenseRatio
+
 	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{
 		"snapshot":        snapshot,
 		"snapshot_values": snapshotValues,

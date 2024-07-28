@@ -2,17 +2,18 @@ package snapshot
 
 import (
 	"context"
+	"math"
 	"time"
 
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) TallyByWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, e error) {
+func (s *PostgresSnapshotStore) RefreshSnapshotWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, e error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
-	// Pre-sum the holding values into a separate table first, then cross join so that we have access to the total when aggregating the final value
-	// trying to do it all in one line seems impossible due to not being able to use aggregate function calls containing window function calls
+	// Pre-sum the holding values into a separate table first, then cross join so that we have access to the total when aggregating the final value.
+	// Trying to do it all in one line seems impossible due to not being able to use aggregate function calls containing window function calls
 	// e.g. (sv.total / SUM(sv.total) OVER ()) * holdings.expense_ratio AS weighted_expense_ratio
 
 	row := s.db.QueryRow(
@@ -46,7 +47,20 @@ func (s *PostgresSnapshotStore) TallyByWeightedER(ctx context.Context, userId, s
 		return 0, err
 	}
 
-	return expenseRatio, nil
+	roundedER := math.Round(expenseRatio*1000) / 1000
+	_, err = s.db.Exec(
+		c,
+		`UPDATE snapshots
+		SET weighted_er = $1
+		WHERE user_id = $2
+		AND snap_id = $3`,
+		roundedER, userId, snapId,
+	)
+
+	if err != nil {
+		return 0, err
+	}
+	return roundedER, nil
 }
 
 func (s *PostgresSnapshotStore) parseRowIntoWeightedER(row pgx.Row) (weightedER float64, e error) {

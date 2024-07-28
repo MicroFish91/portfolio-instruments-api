@@ -9,11 +9,10 @@ import (
 type TallyCategory string
 
 const (
-	BY_ACCOUNT_NAME           TallyCategory = "ACCOUNT_NAME"
-	BY_ACCOUNT_INSTITUTION    TallyCategory = "ACCOUNT_INSTITUTION"
-	BY_TAX_SHELTER            TallyCategory = "TAX_SHELTER"
-	BY_ASSET_CATEGORY         TallyCategory = "ASSET_CATEGORY"
-	BY_WEIGHTED_EXPENSE_RATIO TallyCategory = "EXPENSE_RATIO"
+	BY_ACCOUNT_NAME        TallyCategory = "ACCOUNT_NAME"
+	BY_ACCOUNT_INSTITUTION TallyCategory = "ACCOUNT_INSTITUTION"
+	BY_TAX_SHELTER         TallyCategory = "TAX_SHELTER"
+	BY_ASSET_CATEGORY      TallyCategory = "ASSET_CATEGORY"
 )
 
 type GetSnapshotByIdQuery struct {
@@ -41,8 +40,6 @@ func (q GetSnapshotByIdQuery) Validate() error {
 	case TallyCategory(q.Tally_by) == BY_TAX_SHELTER:
 		break
 	case TallyCategory(q.Tally_by) == BY_ASSET_CATEGORY:
-		break
-	case TallyCategory(q.Tally_by) == BY_WEIGHTED_EXPENSE_RATIO:
 		break
 	default:
 		return errors.New("provide a valid tally_by category in all caps")

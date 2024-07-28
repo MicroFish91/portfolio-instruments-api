@@ -91,6 +91,7 @@ func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) (*[]types.
 			&s.Description,
 			&s.Snap_date,
 			&s.Total,
+			&s.Weighted_er,
 			&benchmark_id,
 			&s.User_id,
 			&s.Created_at,

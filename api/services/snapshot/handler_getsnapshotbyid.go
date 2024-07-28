@@ -2,7 +2,6 @@ package snapshot
 
 import (
 	"errors"
-	"math"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -157,17 +156,6 @@ func (h *SnapshotHandlerImpl) handleResourceTally(c fiber.Ctx, tc string, snapId
 		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
 			"holdings_grouped": holdingsGrouped,
 			"field_type":       TallyCategory(tc),
-		})
-
-	case BY_WEIGHTED_EXPENSE_RATIO:
-
-		weightedER, err := h.snapshotStore.TallyByWeightedER(c.Context(), userId, snapId)
-		if err != nil {
-			return utils.SendError(c, utils.StatusCodeFromError(err), err)
-		}
-
-		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
-			"weighted_expense_ratio": math.Round(weightedER*1000) / 1000,
 		})
 
 	default:

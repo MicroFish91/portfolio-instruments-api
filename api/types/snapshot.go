@@ -12,6 +12,7 @@ type Snapshot struct {
 	Description  string    `json:"description,omitempty"`
 	Snap_date    string    `json:"snap_date"`
 	Total        float64   `json:"total"`
+	Weighted_er  float64   `json:"weighted_er"`
 	Benchmark_id int       `json:"benchmark_id,omitempty"`
 	User_id      int       `json:"user_id"`
 	Created_at   time.Time `json:"created_at"`
@@ -41,10 +42,10 @@ type SnapshotStore interface {
 	GetSnapshotById(ctx context.Context, snapshotId, userId int) (*Snapshot, *[]SnapshotValues, error)
 	CreateSnapshot(context.Context, *Snapshot) (*Snapshot, error)
 	CreateSnapshotValues(context.Context, *SnapshotValues) (*SnapshotValues, error)
-	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (float64, error)
+	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (total float64, err error)
+	RefreshSnapshotWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, err error)
 	TallyByAccount(ctx context.Context, userId, snapId int, options *GetTallyByAccountStoreOptions) (*ResourcesGrouped, error)
 	TallyByHolding(ctx context.Context, userId, snapId int, options *GetTallyByHoldingStoreOptions) (*ResourcesGrouped, error)
-	TallyByWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, err error)
 }
 
 type GetSnapshotsStoreOptions struct {
