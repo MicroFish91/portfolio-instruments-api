@@ -2,6 +2,7 @@ package snapshot
 
 import (
 	"errors"
+	"math"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -26,7 +27,7 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
-	// Handler for special "tally_by" request queries
+	// tally_by
 	if queryPayload.Tally_by != "" {
 		return h.handleResourceTally(c, queryPayload.Tally_by, snapshotParams.Id, userPayload.User_id)
 	}
@@ -90,6 +91,7 @@ func (h *SnapshotHandlerImpl) getSnapshotHoldings(c fiber.Ctx, holdingIds *[]int
 	return holdings, nil
 }
 
+// Takes a complete slice of snapshot_values and returns all unique account and holding ids
 func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues *[]types.SnapshotValues) (accIds *[]int, holdIds *[]int) {
 	accIdsSet := map[int]struct{}{}
 	holdIdsSet := map[int]struct{}{}
@@ -112,6 +114,7 @@ func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues *[]types.
 	return &accountIds, &holdingIds
 }
 
+// Handles all logic paths for resolving the tally_by query parameter
 func (h *SnapshotHandlerImpl) handleResourceTally(c fiber.Ctx, tc string, snapId, userId int) error {
 	switch TallyCategory(tc) {
 	case BY_ACCOUNT_NAME, BY_ACCOUNT_INSTITUTION, BY_TAX_SHELTER:
@@ -154,6 +157,17 @@ func (h *SnapshotHandlerImpl) handleResourceTally(c fiber.Ctx, tc string, snapId
 		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
 			"holdings_grouped": holdingsGrouped,
 			"field_type":       TallyCategory(tc),
+		})
+
+	case BY_WEIGHTED_EXPENSE_RATIO:
+
+		weightedER, err := h.snapshotStore.TallyByWeightedER(c.Context(), userId, snapId)
+		if err != nil {
+			return utils.SendError(c, utils.StatusCodeFromError(err), err)
+		}
+
+		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
+			"weighted_expense_ratio": math.Round(weightedER*1000) / 1000,
 		})
 
 	default:

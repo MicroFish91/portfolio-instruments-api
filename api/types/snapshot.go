@@ -44,6 +44,7 @@ type SnapshotStore interface {
 	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (float64, error)
 	TallyByAccount(ctx context.Context, userId, snapId int, options *GetTallyByAccountStoreOptions) (*ResourcesGrouped, error)
 	TallyByHolding(ctx context.Context, userId, snapId int, options *GetTallyByHoldingStoreOptions) (*ResourcesGrouped, error)
+	TallyByWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, err error)
 }
 
 type GetSnapshotsStoreOptions struct {
