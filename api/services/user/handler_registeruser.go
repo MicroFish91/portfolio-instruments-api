@@ -13,7 +13,7 @@ import (
 func (h *UserHandlerImpl) RegisterUser(c fiber.Ctx) error {
 	userPayload, ok := c.Locals(constants.LOCALS_REQ_BODY).(RegisterUserPayload)
 	if !ok {
-		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user request body"))
+		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("unable to parse valid user request body"))
 	}
 
 	u, _ := h.userStore.GetUserByEmail(c.Context(), userPayload.Email)

@@ -27,7 +27,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 			{
 				"Name":        "Classic Bogleheads Portfolio",
 				"Description": "The classic 60/40 split",
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TSM",
 						Percent:  60,
@@ -45,7 +45,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 			{
 				"Name":        "Golden Butterfly",
 				"Description": "A juiced up Permanent Portfolio",
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TSM",
 						Percent:  20,
@@ -73,7 +73,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 			},
 			{
 				"Name": "Permanent Portfolio",
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TSM",
 						Percent:  25,
@@ -104,7 +104,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 			{
 				"Name":        "Classic Bogleheads Portfolio",
 				"Description": "The classic 60/40 split",
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TSM",
 						Percent:  50,
@@ -122,7 +122,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 			{
 				"Name":        "Classic Bogleheads Portfolio",
 				"Description": "The classic 60/40 split",
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TEST",
 						Percent:  50,
@@ -140,7 +140,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 			{
 				"Name":        "Golden Butterfly",
 				"Description": "A juiced up Permanent Portfolio",
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TSM",
 						Percent:  35,
@@ -164,7 +164,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 			},
 			{
 				"Name": 1,
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TSM",
 						Percent:  35,
@@ -226,7 +226,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 				},
 			},
 			{
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TSM",
 						Percent:  35,
@@ -254,7 +254,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 			},
 			{
 				"Name": "Total Stock Market",
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TSM",
 						Percent:  100,
@@ -277,7 +277,7 @@ var createBenchmarkTestCases = []CreateBenchmarkTestCases{
 			{
 				"Name":        "Classic Bogleheads Portfolio",
 				"Description": "The classic 60/40 split",
-				"Asset_allocation": []types.AssetAllocation{
+				"Asset_allocation": []types.AssetAllocationPct{
 					{
 						Category: "TSM",
 						Percent:  60,

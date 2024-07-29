@@ -7,6 +7,7 @@ import (
 )
 
 type SnapshotHandlerImpl struct {
+	userStore      types.UserStore
 	benchmarkStore types.BenchmarkStore
 	accountStore   types.AccountStore
 	holdingStore   types.HoldingStore
@@ -15,6 +16,7 @@ type SnapshotHandlerImpl struct {
 }
 
 func NewSnapshotHandler(
+	userStore types.UserStore,
 	benchmarkStore types.BenchmarkStore,
 	accountStore types.AccountStore,
 	holdingStore types.HoldingStore,
@@ -23,6 +25,7 @@ func NewSnapshotHandler(
 ) *SnapshotHandlerImpl {
 
 	return &SnapshotHandlerImpl{
+		userStore:      userStore,
 		benchmarkStore: benchmarkStore,
 		accountStore:   accountStore,
 		holdingStore:   holdingStore,

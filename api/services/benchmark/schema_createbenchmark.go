@@ -8,13 +8,13 @@ import (
 )
 
 type CreateBenchmarkPayload struct {
-	Name             string                  `json:"name"`
-	Description      string                  `json:"description"`
-	Asset_allocation []types.AssetAllocation `json:"asset_allocation"`
-	Std_dev_pct      float32                 `json:"std_dev_pct"`
-	Real_return_pct  float32                 `json:"real_return_pct"`
-	Drawdown_yrs     int                     `json:"drawdown_yrs"`
-	Is_deprecated    bool                    `json:"is_deprecated"`
+	Name             string                     `json:"name"`
+	Description      string                     `json:"description"`
+	Asset_allocation []types.AssetAllocationPct `json:"asset_allocation"`
+	Std_dev_pct      float32                    `json:"std_dev_pct"`
+	Real_return_pct  float32                    `json:"real_return_pct"`
+	Drawdown_yrs     int                        `json:"drawdown_yrs"`
+	Is_deprecated    bool                       `json:"is_deprecated"`
 }
 
 func (p CreateBenchmarkPayload) Validate() error {

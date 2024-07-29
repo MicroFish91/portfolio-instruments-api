@@ -35,6 +35,7 @@ type SnapshotHandler interface {
 	GetSnapshots(fiber.Ctx) error
 	GetSnapshotById(fiber.Ctx) error
 	CreateSnapshot(fiber.Ctx) error
+	RebalanceSnapshot(fiber.Ctx) error
 }
 
 type SnapshotStore interface {
@@ -77,6 +78,8 @@ type GetTallyByAccountStoreOptions struct {
 
 type GetTallyByHoldingStoreOptions struct {
 	Tally_by HoldingsTallyCategory
+	// Omit any snapshot_values that have "skip_rebalance" set to true
+	Omit_skip_reb bool
 }
 
 type ResourcesGrouped struct {

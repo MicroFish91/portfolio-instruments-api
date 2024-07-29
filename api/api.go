@@ -53,7 +53,7 @@ func (s *ApiServer) Run() error {
 	accountHandler := account.NewAccountHandler(accountStore, s.logger)
 	holdingHandler := holding.NewHoldingHandler(holdingStore, s.logger)
 	benchmarkHandler := benchmark.NewBenchmarkHandler(benchmarkStore, s.logger)
-	snapshotHandler := snapshot.NewSnapshotHandler(benchmarkStore, accountStore, holdingStore, snapshotStore, s.logger)
+	snapshotHandler := snapshot.NewSnapshotHandler(userStore, benchmarkStore, accountStore, holdingStore, snapshotStore, s.logger)
 
 	routes.RegisterRoutes(app, userHandler, accountHandler, holdingHandler, benchmarkHandler, snapshotHandler)
 	return app.Listen(s.addr)

@@ -13,7 +13,7 @@ import (
 func (h *UserHandlerImpl) GetSettings(c fiber.Ctx) error {
 	userPayload, ok := c.Locals(constants.LOCALS_REQ_USER).(auth.AuthUserPayload)
 	if !ok {
-		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user request body"))
+		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("unable to parse valid user request body"))
 	}
 
 	if err := h.hasAuthorizedUserId(c, userPayload.User_id); err != nil {

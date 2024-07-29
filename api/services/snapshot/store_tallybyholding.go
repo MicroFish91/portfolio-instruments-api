@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/jackc/pgx/v5"
 )
@@ -23,22 +24,33 @@ func (s *PostgresSnapshotStore) TallyByHolding(ctx context.Context, userId, snap
 		field = "asset_category"
 	}
 
+	pgxb := querybuilder.NewPgxQueryBuilder()
+	pgxb.AddQuery(
+		fmt.Sprintf("SELECT holdings.%s, SUM(snapshots_values.total) AS total", field),
+	)
+	pgxb.AddQuery(
+		`FROM snapshots_values
+		INNER JOIN holdings
+		ON snapshots_values.holding_id = holdings.holding_id`,
+	)
+	pgxb.AddQueryWithPositionals("WHERE snapshots_values.user_id = $x", []any{userId})
+	pgxb.AddQueryWithPositionals("AND snapshots_values.snap_id = $x", []any{snapId})
+	pgxb.AddQuery("AND is_deprecated is false")
+
+	if options.Omit_skip_reb {
+		pgxb.AddQuery("AND snapshots_values.skip_rebalance is false")
+	}
+
+	pgxb.AddQuery(
+		fmt.Sprintf("GROUP BY holdings.%s", field),
+	)
+
 	// search by upper and lower maturation date?
 
 	rows, err := s.db.Query(
 		c,
-		fmt.Sprintf(
-			`SELECT holdings.%s, SUM(snapshots_values.total) AS total
-			FROM snapshots_values
-			INNER JOIN holdings
-			ON snapshots_values.holding_id = holdings.holding_id
-			WHERE snapshots_values.user_id = $1
-			AND snapshots_values.snap_id = $2
-			AND is_deprecated is false
-			GROUP BY holdings.%s`,
-			field, field,
-		),
-		userId, snapId,
+		pgxb.Query,
+		pgxb.QueryParams...,
 	)
 
 	if err != nil {
