@@ -40,8 +40,6 @@ func (h *UserHandlerImpl) RegisterUser(c fiber.Ctx) error {
 
 	settings, err := h.userStore.CreateSettings(c.Context(), &types.Settings{
 		Reb_thresh_pct: 10,
-		Vp_thresh_pct:  0,
-		Vp_enabled:     false,
 		User_id:        user.User_id,
 	})
 

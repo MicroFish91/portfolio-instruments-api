@@ -18,8 +18,6 @@ type User struct {
 type Settings struct {
 	Settings_id    int       `json:"settings_id"`
 	Reb_thresh_pct int       `json:"reb_thresh_pct"`
-	Vp_thresh_pct  int       `json:"vp_thresh_pct,omitempty"`
-	Vp_enabled     bool      `json:"vp_enabled"`
 	User_id        int       `json:"user_id"`
 	Benchmark_id   int       `json:"benchmark_id,omitempty"`
 	Created_at     time.Time `json:"created_at"`

@@ -22,12 +22,6 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
-	// settings
-	settings, err := h.userStore.GetSettings(c.Context(), userPayload.User_id)
-	if err != nil {
-		return utils.SendError(c, utils.StatusCodeFromError(err), err)
-	}
-
 	// snapshot
 	snapshot, _, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotParams.Id, userPayload.User_id)
 	if err != nil {
@@ -53,16 +47,16 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 	}
 
 	// compute rebalance
-	target, current, change, shouldRebalance, err := h.computeRebalance(benchmark.Asset_allocation, *holdingsGrouped, snapshot.Total, settings.Reb_thresh_pct)
+	target, current, change, rebThreshPct, err := h.computeRebalance(benchmark.Asset_allocation, *holdingsGrouped, snapshot.Total)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
-		"target_allocation":  target,
-		"current_allocation": current,
-		"change_required":    change,
-		"should_rebalance":   shouldRebalance,
+		"target_allocation":    target,
+		"current_allocation":   current,
+		"change_required":      change,
+		"target_deviation_pct": rebThreshPct,
 	})
 }
 
@@ -71,9 +65,9 @@ type AssetAllocation struct {
 	Value    float64 `json:"value"`
 }
 
-func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct, halloc types.ResourcesGrouped, total float64, rebThreshPct int) (target *[]AssetAllocation, current *[]AssetAllocation, change *[]AssetAllocation, shouldRebalance bool, e error) {
+func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct, halloc types.ResourcesGrouped, total float64) (target *[]AssetAllocation, current *[]AssetAllocation, change *[]AssetAllocation, rebThreshPct int, e error) {
 	if len(halloc.Fields) != len(halloc.Total) {
-		return nil, nil, nil, false, errors.New("internal: could not compute rebalance, mismatching number of fields and totals for grouped holdings")
+		return nil, nil, nil, 0, errors.New("internal: could not compute rebalance, mismatching number of fields and totals for grouped holdings")
 	}
 
 	// Benchmark target allocation
@@ -95,18 +89,18 @@ func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct
 	}
 
 	// Rebalance diff required
-	ch, shouldRebalance, err := h.computeRebalanceDiff(tar, cur, total, rebThreshPct)
+	ch, rebThresh, err := h.computeRebalanceDiff(tar, cur, total)
 	if err != nil {
-		return nil, nil, nil, false, err
+		return nil, nil, nil, 0, err
 	}
 
-	return &tar, &cur, ch, shouldRebalance, nil
+	return &tar, &cur, ch, rebThresh, nil
 }
 
-func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, current []AssetAllocation, total float64, rebThreshPct int) (alloc *[]AssetAllocation, rebalance bool, e error) {
+func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, current []AssetAllocation, total float64) (alloc *[]AssetAllocation, rebThreshPct int, e error) {
 	var (
-		shouldRebalance = false
-		chmap           = make(map[string]float64)
+		maxDeviation = 0
+		chmap        = make(map[string]float64)
 	)
 
 	// Compute diffs for the target (benchmark) asset categories
@@ -128,8 +122,9 @@ func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, cur
 		diff := t.Value - alloc.Value
 		chmap[t.Category] = diff
 
-		if diff/total >= float64(rebThreshPct)/100 {
-			shouldRebalance = true
+		deviation := math.Round(diff / total * 100)
+		if int(math.Abs(deviation)) > maxDeviation {
+			maxDeviation = int(math.Abs(deviation))
 		}
 	}
 
@@ -151,5 +146,5 @@ func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, cur
 		ch = append(ch, alloc)
 	}
 
-	return &ch, shouldRebalance, nil
+	return &ch, maxDeviation, nil
 }

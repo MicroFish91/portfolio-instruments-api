@@ -16,10 +16,10 @@ func (s *PostgresUserStore) CreateSettings(ctx context.Context, settings *types.
 	row := s.db.QueryRow(
 		c,
 		`INSERT INTO settings
-		(reb_thresh_pct, vp_thresh_pct, vp_enabled, user_id)
-		VALUES ($1, $2, $3, $4)
+		(reb_thresh_pct, user_id)
+		VALUES ($1, $2)
 		RETURNING *`,
-		settings.Reb_thresh_pct, settings.Vp_thresh_pct, settings.Vp_enabled, settings.User_id,
+		settings.Reb_thresh_pct, settings.User_id,
 	)
 
 	settings, err := s.parseRowIntoSettings(row)
@@ -37,8 +37,6 @@ func (s *PostgresUserStore) parseRowIntoSettings(row pgx.Row) (*types.Settings, 
 	err := row.Scan(
 		&setting.Settings_id,
 		&setting.Reb_thresh_pct,
-		&setting.Vp_thresh_pct,
-		&setting.Vp_enabled,
 		&setting.User_id,
 		&benchmark_id,
 		&setting.Created_at,
