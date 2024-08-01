@@ -2,7 +2,7 @@ package querybuilder
 
 import (
 	"fmt"
-	"unicode/utf8"
+	"strconv"
 )
 
 type PgxQueryBuilder struct {
@@ -44,26 +44,41 @@ func (q *PgxQueryBuilder) replaceWithIncrementingPositionals(query string) (newQ
 		current, oneBefore rune
 	)
 
-	for c, char := range query {
+	queryRunes := []rune(query)
+	for c := 0; c < len(queryRunes); c += 1 {
+		char := queryRunes[c]
 		oneBefore = current
 		current = char
 
 		if oneBefore == '$' && current == 'x' {
 			q.positionalParams += 1
 
-			f := query[:c]
+			f := string(queryRunes[:c])
 			m := fmt.Sprintf("%d", q.positionalParams)
 
 			// Avoid an out of bounds error if c is at the last indexed position
 			var e string
-			if utf8.RuneCountInString(query)-1 == c {
+			if len(queryRunes)-1 == c {
 				e = ""
+			} else {
+				e = string(queryRunes[c+1:])
 			}
-			e = query[c+1:]
 
 			query = fmt.Sprintf("%s%s%s", f, m, e)
+			queryRunes = []rune(query)
+
+			// We have to increment the c an extra amount based on the number of new characters we just added
+			d := numDigits(q.positionalParams)
+			if d > 1 {
+				c += d - 1
+			}
 		}
 	}
 
 	return query, q.positionalParams - before
+}
+
+func numDigits(n int) int {
+	numstring := strconv.Itoa(n)
+	return len(numstring)
 }

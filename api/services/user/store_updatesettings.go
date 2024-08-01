@@ -16,7 +16,7 @@ func (s *PostgresUserStore) UpdateSettings(ctx context.Context, settings *types.
 	pgxb := querybuilder.NewPgxQueryBuilder()
 	pgxb.AddQuery("UPDATE settings")
 
-	setColumnsQuery := "SET reb_thresh_pct = $x updated_at = NOW()"
+	setColumnsQuery := "SET reb_thresh_pct = $x, updated_at = NOW()"
 	setColumnsArgs := []any{settings.Reb_thresh_pct}
 	if settings.Benchmark_id != 0 {
 		setColumnsQuery = fmt.Sprintf("%s, benchmark_id = $x", setColumnsQuery)
