@@ -25,8 +25,6 @@
     |----------------|-----------|----------|-------------|
     | setting_id     | PKEY      | ✅       | ✅          |
     | reb_thresh_pct | INTEGER   | ✅       |             |
-    | vp_thresh_pct  | INTEGER   | ✅       |             |
-    | vp_enabled     | BOOLEAN   | ✅       |             |
     | user_id        | INTEGER   | ✅       |             |
     | benchmark_id   | INTEGER   |          |             |
     | created_at     | TIMESTAMP | ✅       |             |
@@ -35,8 +33,6 @@
     Example:
         setting_id = 1
         reb_thresh_pct = 10
-        vp_thresh_pct = 10
-        vp_enabled = true
         user_id = 1
         benchmark_id = 5
 
