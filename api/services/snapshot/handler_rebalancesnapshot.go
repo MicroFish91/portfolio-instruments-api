@@ -22,6 +22,14 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
+	// Get total of all values where skip_rebalance = false
+	omitSkipsTotal, err := h.snapshotStore.GetSnapshotTotal(c.Context(), userPayload.User_id, snapshotParams.Id, types.GetSnapshotTotalStoreOptions{
+		Omit_skip_reb: true,
+	})
+	if err != nil {
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
+	}
+
 	// snapshot
 	snapshot, _, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotParams.Id, userPayload.User_id)
 	if err != nil {
@@ -47,16 +55,18 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 	}
 
 	// compute rebalance
-	target, current, change, rebThreshPct, err := h.computeRebalance(benchmark.Asset_allocation, *holdingsGrouped, snapshot.Total)
+	target, current, change, rebThreshPct, err := h.computeRebalance(benchmark.Asset_allocation, *holdingsGrouped, omitSkipsTotal)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
-		"target_allocation":    target,
-		"current_allocation":   current,
-		"change_required":      change,
-		"target_deviation_pct": rebThreshPct,
+		"target_allocation":         target,
+		"current_allocation":        current,
+		"change_required":           change,
+		"rebalance_thresh_pct":      rebThreshPct,
+		"snapshot_total":            snapshot.Total,
+		"snapshot_total_omit_skips": omitSkipsTotal,
 	})
 }
 
@@ -122,9 +132,9 @@ func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, cur
 		diff := t.Value - alloc.Value
 		chmap[t.Category] = diff
 
-		deviation := math.Round(diff / total * 100)
-		if int(math.Abs(deviation)) > maxDeviation {
-			maxDeviation = int(math.Abs(deviation))
+		deviation := int(math.Round(math.Abs(diff / t.Value * 100)))
+		if (deviation) > maxDeviation {
+			maxDeviation = deviation
 		}
 	}
 

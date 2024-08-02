@@ -3,6 +3,8 @@ package snapshot
 import (
 	"context"
 	"time"
+
+	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresSnapshotStore) RefreshSnapshotTotal(ctx context.Context, userId, snapshotId int) (float64, error) {
@@ -10,25 +12,12 @@ func (s *PostgresSnapshotStore) RefreshSnapshotTotal(ctx context.Context, userId
 	defer cancel()
 
 	// Use an aggregate function to sum row totals
-	rows, err := s.db.Query(
-		c,
-		`SELECT SUM(total) AS snapshot_total
-		FROM snapshots_values
-		WHERE user_id = $1
-		AND snap_id = $2`,
-		userId, snapshotId,
-	)
+	snapshotTotal, err := s.GetSnapshotTotal(c, userId, snapshotId, types.GetSnapshotTotalStoreOptions{
+		Omit_skip_reb: false,
+	})
 
 	if err != nil {
 		return 0, err
-	}
-	defer rows.Close()
-
-	var snapshot_total float64
-	for rows.Next() {
-		if err := rows.Scan(&snapshot_total); err != nil {
-			return 0, err
-		}
 	}
 
 	// Update snapshots with the new total
@@ -38,7 +27,8 @@ func (s *PostgresSnapshotStore) RefreshSnapshotTotal(ctx context.Context, userId
 		SET total = $1
 		WHERE user_id = $2
 		AND snap_id = $3`,
-		snapshot_total, userId, snapshotId,
+		snapshotTotal, userId, snapshotId,
 	)
-	return snapshot_total, err
+
+	return snapshotTotal, err
 }
