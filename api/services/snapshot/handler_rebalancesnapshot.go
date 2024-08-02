@@ -99,7 +99,7 @@ func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct
 	}
 
 	// Rebalance diff required
-	ch, rebThresh, err := h.computeRebalanceDiff(tar, cur, total)
+	ch, rebThresh, err := h.computeRebalanceDiff(tar, cur)
 	if err != nil {
 		return nil, nil, nil, 0, err
 	}
@@ -107,7 +107,7 @@ func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct
 	return &tar, &cur, ch, rebThresh, nil
 }
 
-func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, current []AssetAllocation, total float64) (alloc *[]AssetAllocation, rebThreshPct int, e error) {
+func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, current []AssetAllocation) (alloc *[]AssetAllocation, rebThreshPct int, e error) {
 	var (
 		maxDeviation = 0
 		chmap        = make(map[string]float64)
