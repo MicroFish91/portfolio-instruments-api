@@ -25,14 +25,14 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 	// Ensure ticker holdings are unique per user
 	if holdingPayload.Ticker != "" {
 		existingHolding, _ := h.store.GetHoldingByTicker(c.Context(), holdingPayload.Ticker, userPayload.User_id)
-		if existingHolding != nil {
+		if existingHolding.Holding_id != 0 {
 			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has holding with ticker symbol "%s"`, existingHolding.Ticker))
 		}
 	}
 
 	holding, err := h.store.CreateHolding(
 		c.Context(),
-		&types.Holding{
+		types.Holding{
 			Name:            holdingPayload.Name,
 			Ticker:          holdingPayload.Ticker,
 			Asset_category:  holdingPayload.Asset_category,

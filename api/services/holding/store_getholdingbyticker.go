@@ -7,7 +7,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresHoldingStore) GetHoldingByTicker(ctx context.Context, ticker string, userId int) (*types.Holding, error) {
+func (s *PostgresHoldingStore) GetHoldingByTicker(ctx context.Context, ticker string, userId int) (types.Holding, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -23,7 +23,7 @@ func (s *PostgresHoldingStore) GetHoldingByTicker(ctx context.Context, ticker st
 	holding, err := s.parseRowIntoHolding(row)
 
 	if err != nil {
-		return nil, err
+		return types.Holding{}, err
 	}
 	return holding, nil
 }

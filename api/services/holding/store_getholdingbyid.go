@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId int, holdingId int) (*types.Holding, error) {
+func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId int, holdingId int) (types.Holding, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -22,13 +22,13 @@ func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId int, h
 
 	holding, err := s.parseRowIntoHolding(row)
 	if err != nil {
-		return nil, err
+		return types.Holding{}, err
 	}
 
 	return holding, nil
 }
 
-func (s *PostgresHoldingStore) parseRowIntoHolding(row pgx.Row) (*types.Holding, error) {
+func (s *PostgresHoldingStore) parseRowIntoHolding(row pgx.Row) (types.Holding, error) {
 	var holding types.Holding
 	err := row.Scan(
 		&holding.Holding_id,
@@ -45,7 +45,7 @@ func (s *PostgresHoldingStore) parseRowIntoHolding(row pgx.Row) (*types.Holding,
 	)
 
 	if err != nil {
-		return nil, err
+		return types.Holding{}, err
 	}
-	return &holding, nil
+	return holding, nil
 }

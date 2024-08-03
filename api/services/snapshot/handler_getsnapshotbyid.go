@@ -28,11 +28,7 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 
 	// group_by
 	if queryPayload.Group_by != "" {
-		return h.handleGroupByResource(c, snapshotParams.Id, userPayload.User_id, HandleGroupByResourceOptions{
-			Group_by:         queryPayload.Group_by,
-			Maturation_start: queryPayload.Maturation_start,
-			Maturation_end:   queryPayload.Maturation_end,
-		})
+		return h.handleGroupByResource(c, snapshotParams.Id, userPayload.User_id, HandleGroupByResourceOptions(queryPayload))
 	}
 
 	// snapshot, snapshotValues
@@ -78,11 +74,11 @@ func (h *SnapshotHandlerImpl) getSnapshotAccounts(c fiber.Ctx, accountsIds []int
 	return accounts, nil
 }
 
-func (h *SnapshotHandlerImpl) getSnapshotHoldings(c fiber.Ctx, holdingIds []int, userId int) (*[]types.Holding, error) {
+func (h *SnapshotHandlerImpl) getSnapshotHoldings(c fiber.Ctx, holdingIds []int, userId int) ([]types.Holding, error) {
 	holdings, _, err := h.holdingStore.GetHoldings(
 		c.Context(),
 		userId,
-		&types.GetHoldingsStoreOptions{
+		types.GetHoldingsStoreOptions{
 			Holding_ids: holdingIds,
 			Page_size:   100,
 		},

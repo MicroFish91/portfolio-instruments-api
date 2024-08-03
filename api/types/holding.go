@@ -67,10 +67,10 @@ type HoldingHandler interface {
 }
 
 type HoldingStore interface {
-	CreateHolding(context.Context, *Holding) (*Holding, error)
-	GetHoldings(ctx context.Context, userId int, options *GetHoldingsStoreOptions) (*[]Holding, *PaginationMetadata, error)
-	GetHoldingById(ctx context.Context, userId, benchmarkId int) (*Holding, error)
-	GetHoldingByTicker(ctx context.Context, ticker string, userId int) (*Holding, error)
+	CreateHolding(context.Context, Holding) (Holding, error)
+	GetHoldings(ctx context.Context, userId int, options GetHoldingsStoreOptions) ([]Holding, PaginationMetadata, error)
+	GetHoldingById(ctx context.Context, userId, benchmarkId int) (Holding, error)
+	GetHoldingByTicker(ctx context.Context, ticker string, userId int) (Holding, error)
 }
 
 type GetHoldingsStoreOptions struct {

@@ -7,7 +7,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresHoldingStore) CreateHolding(ctx context.Context, h *types.Holding) (*types.Holding, error) {
+func (s *PostgresHoldingStore) CreateHolding(ctx context.Context, h types.Holding) (types.Holding, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -22,7 +22,7 @@ func (s *PostgresHoldingStore) CreateHolding(ctx context.Context, h *types.Holdi
 
 	holding, err := s.parseRowIntoHolding(row)
 	if err != nil {
-		return nil, err
+		return types.Holding{}, err
 	}
 
 	return holding, nil

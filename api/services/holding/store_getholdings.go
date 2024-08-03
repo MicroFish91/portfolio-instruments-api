@@ -11,7 +11,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, options *types.GetHoldingsStoreOptions) (*[]types.Holding, *types.PaginationMetadata, error) {
+func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, options types.GetHoldingsStoreOptions) ([]types.Holding, types.PaginationMetadata, error) {
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page
@@ -46,7 +46,7 @@ func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, opti
 		if options.Has_maturation_remaining == "true" {
 			pgxb.AddQueryWithPositionals("AND maturation_date != '' AND TO_DATE(maturation_date, 'MM/DD/YYYY') >= TO_DATE($x, 'MM/DD/YYYY')", []any{currentDate})
 		} else {
-			pgxb.AddQueryWithPositionals("AND maturation_date != '' AND TO_DATE(maturation_date, 'MM/DD/YYYY') < TO_DATE($x, 'MM/DD/YYYY')", []any{currentDate})
+			pgxb.AddQueryWithPositionals("AND maturation_date != '' AND TO_DATE(maturation_date, 'MM/DD/YYYY') <= TO_DATE($x, 'MM/DD/YYYY')", []any{currentDate})
 		}
 	}
 
@@ -65,23 +65,23 @@ func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, opti
 
 	rows, err := s.db.Query(c, pgxb.Query, pgxb.QueryParams...)
 	if err != nil {
-		return nil, nil, err
+		return nil, types.PaginationMetadata{}, err
 	}
 	defer rows.Close()
 
 	holdings, total_items, err := s.parseRowsIntoHoldings(rows)
 	if err != nil {
-		return nil, nil, err
+		return nil, types.PaginationMetadata{}, err
 	}
 
-	return holdings, &types.PaginationMetadata{
+	return holdings, types.PaginationMetadata{
 		Current_page: currentPage,
 		Page_size:    pageSize,
 		Total_items:  total_items,
 	}, nil
 }
 
-func (s *PostgresHoldingStore) parseRowsIntoHoldings(rows pgx.Rows) (*[]types.Holding, int, error) {
+func (s *PostgresHoldingStore) parseRowsIntoHoldings(rows pgx.Rows) ([]types.Holding, int, error) {
 	var total_items int
 	var holdings []types.Holding
 
@@ -108,5 +108,5 @@ func (s *PostgresHoldingStore) parseRowsIntoHoldings(rows pgx.Rows) (*[]types.Ho
 		holdings = append(holdings, h)
 	}
 
-	return &holdings, total_items, nil
+	return holdings, total_items, nil
 }

@@ -52,7 +52,7 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		}
 
 		hold, _ := h.holdingStore.GetHoldingById(c.Context(), userPayload.User_id, svpayload.Holding_id)
-		if hold == nil {
+		if hold.Holding_id == 0 {
 			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`specified holding with id "%d" does not exist`, svpayload.Holding_id))
 		}
 		holdIdsSet[svpayload.Holding_id] = struct{}{}
