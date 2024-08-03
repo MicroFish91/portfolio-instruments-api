@@ -25,7 +25,7 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	// Verify benchmark_id if provided
 	if snapshotPayload.Benchmark_id != 0 {
 		benchmark, _ := h.benchmarkStore.GetBenchmarkById(c.Context(), userPayload.User_id, snapshotPayload.Benchmark_id)
-		if benchmark == nil {
+		if benchmark.Benchmark_id == 0 {
 			return utils.SendError(c, fiber.StatusConflict, errors.New("benchmark with the provided id does not exist"))
 		}
 	}

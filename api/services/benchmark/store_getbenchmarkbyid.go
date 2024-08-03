@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, benchmarkId int) (*types.Benchmark, error) {
+func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, benchmarkId int) (types.Benchmark, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -23,12 +23,12 @@ func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, b
 	benchmark, err := s.parseRowIntoBenchmark(row)
 
 	if err != nil {
-		return nil, err
+		return types.Benchmark{}, err
 	}
 	return benchmark, nil
 }
 
-func (s *PostgresBenchmarkStore) parseRowIntoBenchmark(row pgx.Row) (*types.Benchmark, error) {
+func (s *PostgresBenchmarkStore) parseRowIntoBenchmark(row pgx.Row) (types.Benchmark, error) {
 	var b types.Benchmark
 	err := row.Scan(
 		&b.Benchmark_id,
@@ -45,7 +45,7 @@ func (s *PostgresBenchmarkStore) parseRowIntoBenchmark(row pgx.Row) (*types.Benc
 	)
 
 	if err != nil {
-		return nil, err
+		return types.Benchmark{}, err
 	}
-	return &b, nil
+	return b, nil
 }

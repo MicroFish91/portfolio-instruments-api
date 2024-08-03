@@ -11,7 +11,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, options *types.GetBenchmarksStoreOptions) (*[]types.Benchmark, *types.PaginationMetadata, error) {
+func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, options types.GetBenchmarksStoreOptions) ([]types.Benchmark, types.PaginationMetadata, error) {
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page
@@ -35,7 +35,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 		pgxb.AddQueryWithPositionals("AND is_deprecated = $x", []any{options.Is_deprecated})
 	}
 
-	if options.Benchmark_ids != nil && len(options.Benchmark_ids) > 0 {
+	if len(options.Benchmark_ids) > 0 {
 		pgxb.AddQueryWithPositionals(
 			fmt.Sprintf("AND benchmark_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.Benchmark_ids))),
 			utils.IntSliceToAny(options.Benchmark_ids),
@@ -55,23 +55,23 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 	)
 
 	if err != nil {
-		return nil, nil, err
+		return nil, types.PaginationMetadata{}, err
 	}
 	defer rows.Close()
 
 	benchmarks, total_items, err := s.parseRowsIntoBenchmarks(rows)
 	if err != nil {
-		return nil, nil, err
+		return nil, types.PaginationMetadata{}, err
 	}
 
-	return benchmarks, &types.PaginationMetadata{
+	return benchmarks, types.PaginationMetadata{
 		Current_page: currentPage,
 		Page_size:    pageSize,
 		Total_items:  total_items,
 	}, nil
 }
 
-func (s *PostgresBenchmarkStore) parseRowsIntoBenchmarks(rows pgx.Rows) (*[]types.Benchmark, int, error) {
+func (s *PostgresBenchmarkStore) parseRowsIntoBenchmarks(rows pgx.Rows) ([]types.Benchmark, int, error) {
 	var total_items int
 	var benchmarks []types.Benchmark
 
@@ -98,5 +98,5 @@ func (s *PostgresBenchmarkStore) parseRowsIntoBenchmarks(rows pgx.Rows) (*[]type
 		benchmarks = append(benchmarks, b)
 	}
 
-	return &benchmarks, total_items, nil
+	return benchmarks, total_items, nil
 }

@@ -27,7 +27,7 @@ func (h *UserHandlerImpl) UpdateSettings(c fiber.Ctx) error {
 
 	if settingsPayload.Benchmark_id != 0 {
 		benchmark, _ := h.benchmarkStore.GetBenchmarkById(c.Context(), userPayload.User_id, settingsPayload.Benchmark_id)
-		if benchmark == nil {
+		if benchmark.Benchmark_id == 0 {
 			return utils.SendError(c, fiber.StatusConflict, errors.New("benchmark with provided id does not exist"))
 		}
 	}

@@ -24,13 +24,13 @@ func (h *BenchmarkHandlerImpl) CreateBenchmark(c fiber.Ctx) error {
 
 	// Ensure benchmark name is unique per user
 	existingBenchmark, _ := h.store.GetBenchmarkByName(c.Context(), benchmarkPayload.Name, userPayload.User_id)
-	if existingBenchmark != nil {
+	if existingBenchmark.Benchmark_id != 0 {
 		return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has existing benchmark with name "%s"`, existingBenchmark.Name))
 	}
 
 	benchmark, err := h.store.CreateBenchmark(
 		c.Context(),
-		&types.Benchmark{
+		types.Benchmark{
 			Name:             benchmarkPayload.Name,
 			Description:      benchmarkPayload.Description,
 			Asset_allocation: benchmarkPayload.Asset_allocation,

@@ -7,7 +7,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresBenchmarkStore) GetBenchmarkByName(ctx context.Context, name string, userId int) (*types.Benchmark, error) {
+func (s *PostgresBenchmarkStore) GetBenchmarkByName(ctx context.Context, name string, userId int) (types.Benchmark, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -23,7 +23,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarkByName(ctx context.Context, name st
 	benchmark, err := s.parseRowIntoBenchmark(row)
 
 	if err != nil {
-		return nil, err
+		return types.Benchmark{}, err
 	}
 	return benchmark, err
 }
