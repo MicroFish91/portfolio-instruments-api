@@ -2,6 +2,7 @@ package snapshot
 
 import (
 	"errors"
+	"regexp"
 
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
@@ -13,10 +14,13 @@ const (
 	BY_ACCOUNT_INSTITUTION GroupByCategory = "ACCOUNT_INSTITUTION"
 	BY_TAX_SHELTER         GroupByCategory = "TAX_SHELTER"
 	BY_ASSET_CATEGORY      GroupByCategory = "ASSET_CATEGORY"
+	BY_MATURATION_DATE     GroupByCategory = "MATURATION_DATE"
 )
 
 type GetSnapshotByIdQuery struct {
-	Group_by string `json:"group_by"` // Easier to analyze this as a string so we don't have to worry about setting up a reflection case for this as an enum
+	Group_by         string `json:"group_by"` // Easier to analyze this as a string so we don't have to worry about setting up a reflection case for this as an enum
+	Maturation_start string `json:"maturation_start"`
+	Maturation_end   string `json:"maturation_end"`
 }
 
 type GetSnapshotByIdParams struct {
@@ -41,8 +45,19 @@ func (q GetSnapshotByIdQuery) Validate() error {
 		break
 	case GroupByCategory(q.Group_by) == BY_ASSET_CATEGORY:
 		break
+	case GroupByCategory(q.Group_by) == BY_MATURATION_DATE:
+		break
 	default:
 		return errors.New("provide a valid group_by category in all caps")
+	}
+
+	re := regexp.MustCompile(`^\d{2}/\d{2}/\d{4}$`)
+	if q.Maturation_start != "" && !re.Match([]byte(q.Maturation_start)) {
+		return errors.New("maturation_start must follow string format mm/dd/yyyy")
+	}
+
+	if q.Maturation_end != "" && !re.Match([]byte(q.Maturation_end)) {
+		return errors.New("maturation_end must follow string format mm/dd/yyyy")
 	}
 
 	return nil

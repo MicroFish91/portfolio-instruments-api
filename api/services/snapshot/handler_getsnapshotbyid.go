@@ -26,9 +26,13 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
-	// tally_by
+	// group_by
 	if queryPayload.Group_by != "" {
-		return h.handleResourceTally(c, queryPayload.Group_by, snapshotParams.Id, userPayload.User_id)
+		return h.handleGroupByResource(c, snapshotParams.Id, userPayload.User_id, HandleGroupByResourceOptions{
+			Group_by:         queryPayload.Group_by,
+			Maturation_start: queryPayload.Maturation_start,
+			Maturation_end:   queryPayload.Maturation_end,
+		})
 	}
 
 	// snapshot, snapshotValues
@@ -113,15 +117,21 @@ func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues []types.S
 	return accountIds, holdingIds
 }
 
+type HandleGroupByResourceOptions struct {
+	Group_by         string
+	Maturation_start string
+	Maturation_end   string
+}
+
 // Handles all logic paths for resolving the tally_by query parameter
-func (h *SnapshotHandlerImpl) handleResourceTally(c fiber.Ctx, tc string, snapId, userId int) error {
-	switch GroupByCategory(tc) {
+func (h *SnapshotHandlerImpl) handleGroupByResource(c fiber.Ctx, snapId, userId int, options HandleGroupByResourceOptions) error {
+	switch GroupByCategory(options.Group_by) {
 	case BY_ACCOUNT_NAME, BY_ACCOUNT_INSTITUTION, BY_TAX_SHELTER:
 
 		var groupBy types.AccountsGroupByCategory
-		if GroupByCategory(tc) == BY_ACCOUNT_NAME {
+		if GroupByCategory(options.Group_by) == BY_ACCOUNT_NAME {
 			groupBy = types.BY_ACCOUNT_NAME
-		} else if GroupByCategory(tc) == BY_ACCOUNT_INSTITUTION {
+		} else if GroupByCategory(options.Group_by) == BY_ACCOUNT_INSTITUTION {
 			groupBy = types.BY_ACCOUNT_INSTITUTION
 		} else {
 			groupBy = types.BY_TAX_SHELTER
@@ -142,12 +152,13 @@ func (h *SnapshotHandlerImpl) handleResourceTally(c fiber.Ctx, tc string, snapId
 	case BY_ASSET_CATEGORY:
 
 		var groupBy types.HoldingsGroupByCategory
-		if GroupByCategory(tc) == BY_ASSET_CATEGORY {
+		if GroupByCategory(options.Group_by) == BY_ASSET_CATEGORY {
 			groupBy = types.BY_ASSET_CATEGORY
 		}
 
 		holdingsGrouped, err := h.snapshotStore.GroupByHolding(c.Context(), userId, snapId, types.GetGroupByHoldingStoreOptions{
-			Group_by: groupBy,
+			Group_by:      groupBy,
+			Omit_skip_reb: false,
 		})
 
 		if err != nil {
@@ -155,7 +166,24 @@ func (h *SnapshotHandlerImpl) handleResourceTally(c fiber.Ctx, tc string, snapId
 		}
 		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
 			"holdings_grouped": holdingsGrouped,
-			"field_type":       GroupByCategory(tc),
+			"field_type":       GroupByCategory(options.Group_by),
+		})
+
+	case BY_MATURATION_DATE:
+
+		resources, err := h.snapshotStore.GroupByMaturationDate(c.Context(), userId, snapId, types.GetGroupByMaturationDateStoreOptions{
+			Maturation_start: options.Maturation_start,
+			Maturation_end:   options.Maturation_end,
+		})
+
+		if err != nil {
+			return utils.SendError(c, utils.StatusCodeFromError(err), err)
+		}
+		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
+			"resources":        resources,
+			"field_type":       GroupByCategory(options.Group_by),
+			"maturation_start": options.Maturation_start,
+			"maturation_end":   options.Maturation_end,
 		})
 
 	default:

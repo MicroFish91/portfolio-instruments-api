@@ -48,6 +48,22 @@ type SnapshotStore interface {
 	RefreshSnapshotWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, err error)
 	GroupByAccount(ctx context.Context, userId, snapId int, options GetGroupByAccountStoreOptions) (ResourcesGrouped, error)
 	GroupByHolding(ctx context.Context, userId, snapId int, options GetGroupByHoldingStoreOptions) (ResourcesGrouped, error)
+	GroupByMaturationDate(ctx context.Context, userId, snapId int, options GetGroupByMaturationDateStoreOptions) ([]MaturationDateResource, error)
+}
+
+type ResourcesGrouped struct {
+	Fields []string  `json:"fields"`
+	Total  []float64 `json:"total"`
+}
+
+type MaturationDateResource struct {
+	Account_name    string  `json:"account_name"`
+	Holding_name    string  `json:"holding_name"`
+	Asset_category  string  `json:"asset_category"`
+	Interest_rate   float64 `json:"interest_rate"`
+	Maturation_date string  `json:"maturation_date"`
+	Total           float64 `json:"total"`
+	Skip_rebalance  bool    `json:"skip_rebalance"`
 }
 
 type GetSnapshotsStoreOptions struct {
@@ -79,13 +95,13 @@ type GetGroupByAccountStoreOptions struct {
 
 type GetGroupByHoldingStoreOptions struct {
 	Group_by HoldingsGroupByCategory
-	// Omit any snapshot_values that have "skip_rebalance" set to true
+	// Omit any snapshots_values that have "skip_rebalance" set to true
 	Omit_skip_reb bool
 }
 
-type ResourcesGrouped struct {
-	Fields []string  `json:"fields"`
-	Total  []float64 `json:"total"`
+type GetGroupByMaturationDateStoreOptions struct {
+	Maturation_start string
+	Maturation_end   string
 }
 
 type GetSnapshotTotalStoreOptions struct {
