@@ -64,6 +64,7 @@ type HoldingHandler interface {
 	CreateHolding(fiber.Ctx) error
 	GetHoldings(fiber.Ctx) error
 	GetHoldingById(fiber.Ctx) error
+	UpdateHolding(fiber.Ctx) error
 }
 
 type HoldingStore interface {
@@ -71,6 +72,7 @@ type HoldingStore interface {
 	GetHoldings(ctx context.Context, userId int, options GetHoldingsStoreOptions) ([]Holding, PaginationMetadata, error)
 	GetHoldingById(ctx context.Context, userId, benchmarkId int) (Holding, error)
 	GetHoldingByTicker(ctx context.Context, ticker string, userId int) (Holding, error)
+	UpdateHolding(context.Context, Holding) (Holding, error)
 }
 
 type GetHoldingsStoreOptions struct {

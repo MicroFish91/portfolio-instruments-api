@@ -11,15 +11,20 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
+func (h *HoldingHandlerImpl) UpdateHolding(c fiber.Ctx) error {
 	userPayload, ok := c.Locals(constants.LOCALS_REQ_USER).(auth.AuthUserPayload)
 	if !ok {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user from token"))
 	}
 
-	holdingPayload, ok := c.Locals(constants.LOCALS_REQ_BODY).(CreateHoldingPayload)
+	holdingPayload, ok := c.Locals(constants.LOCALS_REQ_BODY).(UpdateHoldingPayload)
 	if !ok {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid holding payload from request body"))
+	}
+
+	holdingParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(GetHoldingByIdParams)
+	if !ok {
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid holding params from request"))
 	}
 
 	// Ensure only one unique "active" ticker per user
@@ -30,9 +35,10 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 		}
 	}
 
-	holding, err := h.store.CreateHolding(
+	holding, err := h.store.UpdateHolding(
 		c.Context(),
 		types.Holding{
+			Holding_id:      holdingParams.Id,
 			Name:            holdingPayload.Name,
 			Ticker:          holdingPayload.Ticker,
 			Asset_category:  holdingPayload.Asset_category,
@@ -48,5 +54,5 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{"holding": holding})
+	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"holding": holding})
 }
