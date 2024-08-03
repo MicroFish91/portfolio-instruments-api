@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresAccountStore) GetAccountById(ctx context.Context, userId int, accountId int) (*types.Account, error) {
+func (s *PostgresAccountStore) GetAccountById(ctx context.Context, userId int, accountId int) (types.Account, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -22,13 +22,13 @@ func (s *PostgresAccountStore) GetAccountById(ctx context.Context, userId int, a
 
 	account, err := s.parseRowIntoAccount(row)
 	if err != nil {
-		return nil, err
+		return types.Account{}, err
 	}
 
 	return account, nil
 }
 
-func (s *PostgresAccountStore) parseRowIntoAccount(row pgx.Row) (*types.Account, error) {
+func (s *PostgresAccountStore) parseRowIntoAccount(row pgx.Row) (types.Account, error) {
 	var a types.Account
 	err := row.Scan(
 		&a.Account_id,
@@ -43,7 +43,7 @@ func (s *PostgresAccountStore) parseRowIntoAccount(row pgx.Row) (*types.Account,
 	)
 
 	if err != nil {
-		return nil, err
+		return types.Account{}, err
 	}
-	return &a, nil
+	return a, nil
 }

@@ -11,7 +11,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, options *types.GetAccountsStoreOptions) (*[]types.Account, *types.PaginationMetadata, error) {
+func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, options types.GetAccountsStoreOptions) ([]types.Account, types.PaginationMetadata, error) {
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page
@@ -48,7 +48,7 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 	pgxb.AddQueryWithPositionals("LIMIT $x OFFSET $x", []any{pageSize, (currentPage - 1) * pageSize})
 
 	if err != nil {
-		return nil, nil, fmt.Errorf("error formatting sql query using query builder: %s", err.Error())
+		return nil, types.PaginationMetadata{}, fmt.Errorf("error formatting sql query using query builder: %s", err.Error())
 	}
 
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
@@ -56,23 +56,23 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 
 	rows, err := s.db.Query(c, pgxb.Query, pgxb.QueryParams...)
 	if err != nil {
-		return nil, nil, err
+		return nil, types.PaginationMetadata{}, err
 	}
 	defer rows.Close()
 
 	accounts, total_items, err := s.parseRowsIntoAccounts(rows)
 	if err != nil {
-		return nil, nil, err
+		return nil, types.PaginationMetadata{}, err
 	}
 
-	return accounts, &types.PaginationMetadata{
+	return accounts, types.PaginationMetadata{
 		Current_page: currentPage,
 		Page_size:    pageSize,
 		Total_items:  total_items,
 	}, nil
 }
 
-func (s *PostgresAccountStore) parseRowsIntoAccounts(rows pgx.Rows) (*[]types.Account, int, error) {
+func (s *PostgresAccountStore) parseRowsIntoAccounts(rows pgx.Rows) ([]types.Account, int, error) {
 	var total_items int
 	var accounts []types.Account
 
@@ -97,5 +97,5 @@ func (s *PostgresAccountStore) parseRowsIntoAccounts(rows pgx.Rows) (*[]types.Ac
 		accounts = append(accounts, a)
 	}
 
-	return &accounts, total_items, nil
+	return accounts, total_items, nil
 }

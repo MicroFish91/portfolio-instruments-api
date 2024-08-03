@@ -7,7 +7,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresAccountStore) CreateAccount(ctx context.Context, a *types.Account) (*types.Account, error) {
+func (s *PostgresAccountStore) CreateAccount(ctx context.Context, a types.Account) (types.Account, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -23,7 +23,7 @@ func (s *PostgresAccountStore) CreateAccount(ctx context.Context, a *types.Accou
 	account, err := s.parseRowIntoAccount(row)
 
 	if err != nil {
-		return nil, err
+		return types.Account{}, err
 	}
 	return account, nil
 }

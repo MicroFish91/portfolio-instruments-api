@@ -59,11 +59,11 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 	})
 }
 
-func (h *SnapshotHandlerImpl) getSnapshotAccounts(c fiber.Ctx, accountsIds []int, userId int) (*[]types.Account, error) {
+func (h *SnapshotHandlerImpl) getSnapshotAccounts(c fiber.Ctx, accountsIds []int, userId int) ([]types.Account, error) {
 	accounts, _, err := h.accountStore.GetAccounts(
 		c.Context(),
 		userId,
-		&types.GetAccountsStoreOptions{
+		types.GetAccountsStoreOptions{
 			AccountIds: accountsIds,
 		},
 	)

@@ -38,7 +38,7 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		}
 
 		acc, _ := h.accountStore.GetAccountById(c.Context(), userPayload.User_id, svpayload.Account_id)
-		if acc == nil {
+		if acc.Account_id == 0 {
 			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`specified account with id "%d" does not exist`, svpayload.Account_id))
 		}
 		accIdsSet[svpayload.Account_id] = struct{}{}

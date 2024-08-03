@@ -24,13 +24,13 @@ func (h *AccountHandlerImpl) CreateAccount(c fiber.Ctx) error {
 
 	// Ensure account name is unique per user
 	existingAccount, _ := h.store.GetAccountByName(c.Context(), accountPayload.Name, userPayload.User_id)
-	if existingAccount != nil {
+	if existingAccount.Account_id != 0 {
 		return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has account with name "%s"`, existingAccount.Name))
 	}
 
 	account, err := h.store.CreateAccount(
 		c.Context(),
-		&types.Account{
+		types.Account{
 			Name:          accountPayload.Name,
 			Description:   accountPayload.Description,
 			Tax_shelter:   accountPayload.Tax_shelter,
