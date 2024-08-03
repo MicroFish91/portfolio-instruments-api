@@ -21,7 +21,7 @@ func (h *SnapshotHandlerImpl) GetSnapshots(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid query params from request"))
 	}
 
-	snapshots, pagination, err := h.snapshotStore.GetSnapshots(c.Context(), userPayload.User_id, &types.GetSnapshotsStoreOptions{
+	snapshots, pagination, err := h.snapshotStore.GetSnapshots(c.Context(), userPayload.User_id, types.GetSnapshotsStoreOptions{
 		Snap_ids:        queryPayload.Snap_ids,
 		Snap_date_lower: queryPayload.Snap_date_lower,
 		Snap_date_upper: queryPayload.Snap_date_upper,

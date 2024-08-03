@@ -12,7 +12,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, options *types.GetSnapshotsStoreOptions) (*[]types.Snapshot, *types.PaginationMetadata, error) {
+func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, options types.GetSnapshotsStoreOptions) ([]types.Snapshot, types.PaginationMetadata, error) {
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page
@@ -28,7 +28,7 @@ func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, op
 	pgxb.AddQuery("FROM snapshots")
 	pgxb.AddQueryWithPositionals("WHERE user_id = $x", []any{userId})
 
-	if options.Snap_ids != nil && len(options.Snap_ids) > 0 {
+	if len(options.Snap_ids) > 0 {
 		pgxb.AddQueryWithPositionals(
 			fmt.Sprintf("AND snap_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.Snap_ids))),
 			utils.IntSliceToAny(options.Snap_ids),
@@ -63,22 +63,22 @@ func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, op
 	)
 
 	if err != nil {
-		return nil, nil, err
+		return nil, types.PaginationMetadata{}, err
 	}
 
 	snapshots, total_items, err := s.parseRowsIntoSnapshots(rows)
 	if err != nil {
-		return nil, nil, err
+		return nil, types.PaginationMetadata{}, err
 	}
 
-	return snapshots, &types.PaginationMetadata{
+	return snapshots, types.PaginationMetadata{
 		Current_page: currentPage,
 		Page_size:    pageSize,
 		Total_items:  total_items,
 	}, nil
 }
 
-func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) (*[]types.Snapshot, int, error) {
+func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) ([]types.Snapshot, int, error) {
 	var snapshots []types.Snapshot
 	var total_items int
 
@@ -112,5 +112,5 @@ func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) (*[]types.
 		snapshots = append(snapshots, s)
 	}
 
-	return &snapshots, total_items, nil
+	return snapshots, total_items, nil
 }

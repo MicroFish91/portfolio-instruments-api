@@ -11,16 +11,16 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) TallyByHolding(ctx context.Context, userId, snapId int, options *types.GetTallyByHoldingStoreOptions) (*types.ResourcesGrouped, error) {
+func (s *PostgresSnapshotStore) GroupByHolding(ctx context.Context, userId, snapId int, options types.GetGroupByHoldingStoreOptions) (types.ResourcesGrouped, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
-	if options == nil || options.Tally_by == "" {
-		return nil, errors.New("required to designate a tally_by options parameter")
+	if options.Group_by == "" {
+		return types.ResourcesGrouped{}, errors.New("required to designate a group_by options parameter")
 	}
 
 	var field string
-	if options.Tally_by == types.BY_ASSET_CATEGORY {
+	if options.Group_by == types.BY_ASSET_CATEGORY {
 		field = "asset_category"
 	}
 
@@ -54,19 +54,19 @@ func (s *PostgresSnapshotStore) TallyByHolding(ctx context.Context, userId, snap
 	)
 
 	if err != nil {
-		return nil, err
+		return types.ResourcesGrouped{}, err
 	}
 	defer rows.Close()
 
 	holdingsGrouped, err := s.parseRowsIntoHoldingsGrouped(rows)
 
 	if err != nil {
-		return nil, err
+		return types.ResourcesGrouped{}, err
 	}
 	return holdingsGrouped, nil
 }
 
-func (s *PostgresSnapshotStore) parseRowsIntoHoldingsGrouped(rows pgx.Rows) (*types.ResourcesGrouped, error) {
+func (s *PostgresSnapshotStore) parseRowsIntoHoldingsGrouped(rows pgx.Rows) (types.ResourcesGrouped, error) {
 	type HoldingGroup struct {
 		Field string
 		Total float64
@@ -81,12 +81,12 @@ func (s *PostgresSnapshotStore) parseRowsIntoHoldingsGrouped(rows pgx.Rows) (*ty
 		)
 
 		if err != nil {
-			return nil, err
+			return types.ResourcesGrouped{}, err
 		}
 
 		hgs.Fields = append(hgs.Fields, hg.Field)
 		hgs.Total = append(hgs.Total, hg.Total)
 	}
 
-	return &hgs, nil
+	return hgs, nil
 }

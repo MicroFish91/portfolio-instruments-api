@@ -10,18 +10,18 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) TallyByAccount(ctx context.Context, snapId, userId int, options *types.GetTallyByAccountStoreOptions) (*types.ResourcesGrouped, error) {
+func (s *PostgresSnapshotStore) GroupByAccount(ctx context.Context, snapId, userId int, options types.GetGroupByAccountStoreOptions) (types.ResourcesGrouped, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
-	if options == nil || options.Tally_by == "" {
-		return nil, errors.New("required to designate a tally_by options parameter")
+	if options.Group_by == "" {
+		return types.ResourcesGrouped{}, errors.New("required to designate a group_by options parameter")
 	}
 
 	var field string
-	if options.Tally_by == types.BY_ACCOUNT_NAME {
+	if options.Group_by == types.BY_ACCOUNT_NAME {
 		field = "name"
-	} else if options.Tally_by == types.BY_ACCOUNT_INSTITUTION {
+	} else if options.Group_by == types.BY_ACCOUNT_INSTITUTION {
 		field = "institution"
 	} else {
 		field = "tax_shelter"
@@ -44,19 +44,19 @@ func (s *PostgresSnapshotStore) TallyByAccount(ctx context.Context, snapId, user
 	)
 
 	if err != nil {
-		return nil, err
+		return types.ResourcesGrouped{}, err
 	}
 	defer rows.Close()
 
 	accountsGrouped, err := s.parseRowsIntoAccountsGrouped(rows)
 
 	if err != nil {
-		return nil, err
+		return types.ResourcesGrouped{}, err
 	}
 	return accountsGrouped, nil
 }
 
-func (s *PostgresSnapshotStore) parseRowsIntoAccountsGrouped(rows pgx.Rows) (*types.ResourcesGrouped, error) {
+func (s *PostgresSnapshotStore) parseRowsIntoAccountsGrouped(rows pgx.Rows) (types.ResourcesGrouped, error) {
 	type AccountGrouped struct {
 		Field string
 		Total float64
@@ -71,12 +71,12 @@ func (s *PostgresSnapshotStore) parseRowsIntoAccountsGrouped(rows pgx.Rows) (*ty
 		)
 
 		if err != nil {
-			return nil, err
+			return types.ResourcesGrouped{}, err
 		}
 
 		ags.Fields = append(ags.Fields, ag.Field)
 		ags.Total = append(ags.Total, ag.Total)
 	}
 
-	return &ags, nil
+	return ags, nil
 }

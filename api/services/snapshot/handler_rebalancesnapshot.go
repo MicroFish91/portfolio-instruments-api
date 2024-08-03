@@ -46,8 +46,8 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 	}
 
 	// holdings
-	holdingsGrouped, err := h.snapshotStore.TallyByHolding(c.Context(), userPayload.User_id, snapshot.Snap_id, &types.GetTallyByHoldingStoreOptions{
-		Tally_by:      types.BY_ASSET_CATEGORY,
+	holdingsGrouped, err := h.snapshotStore.GroupByHolding(c.Context(), userPayload.User_id, snapshot.Snap_id, types.GetGroupByHoldingStoreOptions{
+		Group_by:      types.BY_ASSET_CATEGORY,
 		Omit_skip_reb: true,
 	})
 	if err != nil {
@@ -55,7 +55,7 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 	}
 
 	// compute rebalance
-	target, current, change, rebThreshPct, err := h.computeRebalance(benchmark.Asset_allocation, *holdingsGrouped, omitSkipsTotal)
+	target, current, change, rebThreshPct, err := h.computeRebalance(benchmark.Asset_allocation, holdingsGrouped, omitSkipsTotal)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}

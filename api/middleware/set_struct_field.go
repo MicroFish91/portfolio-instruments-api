@@ -13,20 +13,19 @@ func setStructField(target interface{}, fieldName string, fieldValue any) error 
 	// Capitalize first letter in the name to match the exported schema field
 	fieldName = strings.ToUpper(fieldName[:1]) + fieldName[1:]
 
-	// The struct
+	// The target struct
 	structValue := reflect.ValueOf(target).Elem()
 
-	// The struct's field
+	// Access the target struct's field corresponding to the incoming fieldName
 	structFieldValue := structValue.FieldByName(fieldName)
-	structFieldType := structFieldValue.Type()
-
 	if !structFieldValue.IsValid() {
 		return fmt.Errorf("no field: %s in obj", fieldName)
 	}
-
 	if !structFieldValue.CanSet() {
 		return fmt.Errorf("cannot set %s field value", fieldName)
 	}
+
+	structFieldType := structFieldValue.Type()
 
 	// The reflect value we want to set
 	newValue := reflect.ValueOf(fieldValue)

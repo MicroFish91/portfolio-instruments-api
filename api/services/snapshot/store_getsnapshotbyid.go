@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId, userId int) (*types.Snapshot, *[]types.SnapshotValues, error) {
+func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId, userId int) (types.Snapshot, []types.SnapshotValues, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
@@ -23,7 +23,7 @@ func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId,
 
 	snapshot, err := s.parseRowIntoSnapshot(row)
 	if err != nil {
-		return nil, nil, err
+		return types.Snapshot{}, nil, err
 	}
 
 	rows, err := s.db.Query(
@@ -36,19 +36,19 @@ func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId,
 	)
 
 	if err != nil {
-		return nil, nil, err
+		return types.Snapshot{}, nil, err
 	}
 	defer rows.Close()
 
 	snapshotValues, err := s.parseRowsIntoSnapshotValues(rows)
 
 	if err != nil {
-		return nil, nil, err
+		return types.Snapshot{}, nil, err
 	}
 	return snapshot, snapshotValues, nil
 }
 
-func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (*types.Snapshot, error) {
+func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (types.Snapshot, error) {
 	var snap types.Snapshot
 	var benchmark_id sql.NullInt64
 
@@ -65,7 +65,7 @@ func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (*types.Snapsh
 	)
 
 	if err != nil {
-		return nil, err
+		return types.Snapshot{}, err
 	}
 
 	if benchmark_id.Valid {
@@ -74,10 +74,10 @@ func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (*types.Snapsh
 		snap.Benchmark_id = 0
 	}
 
-	return &snap, nil
+	return snap, nil
 }
 
-func (s *PostgresSnapshotStore) parseRowsIntoSnapshotValues(rows pgx.Rows) (*[]types.SnapshotValues, error) {
+func (s *PostgresSnapshotStore) parseRowsIntoSnapshotValues(rows pgx.Rows) ([]types.SnapshotValues, error) {
 	var snapshotValues []types.SnapshotValues
 	for rows.Next() {
 		var sv types.SnapshotValues
@@ -99,5 +99,5 @@ func (s *PostgresSnapshotStore) parseRowsIntoSnapshotValues(rows pgx.Rows) (*[]t
 		snapshotValues = append(snapshotValues, sv)
 	}
 
-	return &snapshotValues, nil
+	return snapshotValues, nil
 }

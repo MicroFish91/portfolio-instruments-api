@@ -7,7 +7,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresSnapshotStore) CreateSnapshot(ctx context.Context, snapshot *types.Snapshot) (*types.Snapshot, error) {
+func (s *PostgresSnapshotStore) CreateSnapshot(ctx context.Context, snapshot types.Snapshot) (types.Snapshot, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -22,7 +22,7 @@ func (s *PostgresSnapshotStore) CreateSnapshot(ctx context.Context, snapshot *ty
 
 	snap, err := s.parseRowIntoSnapshot(row)
 	if err != nil {
-		return nil, err
+		return types.Snapshot{}, err
 	}
 
 	if snapshot.Benchmark_id != 0 {
@@ -37,7 +37,7 @@ func (s *PostgresSnapshotStore) CreateSnapshot(ctx context.Context, snapshot *ty
 
 		snap, err = s.parseRowIntoSnapshot(row)
 		if err != nil {
-			return nil, err
+			return types.Snapshot{}, err
 		}
 	}
 

@@ -61,7 +61,7 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	// Create snapshot
 	snapshot, err := h.snapshotStore.CreateSnapshot(
 		c.Context(),
-		&types.Snapshot{
+		types.Snapshot{
 			Snap_date:    snapshotPayload.Snap_date,
 			Description:  snapshotPayload.Description,
 			User_id:      userPayload.User_id,
@@ -77,7 +77,7 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	for _, sv := range snapshotPayload.Snapshot_values {
 		snapshotVal, err := h.snapshotStore.CreateSnapshotValues(
 			c.Context(),
-			&types.SnapshotValues{
+			types.SnapshotValues{
 				Snap_id:        snapshot.Snap_id,
 				Account_id:     sv.Account_id,
 				Holding_id:     sv.Holding_id,
@@ -89,7 +89,7 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		if err != nil {
 			return utils.SendError(c, utils.StatusCodeFromError(err), err)
 		}
-		snapshotValues = append(snapshotValues, *snapshotVal)
+		snapshotValues = append(snapshotValues, snapshotVal)
 	}
 
 	// Acquire snapshot total

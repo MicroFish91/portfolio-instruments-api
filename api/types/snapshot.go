@@ -39,15 +39,15 @@ type SnapshotHandler interface {
 }
 
 type SnapshotStore interface {
-	GetSnapshots(ctx context.Context, userId int, options *GetSnapshotsStoreOptions) (*[]Snapshot, *PaginationMetadata, error)
-	GetSnapshotById(ctx context.Context, snapshotId, userId int) (*Snapshot, *[]SnapshotValues, error)
-	CreateSnapshot(context.Context, *Snapshot) (*Snapshot, error)
-	CreateSnapshotValues(context.Context, *SnapshotValues) (*SnapshotValues, error)
+	GetSnapshots(ctx context.Context, userId int, options GetSnapshotsStoreOptions) ([]Snapshot, PaginationMetadata, error)
+	GetSnapshotById(ctx context.Context, snapshotId, userId int) (Snapshot, []SnapshotValues, error)
+	CreateSnapshot(context.Context, Snapshot) (Snapshot, error)
+	CreateSnapshotValues(context.Context, SnapshotValues) (SnapshotValues, error)
 	GetSnapshotTotal(ctx context.Context, userId, snapId int, options GetSnapshotTotalStoreOptions) (total float64, err error)
 	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (total float64, err error)
 	RefreshSnapshotWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, err error)
-	TallyByAccount(ctx context.Context, userId, snapId int, options *GetTallyByAccountStoreOptions) (*ResourcesGrouped, error)
-	TallyByHolding(ctx context.Context, userId, snapId int, options *GetTallyByHoldingStoreOptions) (*ResourcesGrouped, error)
+	GroupByAccount(ctx context.Context, userId, snapId int, options GetGroupByAccountStoreOptions) (ResourcesGrouped, error)
+	GroupByHolding(ctx context.Context, userId, snapId int, options GetGroupByHoldingStoreOptions) (ResourcesGrouped, error)
 }
 
 type GetSnapshotsStoreOptions struct {
@@ -59,26 +59,26 @@ type GetSnapshotsStoreOptions struct {
 	Page_size       int
 }
 
-type AccountsTallyCategory string
+type AccountsGroupByCategory string
 
 const (
-	BY_ACCOUNT_NAME        AccountsTallyCategory = "ACCOUNT_NAME"
-	BY_ACCOUNT_INSTITUTION AccountsTallyCategory = "ACCOUNT_INSTITUTION"
-	BY_TAX_SHELTER         AccountsTallyCategory = "TAX_SHELTER"
+	BY_ACCOUNT_NAME        AccountsGroupByCategory = "ACCOUNT_NAME"
+	BY_ACCOUNT_INSTITUTION AccountsGroupByCategory = "ACCOUNT_INSTITUTION"
+	BY_TAX_SHELTER         AccountsGroupByCategory = "TAX_SHELTER"
 )
 
-type HoldingsTallyCategory string
+type HoldingsGroupByCategory string
 
 const (
-	BY_ASSET_CATEGORY HoldingsTallyCategory = "ASSET_CATEGORY"
+	BY_ASSET_CATEGORY HoldingsGroupByCategory = "ASSET_CATEGORY"
 )
 
-type GetTallyByAccountStoreOptions struct {
-	Tally_by AccountsTallyCategory
+type GetGroupByAccountStoreOptions struct {
+	Group_by AccountsGroupByCategory
 }
 
-type GetTallyByHoldingStoreOptions struct {
-	Tally_by HoldingsTallyCategory
+type GetGroupByHoldingStoreOptions struct {
+	Group_by HoldingsGroupByCategory
 	// Omit any snapshot_values that have "skip_rebalance" set to true
 	Omit_skip_reb bool
 }
