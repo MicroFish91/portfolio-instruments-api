@@ -17,7 +17,7 @@ func (h *UserHandlerImpl) RegisterUser(c fiber.Ctx) error {
 	}
 
 	u, _ := h.userStore.GetUserByEmail(c.Context(), userPayload.Email)
-	if u != nil {
+	if u.User_id != 0 {
 		return utils.SendError(c, fiber.StatusConflict, errors.New("user with provided email already exists"))
 	}
 
@@ -28,7 +28,7 @@ func (h *UserHandlerImpl) RegisterUser(c fiber.Ctx) error {
 
 	user, err := h.userStore.RegisterUser(
 		c.Context(),
-		&types.User{
+		types.User{
 			Email:        userPayload.Email,
 			Enc_password: encpw,
 		},
@@ -38,7 +38,7 @@ func (h *UserHandlerImpl) RegisterUser(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	settings, err := h.userStore.CreateSettings(c.Context(), &types.Settings{
+	settings, err := h.userStore.CreateSettings(c.Context(), types.Settings{
 		Reb_thresh_pct: 10,
 		User_id:        user.User_id,
 	})

@@ -32,7 +32,7 @@ func (h *UserHandlerImpl) UpdateSettings(c fiber.Ctx) error {
 		}
 	}
 
-	settings, err := h.userStore.UpdateSettings(c.Context(), &types.Settings{
+	settings, err := h.userStore.UpdateSettings(c.Context(), types.Settings{
 		Reb_thresh_pct: settingsPayload.Reb_thresh_pct,
 		Benchmark_id:   settingsPayload.Benchmark_id,
 		User_id:        userPayload.User_id,

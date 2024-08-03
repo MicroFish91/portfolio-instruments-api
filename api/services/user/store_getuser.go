@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (*types.User, error) {
+func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (types.User, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -23,17 +23,17 @@ func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (*
 	user, err := s.parseRowIntoUser(row)
 
 	if err != nil {
-		return nil, err
+		return types.User{}, err
 	}
 	return user, nil
 }
 
-func (s *PostgresUserStore) parseRowIntoUser(row pgx.Row) (*types.User, error) {
+func (s *PostgresUserStore) parseRowIntoUser(row pgx.Row) (types.User, error) {
 	var u types.User
 	err := row.Scan(&u.User_id, &u.Email, &u.Enc_password, &u.Created_at, &u.Updated_at)
 
 	if err != nil {
-		return nil, err
+		return types.User{}, err
 	}
-	return &u, nil
+	return u, nil
 }

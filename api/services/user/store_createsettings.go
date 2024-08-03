@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresUserStore) CreateSettings(ctx context.Context, settings *types.Settings) (*types.Settings, error) {
+func (s *PostgresUserStore) CreateSettings(ctx context.Context, settings types.Settings) (types.Settings, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -24,13 +24,13 @@ func (s *PostgresUserStore) CreateSettings(ctx context.Context, settings *types.
 
 	settings, err := s.parseRowIntoSettings(row)
 	if err != nil {
-		return nil, err
+		return types.Settings{}, err
 	}
 
 	return settings, nil
 }
 
-func (s *PostgresUserStore) parseRowIntoSettings(row pgx.Row) (*types.Settings, error) {
+func (s *PostgresUserStore) parseRowIntoSettings(row pgx.Row) (types.Settings, error) {
 	var setting types.Settings
 	var benchmark_id sql.NullInt64
 
@@ -44,7 +44,7 @@ func (s *PostgresUserStore) parseRowIntoSettings(row pgx.Row) (*types.Settings, 
 	)
 
 	if err != nil {
-		return nil, err
+		return types.Settings{}, err
 	}
 
 	if benchmark_id.Valid {
@@ -53,5 +53,5 @@ func (s *PostgresUserStore) parseRowIntoSettings(row pgx.Row) (*types.Settings, 
 		setting.Benchmark_id = 0
 	}
 
-	return &setting, nil
+	return setting, nil
 }

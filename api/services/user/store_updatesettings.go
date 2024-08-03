@@ -9,7 +9,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresUserStore) UpdateSettings(ctx context.Context, settings *types.Settings) (*types.Settings, error) {
+func (s *PostgresUserStore) UpdateSettings(ctx context.Context, settings types.Settings) (types.Settings, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -36,7 +36,7 @@ func (s *PostgresUserStore) UpdateSettings(ctx context.Context, settings *types.
 	settings, err := s.parseRowIntoSettings(row)
 
 	if err != nil {
-		return nil, err
+		return types.Settings{}, err
 	}
 	return settings, nil
 }

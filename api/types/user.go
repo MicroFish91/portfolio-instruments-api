@@ -32,9 +32,9 @@ type UserHandler interface {
 }
 
 type UserStore interface {
-	RegisterUser(context.Context, *User) (*User, error)
-	GetUserByEmail(ctx context.Context, email string) (*User, error)
-	CreateSettings(context.Context, *Settings) (*Settings, error)
-	GetSettings(ctx context.Context, userId int) (*Settings, error)
-	UpdateSettings(context.Context, *Settings) (*Settings, error)
+	RegisterUser(context.Context, User) (User, error)
+	GetUserByEmail(ctx context.Context, email string) (User, error)
+	CreateSettings(context.Context, Settings) (Settings, error)
+	GetSettings(ctx context.Context, userId int) (Settings, error)
+	UpdateSettings(context.Context, Settings) (Settings, error)
 }
