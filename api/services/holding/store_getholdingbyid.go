@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId int, holdingId int) (types.Holding, error) {
+func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId, holdingId int) (types.Holding, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 

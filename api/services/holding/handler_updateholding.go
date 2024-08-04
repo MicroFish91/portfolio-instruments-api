@@ -22,7 +22,7 @@ func (h *HoldingHandlerImpl) UpdateHolding(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid holding payload from request body"))
 	}
 
-	holdingParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(GetHoldingByIdParams)
+	holdingParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(UpdateHoldingParams)
 	if !ok {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid holding params from request"))
 	}

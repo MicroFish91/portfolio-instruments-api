@@ -37,3 +37,13 @@ func (p UpdateHoldingPayload) Validate() error {
 		validation.Field(&p.Is_deprecated),
 	)
 }
+
+type UpdateHoldingParams struct {
+	Id int `json:"id"`
+}
+
+func (p UpdateHoldingParams) Validate() error {
+	return validation.ValidateStruct(&p,
+		validation.Field(&p.Id, validation.Required, validation.Min(1)),
+	)
+}
