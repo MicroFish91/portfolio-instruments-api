@@ -25,7 +25,7 @@ type Account struct {
 	Account_id    int        `json:"account_id,omitempty"`
 	Name          string     `json:"name"`
 	Description   string     `json:"description,omitempty"`
-	Tax_shelter   TaxShelter `json:"shelter_type"`
+	Tax_shelter   TaxShelter `json:"tax_shelter"`
 	Institution   string     `json:"institution"`
 	Is_deprecated bool       `json:"is_deprecated"`
 	User_id       int        `json:"user_id"`
@@ -37,6 +37,7 @@ type AccountHandler interface {
 	CreateAccount(fiber.Ctx) error
 	GetAccounts(fiber.Ctx) error
 	GetAccountById(fiber.Ctx) error
+	UpdateAccount(fiber.Ctx) error
 }
 
 type AccountStore interface {
@@ -44,6 +45,7 @@ type AccountStore interface {
 	GetAccounts(ctx context.Context, userId int, options GetAccountsStoreOptions) ([]Account, PaginationMetadata, error)
 	GetAccountById(ctx context.Context, userId int, accountId int) (Account, error)
 	GetAccountByName(ctx context.Context, name string, userId int) (Account, error)
+	UpdateAccount(context.Context, Account) (Account, error)
 }
 
 type GetAccountsStoreOptions struct {
