@@ -12,4 +12,5 @@ func registerAccountRoutes(r fiber.Router, h types.AccountHandler) {
 	r.Get("/accounts/:id", h.GetAccountById, middleware.RequireAuth, middleware.AddParamsValidator[account.GetAccountByIdParams]())
 	r.Post("/accounts", h.CreateAccount, middleware.RequireAuth, middleware.AddBodyValidator[account.CreateAccountPayload]())
 	r.Put("/accounts/:id", h.UpdateAccount, middleware.RequireAuth, middleware.AddBodyValidator[account.UpdateAccountPayload](), middleware.AddParamsValidator[account.UpdateAccountByIdParams]())
+	r.Delete("/accounts/:id", h.DeleteAccount, middleware.RequireAuth, middleware.AddParamsValidator[account.DeleteAccountByIdParams]())
 }

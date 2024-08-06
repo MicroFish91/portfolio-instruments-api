@@ -38,14 +38,16 @@ type AccountHandler interface {
 	GetAccounts(fiber.Ctx) error
 	GetAccountById(fiber.Ctx) error
 	UpdateAccount(fiber.Ctx) error
+	DeleteAccount(fiber.Ctx) error
 }
 
 type AccountStore interface {
 	CreateAccount(context.Context, Account) (Account, error)
 	GetAccounts(ctx context.Context, userId int, options GetAccountsStoreOptions) ([]Account, PaginationMetadata, error)
-	GetAccountById(ctx context.Context, userId int, accountId int) (Account, error)
+	GetAccountById(ctx context.Context, userId, accountId int) (Account, error)
 	GetAccountByName(ctx context.Context, name string, userId int) (Account, error)
 	UpdateAccount(context.Context, Account) (Account, error)
+	DeleteAccount(ctx context.Context, userId, accountId int) (Account, error)
 }
 
 type GetAccountsStoreOptions struct {
