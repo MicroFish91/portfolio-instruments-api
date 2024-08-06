@@ -30,6 +30,7 @@ type BenchmarkHandler interface {
 	CreateBenchmark(fiber.Ctx) error
 	GetBenchmarks(fiber.Ctx) error
 	GetBenchmarkById(fiber.Ctx) error
+	UpdateBenchmark(fiber.Ctx) error
 }
 
 type BenchmarkStore interface {
@@ -37,6 +38,7 @@ type BenchmarkStore interface {
 	GetBenchmarks(ctx context.Context, userId int, options GetBenchmarksStoreOptions) ([]Benchmark, PaginationMetadata, error)
 	GetBenchmarkById(ctx context.Context, userId, benchmarkId int) (Benchmark, error)
 	GetBenchmarkByName(ctx context.Context, name string, userId int) (Benchmark, error)
+	UpdateBenchmark(context.Context, Benchmark) (Benchmark, error)
 }
 
 type GetBenchmarksStoreOptions struct {

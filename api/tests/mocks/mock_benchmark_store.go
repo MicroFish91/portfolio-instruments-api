@@ -37,3 +37,7 @@ func (s *MockBenchmarkStore) GetBenchmarkByName(ctx context.Context, name string
 		User_id: userId,
 	}, nil
 }
+
+func (s *MockBenchmarkStore) UpdateBenchmark(ctx context.Context, b types.Benchmark) (types.Benchmark, error) {
+	return types.Benchmark{}, nil
+}
