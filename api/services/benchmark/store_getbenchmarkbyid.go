@@ -14,10 +14,17 @@ func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, b
 
 	row := s.db.QueryRow(
 		c,
-		`SELECT * FROM benchmarks
-		WHERE benchmark_id = $1
-		AND user_id = $2`,
-		benchmarkId, userId,
+		`
+			select
+				* 
+			from 
+				benchmarks
+			where 
+				benchmark_id = $1
+				and user_id = $2
+		`,
+		benchmarkId,
+		userId,
 	)
 
 	benchmark, err := s.parseRowIntoBenchmark(row)

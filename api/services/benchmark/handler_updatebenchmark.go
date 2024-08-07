@@ -23,10 +23,10 @@ func (h *BenchmarkHandlerImpl) UpdateBenchmark(c fiber.Ctx) error {
 
 	benchmarkParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(UpdateBenchmarkById)
 	if !ok {
-		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid account params from request"))
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid benchmark params from request"))
 	}
 
-	benchmark, err := h.store.UpdateBenchmark(c.Context(), types.Benchmark{
+	benchmark, err := h.benchmarkStore.UpdateBenchmark(c.Context(), types.Benchmark{
 		Benchmark_id:     benchmarkParams.Id,
 		Name:             benchmarkPayload.Name,
 		Description:      benchmarkPayload.Description,

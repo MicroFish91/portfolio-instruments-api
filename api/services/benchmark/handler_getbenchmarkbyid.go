@@ -17,10 +17,10 @@ func (h *BenchmarkHandlerImpl) GetBenchmarkById(c fiber.Ctx) error {
 
 	benchmarkParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(GetBenchmarkByIdParams)
 	if !ok {
-		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid account params from request"))
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid benchmark params from request"))
 	}
 
-	benchmark, err := h.store.GetBenchmarkById(c.Context(), userPayload.User_id, benchmarkParams.Id)
+	benchmark, err := h.benchmarkStore.GetBenchmarkById(c.Context(), userPayload.User_id, benchmarkParams.Id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}

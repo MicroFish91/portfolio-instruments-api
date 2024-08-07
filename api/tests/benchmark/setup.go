@@ -21,8 +21,9 @@ func registerAppWithBenchmarks() *fiber.App {
 	logger := mocks.NewMockLogger(slog.LevelDebug)
 	app = fiber.New(api.GetFiberConfig())
 
+	userStore := mocks.NewMockUserStore()
 	benchmarkStore := mocks.NewMockBenchmarkStore()
-	benchmarkHandler := benchmark.NewBenchmarkHandler(benchmarkStore, logger)
+	benchmarkHandler := benchmark.NewBenchmarkHandler(userStore, benchmarkStore, logger)
 
 	registerMockBenchmarkRoutes(app, benchmarkHandler)
 	return app

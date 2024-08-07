@@ -41,3 +41,7 @@ func (s *MockBenchmarkStore) GetBenchmarkByName(ctx context.Context, name string
 func (s *MockBenchmarkStore) UpdateBenchmark(ctx context.Context, b types.Benchmark) (types.Benchmark, error) {
 	return types.Benchmark{}, nil
 }
+
+func (s *MockBenchmarkStore) DeleteBenchmark(ctx context.Context, userId, benchmark int) (types.Benchmark, error) {
+	return types.Benchmark{}, nil
+}

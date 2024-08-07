@@ -21,7 +21,7 @@ func (h *BenchmarkHandlerImpl) GetBenchmarks(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid query params from request"))
 	}
 
-	benchmarks, pagination, err := h.store.GetBenchmarks(
+	benchmarks, pagination, err := h.benchmarkStore.GetBenchmarks(
 		c.Context(),
 		userPayload.User_id,
 		types.GetBenchmarksStoreOptions{

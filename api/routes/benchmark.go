@@ -12,4 +12,5 @@ func RegisterBenchmarkRoutes(r fiber.Router, h types.BenchmarkHandler) {
 	r.Get("/benchmarks/:id", h.GetBenchmarkById, middleware.RequireAuth, middleware.AddParamsValidator[benchmark.GetBenchmarkByIdParams]())
 	r.Post("/benchmarks", h.CreateBenchmark, middleware.RequireAuth, middleware.AddBodyValidator[benchmark.CreateBenchmarkPayload]())
 	r.Put("/benchmarks/:id", h.UpdateBenchmark, middleware.RequireAuth, middleware.AddBodyValidator[benchmark.UpdateBenchmarkPayload](), middleware.AddParamsValidator[benchmark.UpdateBenchmarkById]())
+	r.Delete("/benchmarks/:id", h.DeleteBenchmark, middleware.RequireAuth, middleware.AddParamsValidator[benchmark.DeleteBenchmarkById]())
 }

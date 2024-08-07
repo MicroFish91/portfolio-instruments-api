@@ -7,13 +7,15 @@ import (
 )
 
 type BenchmarkHandlerImpl struct {
-	store  types.BenchmarkStore
-	logger *slog.Logger
+	userStore      types.UserStore
+	benchmarkStore types.BenchmarkStore
+	logger         *slog.Logger
 }
 
-func NewBenchmarkHandler(store types.BenchmarkStore, logger *slog.Logger) *BenchmarkHandlerImpl {
+func NewBenchmarkHandler(userStore types.UserStore, benchmarkStore types.BenchmarkStore, logger *slog.Logger) *BenchmarkHandlerImpl {
 	return &BenchmarkHandlerImpl{
-		store:  store,
-		logger: logger,
+		userStore:      userStore,
+		benchmarkStore: benchmarkStore,
+		logger:         logger,
 	}
 }
