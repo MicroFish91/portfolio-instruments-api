@@ -73,11 +73,11 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	}
 
 	// Create snapshot values
-	var snapshotValues []types.SnapshotValues
+	var snapshotValues []types.SnapshotValue
 	for _, sv := range snapshotPayload.Snapshot_values {
-		snapshotVal, err := h.snapshotStore.CreateSnapshotValues(
+		snapshotVal, err := h.snapshotValueStore.CreateSnapshotValue(
 			c.Context(),
-			types.SnapshotValues{
+			types.SnapshotValue{
 				Snap_id:        snapshot.Snap_id,
 				Account_id:     sv.Account_id,
 				Holding_id:     sv.Holding_id,

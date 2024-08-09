@@ -91,7 +91,7 @@ func (h *SnapshotHandlerImpl) getSnapshotHoldings(c fiber.Ctx, holdingIds []int,
 }
 
 // Takes a complete slice of snapshot_values and returns all unique account and holding ids
-func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues []types.SnapshotValues) (accIds []int, holdIds []int) {
+func (h *SnapshotHandlerImpl) gatherSnapshotResourceIds(snapshotValues []types.SnapshotValue) (accIds []int, holdIds []int) {
 	accIdsSet := map[int]struct{}{}
 	holdIdsSet := map[int]struct{}{}
 

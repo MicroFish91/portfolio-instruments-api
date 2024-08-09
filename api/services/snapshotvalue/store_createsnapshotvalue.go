@@ -1,4 +1,4 @@
-package snapshot
+package snapshotvalue
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) CreateSnapshotValues(ctx context.Context, snapVals types.SnapshotValues) (types.SnapshotValues, error) {
+func (s *PostgresSnapshotValueStore) CreateSnapshotValue(ctx context.Context, snapVals types.SnapshotValue) (types.SnapshotValue, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
@@ -21,16 +21,16 @@ func (s *PostgresSnapshotStore) CreateSnapshotValues(ctx context.Context, snapVa
 		snapVals.Snap_id, snapVals.Account_id, snapVals.Holding_id, snapVals.Total, snapVals.Skip_rebalance, snapVals.User_id,
 	)
 
-	sv, err := s.parseRowIntoSnapshotValues(row)
+	sv, err := s.parseRowIntoSnapshotValue(row)
 
 	if err != nil {
-		return types.SnapshotValues{}, err
+		return types.SnapshotValue{}, err
 	}
 	return sv, nil
 }
 
-func (s *PostgresSnapshotStore) parseRowIntoSnapshotValues(row pgx.Row) (types.SnapshotValues, error) {
-	var sv types.SnapshotValues
+func (s *PostgresSnapshotValueStore) parseRowIntoSnapshotValue(row pgx.Row) (types.SnapshotValue, error) {
+	var sv types.SnapshotValue
 	err := row.Scan(
 		&sv.Snap_val_id,
 		&sv.Snap_id,
@@ -44,7 +44,7 @@ func (s *PostgresSnapshotStore) parseRowIntoSnapshotValues(row pgx.Row) (types.S
 	)
 
 	if err != nil {
-		return types.SnapshotValues{}, err
+		return types.SnapshotValue{}, err
 	}
 	return sv, nil
 }

@@ -19,32 +19,21 @@ type Snapshot struct {
 	Updated_at   time.Time `json:"updated_at"`
 }
 
-type SnapshotValues struct {
-	Snap_val_id    int       `json:"snap_val_id"`
-	Snap_id        int       `json:"snap_id"`
-	Account_id     int       `json:"account_id"`
-	Holding_id     int       `json:"holding_id"`
-	Total          float64   `json:"total"`
-	Skip_rebalance bool      `json:"skip_rebalance"`
-	User_id        int       `json:"user_id"`
-	Created_at     time.Time `json:"created_at"`
-	Updated_at     time.Time `json:"updated_at"`
-}
-
 type SnapshotHandler interface {
 	GetSnapshots(fiber.Ctx) error
 	GetSnapshotById(fiber.Ctx) error
 	CreateSnapshot(fiber.Ctx) error
 	UpdateSnapshot(fiber.Ctx) error
+	DeleteSnapshot(fiber.Ctx) error
 	RebalanceSnapshot(fiber.Ctx) error
 }
 
 type SnapshotStore interface {
 	GetSnapshots(ctx context.Context, userId int, options GetSnapshotsStoreOptions) ([]Snapshot, PaginationMetadata, error)
-	GetSnapshotById(ctx context.Context, snapshotId, userId int) (Snapshot, []SnapshotValues, error)
+	GetSnapshotById(ctx context.Context, snapshotId, userId int) (Snapshot, []SnapshotValue, error)
 	CreateSnapshot(context.Context, Snapshot) (Snapshot, error)
-	CreateSnapshotValues(context.Context, SnapshotValues) (SnapshotValues, error)
 	UpdateSnapshot(context.Context, Snapshot) (Snapshot, error)
+	DeleteSnapshot(ctx context.Context, snapshotId, userId int) (Snapshot, error)
 
 	GetSnapshotTotal(ctx context.Context, userId, snapId int, options GetSnapshotTotalStoreOptions) (total float64, err error)
 	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (total float64, err error)

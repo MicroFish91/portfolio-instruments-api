@@ -9,7 +9,7 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId, userId int) (types.Snapshot, []types.SnapshotValues, error) {
+func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId, userId int) (types.Snapshot, []types.SnapshotValue, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*10)
 	defer cancel()
 
@@ -77,10 +77,10 @@ func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (types.Snapsho
 	return snap, nil
 }
 
-func (s *PostgresSnapshotStore) parseRowsIntoSnapshotValues(rows pgx.Rows) ([]types.SnapshotValues, error) {
-	var snapshotValues []types.SnapshotValues
+func (s *PostgresSnapshotStore) parseRowsIntoSnapshotValues(rows pgx.Rows) ([]types.SnapshotValue, error) {
+	var snapshotValues []types.SnapshotValue
 	for rows.Next() {
-		var sv types.SnapshotValues
+		var sv types.SnapshotValue
 		err := rows.Scan(
 			&sv.Snap_val_id,
 			&sv.Snap_id,

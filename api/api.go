@@ -9,6 +9,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/benchmark"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/holding"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/user"
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -37,24 +38,26 @@ func GetFiberConfig() fiber.Config {
 func (s *ApiServer) Run() error {
 	app := fiber.New(GetFiberConfig())
 
-	// Middleware pipeline
+	// Middleware
 	app.Use(middleware.AddIncomingTrafficLogger(s.logger))
 	app.Use(middleware.AddLocalsContextLogger(s.logger))
 
-	// Initialize stores
+	// Stores
 	userStore := user.NewPostgresUserStore(s.db, s.logger)
 	accountStore := account.NewPostgresAccountStore(s.db, s.logger)
 	holdingStore := holding.NewPostgresHoldingStore(s.db, s.logger)
 	benchmarkStore := benchmark.NewPostgresBenchmarkStore(s.db, s.logger)
 	snapshotStore := snapshot.NewPostgresSnapshotStore(s.db, s.logger)
+	snapshotValueStore := snapshotvalue.NewPostgresSnapshotValueStore(s.db, s.logger)
 
-	// Initialize handlers
+	// Handlers
 	userHandler := user.NewUserHandler(userStore, benchmarkStore, s.logger)
 	accountHandler := account.NewAccountHandler(accountStore, s.logger)
 	holdingHandler := holding.NewHoldingHandler(holdingStore, s.logger)
 	benchmarkHandler := benchmark.NewBenchmarkHandler(userStore, benchmarkStore, s.logger)
-	snapshotHandler := snapshot.NewSnapshotHandler(userStore, benchmarkStore, accountStore, holdingStore, snapshotStore, s.logger)
+	snapshotHandler := snapshot.NewSnapshotHandler(userStore, benchmarkStore, accountStore, holdingStore, snapshotStore, snapshotValueStore, s.logger)
 
+	// Routes
 	routes.RegisterRoutes(app, userHandler, accountHandler, holdingHandler, benchmarkHandler, snapshotHandler)
 	return app.Listen(s.addr)
 }
