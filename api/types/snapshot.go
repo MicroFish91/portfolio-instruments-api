@@ -35,6 +35,7 @@ type SnapshotHandler interface {
 	GetSnapshots(fiber.Ctx) error
 	GetSnapshotById(fiber.Ctx) error
 	CreateSnapshot(fiber.Ctx) error
+	UpdateSnapshot(fiber.Ctx) error
 	RebalanceSnapshot(fiber.Ctx) error
 }
 
@@ -43,6 +44,8 @@ type SnapshotStore interface {
 	GetSnapshotById(ctx context.Context, snapshotId, userId int) (Snapshot, []SnapshotValues, error)
 	CreateSnapshot(context.Context, Snapshot) (Snapshot, error)
 	CreateSnapshotValues(context.Context, SnapshotValues) (SnapshotValues, error)
+	UpdateSnapshot(context.Context, Snapshot) (Snapshot, error)
+
 	GetSnapshotTotal(ctx context.Context, userId, snapId int, options GetSnapshotTotalStoreOptions) (total float64, err error)
 	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (total float64, err error)
 	RefreshSnapshotWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, err error)
