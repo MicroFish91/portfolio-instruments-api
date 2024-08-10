@@ -8,14 +8,14 @@ import (
 	validation "github.com/go-ozzo/ozzo-validation"
 )
 
-type CreateSnapshotValuePayload struct {
+type UpdateSnapshotValuePayload struct {
 	Account_id     int     `json:"account_id"`
 	Holding_id     int     `json:"holding_id"`
 	Total          float64 `json:"total"`
 	Skip_rebalance bool    `json:"skip_rebalance"`
 }
 
-func (p CreateSnapshotValuePayload) Validate() error {
+func (p UpdateSnapshotValuePayload) Validate() error {
 	if err := validation.ValidateStruct(&p,
 		validation.Field(&p.Account_id, validation.Required, validation.Min(1)),
 		validation.Field(&p.Holding_id, validation.Required, validation.Min(1)),
@@ -34,12 +34,14 @@ func (p CreateSnapshotValuePayload) Validate() error {
 	return nil
 }
 
-type CreateSnapshotValueParams struct {
-	Snap_id int `json:"snap_id"`
+type UpdateSnapshotValueParams struct {
+	Snap_id     int `json:"snap_id"`
+	Snap_val_id int `json:"snap_val_id"`
 }
 
-func (p CreateSnapshotValueParams) Validate() error {
+func (p UpdateSnapshotValueParams) Validate() error {
 	return validation.ValidateStruct(&p,
 		validation.Field(&p.Snap_id, validation.Required, validation.Min(1)),
+		validation.Field(&p.Snap_val_id, validation.Required, validation.Min(1)),
 	)
 }
