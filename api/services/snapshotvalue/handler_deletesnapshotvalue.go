@@ -21,13 +21,8 @@ func (h *SnapshotValueHandlerImpl) DeleteSnapshotValue(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot_value params from request"))
 	}
 
-	// Verify snapshot
-	if err := h.verifySnapshotById(c, svParams.Snap_id, userPayload.User_id); err != nil {
-		return utils.SendError(c, fiber.StatusConflict, err)
-	}
-
 	// snapshot_value
-	snapshotvalue, err := h.snapshotvalueStore.DeleteSnapshotValue(c.Context(), svParams.Snap_val_id, userPayload.User_id)
+	snapshotvalue, err := h.snapshotValueStore.DeleteSnapshotValue(c.Context(), svParams.Snap_id, svParams.Snap_val_id, userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}

@@ -10,7 +10,7 @@ type SnapshotValueHandlerImpl struct {
 	accountStore       types.AccountStore
 	holdingStore       types.HoldingStore
 	snapshotStore      types.SnapshotStore
-	snapshotvalueStore types.SnapshotValueStore
+	snapshotValueStore types.SnapshotValueStore
 	logger             *slog.Logger
 }
 
@@ -18,7 +18,7 @@ func NewSnapshotValueHandler(
 	accountStore types.AccountStore,
 	holdingStore types.HoldingStore,
 	snapshotStore types.SnapshotStore,
-	snapshotvalueStore types.SnapshotValueStore,
+	snapshotValueStore types.SnapshotValueStore,
 	logger *slog.Logger,
 ) *SnapshotValueHandlerImpl {
 
@@ -26,7 +26,7 @@ func NewSnapshotValueHandler(
 		accountStore:       accountStore,
 		holdingStore:       holdingStore,
 		snapshotStore:      snapshotStore,
-		snapshotvalueStore: snapshotvalueStore,
+		snapshotValueStore: snapshotValueStore,
 		logger:             logger,
 	}
 }

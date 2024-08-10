@@ -22,11 +22,13 @@ type SnapshotValue struct {
 type SnapshotValueHandler interface {
 	CreateSnapshotValue(fiber.Ctx) error
 	GetSnapshotValues(fiber.Ctx) error
+	GetSnapshotValue(fiber.Ctx) error
 	DeleteSnapshotValue(fiber.Ctx) error
 }
 
 type SnapshotValueStore interface {
 	CreateSnapshotValue(context.Context, SnapshotValue) (SnapshotValue, error)
 	GetSnapshotValues(ctx context.Context, snapId, userId int) ([]SnapshotValue, error)
-	DeleteSnapshotValue(ctx context.Context, snapValId, userId int) (SnapshotValue, error)
+	GetSnapshotValue(ctx context.Context, snapId, snapValId, userId int) (SnapshotValue, error)
+	DeleteSnapshotValue(ctx context.Context, snapId, snapValId, userId int) (SnapshotValue, error)
 }

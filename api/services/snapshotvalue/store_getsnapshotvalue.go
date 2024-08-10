@@ -7,21 +7,21 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresSnapshotValueStore) DeleteSnapshotValue(ctx context.Context, snapId, snapValId, userId int) (types.SnapshotValue, error) {
+func (s *PostgresSnapshotValueStore) GetSnapshotValue(ctx context.Context, snapId, snapValId, userId int) (types.SnapshotValue, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
 	row := s.db.QueryRow(
 		c,
 		`
-			delete from
+			select
+				*
+			from
 				snapshots_values
 			where
-				snap_id = $1 
+				snap_id = $1
 				and snap_val_id = $2
 				and user_id = $3
-			returning
-				*
 		`,
 		snapId,
 		snapValId,
