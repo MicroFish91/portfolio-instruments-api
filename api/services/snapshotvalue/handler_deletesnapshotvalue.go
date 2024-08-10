@@ -27,7 +27,7 @@ func (h *SnapshotValueHandlerImpl) DeleteSnapshotValue(c fiber.Ctx) error {
 	}
 
 	// snapshot_value
-	snapshotvalue, err := h.snapshotvalue.DeleteSnapshotValue(c.Context(), svParams.Snap_val_id, userPayload.User_id)
+	snapshotvalue, err := h.snapshotvalueStore.DeleteSnapshotValue(c.Context(), svParams.Snap_val_id, userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}

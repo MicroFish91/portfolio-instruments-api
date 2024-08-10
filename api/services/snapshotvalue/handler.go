@@ -7,26 +7,26 @@ import (
 )
 
 type SnapshotValueHandlerImpl struct {
-	accountStore  types.AccountStore
-	holdingStore  types.HoldingStore
-	snapshotStore types.SnapshotStore
-	snapshotvalue types.SnapshotValueStore
-	logger        *slog.Logger
+	accountStore       types.AccountStore
+	holdingStore       types.HoldingStore
+	snapshotStore      types.SnapshotStore
+	snapshotvalueStore types.SnapshotValueStore
+	logger             *slog.Logger
 }
 
 func NewSnapshotValueHandler(
 	accountStore types.AccountStore,
 	holdingStore types.HoldingStore,
 	snapshotStore types.SnapshotStore,
-	snapshotvalue types.SnapshotValueStore,
+	snapshotvalueStore types.SnapshotValueStore,
 	logger *slog.Logger,
 ) *SnapshotValueHandlerImpl {
 
 	return &SnapshotValueHandlerImpl{
-		accountStore:  accountStore,
-		holdingStore:  holdingStore,
-		snapshotStore: snapshotStore,
-		snapshotvalue: snapshotvalue,
-		logger:        logger,
+		accountStore:       accountStore,
+		holdingStore:       holdingStore,
+		snapshotStore:      snapshotStore,
+		snapshotvalueStore: snapshotvalueStore,
+		logger:             logger,
 	}
 }

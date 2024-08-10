@@ -43,7 +43,7 @@ func (h *SnapshotValueHandlerImpl) CreateSnapshotValue(c fiber.Ctx) error {
 	}
 
 	// snapshotvalue
-	snapshotvalue, err := h.snapshotvalue.CreateSnapshotValue(c.Context(), types.SnapshotValue{
+	snapshotvalue, err := h.snapshotvalueStore.CreateSnapshotValue(c.Context(), types.SnapshotValue{
 		Snap_id:        svParams.Snap_id,
 		Account_id:     svPayload.Account_id,
 		Holding_id:     svPayload.Holding_id,

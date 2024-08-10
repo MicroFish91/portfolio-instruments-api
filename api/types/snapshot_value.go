@@ -19,14 +19,14 @@ type SnapshotValue struct {
 	Updated_at     time.Time `json:"updated_at"`
 }
 
-// todo: finish delete snapshot value and then migrate types for createsnapshotvalue
-
 type SnapshotValueHandler interface {
 	CreateSnapshotValue(fiber.Ctx) error
+	GetSnapshotValues(fiber.Ctx) error
 	DeleteSnapshotValue(fiber.Ctx) error
 }
 
 type SnapshotValueStore interface {
 	CreateSnapshotValue(context.Context, SnapshotValue) (SnapshotValue, error)
+	GetSnapshotValues(ctx context.Context, snapId, userId int) ([]SnapshotValue, error)
 	DeleteSnapshotValue(ctx context.Context, snapValId, userId int) (SnapshotValue, error)
 }
