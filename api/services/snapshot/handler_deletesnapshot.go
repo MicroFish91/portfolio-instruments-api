@@ -20,13 +20,13 @@ func (h *SnapshotHandlerImpl) DeleteSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
-	// todo: could replace with .GetSnapshotValues... once implemented
-	_, snapshotValues, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotParams.Id, userPayload.User_id)
+	// get snapshot_values
+	snapshotValues, err := h.snapshotValueStore.GetSnapshotValues(c.Context(), snapshotParams.Id, userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	// snapshotValues
+	// delete snapshot_values
 	for _, sv := range snapshotValues {
 		_, err := h.snapshotValueStore.DeleteSnapshotValue(c.Context(), sv.Snap_id, sv.Snap_val_id, sv.User_id)
 		if err != nil {
