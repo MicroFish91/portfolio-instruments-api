@@ -7,6 +7,7 @@ import (
 
 func RegisterRoutes(
 	app *fiber.App,
+	authHandler types.AuthHandler,
 	userHandler types.UserHandler,
 	accountHandler types.AccountHandler,
 	holdingHandler types.HoldingHandler,
@@ -20,6 +21,7 @@ func RegisterRoutes(
 
 	routerV1 := app.Group("/api/v1")
 
+	registerAuthRoutes(routerV1, authHandler)
 	registerUserRoutes(routerV1, userHandler)
 	RegisterBenchmarkRoutes(routerV1, benchmarkHandler)
 	registerAccountRoutes(routerV1, accountHandler)

@@ -6,6 +6,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/middleware"
 	"github.com/MicroFish91/portfolio-instruments-api/api/routes"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/account"
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/benchmark"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/holding"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
@@ -51,6 +52,7 @@ func (s *ApiServer) Run() error {
 	snapshotValueStore := snapshotvalue.NewPostgresSnapshotValueStore(s.db, s.logger)
 
 	// Handlers
+	authHandler := auth.NewAuthHandler(userStore, s.logger)
 	userHandler := user.NewUserHandler(userStore, benchmarkStore, s.logger)
 	accountHandler := account.NewAccountHandler(accountStore, s.logger)
 	holdingHandler := holding.NewHoldingHandler(holdingStore, s.logger)
@@ -59,6 +61,6 @@ func (s *ApiServer) Run() error {
 	snapshotValueHandler := snapshotvalue.NewSnapshotValueHandler(accountStore, holdingStore, snapshotStore, snapshotValueStore, s.logger)
 
 	// Routes
-	routes.RegisterRoutes(app, userHandler, accountHandler, holdingHandler, benchmarkHandler, snapshotHandler, snapshotValueHandler)
+	routes.RegisterRoutes(app, authHandler, userHandler, accountHandler, holdingHandler, benchmarkHandler, snapshotHandler, snapshotValueHandler)
 	return app.Listen(s.addr)
 }

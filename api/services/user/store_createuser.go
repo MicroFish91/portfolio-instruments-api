@@ -7,7 +7,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresUserStore) RegisterUser(ctx context.Context, u types.User) (types.User, error) {
+func (s *PostgresUserStore) CreateUser(ctx context.Context, u types.User) (types.User, error) {
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 

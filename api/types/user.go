@@ -25,21 +25,19 @@ type Settings struct {
 }
 
 type UserHandler interface {
-	// Auth
-	LoginUser(fiber.Ctx) error
-	RegisterUser(fiber.Ctx) error
 	// GetUser
+	// Update user?
 	// DeleteUser
 	GetSettings(fiber.Ctx) error
 	UpdateSettings(fiber.Ctx) error
 }
 
 type UserStore interface {
-	RegisterUser(context.Context, User) (User, error)
+	CreateUser(context.Context, User) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
+	// Update user?
 	// DeleteUser
 	CreateSettings(context.Context, Settings) (Settings, error)
 	GetSettings(ctx context.Context, userId int) (Settings, error)
 	UpdateSettings(context.Context, Settings) (Settings, error)
-	// DeleteSettings
 }

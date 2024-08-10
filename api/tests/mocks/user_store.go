@@ -12,7 +12,7 @@ func NewMockUserStore() *MockUserStore {
 	return &MockUserStore{}
 }
 
-func (s *MockUserStore) RegisterUser(ctx context.Context, u types.User) (types.User, error) {
+func (s *MockUserStore) CreateUser(ctx context.Context, u types.User) (types.User, error) {
 	return types.User{}, nil
 }
 
