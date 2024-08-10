@@ -56,8 +56,9 @@ func (s *ApiServer) Run() error {
 	holdingHandler := holding.NewHoldingHandler(holdingStore, s.logger)
 	benchmarkHandler := benchmark.NewBenchmarkHandler(userStore, benchmarkStore, s.logger)
 	snapshotHandler := snapshot.NewSnapshotHandler(userStore, benchmarkStore, accountStore, holdingStore, snapshotStore, snapshotValueStore, s.logger)
+	snapshotValueHandler := snapshotvalue.NewSnapshotValueHandler(accountStore, holdingStore, snapshotStore, snapshotValueStore, s.logger)
 
 	// Routes
-	routes.RegisterRoutes(app, userHandler, accountHandler, holdingHandler, benchmarkHandler, snapshotHandler)
+	routes.RegisterRoutes(app, userHandler, accountHandler, holdingHandler, benchmarkHandler, snapshotHandler, snapshotValueHandler)
 	return app.Listen(s.addr)
 }

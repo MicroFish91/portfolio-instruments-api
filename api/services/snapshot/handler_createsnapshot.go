@@ -24,9 +24,8 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 
 	// Verify benchmark_id if provided
 	if snapshotPayload.Benchmark_id != 0 {
-		benchmark, _ := h.benchmarkStore.GetBenchmarkById(c.Context(), userPayload.User_id, snapshotPayload.Benchmark_id)
-		if benchmark.Benchmark_id == 0 {
-			return utils.SendError(c, fiber.StatusConflict, errors.New("benchmark with the provided id does not exist"))
+		if err := h.verifyBenchmarkById(c, snapshotPayload.Benchmark_id, userPayload.User_id); err != nil {
+			return utils.SendError(c, fiber.StatusConflict, err)
 		}
 	}
 
@@ -36,10 +35,8 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		if _, checked := accIdsSet[svpayload.Account_id]; checked {
 			continue
 		}
-
-		acc, _ := h.accountStore.GetAccountById(c.Context(), userPayload.User_id, svpayload.Account_id)
-		if acc.Account_id == 0 {
-			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`specified account with id "%d" does not exist`, svpayload.Account_id))
+		if err := h.verifyAccountById(c, svpayload.Holding_id, userPayload.User_id); err != nil {
+			return utils.SendError(c, fiber.StatusConflict, err)
 		}
 		accIdsSet[svpayload.Account_id] = struct{}{}
 	}
@@ -50,10 +47,8 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		if _, checked := holdIdsSet[svpayload.Holding_id]; checked {
 			continue
 		}
-
-		hold, _ := h.holdingStore.GetHoldingById(c.Context(), userPayload.User_id, svpayload.Holding_id)
-		if hold.Holding_id == 0 {
-			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`specified holding with id "%d" does not exist`, svpayload.Holding_id))
+		if err := h.verifyHoldingById(c, svpayload.Holding_id, userPayload.User_id); err != nil {
+			return utils.SendError(c, fiber.StatusConflict, err)
 		}
 		holdIdsSet[svpayload.Holding_id] = struct{}{}
 	}
@@ -110,4 +105,28 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		"snapshot":        snapshot,
 		"snapshot_values": snapshotValues,
 	})
+}
+
+func (h *SnapshotHandlerImpl) verifyAccountById(c fiber.Ctx, accountId, userId int) error {
+	_, err := h.accountStore.GetAccountById(c.Context(), userId, accountId)
+	if err != nil {
+		return fmt.Errorf(`specified account with id "%d" does not exist for the current user`, accountId)
+	}
+	return nil
+}
+
+func (h *SnapshotHandlerImpl) verifyHoldingById(c fiber.Ctx, holdingId, userId int) error {
+	_, err := h.holdingStore.GetHoldingById(c.Context(), userId, holdingId)
+	if err != nil {
+		return fmt.Errorf(`specified holding with id "%d" does not exist for the current user`, holdingId)
+	}
+	return nil
+}
+
+func (h *SnapshotHandlerImpl) verifyBenchmarkById(c fiber.Ctx, benchmarkId, userId int) error {
+	_, err := h.benchmarkStore.GetBenchmarkById(c.Context(), userId, benchmarkId)
+	if err != nil {
+		return fmt.Errorf(`specified benchmark with id "%d" does not exist for the current user`, benchmarkId)
+	}
+	return nil
 }

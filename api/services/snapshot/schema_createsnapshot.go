@@ -4,21 +4,15 @@ import (
 	"errors"
 	"regexp"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
 type CreateSnapshotPayload struct {
-	Snap_date       string                        `json:"snap_date"`
-	Description     string                        `json:"description"`
-	Snapshot_values []CreateSnapshotValuesPayload `json:"snapshot_values"`
-	Benchmark_id    int                           `json:"benchmark_id"`
-}
-
-type CreateSnapshotValuesPayload struct {
-	Account_id     int     `json:"account_id"`
-	Holding_id     int     `json:"holding_id"`
-	Total          float64 `json:"total"`
-	Skip_rebalance bool    `json:"skip_rebalance"`
+	Snap_date       string                                     `json:"snap_date"`
+	Description     string                                     `json:"description"`
+	Snapshot_values []snapshotvalue.CreateSnapshotValuePayload `json:"snapshot_values"`
+	Benchmark_id    int                                        `json:"benchmark_id"`
 }
 
 func (p CreateSnapshotPayload) Validate() error {
@@ -37,14 +31,5 @@ func (p CreateSnapshotPayload) Validate() error {
 		validation.Field(&p.Description, validation.Length(1, 1024)),
 		validation.Field(&p.Snapshot_values),
 		validation.Field(&p.Benchmark_id, validation.Min(1)),
-	)
-}
-
-func (p CreateSnapshotValuesPayload) Validate() error {
-	return validation.ValidateStruct(&p,
-		validation.Field(&p.Account_id, validation.Required),
-		validation.Field(&p.Holding_id, validation.Required),
-		validation.Field(&p.Total, validation.Required),
-		validation.Field(&p.Skip_rebalance),
 	)
 }
