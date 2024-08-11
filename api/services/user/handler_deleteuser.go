@@ -9,24 +9,28 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func (h *UserHandlerImpl) GetMe(c fiber.Ctx) error {
+func (h *UserHandlerImpl) DeleteUser(c fiber.Ctx) error {
 	userPayload, ok := c.Locals(constants.LOCALS_REQ_USER).(auth.AuthUserPayload)
 	if !ok {
 		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("unable to parse valid user request body"))
 	}
 
-	user, err := h.userStore.GetUserById(c.Context(), userPayload.User_id)
-	if err != nil {
-		return utils.SendError(c, utils.StatusCodeFromError(err), err)
+	userParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(DeleteUserParams)
+	if !ok {
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user params from request"))
 	}
 
-	settings, err := h.userStore.GetSettings(c.Context(), user.User_id)
+	if userPayload.User_id != userParams.Id {
+		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("unable to delete user with the provided id"))
+	}
+
+	user, err := h.userStore.DeleteUser(c.Context(), userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
-		"user":     user,
-		"settings": settings,
+		"message": "user deleted successfully",
+		"user":    user,
 	})
 }

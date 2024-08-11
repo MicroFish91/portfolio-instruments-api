@@ -24,6 +24,10 @@ func (s *MockUserStore) GetUserByEmail(ctx context.Context, email string) (types
 	return types.User{}, nil
 }
 
+func (s *MockUserStore) DeleteUser(ctx context.Context, userId int) (types.User, error) {
+	return types.User{}, nil
+}
+
 func (s *MockUserStore) CreateSettings(ctx context.Context, settings types.Settings) (types.Settings, error) {
 	return types.Settings{}, nil
 }

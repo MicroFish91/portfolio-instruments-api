@@ -10,6 +10,7 @@ import (
 func registerUserRoutes(r fiber.Router, h types.UserHandler) {
 	// User
 	r.Get("/users/me", h.GetMe, middleware.RequireAuth)
+	r.Delete("/users/:id", h.DeleteUser, middleware.RequireAuth, middleware.AddParamsValidator[user.DeleteUserParams]())
 
 	// Settings
 	r.Get("/users/settings", h.GetSettings, middleware.RequireAuth)
