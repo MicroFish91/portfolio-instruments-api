@@ -25,7 +25,8 @@ type Settings struct {
 }
 
 type UserHandler interface {
-	// GetUser
+	GetMe(fiber.Ctx) error
+	// Get user
 	// Update user?
 	// DeleteUser
 	GetSettings(fiber.Ctx) error
@@ -34,6 +35,7 @@ type UserHandler interface {
 
 type UserStore interface {
 	CreateUser(context.Context, User) (User, error)
+	GetUserById(ctx context.Context, userId int) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	// Update user?
 	// DeleteUser

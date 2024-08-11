@@ -16,6 +16,10 @@ func (s *MockUserStore) CreateUser(ctx context.Context, u types.User) (types.Use
 	return types.User{}, nil
 }
 
+func (s *MockUserStore) GetUserById(ctx context.Context, userId int) (types.User, error) {
+	return types.User{}, nil
+}
+
 func (s *MockUserStore) GetUserByEmail(ctx context.Context, email string) (types.User, error) {
 	return types.User{}, nil
 }

@@ -8,6 +8,9 @@ import (
 )
 
 func registerUserRoutes(r fiber.Router, h types.UserHandler) {
+	// User
+	r.Get("/users/me", h.GetMe, middleware.RequireAuth)
+
 	// Settings
 	r.Get("/users/settings", h.GetSettings, middleware.RequireAuth)
 	r.Get("/users/:id/settings", h.GetSettings, middleware.RequireAuth)
