@@ -8,11 +8,12 @@ import (
 )
 
 type User struct {
-	User_id      int       `json:"user_id,omitempty"`
-	Email        string    `json:"email"`
-	Enc_password string    `json:"-"`
-	Created_at   time.Time `json:"created_at"`
-	Updated_at   time.Time `json:"updated_at"`
+	User_id      int    `json:"user_id,omitempty"`
+	Email        string `json:"email"`
+	Enc_password string `json:"-"`
+	// Todo: Add role
+	Created_at time.Time `json:"created_at"`
+	Updated_at time.Time `json:"updated_at"`
 }
 
 type Settings struct {
@@ -27,6 +28,7 @@ type Settings struct {
 type UserHandler interface {
 	GetMe(fiber.Ctx) error
 	// Get user
+	// Get users? updated auth role
 	DeleteUser(fiber.Ctx) error
 	GetSettings(fiber.Ctx) error
 	UpdateSettings(fiber.Ctx) error

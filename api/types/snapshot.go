@@ -8,10 +8,11 @@ import (
 )
 
 type Snapshot struct {
-	Snap_id      int       `json:"snap_id"`
-	Description  string    `json:"description,omitempty"`
-	Snap_date    string    `json:"snap_date"`
-	Total        float64   `json:"total"`
+	Snap_id     int     `json:"snap_id"`
+	Description string  `json:"description,omitempty"`
+	Snap_date   string  `json:"snap_date"`
+	Total       float64 `json:"total"`
+	// Todo: rename weighted_er_pct
 	Weighted_er  float64   `json:"weighted_er"`
 	Benchmark_id int       `json:"benchmark_id,omitempty"`
 	User_id      int       `json:"user_id"`
