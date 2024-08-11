@@ -6,5 +6,5 @@ import (
 )
 
 func FallbackHandler(c fiber.Ctx, err error) error {
-	return utils.SendError(c, fiber.StatusInternalServerError, err)
+	return utils.SendError(c, utils.StatusCodeFromError(err), err)
 }
