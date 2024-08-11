@@ -2,29 +2,46 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresUserStore) DeleteUser(ctx context.Context, userId int) (types.User, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*10)
+	c, cancel := context.WithTimeout(ctx, time.Second*40)
 	defer cancel()
 
-	_, err := s.db.Exec(
-		c,
-		`
-			delete from
-				settings
-			where
-				user_id = $1
-		`,
-		userId,
-	)
-	if err != nil {
-		return types.User{}, err
+	foreignTables := []string{
+		"snapshots_values",
+		"snapshots",
+		"holdings",
+		"accounts",
+		"settings",
+		"benchmarks",
 	}
 
+	// Delete foreign tables
+	for _, t := range foreignTables {
+		_, err := s.db.Exec(
+			c,
+			fmt.Sprintf(
+				`
+					delete from
+						%s
+					where
+						user_id = $1
+				`,
+				t,
+			),
+			userId,
+		)
+		if err != nil {
+			return types.User{}, fmt.Errorf("failed to delete values from %s table: %s", t, err.Error())
+		}
+	}
+
+	// Delete user
 	row := s.db.QueryRow(
 		c,
 		`
