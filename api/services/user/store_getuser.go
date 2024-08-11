@@ -14,9 +14,13 @@ func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (t
 
 	row := s.db.QueryRow(
 		c,
-		`SELECT user_id, email, enc_password, created_at, updated_at 
-		FROM users 
-		WHERE email = $1`,
+		`
+			select
+				*
+			from 
+				users 
+			where 
+				email = $1`,
 		email,
 	)
 
@@ -30,7 +34,14 @@ func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (t
 
 func (s *PostgresUserStore) parseRowIntoUser(row pgx.Row) (types.User, error) {
 	var u types.User
-	err := row.Scan(&u.User_id, &u.Email, &u.Enc_password, &u.Created_at, &u.Updated_at)
+	err := row.Scan(
+		&u.User_id,
+		&u.Email,
+		&u.Enc_password,
+		&u.User_role,
+		&u.Created_at,
+		&u.Updated_at,
+	)
 
 	if err != nil {
 		return types.User{}, err

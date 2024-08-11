@@ -23,7 +23,7 @@ func (h *AuthHandlerImpl) Login(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("invalid login credentials"))
 	}
 
-	jwt, err := GenerateSignedJwt(user.User_id, user.Email)
+	jwt, err := GenerateSignedJwt(user.User_id, user.Email, user.User_role)
 	if err != nil {
 		return utils.SendError(c, fiber.StatusInternalServerError, err)
 	}

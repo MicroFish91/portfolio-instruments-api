@@ -9,6 +9,7 @@ import (
 
 func registerUserRoutes(r fiber.Router, h types.UserHandler) {
 	// User
+	r.Get("/users", h.GetUsers, middleware.RequireAuth, middleware.AddQueryValidator[user.GetUsersQuery]())
 	r.Get("/users/me", h.GetMe, middleware.RequireAuth)
 	r.Delete("/users/:id", h.DeleteUser, middleware.RequireAuth, middleware.AddParamsValidator[user.DeleteUserParams]())
 

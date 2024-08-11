@@ -1,2 +1,2 @@
 DROP TABLE IF EXISTS accounts;
-DROP TYPE shelter_type;
+DROP TYPE IF EXISTS shelter_type;

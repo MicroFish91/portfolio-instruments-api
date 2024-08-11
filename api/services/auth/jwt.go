@@ -4,21 +4,24 @@ import (
 	"errors"
 	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/golang-jwt/jwt/v5"
 )
 
 const JWT_SECRET = "the-not-so-secret-jwt-secret"
 
 type JwtClaims struct {
-	UserId int
-	Email  string
+	UserId   int
+	Email    string
+	UserRole types.UserRole
 	jwt.RegisteredClaims
 }
 
-func GenerateSignedJwt(userId int, email string) (string, error) {
+func GenerateSignedJwt(userId int, email string, role types.UserRole) (string, error) {
 	claims := JwtClaims{
-		UserId: userId,
-		Email:  email,
+		UserId:   userId,
+		Email:    email,
+		UserRole: role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "https://portfolioinstruments.com/api",
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Hour * 2)),

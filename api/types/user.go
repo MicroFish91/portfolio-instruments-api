@@ -7,13 +7,20 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
+type UserRole = string
+
+const (
+	Default UserRole = "DEFAULT"
+	Admin   UserRole = "ADMIN"
+)
+
 type User struct {
-	User_id      int    `json:"user_id,omitempty"`
-	Email        string `json:"email"`
-	Enc_password string `json:"-"`
-	// Todo: Add role
-	Created_at time.Time `json:"created_at"`
-	Updated_at time.Time `json:"updated_at"`
+	User_id      int       `json:"user_id,omitempty"`
+	Email        string    `json:"email"`
+	Enc_password string    `json:"-"`
+	User_role    UserRole  `json:"user_role"`
+	Created_at   time.Time `json:"created_at"`
+	Updated_at   time.Time `json:"updated_at"`
 }
 
 type Settings struct {
@@ -28,8 +35,9 @@ type Settings struct {
 type UserHandler interface {
 	GetMe(fiber.Ctx) error
 	// Get user
-	// Get users? updated auth role
+	GetUsers(fiber.Ctx) error
 	DeleteUser(fiber.Ctx) error
+
 	GetSettings(fiber.Ctx) error
 	UpdateSettings(fiber.Ctx) error
 }
@@ -38,8 +46,15 @@ type UserStore interface {
 	CreateUser(context.Context, User) (User, error)
 	GetUserById(ctx context.Context, userId int) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
+	GetUsers(ctx context.Context, options GetUsersStoreOptions) ([]User, PaginationMetadata, error)
 	DeleteUser(ctx context.Context, userId int) (User, error)
+
 	CreateSettings(context.Context, Settings) (Settings, error)
 	GetSettings(ctx context.Context, userId int) (Settings, error)
 	UpdateSettings(context.Context, Settings) (Settings, error)
+}
+
+type GetUsersStoreOptions struct {
+	Current_page int
+	Page_size    int
 }

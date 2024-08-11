@@ -10,28 +10,31 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func (h *UserHandlerImpl) DeleteUser(c fiber.Ctx) error {
+func (h *UserHandlerImpl) GetUsers(c fiber.Ctx) error {
 	userPayload, ok := c.Locals(constants.LOCALS_REQ_USER).(auth.AuthUserPayload)
 	if !ok {
 		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("unable to parse valid user request body"))
 	}
 
-	userParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(DeleteUserParams)
+	queryPayload, ok := c.Locals(constants.LOCALS_REQ_QUERY).(GetUsersQuery)
 	if !ok {
-		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user params from request"))
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid query params from request"))
 	}
 
-	if userPayload.User_id != userParams.Id && userPayload.User_role != types.Admin {
-		return utils.SendError(c, fiber.StatusForbidden, errors.New("unable to delete user with the provided id"))
+	if userPayload.User_role != types.Admin {
+		return utils.SendError(c, fiber.StatusForbidden, errors.New("insufficient permissions level to access this route"))
 	}
 
-	user, err := h.userStore.DeleteUser(c.Context(), userParams.Id)
+	users, pagination, err := h.userStore.GetUsers(c.Context(), types.GetUsersStoreOptions{
+		Current_page: queryPayload.Current_page,
+		Page_size:    queryPayload.Page_size,
+	})
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
-		"message": "user deleted successfully",
-		"user":    user,
+		"users":      users,
+		"pagination": pagination,
 	})
 }

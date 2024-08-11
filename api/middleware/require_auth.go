@@ -32,8 +32,9 @@ func RequireAuth(c fiber.Ctx) error {
 	}
 
 	c.Locals(constants.LOCALS_REQ_USER, auth.AuthUserPayload{
-		User_id: jwtClaims.UserId,
-		Email:   jwtClaims.Email,
+		User_id:   jwtClaims.UserId,
+		Email:     jwtClaims.Email,
+		User_role: jwtClaims.UserRole,
 	})
 	return c.Next()
 }
