@@ -3,7 +3,7 @@ CREATE TABLE IF NOT EXISTS snapshots (
     description text,
     snap_date varchar(10) CHECK (snap_date ~ '^\d{2}/\d{2}/\d{4}$') NOT NULL, -- MM/DD/YYYY,
     total numeric(13, 2) DEFAULT 0,
-    weighted_er numeric(3, 3) DEFAULT 0,
+    weighted_er_pct numeric(3, 3) DEFAULT 0,
     benchmark_id integer,
     user_id integer NOT NULL,
     created_at timestamp DEFAULT current_timestamp,

@@ -99,7 +99,7 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
-	snapshot.Weighted_er = expenseRatio
+	snapshot.Weighted_er_pct = expenseRatio
 
 	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{
 		"snapshot":        snapshot,

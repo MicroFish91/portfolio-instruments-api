@@ -37,15 +37,15 @@ func (h *HoldingHandlerImpl) DeleteHolding(c fiber.Ctx) error {
 
 			if !holding.Is_deprecated {
 				holding, err = h.store.UpdateHolding(c.Context(), types.Holding{
-					Holding_id:      holding.Holding_id,
-					Name:            holding.Name,
-					Ticker:          holding.Ticker,
-					Asset_category:  holding.Asset_category,
-					Expense_ratio:   holding.Expense_ratio,
-					Maturation_date: holding.Maturation_date,
-					Interest_rate:   holding.Interest_rate,
-					Is_deprecated:   true,
-					User_id:         holding.User_id,
+					Holding_id:        holding.Holding_id,
+					Name:              holding.Name,
+					Ticker:            holding.Ticker,
+					Asset_category:    holding.Asset_category,
+					Expense_ratio_pct: holding.Expense_ratio_pct,
+					Maturation_date:   holding.Maturation_date,
+					Interest_rate_pct: holding.Interest_rate_pct,
+					Is_deprecated:     true,
+					User_id:           holding.User_id,
 				})
 
 				if err != nil {

@@ -15,10 +15,17 @@ func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId,
 
 	row := s.db.QueryRow(
 		c,
-		`SELECT * FROM snapshots
-		WHERE user_id = $1
-		AND snap_id = $2`,
-		userId, snapshotId,
+		`
+			select 
+				* 
+			from 
+				snapshots
+			where 
+				user_id = $1
+				and snap_id = $2
+		`,
+		userId,
+		snapshotId,
 	)
 
 	snapshot, err := s.parseRowIntoSnapshot(row)
@@ -28,11 +35,20 @@ func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId,
 
 	rows, err := s.db.Query(
 		c,
-		`SELECT * FROM snapshots_values
-		WHERE user_id = $1
-		AND snap_id = $2
-		ORDER BY account_id ASC, holding_id ASC`,
-		userId, snapshotId,
+		`
+			select 
+				* 
+			from 
+				snapshots_values
+			where 
+				user_id = $1
+				and snap_id = $2
+			order by 
+				account_id ASC, 
+				holding_id ASC
+		`,
+		userId,
+		snapshotId,
 	)
 
 	if err != nil {
@@ -57,7 +73,7 @@ func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (types.Snapsho
 		&snap.Description,
 		&snap.Snap_date,
 		&snap.Total,
-		&snap.Weighted_er,
+		&snap.Weighted_er_pct,
 		&benchmark_id,
 		&snap.User_id,
 		&snap.Created_at,

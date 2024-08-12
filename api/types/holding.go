@@ -47,19 +47,17 @@ var ValidAssetCategories = []interface{}{
 }
 
 type Holding struct {
-	Holding_id     int           `json:"holding_id,omitempty"`
-	Name           string        `json:"name"`
-	Ticker         string        `json:"ticker,omitempty"`
-	Asset_category AssetCategory `json:"asset_category"`
-	// Todo: rename expense_ratio_pct
-	Expense_ratio   float32 `json:"expense_ratio,omitempty"`
-	Maturation_date string  `json:"maturation_date,omitempty"`
-	// Todo: rename interest_rate_pct
-	Interest_rate float32   `json:"interest_rate,omitempty"`
-	Is_deprecated bool      `json:"is_deprecated"`
-	User_id       int       `json:"user_id"`
-	Created_at    time.Time `json:"created_at"`
-	Updated_at    time.Time `json:"updated_at"`
+	Holding_id        int           `json:"holding_id,omitempty"`
+	Name              string        `json:"name"`
+	Ticker            string        `json:"ticker,omitempty"`
+	Asset_category    AssetCategory `json:"asset_category"`
+	Expense_ratio_pct float32       `json:"expense_ratio_pct,omitempty"`
+	Maturation_date   string        `json:"maturation_date,omitempty"`
+	Interest_rate_pct float32       `json:"interest_rate_pct,omitempty"`
+	Is_deprecated     bool          `json:"is_deprecated"`
+	User_id           int           `json:"user_id"`
+	Created_at        time.Time     `json:"created_at"`
+	Updated_at        time.Time     `json:"updated_at"`
 }
 
 type HoldingHandler interface {

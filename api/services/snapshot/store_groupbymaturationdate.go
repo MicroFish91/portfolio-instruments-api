@@ -20,7 +20,7 @@ func (s *PostgresSnapshotStore) GroupByMaturationDate(ctx context.Context, userI
 				a.name,
 				h.name,
 				h.asset_category,
-				h.interest_rate,
+				h.interest_rate_pct,
 				h.maturation_date,
 				sv.total,
 				sv.skip_rebalance
@@ -50,7 +50,7 @@ func (s *PostgresSnapshotStore) GroupByMaturationDate(ctx context.Context, userI
 		`
 			order by 
 				h.maturation_date desc,
-				h.interest_rate desc,
+				h.interest_rate_pct desc,
 				sv.total desc
 		`,
 	)
@@ -81,7 +81,7 @@ func (s *PostgresSnapshotStore) parseRowsIntoMaturationDateResources(rows pgx.Ro
 			&r.Account_name,
 			&r.Holding_name,
 			&r.Asset_category,
-			&r.Interest_rate,
+			&r.Interest_rate_pct,
 			&r.Maturation_date,
 			&r.Total,
 			&r.Skip_rebalance,

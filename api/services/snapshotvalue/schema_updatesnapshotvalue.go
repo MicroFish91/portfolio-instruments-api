@@ -28,9 +28,14 @@ func (p UpdateSnapshotValuePayload) Validate() error {
 	totalString := fmt.Sprintf("%v", p.Total)
 	totalComp := strings.Split(totalString, ".")
 
-	if len(totalComp) != 2 || len(totalComp[1]) != 2 {
+	if len(totalComp) == 1 {
+		return nil
+	}
+
+	if len(totalComp) != 2 || len(totalComp[1]) > 2 {
 		return errors.New("the total should represent a dollar value format to 2 decimals")
 	}
+
 	return nil
 }
 

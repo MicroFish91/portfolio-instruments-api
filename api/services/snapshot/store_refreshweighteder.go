@@ -20,7 +20,7 @@ func (s *PostgresSnapshotStore) RefreshSnapshotWeightedER(ctx context.Context, u
 		c,
 		`
 			select 
-				sum((sv.total / snapshot_total.total) * holdings.expense_ratio) as weighted_expense_ratio
+				sum((sv.total / snapshot_total.total) * holdings.expense_ratio_pct) as weighted_expense_ratio
 			from 
 				snapshots_values sv
 			inner join 
@@ -51,7 +51,7 @@ func (s *PostgresSnapshotStore) RefreshSnapshotWeightedER(ctx context.Context, u
 	_, err = s.db.Exec(
 		c,
 		`UPDATE snapshots
-		SET weighted_er = $1
+		SET weighted_er_pct = $1
 		WHERE user_id = $2
 		AND snap_id = $3`,
 		roundedER, userId, snapId,

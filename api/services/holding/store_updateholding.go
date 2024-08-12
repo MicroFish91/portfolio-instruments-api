@@ -20,9 +20,9 @@ func (s *PostgresHoldingStore) UpdateHolding(ctx context.Context, h types.Holdin
 				name = $1,
 				ticker = $2,
 				asset_category = $3,
-				expense_ratio = $4,
+				expense_ratio_pct = $4,
 				maturation_date = $5,
-				interest_rate = $6,
+				interest_rate_pct = $6,
 				is_deprecated = $7,
 				updated_at = now()
 			where
@@ -34,9 +34,9 @@ func (s *PostgresHoldingStore) UpdateHolding(ctx context.Context, h types.Holdin
 		h.Name,
 		h.Ticker,
 		h.Asset_category,
-		h.Expense_ratio,
+		h.Expense_ratio_pct,
 		h.Maturation_date,
-		h.Interest_rate,
+		h.Interest_rate_pct,
 		h.Is_deprecated,
 		h.Holding_id,
 		h.User_id,

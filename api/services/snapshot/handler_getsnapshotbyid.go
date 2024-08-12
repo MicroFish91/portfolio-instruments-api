@@ -26,15 +26,15 @@ func (h *SnapshotHandlerImpl) GetSnapshotById(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
-	// group_by
-	if queryPayload.Group_by != "" {
-		return h.handleGroupByResource(c, snapshotParams.Id, userPayload.User_id, HandleGroupByResourceOptions(queryPayload))
-	}
-
 	// snapshot, snapshotValues
 	snapshot, snapshotValues, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotParams.Id, userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
+	}
+
+	// group_by
+	if queryPayload.Group_by != "" {
+		return h.handleGroupByResource(c, snapshotParams.Id, userPayload.User_id, HandleGroupByResourceOptions(queryPayload))
 	}
 
 	accountIds, holdingIds := h.gatherSnapshotResourceIds(snapshotValues)

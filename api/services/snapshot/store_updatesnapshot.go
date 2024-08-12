@@ -20,7 +20,7 @@ func (s *PostgresSnapshotStore) UpdateSnapshot(ctx context.Context, snap types.S
 				description = $1,
 				snap_date = $2,
 				total = $3,
-				weighted_er = $4,
+				weighted_er_pct = $4,
 				benchmark_id = $5,
 				updated_at = now()
 			where
@@ -32,7 +32,7 @@ func (s *PostgresSnapshotStore) UpdateSnapshot(ctx context.Context, snap types.S
 		snap.Description,
 		snap.Snap_date,
 		snap.Total,
-		snap.Weighted_er,
+		snap.Weighted_er_pct,
 		snap.Benchmark_id,
 		snap.Snap_id,
 		snap.User_id,
