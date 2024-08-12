@@ -8,16 +8,17 @@
     |----------------|-----------|----------|-------------|
     | user_id        | PKEY      | ✅       | ✅          |
     | email          | TEXT      | ✅       |             |
-    | password_hash  | TEXT      | ✅       |             |
-    | role           | ENUM      | ✅       |             |
+    | enc_pw         | TEXT      | ✅       |             |
+    | user_role      | ENUM      | ✅       |             |
+    | last_logged_in | TIMESTAMP | ✅       |             |
     | created_at     | TIMESTAMP | ✅       |             |
     | updated_at     | TIMESTAMP | ✅       |             |
     
     Example:
         user_id = 1
         email = user@gmail.com
-        password_hash = 
-        role = User | Admin
+        enc_pw = 
+        role = Default | Admin
 
 #### Settings:
 

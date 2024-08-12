@@ -2,6 +2,7 @@ package routes
 
 import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -16,14 +17,14 @@ func RegisterRoutes(
 	snapshotValueHandler types.SnapshotValueHandler,
 ) {
 	app.Get("/ping", func(c fiber.Ctx) error {
-		return c.Status(fiber.StatusOK).JSON(map[string]string{"data": "pong"})
+		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"message": "pong"})
 	})
 
 	routerV1 := app.Group("/api/v1")
 
 	registerAuthRoutes(routerV1, authHandler)
 	registerUserRoutes(routerV1, userHandler)
-	RegisterBenchmarkRoutes(routerV1, benchmarkHandler)
+	registerBenchmarkRoutes(routerV1, benchmarkHandler)
 	registerAccountRoutes(routerV1, accountHandler)
 	registerHoldingRoutes(routerV1, holdingHandler)
 	registerSnapshotRoutes(routerV1, snapshotHandler)

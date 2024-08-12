@@ -15,12 +15,13 @@ const (
 )
 
 type User struct {
-	User_id      int       `json:"user_id,omitempty"`
-	Email        string    `json:"email"`
-	Enc_password string    `json:"-"`
-	User_role    UserRole  `json:"user_role"`
-	Created_at   time.Time `json:"created_at"`
-	Updated_at   time.Time `json:"updated_at"`
+	User_id      int      `json:"user_id,omitempty"`
+	Email        string   `json:"email"`
+	Enc_password string   `json:"-"`
+	User_role    UserRole `json:"user_role"`
+	// Todo: Add last logged in
+	Created_at time.Time `json:"created_at"`
+	Updated_at time.Time `json:"updated_at"`
 }
 
 type Settings struct {
@@ -34,7 +35,7 @@ type Settings struct {
 
 type UserHandler interface {
 	GetMe(fiber.Ctx) error
-	// Get user
+	GetUser(fiber.Ctx) error
 	GetUsers(fiber.Ctx) error
 	DeleteUser(fiber.Ctx) error
 
