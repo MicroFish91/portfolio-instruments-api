@@ -31,7 +31,9 @@ func (s *PostgresUserStore) GetUsers(ctx context.Context, options types.GetUsers
 			from
 				users
 			order by
-				email ASC
+				last_logged_in ASC,
+				updated_at ASC,
+				created_at ASC
 			limit
 				$1
 			offset
@@ -69,6 +71,7 @@ func (s *PostgresUserStore) parseRowsIntoUsers(rows pgx.Rows) ([]types.User, int
 			&u.Email,
 			&u.Enc_password,
 			&u.User_role,
+			&u.Last_logged_in,
 			&u.Created_at,
 			&u.Updated_at,
 			&total_items,

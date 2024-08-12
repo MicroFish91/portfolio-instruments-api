@@ -15,13 +15,13 @@ const (
 )
 
 type User struct {
-	User_id      int      `json:"user_id,omitempty"`
-	Email        string   `json:"email"`
-	Enc_password string   `json:"-"`
-	User_role    UserRole `json:"user_role"`
-	// Todo: Add last logged in
-	Created_at time.Time `json:"created_at"`
-	Updated_at time.Time `json:"updated_at"`
+	User_id        int       `json:"user_id,omitempty"`
+	Email          string    `json:"email"`
+	Enc_password   string    `json:"-"`
+	User_role      UserRole  `json:"user_role"`
+	Last_logged_in time.Time `json:"last_logged_in"`
+	Created_at     time.Time `json:"created_at"`
+	Updated_at     time.Time `json:"updated_at"`
 }
 
 type Settings struct {
@@ -48,6 +48,7 @@ type UserStore interface {
 	GetUserById(ctx context.Context, userId int) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUsers(ctx context.Context, options GetUsersStoreOptions) ([]User, PaginationMetadata, error)
+	UpdateUserLoggedIn(ctx context.Context, userId int) (User, error)
 	DeleteUser(ctx context.Context, userId int) (User, error)
 
 	CreateSettings(context.Context, Settings) (Settings, error)
