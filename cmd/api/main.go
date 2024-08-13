@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	db, err := db.NewPostgresStorage()
+	db, err := db.NewPostgresStorage("postgresql://localhost:5432/postgres")
 	if err != nil {
 		log.Fatal(err)
 	}
