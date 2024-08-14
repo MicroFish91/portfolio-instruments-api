@@ -18,14 +18,13 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-var ApiServer *api.ApiServer
+var apiServer *api.ApiServer
 
 func GetApiServer() *api.ApiServer {
-	if ApiServer == nil {
-		fmt.Println("found existing server")
-		ApiServer = initApiServer()
+	if apiServer == nil {
+		apiServer = initApiServer()
 	}
-	return ApiServer
+	return apiServer
 }
 
 func initApiServer() *api.ApiServer {
@@ -63,13 +62,6 @@ func initApiServer() *api.ApiServer {
 	// Server
 	logger := logger.NewLogger(slog.LevelDebug)
 	return api.NewApiServer(connStr, db, logger, pgc)
-
-	// t.Cleanup(func() {
-	// 	fmt.Println("----cleaning up postgres test container...----")
-	// 	if err := pgc.Terminate(ctx); err != nil {
-	// 		fmt.Printf("failed to terminate postgres test container: %s", err.Error())
-	// 	}
-	// })
 }
 
 func runDatabaseMigrations(connStr string) {
