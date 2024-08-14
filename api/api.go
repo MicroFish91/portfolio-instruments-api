@@ -1,6 +1,7 @@
 package api
 
 import (
+	"context"
 	"log/slog"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/middleware"
@@ -14,20 +15,27 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/user"
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5/pgxpool"
+	pg "github.com/testcontainers/testcontainers-go/modules/postgres"
 )
 
 type ApiServer struct {
 	addr   string
 	db     *pgxpool.Pool
 	logger *slog.Logger
+	App    *fiber.App
+
+	testContainer *pg.PostgresContainer
 }
 
-func NewApiServer(addr string, db *pgxpool.Pool, logger *slog.Logger) *ApiServer {
-	return &ApiServer{
-		addr:   addr,
-		db:     db,
-		logger: logger,
+func NewApiServer(addr string, db *pgxpool.Pool, logger *slog.Logger, tc *pg.PostgresContainer) *ApiServer {
+	api := &ApiServer{
+		addr:          addr,
+		db:            db,
+		logger:        logger,
+		testContainer: tc,
 	}
+	api.init()
+	return api
 }
 
 func GetFiberConfig() fiber.Config {
@@ -36,12 +44,12 @@ func GetFiberConfig() fiber.Config {
 	}
 }
 
-func (s *ApiServer) Run() error {
-	app := fiber.New(GetFiberConfig())
+func (s *ApiServer) init() {
+	s.App = fiber.New(GetFiberConfig())
 
 	// Middleware
-	app.Use(middleware.AddIncomingTrafficLogger(s.logger))
-	app.Use(middleware.AddLocalsContextLogger(s.logger))
+	s.App.Use(middleware.AddIncomingTrafficLogger(s.logger))
+	s.App.Use(middleware.AddLocalsContextLogger(s.logger))
 
 	// Stores
 	userStore := user.NewPostgresUserStore(s.db, s.logger)
@@ -61,6 +69,17 @@ func (s *ApiServer) Run() error {
 	snapshotValueHandler := snapshotvalue.NewSnapshotValueHandler(accountStore, holdingStore, snapshotStore, snapshotValueStore, s.logger)
 
 	// Routes
-	routes.RegisterRoutes(app, authHandler, userHandler, accountHandler, holdingHandler, benchmarkHandler, snapshotHandler, snapshotValueHandler)
-	return app.Listen(s.addr)
+	routes.RegisterRoutes(s.App, authHandler, userHandler, accountHandler, holdingHandler, benchmarkHandler, snapshotHandler, snapshotValueHandler)
+}
+
+func (s *ApiServer) Run() error {
+	return s.App.Listen(s.addr)
+}
+
+func (s *ApiServer) Shutdown() error {
+	s.db.Close()
+	if s.testContainer != nil {
+		return s.testContainer.Terminate(context.Background())
+	}
+	return nil
 }

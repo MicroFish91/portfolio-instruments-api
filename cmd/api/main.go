@@ -15,11 +15,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer db.Close()
 
 	logger := logger.NewLogger(slog.LevelDebug) // Todo: Set log level via environment variable
+	server := api.NewApiServer(config.Env.Port, db, logger, nil)
+	defer server.Shutdown()
 
-	server := api.NewApiServer(config.Env.Port, db, logger)
 	if err := server.Run(); err != nil {
 		log.Fatal(err)
 	}
