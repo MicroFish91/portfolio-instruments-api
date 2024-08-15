@@ -1,7 +1,6 @@
 package api
 
 import (
-	"context"
 	"log/slog"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/middleware"
@@ -15,7 +14,6 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/user"
 	"github.com/gofiber/fiber/v3"
 	"github.com/jackc/pgx/v5/pgxpool"
-	pg "github.com/testcontainers/testcontainers-go/modules/postgres"
 )
 
 type ApiServer struct {
@@ -23,16 +21,13 @@ type ApiServer struct {
 	db     *pgxpool.Pool
 	logger *slog.Logger
 	App    *fiber.App
-
-	testContainer *pg.PostgresContainer
 }
 
-func NewApiServer(addr string, db *pgxpool.Pool, logger *slog.Logger, tc *pg.PostgresContainer) *ApiServer {
+func NewApiServer(addr string, db *pgxpool.Pool, logger *slog.Logger) *ApiServer {
 	api := &ApiServer{
-		addr:          addr,
-		db:            db,
-		logger:        logger,
-		testContainer: tc,
+		addr:   addr,
+		db:     db,
+		logger: logger,
 	}
 	api.init()
 	return api
@@ -76,10 +71,6 @@ func (s *ApiServer) Run() error {
 	return s.App.Listen(s.addr)
 }
 
-func (s *ApiServer) Shutdown() error {
+func (s *ApiServer) Shutdown() {
 	s.db.Close()
-	if s.testContainer != nil {
-		return s.testContainer.Terminate(context.Background())
-	}
-	return nil
 }

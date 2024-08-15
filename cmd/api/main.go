@@ -17,7 +17,7 @@ func main() {
 	}
 
 	logger := logger.NewLogger(slog.LevelDebug) // Todo: Set log level via environment variable
-	server := api.NewApiServer(config.Env.Port, db, logger, nil)
+	server := api.NewApiServer(config.Env.Port, db, logger)
 	defer server.Shutdown()
 
 	if err := server.Run(); err != nil {

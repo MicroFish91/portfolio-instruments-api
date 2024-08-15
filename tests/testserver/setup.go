@@ -1,4 +1,4 @@
-package tests
+package testserver
 
 import (
 	"context"
@@ -7,7 +7,6 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/MicroFish91/portfolio-instruments-api/api"
 	"github.com/MicroFish91/portfolio-instruments-api/db"
 	"github.com/MicroFish91/portfolio-instruments-api/logger"
 	"github.com/MicroFish91/portfolio-instruments-api/migrator"
@@ -18,16 +17,16 @@ import (
 	"github.com/testcontainers/testcontainers-go/wait"
 )
 
-var apiServer *api.ApiServer
+var testServerWrapper *TestServerWrapper
 
-func GetApiServer() *api.ApiServer {
-	if apiServer == nil {
-		apiServer = initApiServer()
+func GetTestServerWrapper() *TestServerWrapper {
+	if testServerWrapper == nil {
+		testServerWrapper = initTestServerWrapper()
 	}
-	return apiServer
+	return testServerWrapper
 }
 
-func initApiServer() *api.ApiServer {
+func initTestServerWrapper() *TestServerWrapper {
 	ctx := context.Background()
 
 	// Postgres test container
@@ -61,7 +60,7 @@ func initApiServer() *api.ApiServer {
 
 	// Server
 	logger := logger.NewLogger(slog.LevelDebug)
-	return api.NewApiServer(connStr, db, logger, pgc)
+	return newTestServerWrapper(connStr, db, logger, pgc)
 }
 
 func runDatabaseMigrations(connStr string) {
