@@ -33,7 +33,7 @@ func (h *AuthHandlerImpl) Login(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusInternalServerError, err)
 	}
 
-	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
+	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{
 		"token": jwt,
 		"user":  user,
 	})

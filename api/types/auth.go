@@ -6,3 +6,22 @@ type AuthHandler interface {
 	Login(fiber.Ctx) error
 	Register(fiber.Ctx) error
 }
+
+// Responses
+type RegisterResponse struct {
+	Data struct {
+		User     User     `json:"user"`
+		Settings Settings `json:"settings"`
+		Status   string   `json:"status"`
+	} `json:"data"`
+	Error *string `json:"error"`
+}
+
+type LoginResponse struct {
+	Data struct {
+		Token  string `json:"token"`
+		User   User   `json:"user"`
+		Status string `json:"status"`
+	} `json:"data"`
+	Error *string `json:"error"`
+}

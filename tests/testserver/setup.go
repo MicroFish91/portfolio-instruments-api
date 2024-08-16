@@ -52,7 +52,7 @@ func initTestServerWrapper() *TestServerWrapper {
 	// Migrations
 	runDatabaseMigrations(connStr)
 
-	// Database connection (pgx)
+	// Database connection (pgx driver)
 	db, err := db.NewPostgresStorage(connStr)
 	if err != nil {
 		log.Fatal(err)
@@ -71,7 +71,6 @@ func runDatabaseMigrations(connStr string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-
 	if err := m.Up(); err != nil {
 		log.Fatal(err)
 	}

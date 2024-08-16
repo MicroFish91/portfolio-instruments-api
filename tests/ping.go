@@ -11,7 +11,6 @@ import (
 )
 
 func TestPing(t *testing.T) {
-	t.Parallel()
 	tsw := testserver.GetTestServerWrapper()
 
 	req, err := http.NewRequest(http.MethodGet, "/ping", bytes.NewBuffer([]byte{}))

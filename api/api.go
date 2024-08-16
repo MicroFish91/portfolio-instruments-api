@@ -33,14 +33,14 @@ func NewApiServer(addr string, db *pgxpool.Pool, logger *slog.Logger) *ApiServer
 	return api
 }
 
-func GetFiberConfig() fiber.Config {
+func getFiberConfig() fiber.Config {
 	return fiber.Config{
 		ErrorHandler: middleware.FallbackHandler,
 	}
 }
 
 func (s *ApiServer) init() {
-	s.App = fiber.New(GetFiberConfig())
+	s.App = fiber.New(getFiberConfig())
 
 	// Middleware
 	s.App.Use(middleware.AddIncomingTrafficLogger(s.logger))

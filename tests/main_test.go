@@ -17,7 +17,5 @@ func TestMain(m *testing.M) {
 
 func TestStart(t *testing.T) {
 	t.Run("Ping", TestPing)
-	// Test Auth
-	// Test Users
-	// etc...
+	t.Run("Integration", TestIntegration)
 }
