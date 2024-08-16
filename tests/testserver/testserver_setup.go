@@ -59,7 +59,7 @@ func initTestServerWrapper() *TestServerWrapper {
 	}
 
 	// Server
-	logger := logger.NewLogger(slog.LevelDebug)
+	logger := logger.NewLogger(slog.LevelError)
 	return newTestServerWrapper(connStr, db, logger, pgc)
 }
 
