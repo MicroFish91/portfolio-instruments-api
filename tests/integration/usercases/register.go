@@ -2,11 +2,11 @@ package usercases
 
 import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/testcases"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/testcase"
 	"github.com/gofiber/fiber/v3"
 )
 
-var RegisterTestCases = []testcases.TestCase{
+var RegisterTestCases = []testcase.PostTestCase{
 	// 201
 	{
 		Title: "201",

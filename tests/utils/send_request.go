@@ -3,6 +3,7 @@ package utils
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"testing"
@@ -30,6 +31,7 @@ func SendPostRequest(t *testing.T, route string, p any, body any) *http.Response
 	if err != nil {
 		t.Fatal(err)
 	}
+	defer res.Body.Close()
 
 	bodyBytes, err := io.ReadAll(res.Body)
 	if err != nil {
@@ -41,5 +43,33 @@ func SendPostRequest(t *testing.T, route string, p any, body any) *http.Response
 		t.Fatal(err)
 	}
 
+	return res
+}
+
+func SendGetRequest(t *testing.T, route string, token string, body any) *http.Response {
+	tsw := testserver.GetTestServerWrapper()
+
+	req, err := http.NewRequest(http.MethodGet, route, bytes.NewBuffer([]byte{}))
+	if err != nil {
+		t.Fatal(err)
+	}
+	req.Header.Set("Authorization", fmt.Sprintf("Bearer %s", token))
+
+	res, err := tsw.TestServer.App.Test(req)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer res.Body.Close()
+
+	bodyBytes, err := io.ReadAll(res.Body)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	err = json.Unmarshal(bodyBytes, &body)
+
+	if err != nil {
+		t.Fatal(err)
+	}
 	return res
 }

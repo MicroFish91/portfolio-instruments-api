@@ -60,3 +60,11 @@ type GetUsersStoreOptions struct {
 	Current_page int
 	Page_size    int
 }
+
+type GetMeResponse struct {
+	Data struct {
+		User     User     `json:"user"`
+		Settings Settings `json:"settings"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
