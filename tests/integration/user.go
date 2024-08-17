@@ -13,7 +13,7 @@ import (
 var token string
 var user types.User
 
-func TestUser(t *testing.T) {
+func TestUserService(t *testing.T) {
 	t.Parallel()
 
 	t.Run("POST://api/v1/register", registerTestCases)

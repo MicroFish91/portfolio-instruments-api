@@ -16,10 +16,13 @@ func TestMain(m *testing.M) {
 	os.Exit(exitCode)
 }
 
-func TestStart(t *testing.T) {
+func TestApi(t *testing.T) {
 	// Ping
 	t.Run("Ping", TestPing)
 
 	// Integration tests (run in parallel)
-	t.Run("User_AuthIntegration", integration.TestUser)
+	t.Run("Integration", func(t2 *testing.T) {
+		t.Parallel()
+		t.Run("UserAuth", integration.TestUserService)
+	})
 }
