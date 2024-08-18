@@ -15,8 +15,7 @@ func registerUserRoutes(r fiber.Router, h types.UserHandler) {
 	r.Delete("/users/:id", h.DeleteUser, middleware.RequireAuth, middleware.AddParamsValidator[user.DeleteUserParams]())
 
 	// Settings
-	r.Get("/users/settings", h.GetSettings, middleware.RequireAuth)
-	r.Get("/users/:id/settings", h.GetSettings, middleware.RequireAuth)
+	r.Get("/users/:id/settings", h.GetSettings, middleware.RequireAuth, middleware.AddParamsValidator[user.GetSettingsParams]())
 	r.Put("/users/settings", h.UpdateSettings, middleware.RequireAuth, middleware.AddBodyValidator[user.UpdateSettingsPayload]())
 	r.Put("/users/:id/settings", h.UpdateSettings, middleware.RequireAuth, middleware.AddBodyValidator[user.UpdateSettingsPayload]())
 }

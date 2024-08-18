@@ -16,13 +16,18 @@ func (h *UserHandlerImpl) UpdateSettings(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user from token"))
 	}
 
+	userParams, ok := c.Locals(constants.LOCALS_REQ_PARAMS).(UpdateSettingsParams)
+	if !ok {
+		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid user params from request"))
+	}
+
 	settingsPayload, ok := c.Locals(constants.LOCALS_REQ_BODY).(UpdateSettingsPayload)
 	if !ok {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid settings request body"))
 	}
 
-	if err := h.hasAuthorizedUserId(c, userPayload.User_id); err != nil {
-		return utils.SendError(c, fiber.StatusUnauthorized, err)
+	if userPayload.User_id != userParams.Id {
+		return utils.SendError(c, fiber.StatusForbidden, errors.New("provided token does not correspond with the requested user"))
 	}
 
 	if settingsPayload.Benchmark_id != 0 {

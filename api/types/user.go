@@ -84,3 +84,10 @@ type DeleteUserResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type GetSettingsResponse struct {
+	Data struct {
+		Settings Settings `json:"settings"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

@@ -27,7 +27,12 @@
     - 400 Bad Request
     - 401 Unauthorized (bad token)
     - 403 Forbidden
-    - 404 Not Found
+
+6. GET /api/v1/users/:id/settings
+    - 200 Ok
+    - 400 Bad Request
+    - 401 Unauthorized
+    - 403 Forbidden
 
 ## Order
 

@@ -13,3 +13,13 @@ func (p UpdateSettingsPayload) Validate() error {
 		validation.Field(&p.Benchmark_id, validation.Min(1)),
 	)
 }
+
+type UpdateSettingsParams struct {
+	Id int
+}
+
+func (p UpdateSettingsParams) Validate() error {
+	return validation.ValidateStruct(&p,
+		validation.Field(&p.Id, validation.Required, validation.Min(1)),
+	)
+}
