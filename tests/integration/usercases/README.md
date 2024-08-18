@@ -22,6 +22,13 @@
     - 401 Unauthorized (bad token)
     - 403 Forbidden (param id and token id mismatch)
 
+5. DEL /api/v1/users/:id
+    - 200 Ok
+    - 400 Bad Request
+    - 401 Unauthorized (bad token)
+    - 403 Forbidden
+    - 404 Not Found
+
 ## Order
 
 1. Register

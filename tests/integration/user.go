@@ -20,6 +20,7 @@ func TestUserService(t *testing.T) {
 	t.Run("POST://api/v1/login", loginTestCases)
 	t.Run("GET://api/v1/me", getMeTestCases)
 	t.Run("GET://api/v1/users/:id", getUserByIdTestCases)
+	t.Run("DEL://api/v1/users/:id", deleteUserTestCases)
 }
 
 func registerTestCases(t *testing.T) {
@@ -80,6 +81,18 @@ func getUserByIdTestCases(t *testing.T) {
 				tok = tc.ReplacementToken
 			}
 			userTestCase.TestGetUserById(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
+		})
+	}
+}
+
+func deleteUserTestCases(t *testing.T) {
+	for _, tc := range userTestCases.DeletUserTestCases(t, user.User_id) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+			userTestCase.TestDeleteUser(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
 		})
 	}
 }

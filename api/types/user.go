@@ -76,3 +76,11 @@ type GetUserByIdResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type DeleteUserResponse struct {
+	Data struct {
+		Message string `json:"message"`
+		User    User   `json:"user"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
