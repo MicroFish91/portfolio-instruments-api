@@ -19,6 +19,7 @@ func TestUserService(t *testing.T) {
 	t.Run("POST://api/v1/register", registerTestCases)
 	t.Run("POST://api/v1/login", loginTestCases)
 	t.Run("GET://api/v1/me", getMeTestCases)
+	t.Run("GET://api/v1/users/:id", getUserByIdTestCases)
 }
 
 func registerTestCases(t *testing.T) {
@@ -67,6 +68,18 @@ func getMeTestCases(t *testing.T) {
 				tok = tc.ReplacementToken
 			}
 			userTestCase.TestGetMe(t2, tok, tc.ParameterId, tc.ExpectedStatusCode)
+		})
+	}
+}
+
+func getUserByIdTestCases(t *testing.T) {
+	for _, tc := range userTestCases.GetUserByIdTestCases(t, user.User_id) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+			userTestCase.TestGetUserById(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
 		})
 	}
 }

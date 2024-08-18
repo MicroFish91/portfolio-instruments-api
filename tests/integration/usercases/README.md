@@ -16,6 +16,12 @@
     - 401 Unauthorized
     - 404 Not Found
 
+4. GET /api/v1/users/:id
+    - 200 Ok
+    - 400 Bad Request (not a valid id param)
+    - 401 Unauthorized (bad token)
+    - 403 Forbidden (param id and token id mismatch)
+
 ## Order
 
 1. Register

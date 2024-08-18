@@ -19,10 +19,10 @@ func setStructField(target interface{}, fieldName string, fieldValue any) error 
 	// Access the target struct's field corresponding to the incoming fieldName
 	structFieldValue := structValue.FieldByName(fieldName)
 	if !structFieldValue.IsValid() {
-		return fmt.Errorf("no field: %s in obj", fieldName)
+		return fmt.Errorf("no field: %s in obj (type: bad_request)", fieldName)
 	}
 	if !structFieldValue.CanSet() {
-		return fmt.Errorf("cannot set %s field value", fieldName)
+		return fmt.Errorf("cannot set %s field value (type: bad_request)", fieldName)
 	}
 
 	structFieldType := structFieldValue.Type()
@@ -40,7 +40,7 @@ func setStructField(target interface{}, fieldName string, fieldValue any) error 
 		// string -> int
 		intVal, err := strconv.Atoi(newValue.String())
 		if err != nil {
-			return fmt.Errorf("cannot convert %s to %s: %v", newValue.Type(), structFieldType, err)
+			return fmt.Errorf("cannot convert %s to %s: %v (type: bad_request)", newValue.Type(), structFieldType, err)
 		}
 		structFieldValue.Set(reflect.ValueOf(intVal))
 	case reflect.Slice:
@@ -57,16 +57,16 @@ func setStructField(target interface{}, fieldName string, fieldValue any) error 
 			for _, iv := range stringVals {
 				v, err := strconv.Atoi(iv)
 				if err != nil {
-					return errors.New("error converting to int slice")
+					return errors.New("error converting to int slice (type: bad_request)")
 				}
 				intVals = append(intVals, v)
 			}
 			structFieldValue.Set(reflect.ValueOf(intVals))
 		default:
-			return fmt.Errorf("unsupported struct field type: %s", structFieldType)
+			return fmt.Errorf("unsupported struct field type: %s (type: bad_request)", structFieldType)
 		}
 	default:
-		return fmt.Errorf("unsupported struct field type: %s", structFieldType)
+		return fmt.Errorf("unsupported struct field type: %s (type: bad_request)", structFieldType)
 	}
 
 	return nil

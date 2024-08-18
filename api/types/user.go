@@ -68,3 +68,11 @@ type GetMeResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type GetUserByIdResponse struct {
+	Data struct {
+		User     User     `json:"user"`
+		Settings Settings `json:"settings"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
