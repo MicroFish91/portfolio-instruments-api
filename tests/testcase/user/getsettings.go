@@ -36,15 +36,7 @@ func TestGetSettings(t *testing.T, route string, token string, userId int, expec
 			},
 			getSettingsResponse.Data.Settings,
 		)
-	case 400:
-		assert.Equal(t, fiber.StatusBadRequest, res.StatusCode)
-	case 401:
-		assert.Equal(t, fiber.StatusUnauthorized, res.StatusCode)
-	case 403:
-		assert.Equal(t, fiber.StatusForbidden, res.StatusCode)
-	case 404:
-		assert.Equal(t, fiber.StatusNotFound, res.StatusCode)
 	default:
-		t.Fatal("provided an unexpected status code")
+		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}
 }

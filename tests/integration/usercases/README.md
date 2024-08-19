@@ -21,18 +21,28 @@
     - 400 Bad Request (not a valid id param)
     - 401 Unauthorized (bad token)
     - 403 Forbidden (param id and token id mismatch)
+    - 404 Not Found
 
 5. DEL /api/v1/users/:id
     - 200 Ok
     - 400 Bad Request
     - 401 Unauthorized (bad token)
     - 403 Forbidden
+    - 404 Not Found
 
 6. GET /api/v1/users/:id/settings
     - 200 Ok
     - 400 Bad Request
     - 401 Unauthorized
     - 403 Forbidden
+    - 404 Not Found
+
+7. PUT /api/v1/users/:id/settings
+    - 200 Ok
+    - 400 Bad Request
+    - 401 Unauthorized
+    - 403 Forbidden
+    - 404 Not Found
 
 ## Order
 

@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetSettingsByIdTestCases(t *testing.T, userId int) []testcase.GetTestCase {
+func GetSettingsTestCases(t *testing.T, userId int) []testcase.GetTestCase {
 	tok401, err := auth.GenerateSignedJwt(userId, "test_user@gmail.com", "Default")
 	if err != nil {
 		t.Fatal(err)

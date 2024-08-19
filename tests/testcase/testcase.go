@@ -13,3 +13,12 @@ type GetTestCase struct {
 	ReplacementToken   string
 	ExpectedStatusCode int
 }
+
+type PutTestCase struct {
+	Title              string
+	ParameterId        int
+	Route              string
+	ReplacementToken   string
+	Payload            any
+	ExpectedStatusCode int
+}

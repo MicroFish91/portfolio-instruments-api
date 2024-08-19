@@ -12,7 +12,7 @@ import (
 
 func TestRegister(t *testing.T, p auth.RegisterPayload, expectedStatusCode int) {
 	var registerResponse types.RegisterResponse
-	res := testUtils.SendPostRequest(t, "/api/v1/register", &p, &registerResponse)
+	res := testUtils.SendAuthRequest(t, "/api/v1/register", &p, &registerResponse)
 
 	switch expectedStatusCode {
 	case 201:
@@ -29,11 +29,7 @@ func TestRegister(t *testing.T, p auth.RegisterPayload, expectedStatusCode int) 
 			},
 			registerResponse.Data.User,
 		)
-	case 400:
-		assert.Equal(t, fiber.StatusBadRequest, res.StatusCode)
-	case 409:
-		assert.Equal(t, fiber.StatusConflict, res.StatusCode)
 	default:
-		t.Fatal("provided an unexpected status code")
+		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}
 }

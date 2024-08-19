@@ -12,7 +12,7 @@ import (
 
 func TestLogin(t *testing.T, p auth.LoginPayload, expectedStatusCode int) (u types.User, token string) {
 	var loginResponse types.LoginResponse
-	res := testUtils.SendPostRequest(t, "/api/v1/login", &p, &loginResponse)
+	res := testUtils.SendAuthRequest(t, "/api/v1/login", &p, &loginResponse)
 
 	switch expectedStatusCode {
 	case 201:
@@ -31,16 +31,8 @@ func TestLogin(t *testing.T, p auth.LoginPayload, expectedStatusCode int) (u typ
 			loginResponse.Data.User,
 		)
 		return loginResponse.Data.User, loginResponse.Data.Token
-	case 400:
-		assert.Equal(t, fiber.StatusBadRequest, res.StatusCode)
-	case 401:
-		assert.Equal(t, fiber.StatusUnauthorized, res.StatusCode)
-	case 404:
-		assert.Equal(t, fiber.StatusNotFound, res.StatusCode)
-	case 409:
-		assert.Equal(t, fiber.StatusConflict, res.StatusCode)
 	default:
-		t.Fatal("provided an unexpected status code")
+		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}
 
 	return types.User{}, ""

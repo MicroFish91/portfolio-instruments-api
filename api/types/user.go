@@ -91,3 +91,10 @@ type GetSettingsResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type UpdateSettingsResponse struct {
+	Data struct {
+		Settings Settings `json:"settings"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
