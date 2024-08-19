@@ -15,8 +15,6 @@ var token string
 var testUser types.User
 
 func TestUserService(t *testing.T) {
-	t.Parallel()
-
 	t.Run("POST://api/v1/register", registerTestCases)
 	t.Run("POST://api/v1/login", loginTestCases)
 	t.Run("GET://api/v1/me", getMeTestCases)
