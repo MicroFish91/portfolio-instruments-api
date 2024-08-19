@@ -3,12 +3,11 @@ package integration
 import (
 	"testing"
 
-	auth "github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
-
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	userTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/usercases"
-	authTestCase "github.com/MicroFish91/portfolio-instruments-api/tests/testcase/auth"
-	userTestCase "github.com/MicroFish91/portfolio-instruments-api/tests/testcase/user"
+	userTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/user"
+	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/services/auth"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/services/user"
 )
 
 var token string
@@ -32,7 +31,7 @@ func registerTestCases(t *testing.T) {
 		}
 
 		t.Run(tc.Title, func(t2 *testing.T) {
-			authTestCase.TestRegister(
+			authTester.TestRegister(
 				t2,
 				payload,
 				tc.ExpectedStatusCode,
@@ -49,7 +48,7 @@ func loginTestCases(t *testing.T) {
 		}
 
 		t.Run(tc.Title, func(t2 *testing.T) {
-			u, tok := authTestCase.TestLogin(
+			u, tok := authTester.TestLogin(
 				t2,
 				payload,
 				tc.ExpectedStatusCode,
@@ -69,7 +68,7 @@ func getMeTestCases(t *testing.T) {
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}
-			userTestCase.TestGetMe(t2, tok, tc.ParameterId, tc.ExpectedStatusCode)
+			userTester.TestGetMe(t2, tok, tc.ParameterId, tc.ExpectedStatusCode)
 		})
 	}
 }
@@ -81,7 +80,7 @@ func getUserByIdTestCases(t *testing.T) {
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}
-			userTestCase.TestGetUserById(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
+			userTester.TestGetUserById(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
 		})
 	}
 }
@@ -93,7 +92,7 @@ func getSettingsTestCases(t *testing.T) {
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}
-			userTestCase.TestGetSettings(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
+			userTester.TestGetSettings(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
 		})
 	}
 }
@@ -105,7 +104,7 @@ func updateSettingsTestCases(t *testing.T) {
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}
-			userTestCase.TestUpdateSettings(t2, tc.Route, tok, tc.ParameterId, tc.Payload, tc.ExpectedStatusCode)
+			userTester.TestUpdateSettings(t2, tc.Route, tok, tc.ParameterId, tc.Payload, tc.ExpectedStatusCode)
 		})
 	}
 }
@@ -117,7 +116,7 @@ func deleteUserTestCases(t *testing.T) {
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}
-			userTestCase.TestDeleteUser(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
+			userTester.TestDeleteUser(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
 		})
 	}
 }

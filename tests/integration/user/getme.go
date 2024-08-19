@@ -1,14 +1,14 @@
-package usercases
+package user
 
 import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/testcase"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetMeTestCases(t *testing.T, userId int) []testcase.GetTestCase {
+func GetMeTestCases(t *testing.T, userId int) []shared.GetTestCase {
 	tok401, err := auth.GenerateSignedJwt(userId, "test_user@gmail.com", "Default")
 	if err != nil {
 		t.Fatal(err)
@@ -20,7 +20,7 @@ func GetMeTestCases(t *testing.T, userId int) []testcase.GetTestCase {
 		t.Fatal(err)
 	}
 
-	return []testcase.GetTestCase{
+	return []shared.GetTestCase{
 		{
 			Title:              "200",
 			ParameterId:        userId,

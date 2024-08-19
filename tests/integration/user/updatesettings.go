@@ -1,15 +1,15 @@
-package usercases
+package user
 
 import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/user"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/testcase"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
 	"github.com/gofiber/fiber/v3"
 )
 
-func UpdateSettingsTestCases(t *testing.T, userId int) []testcase.PutTestCase {
+func UpdateSettingsTestCases(t *testing.T, userId int) []shared.PutTestCase {
 	tok401, err := auth.GenerateSignedJwt(userId, "test_user@gmail.com", "Default")
 	if err != nil {
 		t.Fatal(err)
@@ -21,7 +21,7 @@ func UpdateSettingsTestCases(t *testing.T, userId int) []testcase.PutTestCase {
 		t.Fatal(err)
 	}
 
-	return []testcase.PutTestCase{
+	return []shared.PutTestCase{
 		{
 			Title: "200",
 			Payload: user.UpdateSettingsPayload{

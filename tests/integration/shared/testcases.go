@@ -1,4 +1,4 @@
-package testcase
+package shared
 
 type PostTestCase struct {
 	Title              string

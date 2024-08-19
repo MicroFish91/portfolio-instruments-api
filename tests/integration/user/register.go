@@ -1,42 +1,37 @@
-package usercases
+package user
 
 import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/testcase"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
 	"github.com/gofiber/fiber/v3"
 )
 
-var LoginTestCases = []testcase.PostTestCase{
+var RegisterTestCases = []shared.PostTestCase{
+	// 201
 	{
 		Title: "201",
-		Payload: auth.LoginPayload{
+		Payload: auth.RegisterPayload{
 			Email:    "test_user@gmail.com",
 			Password: "abcd1234",
 		},
 		ExpectedStatusCode: fiber.StatusCreated,
 	},
+
+	// 409
 	{
-		Title: "401",
-		Payload: auth.LoginPayload{
+		Title: "409",
+		Payload: auth.RegisterPayload{
 			Email:    "test_user@gmail.com",
-			Password: "fake-password",
-		},
-		ExpectedStatusCode: fiber.StatusUnauthorized,
-	},
-	{
-		Title: "404",
-		Payload: auth.LoginPayload{
-			Email:    "test_user_fake@gmail.com",
 			Password: "abcd1234",
 		},
-		ExpectedStatusCode: fiber.StatusNotFound,
+		ExpectedStatusCode: fiber.StatusConflict,
 	},
 
 	// -- Payload validation tests (400) --
 
 	{
 		Title: "400 No Email",
-		Payload: auth.LoginPayload{
+		Payload: auth.RegisterPayload{
 			Email:    "",
 			Password: "abcd1234",
 		},
@@ -44,7 +39,7 @@ var LoginTestCases = []testcase.PostTestCase{
 	},
 	{
 		Title: "400 Bad Email",
-		Payload: auth.LoginPayload{
+		Payload: auth.RegisterPayload{
 			Email:    "test_user",
 			Password: "abcd1234",
 		},
@@ -52,7 +47,7 @@ var LoginTestCases = []testcase.PostTestCase{
 	},
 	{
 		Title: "400 No Password",
-		Payload: auth.LoginPayload{
+		Payload: auth.RegisterPayload{
 			Email:    "test_user@gmail.com",
 			Password: "",
 		},
