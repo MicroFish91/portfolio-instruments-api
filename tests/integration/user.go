@@ -5,7 +5,7 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	userTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/user"
+	userTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/user"
 	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/services/auth"
 	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/services/user"
 )
