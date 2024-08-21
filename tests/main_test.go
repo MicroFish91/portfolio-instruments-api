@@ -17,10 +17,8 @@ func TestMain(m *testing.M) {
 }
 
 func TestApi(t *testing.T) {
-	// Ping
 	t.Run("Ping", TestPing)
 
-	// Integration tests (run in parallel)
 	t.Run("Integration", func(t2 *testing.T) {
 		t.Parallel()
 

@@ -16,8 +16,9 @@ var as_token string
 var as_testuser types.User
 
 func TestAccountService(t *testing.T) {
-	t.Run("Setup", setup)
+	t.Parallel()
 
+	t.Run("Setup", setup)
 	t.Run("POST://api/v1/accounts", createAccountTestCases)
 }
 

@@ -18,6 +18,8 @@ var email string = utils.GetRotatingEmail()
 var password string = "abcd1234"
 
 func TestUserService(t *testing.T) {
+	t.Parallel()
+
 	t.Run("POST://api/v1/register", registerTestCases)
 	t.Run("POST://api/v1/login", loginTestCases)
 	t.Run("GET://api/v1/me", getMeTestCases)
