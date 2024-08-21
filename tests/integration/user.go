@@ -8,10 +8,14 @@ import (
 	userTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/user"
 	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/services/auth"
 	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/services/user"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 )
 
-var token string
-var testUser types.User
+var us_token string
+var us_testuser types.User
+
+var email string = utils.GetRotatingEmail()
+var password string = "abcd1234"
 
 func TestUserService(t *testing.T) {
 	t.Run("POST://api/v1/register", registerTestCases)
@@ -24,7 +28,7 @@ func TestUserService(t *testing.T) {
 }
 
 func registerTestCases(t *testing.T) {
-	for _, tc := range userTestCases.RegisterTestCases {
+	for _, tc := range userTestCases.GetRegisterTestCases(email, password) {
 		payload, ok := tc.Payload.(auth.RegisterPayload)
 		if !ok {
 			t.Fatal("invalid auth register payload")
@@ -41,7 +45,7 @@ func registerTestCases(t *testing.T) {
 }
 
 func loginTestCases(t *testing.T) {
-	for _, tc := range userTestCases.LoginTestCases {
+	for _, tc := range userTestCases.GetLoginTestCases(email, password) {
 		payload, ok := tc.Payload.(auth.LoginPayload)
 		if !ok {
 			t.Fatal("invalid auth login payload")
@@ -53,18 +57,18 @@ func loginTestCases(t *testing.T) {
 				payload,
 				tc.ExpectedStatusCode,
 			)
-			if token == "" && tok != "" {
-				token = tok
-				testUser = u
+			if us_token == "" && tok != "" {
+				us_token = tok
+				us_testuser = u
 			}
 		})
 	}
 }
 
 func getMeTestCases(t *testing.T) {
-	for _, tc := range userTestCases.GetMeTestCases(t, testUser.User_id) {
+	for _, tc := range userTestCases.GetMeTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
-			tok := token
+			tok := us_token
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}
@@ -74,9 +78,9 @@ func getMeTestCases(t *testing.T) {
 }
 
 func getUserByIdTestCases(t *testing.T) {
-	for _, tc := range userTestCases.GetUserByIdTestCases(t, testUser.User_id) {
+	for _, tc := range userTestCases.GetUserByIdTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
-			tok := token
+			tok := us_token
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}
@@ -86,9 +90,9 @@ func getUserByIdTestCases(t *testing.T) {
 }
 
 func getSettingsTestCases(t *testing.T) {
-	for _, tc := range userTestCases.GetSettingsTestCases(t, testUser.User_id) {
+	for _, tc := range userTestCases.GetSettingsTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
-			tok := token
+			tok := us_token
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}
@@ -98,9 +102,9 @@ func getSettingsTestCases(t *testing.T) {
 }
 
 func updateSettingsTestCases(t *testing.T) {
-	for _, tc := range userTestCases.UpdateSettingsTestCases(t, testUser.User_id) {
+	for _, tc := range userTestCases.UpdateSettingsTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
-			tok := token
+			tok := us_token
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}
@@ -110,9 +114,9 @@ func updateSettingsTestCases(t *testing.T) {
 }
 
 func deleteUserTestCases(t *testing.T) {
-	for _, tc := range userTestCases.DeletUserTestCases(t, testUser.User_id) {
+	for _, tc := range userTestCases.DeletUserTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
-			tok := token
+			tok := us_token
 			if tc.ReplacementToken != "" {
 				tok = tc.ReplacementToken
 			}

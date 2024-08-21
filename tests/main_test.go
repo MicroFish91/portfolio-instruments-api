@@ -23,6 +23,8 @@ func TestApi(t *testing.T) {
 	// Integration tests (run in parallel)
 	t.Run("Integration", func(t2 *testing.T) {
 		t.Parallel()
-		t.Run("UserAuth", integration.TestUserService)
+
+		t.Run("Users-Auth", integration.TestUserService)
+		t.Run("Accounts", integration.TestAccountService)
 	})
 }

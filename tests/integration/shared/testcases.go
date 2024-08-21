@@ -3,6 +3,8 @@ package shared
 type PostTestCase struct {
 	Title              string
 	Payload            any
+	Route              string
+	ReplacementToken   string
 	ExpectedStatusCode int
 }
 

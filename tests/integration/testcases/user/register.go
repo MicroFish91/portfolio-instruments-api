@@ -6,51 +6,50 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-var RegisterTestCases = []shared.PostTestCase{
-	// 201
-	{
-		Title: "201",
-		Payload: auth.RegisterPayload{
-			Email:    "test_user@gmail.com",
-			Password: "abcd1234",
+func GetRegisterTestCases(email string, password string) []shared.PostTestCase {
+	return []shared.PostTestCase{
+		{
+			Title: "201",
+			Payload: auth.RegisterPayload{
+				Email:    email,
+				Password: password,
+			},
+			ExpectedStatusCode: fiber.StatusCreated,
 		},
-		ExpectedStatusCode: fiber.StatusCreated,
-	},
+		{
+			Title: "409",
+			Payload: auth.RegisterPayload{
+				Email:    email,
+				Password: password,
+			},
+			ExpectedStatusCode: fiber.StatusConflict,
+		},
 
-	// 409
-	{
-		Title: "409",
-		Payload: auth.RegisterPayload{
-			Email:    "test_user@gmail.com",
-			Password: "abcd1234",
-		},
-		ExpectedStatusCode: fiber.StatusConflict,
-	},
+		// -- Payload validation tests (400) --
 
-	// -- Payload validation tests (400) --
-
-	{
-		Title: "400 No Email",
-		Payload: auth.RegisterPayload{
-			Email:    "",
-			Password: "abcd1234",
+		{
+			Title: "400 No Email",
+			Payload: auth.RegisterPayload{
+				Email:    "",
+				Password: password,
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
-		ExpectedStatusCode: fiber.StatusBadRequest,
-	},
-	{
-		Title: "400 Bad Email",
-		Payload: auth.RegisterPayload{
-			Email:    "test_user",
-			Password: "abcd1234",
+		{
+			Title: "400 Bad Email",
+			Payload: auth.RegisterPayload{
+				Email:    "test_user",
+				Password: password,
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
-		ExpectedStatusCode: fiber.StatusBadRequest,
-	},
-	{
-		Title: "400 No Password",
-		Payload: auth.RegisterPayload{
-			Email:    "test_user@gmail.com",
-			Password: "",
+		{
+			Title: "400 No Password",
+			Payload: auth.RegisterPayload{
+				Email:    email,
+				Password: "",
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
-		ExpectedStatusCode: fiber.StatusBadRequest,
-	},
+	}
 }

@@ -6,56 +6,58 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-var LoginTestCases = []shared.PostTestCase{
-	{
-		Title: "201",
-		Payload: auth.LoginPayload{
-			Email:    "test_user@gmail.com",
-			Password: "abcd1234",
+func GetLoginTestCases(email string, password string) []shared.PostTestCase {
+	return []shared.PostTestCase{
+		{
+			Title: "201",
+			Payload: auth.LoginPayload{
+				Email:    email,
+				Password: password,
+			},
+			ExpectedStatusCode: fiber.StatusCreated,
 		},
-		ExpectedStatusCode: fiber.StatusCreated,
-	},
-	{
-		Title: "401",
-		Payload: auth.LoginPayload{
-			Email:    "test_user@gmail.com",
-			Password: "fake-password",
+		{
+			Title: "401",
+			Payload: auth.LoginPayload{
+				Email:    email,
+				Password: "fake-pass",
+			},
+			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
-		ExpectedStatusCode: fiber.StatusUnauthorized,
-	},
-	{
-		Title: "404",
-		Payload: auth.LoginPayload{
-			Email:    "test_user_fake@gmail.com",
-			Password: "abcd1234",
+		{
+			Title: "404",
+			Payload: auth.LoginPayload{
+				Email:    "test_user_fake@gmail.com",
+				Password: password,
+			},
+			ExpectedStatusCode: fiber.StatusNotFound,
 		},
-		ExpectedStatusCode: fiber.StatusNotFound,
-	},
 
-	// -- Payload validation tests (400) --
+		// -- Payload validation tests (400) --
 
-	{
-		Title: "400 No Email",
-		Payload: auth.LoginPayload{
-			Email:    "",
-			Password: "abcd1234",
+		{
+			Title: "400 No Email",
+			Payload: auth.LoginPayload{
+				Email:    "",
+				Password: password,
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
-		ExpectedStatusCode: fiber.StatusBadRequest,
-	},
-	{
-		Title: "400 Bad Email",
-		Payload: auth.LoginPayload{
-			Email:    "test_user",
-			Password: "abcd1234",
+		{
+			Title: "400 Bad Email",
+			Payload: auth.LoginPayload{
+				Email:    "test_user",
+				Password: password,
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
-		ExpectedStatusCode: fiber.StatusBadRequest,
-	},
-	{
-		Title: "400 No Password",
-		Payload: auth.LoginPayload{
-			Email:    "test_user@gmail.com",
-			Password: "",
+		{
+			Title: "400 No Password",
+			Payload: auth.LoginPayload{
+				Email:    email,
+				Password: "",
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
-		ExpectedStatusCode: fiber.StatusBadRequest,
-	},
+	}
 }

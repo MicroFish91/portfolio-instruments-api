@@ -3,19 +3,13 @@ package user
 import (
 	"testing"
 
-	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetUserByIdTestCases(t *testing.T, userId int) []shared.GetTestCase {
-	tok401, err := auth.GenerateSignedJwt(userId, "test_user@gmail.com", "Default")
-	if err != nil {
-		t.Fatal(err)
-	}
-	tok401 = tok401[1:]
-
-	tok403, err := auth.GenerateSignedJwt(100, "fake_user_100@gmail.com", "Default")
+func GetUserByIdTestCases(t *testing.T, userId int, email string) []shared.GetTestCase {
+	tok401, tok403, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}

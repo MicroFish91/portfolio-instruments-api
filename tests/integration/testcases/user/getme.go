@@ -8,8 +8,8 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetMeTestCases(t *testing.T, userId int) []shared.GetTestCase {
-	tok401, err := auth.GenerateSignedJwt(userId, "test_user@gmail.com", "Default")
+func GetMeTestCases(t *testing.T, userId int, email string) []shared.GetTestCase {
+	tok401, err := auth.GenerateSignedJwt(userId, email, "Default")
 	if err != nil {
 		t.Fatal(err)
 	}

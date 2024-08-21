@@ -58,3 +58,10 @@ type GetAccountsStoreOptions struct {
 	Current_page  int
 	Page_size     int
 }
+
+type CreateAccountResponse struct {
+	Data struct {
+		Account Account `json:"account"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
