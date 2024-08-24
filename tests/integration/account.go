@@ -1,8 +1,10 @@
 package integration
 
 import (
+	"fmt"
 	"testing"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/account"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	accountTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/account"
@@ -20,6 +22,7 @@ func TestAccountService(t *testing.T) {
 
 	t.Run("Setup", setup)
 	t.Run("POST://api/v1/accounts", createAccountTestCases)
+	t.Run("GET://api/v1/accounts", getAccountsTestCases)
 }
 
 func setup(t *testing.T) {
@@ -63,6 +66,44 @@ func createAccountTestCases(t *testing.T) {
 				tok,
 				as_testuser.User_id,
 				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func getAccountsTestCases(t *testing.T) {
+	// Get accounts test setup
+	t.Run("Setup", func(t2 *testing.T) {
+		for i := 0; i < 25; i += 1 {
+			accountTester.TestCreateAccount(
+				t2,
+				account.CreateAccountPayload{
+					Name:        fmt.Sprintf("Acc%d", i),
+					Tax_shelter: "ROTH",
+					Institution: "Fidelity",
+				},
+				as_token,
+				as_testuser.User_id,
+				fiber.StatusCreated,
+			)
+		}
+	})
+
+	// Get accounts tests
+	for _, tc := range accountTestCases.GetAccountsTestCases() {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			response, ok := tc.ExpectedResponse.(accountTestCases.GetAccountsExpectedResponse)
+			if !ok {
+				t.Fatal("invalid GetAccountsExpectedResponse")
+			}
+
+			accountTester.TestGetAccounts(
+				t2,
+				tc.Route,
+				as_token,
+				as_testuser.User_id,
+				tc.ExpectedStatusCode,
+				response,
 			)
 		})
 	}

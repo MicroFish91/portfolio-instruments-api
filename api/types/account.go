@@ -65,3 +65,11 @@ type CreateAccountResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type GetAccountsResponse struct {
+	Data struct {
+		Accounts   []Account          `json:"accounts"`
+		Pagination PaginationMetadata `json:"pagination"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

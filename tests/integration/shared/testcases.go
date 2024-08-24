@@ -14,6 +14,7 @@ type GetTestCase struct {
 	Route              string
 	ReplacementToken   string
 	ExpectedStatusCode int
+	ExpectedResponse   any
 }
 
 type PutTestCase struct {
