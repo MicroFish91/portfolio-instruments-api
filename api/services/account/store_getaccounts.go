@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -63,6 +64,9 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 	accounts, total_items, err := s.parseRowsIntoAccounts(rows)
 	if err != nil {
 		return nil, types.PaginationMetadata{}, err
+	}
+	if len(accounts) == 0 {
+		return nil, types.PaginationMetadata{}, errors.New("no rows in result set")
 	}
 
 	return accounts, types.PaginationMetadata{

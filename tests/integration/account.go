@@ -78,9 +78,10 @@ func getAccountsTestCases(t *testing.T) {
 			accountTester.TestCreateAccount(
 				t2,
 				account.CreateAccountPayload{
-					Name:        fmt.Sprintf("Acc%d", i),
-					Tax_shelter: "ROTH",
-					Institution: "Fidelity",
+					Name:          fmt.Sprintf("Acc%d", i),
+					Tax_shelter:   utils.GetRotatingTaxShelter(),
+					Institution:   utils.GetRotatingInstitution(),
+					Is_deprecated: utils.GetRotatingDeprecation(),
 				},
 				as_token,
 				as_testuser.User_id,
