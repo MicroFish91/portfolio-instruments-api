@@ -1,8 +1,11 @@
 package account
 
 import (
+	"testing"
+
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -11,7 +14,12 @@ type GetAccountsExpectedResponse struct {
 	Pagination types.PaginationMetadata
 }
 
-func GetAccountsTestCases() []shared.GetTestCase {
+func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.GetTestCase {
+	tok401, _, err := utils.Generate40xTokens(userId, email)
+	if err != nil {
+		t.Fatal(err)
+	}
+
 	return []shared.GetTestCase{
 		// ---- 200 ----
 		{
@@ -157,8 +165,17 @@ func GetAccountsTestCases() []shared.GetTestCase {
 			},
 		},
 
-		// 401
-		// 403?
+		// ---- 401, 404 ----
+		{
+			Title:              "401",
+			Route:              "/api/v1/accounts",
+			ReplacementToken:   tok401,
+			ExpectedStatusCode: fiber.StatusUnauthorized,
+			ExpectedResponse: GetAccountsExpectedResponse{
+				Accounts:   0,
+				Pagination: types.PaginationMetadata{},
+			},
+		},
 		{
 			Title:              "404",
 			Route:              "/api/v1/accounts?ids=32",
@@ -170,5 +187,41 @@ func GetAccountsTestCases() []shared.GetTestCase {
 		},
 
 		// --- 400 ---
+		{
+			Title:              "400 Fake Query Param",
+			Route:              "/api/v1/accounts?fake_query=true",
+			ExpectedStatusCode: fiber.StatusBadRequest,
+			ExpectedResponse: GetAccountsExpectedResponse{
+				Accounts:   0,
+				Pagination: types.PaginationMetadata{},
+			},
+		},
+		{
+			Title:              "400 Tax Shelter 1",
+			Route:              "/api/v1/accounts?tax_shelter=TRAD",
+			ExpectedStatusCode: fiber.StatusBadRequest,
+			ExpectedResponse: GetAccountsExpectedResponse{
+				Accounts:   0,
+				Pagination: types.PaginationMetadata{},
+			},
+		},
+		{
+			Title:              "400 Tax Shelter 2",
+			Route:              "/api/v1/accounts?tax_shelter=5",
+			ExpectedStatusCode: fiber.StatusBadRequest,
+			ExpectedResponse: GetAccountsExpectedResponse{
+				Accounts:   0,
+				Pagination: types.PaginationMetadata{},
+			},
+		},
+		{
+			Title:              "400 Is Deprecated",
+			Route:              "/api/v1/accounts?is_deprecated=test",
+			ExpectedStatusCode: fiber.StatusBadRequest,
+			ExpectedResponse: GetAccountsExpectedResponse{
+				Accounts:   0,
+				Pagination: types.PaginationMetadata{},
+			},
+		},
 	}
 }

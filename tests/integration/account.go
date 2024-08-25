@@ -91,17 +91,22 @@ func getAccountsTestCases(t *testing.T) {
 	})
 
 	// Get accounts tests
-	for _, tc := range accountTestCases.GetAccountsTestCases() {
+	for _, tc := range accountTestCases.GetAccountsTestCases(t, as_testuser.User_id, as_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			response, ok := tc.ExpectedResponse.(accountTestCases.GetAccountsExpectedResponse)
 			if !ok {
 				t.Fatal("invalid GetAccountsExpectedResponse")
 			}
 
+			tok := as_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
 			accountTester.TestGetAccounts(
 				t2,
 				tc.Route,
-				as_token,
+				tok,
 				as_testuser.User_id,
 				tc.ExpectedStatusCode,
 				response,
