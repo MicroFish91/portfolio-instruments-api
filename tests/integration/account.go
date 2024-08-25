@@ -14,8 +14,10 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-var as_token string
-var as_testuser types.User
+var (
+	as_token    string
+	as_testuser types.User
+)
 
 func TestAccountService(t *testing.T) {
 	t.Parallel()
@@ -23,7 +25,8 @@ func TestAccountService(t *testing.T) {
 	t.Run("Setup", setup)
 	t.Run("POST://api/v1/accounts", createAccountTestCases)
 	t.Run("GET://api/v1/accounts", getAccountsTestCases)
-	t.Run("GET://api/v1/account/:id", getAccountTestCases)
+	t.Run("GET://api/v1/accounts/:id", getAccountTestCases)
+	t.Run("PUT://api/v1/accounts/:id", updateAccountTestCases)
 }
 
 func setup(t *testing.T) {
@@ -127,6 +130,26 @@ func getAccountTestCases(t *testing.T) {
 			accountTester.TestGetAccount(
 				t2,
 				tc.ParameterId,
+				tok,
+				as_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func updateAccountTestCases(t *testing.T) {
+	for _, tc := range accountTestCases.GetUpdateAccountTests(t, as_testuser.User_id, as_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := as_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			accountTester.TestUpdateAccount(
+				t2,
+				tc.ParameterId,
+				tc.Payload,
 				tok,
 				as_testuser.User_id,
 				tc.ExpectedStatusCode,

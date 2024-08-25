@@ -80,3 +80,10 @@ type GetAccountResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type UpdateAccountResponse struct {
+	Data struct {
+		Account Account `json:"account"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
