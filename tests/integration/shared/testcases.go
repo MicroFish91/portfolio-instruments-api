@@ -25,3 +25,11 @@ type PutTestCase struct {
 	Payload            any
 	ExpectedStatusCode int
 }
+
+type DeleteTestCase struct {
+	Title              string
+	Route              string
+	ParameterId        int
+	ReplacementToken   string
+	ExpectedStatusCode int
+}

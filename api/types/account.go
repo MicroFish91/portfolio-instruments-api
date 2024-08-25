@@ -87,3 +87,11 @@ type UpdateAccountResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type DeleteAccountResponse struct {
+	Data struct {
+		Message string  `json:"message"`
+		Account Account `json:"account"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

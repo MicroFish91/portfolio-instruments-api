@@ -10,6 +10,7 @@ import (
 	accountTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/account"
 	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/account"
 	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/auth"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -27,6 +28,8 @@ func TestAccountService(t *testing.T) {
 	t.Run("GET://api/v1/accounts", getAccountsTestCases)
 	t.Run("GET://api/v1/accounts/:id", getAccountTestCases)
 	t.Run("PUT://api/v1/accounts/:id", updateAccountTestCases)
+	t.Run("DEL://api/v1/accounts/:id", deleteAccountTestCases)
+	t.Run("Cleanup", asCleanup)
 }
 
 func setup(t *testing.T) {
@@ -156,4 +159,28 @@ func updateAccountTestCases(t *testing.T) {
 			)
 		})
 	}
+}
+
+func deleteAccountTestCases(t *testing.T) {
+	for _, tc := range accountTestCases.DeleteAccountTests(t, as_testuser.User_id, as_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := as_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			accountTester.TestDeleteAccount(
+				t2,
+				tc.ParameterId,
+				tok,
+				as_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func asCleanup(t *testing.T) {
+	route := fmt.Sprintf("/api/v1/users/%d", as_testuser.User_id)
+	userTester.TestDeleteUser(t, route, as_token, as_testuser.User_id, fiber.StatusOK)
 }
