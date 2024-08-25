@@ -23,6 +23,7 @@ func TestAccountService(t *testing.T) {
 	t.Run("Setup", setup)
 	t.Run("POST://api/v1/accounts", createAccountTestCases)
 	t.Run("GET://api/v1/accounts", getAccountsTestCases)
+	t.Run("GET://api/v1/account/:id", getAccountTestCases)
 }
 
 func setup(t *testing.T) {
@@ -110,6 +111,25 @@ func getAccountsTestCases(t *testing.T) {
 				as_testuser.User_id,
 				tc.ExpectedStatusCode,
 				response,
+			)
+		})
+	}
+}
+
+func getAccountTestCases(t *testing.T) {
+	for _, tc := range accountTestCases.GetAccountTests(t, as_testuser.User_id, as_testuser.Email) {
+		tok := as_token
+		if tc.ReplacementToken != "" {
+			tok = tc.ReplacementToken
+		}
+
+		t.Run(tc.Title, func(t2 *testing.T) {
+			accountTester.TestGetAccount(
+				t2,
+				tc.ParameterId,
+				tok,
+				as_testuser.User_id,
+				tc.ExpectedStatusCode,
 			)
 		})
 	}

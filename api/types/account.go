@@ -73,3 +73,10 @@ type GetAccountsResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type GetAccountResponse struct {
+	Data struct {
+		Account Account `json:"account"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
