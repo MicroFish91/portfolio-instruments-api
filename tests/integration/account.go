@@ -8,8 +8,8 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	accountTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/account"
-	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/services/account"
-	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/services/auth"
+	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/account"
+	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
