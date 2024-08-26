@@ -61,6 +61,8 @@ type GetUsersStoreOptions struct {
 	Page_size    int
 }
 
+// ---- User Response Types ----
+
 type GetMeResponse struct {
 	Data struct {
 		User     User     `json:"user"`

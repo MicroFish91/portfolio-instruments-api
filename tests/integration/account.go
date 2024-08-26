@@ -18,21 +18,24 @@ import (
 var (
 	as_token    string
 	as_testuser types.User
+	as_tsidx    int
+	as_instidx  int
+	as_depidx   int
 )
 
 func TestAccountService(t *testing.T) {
 	t.Parallel()
 
-	t.Run("Setup", setup)
-	t.Run("POST://api/v1/accounts", createAccountTestCases)
-	t.Run("GET://api/v1/accounts", getAccountsTestCases)
-	t.Run("GET://api/v1/accounts/:id", getAccountTestCases)
-	t.Run("PUT://api/v1/accounts/:id", updateAccountTestCases)
-	t.Run("DEL://api/v1/accounts/:id", deleteAccountTestCases)
-	t.Run("Cleanup", asCleanup)
+	t.Run("Setup", accountServiceSetup)
+	t.Run("POST://api/v1/accounts", createAccountTests)
+	t.Run("GET://api/v1/accounts", getAccountsTests)
+	t.Run("GET://api/v1/accounts/:id", getAccountTests)
+	t.Run("PUT://api/v1/accounts/:id", updateAccountTests)
+	t.Run("DEL://api/v1/accounts/:id", deleteAccountTests)
+	t.Run("Cleanup", accountServiceCleanup)
 }
 
-func setup(t *testing.T) {
+func accountServiceSetup(t *testing.T) {
 	email := utils.GetRotatingEmail()
 	password := "abcd1234"
 
@@ -59,7 +62,7 @@ func setup(t *testing.T) {
 	})
 }
 
-func createAccountTestCases(t *testing.T) {
+func createAccountTests(t *testing.T) {
 	for _, tc := range accountTestCases.GetCreateAccountTests(t, as_testuser.User_id, as_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := as_token
@@ -78,7 +81,7 @@ func createAccountTestCases(t *testing.T) {
 	}
 }
 
-func getAccountsTestCases(t *testing.T) {
+func getAccountsTests(t *testing.T) {
 	// Get accounts test setup
 	t.Run("Setup", func(t2 *testing.T) {
 		for i := 0; i < 25; i += 1 {
@@ -86,9 +89,9 @@ func getAccountsTestCases(t *testing.T) {
 				t2,
 				account.CreateAccountPayload{
 					Name:          fmt.Sprintf("Acc%d", i),
-					Tax_shelter:   utils.GetRotatingTaxShelter(),
-					Institution:   utils.GetRotatingInstitution(),
-					Is_deprecated: utils.GetRotatingDeprecation(),
+					Tax_shelter:   utils.GetRotatingTaxShelter(&as_tsidx),
+					Institution:   utils.GetRotatingInstitution(&as_instidx),
+					Is_deprecated: utils.GetRotatingDeprecation(&as_depidx),
 				},
 				as_token,
 				as_testuser.User_id,
@@ -122,7 +125,7 @@ func getAccountsTestCases(t *testing.T) {
 	}
 }
 
-func getAccountTestCases(t *testing.T) {
+func getAccountTests(t *testing.T) {
 	for _, tc := range accountTestCases.GetAccountTests(t, as_testuser.User_id, as_testuser.Email) {
 		tok := as_token
 		if tc.ReplacementToken != "" {
@@ -141,7 +144,7 @@ func getAccountTestCases(t *testing.T) {
 	}
 }
 
-func updateAccountTestCases(t *testing.T) {
+func updateAccountTests(t *testing.T) {
 	for _, tc := range accountTestCases.GetUpdateAccountTests(t, as_testuser.User_id, as_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := as_token
@@ -161,7 +164,7 @@ func updateAccountTestCases(t *testing.T) {
 	}
 }
 
-func deleteAccountTestCases(t *testing.T) {
+func deleteAccountTests(t *testing.T) {
 	for _, tc := range accountTestCases.DeleteAccountTests(t, as_testuser.User_id, as_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := as_token
@@ -180,7 +183,7 @@ func deleteAccountTestCases(t *testing.T) {
 	}
 }
 
-func asCleanup(t *testing.T) {
+func accountServiceCleanup(t *testing.T) {
 	route := fmt.Sprintf("/api/v1/users/%d", as_testuser.User_id)
 	userTester.TestDeleteUser(t, route, as_token, as_testuser.User_id, fiber.StatusOK)
 }

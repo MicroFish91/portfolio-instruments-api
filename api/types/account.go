@@ -59,6 +59,8 @@ type GetAccountsStoreOptions struct {
 	Page_size     int
 }
 
+// ---- Account Response Types ----
+
 type CreateAccountResponse struct {
 	Data struct {
 		Account Account `json:"account"`

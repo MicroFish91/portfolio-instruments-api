@@ -20,16 +20,16 @@ var password string = "abcd1234"
 func TestUserService(t *testing.T) {
 	t.Parallel()
 
-	t.Run("POST://api/v1/register", registerTestCases)
-	t.Run("POST://api/v1/login", loginTestCases)
-	t.Run("GET://api/v1/me", getMeTestCases)
-	t.Run("GET://api/v1/users/:id", getUserByIdTestCases)
-	t.Run("GET://api/v1/users/:id/settings", getSettingsTestCases)
-	t.Run("PUT://api/v1/users/:id/settings", updateSettingsTestCases)
-	t.Run("DEL://api/v1/users/:id", deleteUserTestCases)
+	t.Run("POST://api/v1/register", registerTests)
+	t.Run("POST://api/v1/login", loginTests)
+	t.Run("GET://api/v1/me", getMeTests)
+	t.Run("GET://api/v1/users/:id", getUserByIdTests)
+	t.Run("GET://api/v1/users/:id/settings", getSettingsTests)
+	t.Run("PUT://api/v1/users/:id/settings", updateSettingsTests)
+	t.Run("DEL://api/v1/users/:id", deleteUserTests)
 }
 
-func registerTestCases(t *testing.T) {
+func registerTests(t *testing.T) {
 	for _, tc := range userTestCases.GetRegisterTestCases(email, password) {
 		payload, ok := tc.Payload.(auth.RegisterPayload)
 		if !ok {
@@ -46,7 +46,7 @@ func registerTestCases(t *testing.T) {
 	}
 }
 
-func loginTestCases(t *testing.T) {
+func loginTests(t *testing.T) {
 	for _, tc := range userTestCases.GetLoginTestCases(email, password) {
 		payload, ok := tc.Payload.(auth.LoginPayload)
 		if !ok {
@@ -67,7 +67,7 @@ func loginTestCases(t *testing.T) {
 	}
 }
 
-func getMeTestCases(t *testing.T) {
+func getMeTests(t *testing.T) {
 	for _, tc := range userTestCases.GetMeTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := us_token
@@ -79,7 +79,7 @@ func getMeTestCases(t *testing.T) {
 	}
 }
 
-func getUserByIdTestCases(t *testing.T) {
+func getUserByIdTests(t *testing.T) {
 	for _, tc := range userTestCases.GetUserByIdTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := us_token
@@ -91,7 +91,7 @@ func getUserByIdTestCases(t *testing.T) {
 	}
 }
 
-func getSettingsTestCases(t *testing.T) {
+func getSettingsTests(t *testing.T) {
 	for _, tc := range userTestCases.GetSettingsTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := us_token
@@ -103,7 +103,7 @@ func getSettingsTestCases(t *testing.T) {
 	}
 }
 
-func updateSettingsTestCases(t *testing.T) {
+func updateSettingsTests(t *testing.T) {
 	for _, tc := range userTestCases.UpdateSettingsTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := us_token
@@ -115,7 +115,7 @@ func updateSettingsTestCases(t *testing.T) {
 	}
 }
 
-func deleteUserTestCases(t *testing.T) {
+func deleteUserTests(t *testing.T) {
 	for _, tc := range userTestCases.DeletUserTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := us_token

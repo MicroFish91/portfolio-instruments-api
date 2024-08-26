@@ -86,3 +86,12 @@ type GetHoldingsStoreOptions struct {
 	Current_page             int
 	Page_size                int
 }
+
+// ---- Holding Response Types ----
+
+type CreateHoldingResponse struct {
+	Data struct {
+		Holding Holding `json:"holding"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

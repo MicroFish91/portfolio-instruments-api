@@ -7,7 +7,8 @@ type AuthHandler interface {
 	Register(fiber.Ctx) error
 }
 
-// Responses
+// ---- Auth Response Types ----
+
 type RegisterResponse struct {
 	Data struct {
 		User     User     `json:"user"`
