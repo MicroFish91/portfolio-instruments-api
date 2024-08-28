@@ -25,7 +25,7 @@ func (h *HoldingHandlerImpl) GetHoldings(c fiber.Ctx) error {
 		c.Context(),
 		userPayload.User_id,
 		types.GetHoldingsStoreOptions{
-			Holding_ids:              queryPayload.Holding_ids,
+			Holding_ids:              queryPayload.Ids,
 			Ticker:                   queryPayload.Ticker,
 			Asset_category:           queryPayload.Asset_category,
 			Has_maturation_remaining: queryPayload.Has_maturation_remaining,

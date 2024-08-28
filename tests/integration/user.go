@@ -11,11 +11,13 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 )
 
-var us_token string
-var us_testuser types.User
+var (
+	us_token    string
+	us_testuser types.User
 
-var email string = utils.GetRotatingEmail()
-var password string = "abcd1234"
+	email    string = utils.GetRotatingEmail()
+	password string = "abcd1234"
+)
 
 func TestUserService(t *testing.T) {
 	t.Parallel()

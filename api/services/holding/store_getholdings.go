@@ -2,6 +2,7 @@ package holding
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -72,6 +73,9 @@ func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, opti
 	holdings, total_items, err := s.parseRowsIntoHoldings(rows)
 	if err != nil {
 		return nil, types.PaginationMetadata{}, err
+	}
+	if len(holdings) == 0 {
+		return nil, types.PaginationMetadata{}, errors.New("no rows in result set")
 	}
 
 	return holdings, types.PaginationMetadata{

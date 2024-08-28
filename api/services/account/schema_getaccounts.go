@@ -20,14 +20,9 @@ func (q GetAccountsQuery) Validate() error {
 		return err
 	}
 
-	err = validation.ValidateStruct(&q,
+	return validation.ValidateStruct(&q,
 		validation.Field(&q.Tax_shelter, validation.In(types.ValidTaxShelters...).Error("use a recognized tax shelter in all caps")),
 		validation.Field(&q.Institution, validation.Length(1, 64)),
 		validation.Field(&q.Is_deprecated, validation.In("true", "false")),
 	)
-	if err != nil {
-		return err
-	}
-
-	return nil
 }

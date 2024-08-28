@@ -6,7 +6,7 @@ import (
 )
 
 type GetHoldingsQuery struct {
-	Holding_ids              []int               `json:"holding_ids"`
+	Ids                      []int               `json:"ids"`
 	Ticker                   string              `json:"ticker"`
 	Asset_category           types.AssetCategory `json:"asset_category"`
 	Is_deprecated            string              `json:"is_deprecated"`
@@ -22,9 +22,9 @@ func (q GetHoldingsQuery) Validate() error {
 	}
 
 	return validation.ValidateStruct(&q,
-		validation.Field(&q.Holding_ids),
+		validation.Field(&q.Ids),
 		validation.Field(&q.Ticker, validation.Length(1, 32)),
-		validation.Field(&q.Asset_category),
+		validation.Field(&q.Asset_category, validation.In(types.ValidAssetCategories...).Error("use a recognized asset_category in all caps")),
 		validation.Field(&q.Is_deprecated, validation.In("true", "false")),
 		validation.Field(&q.Has_maturation_remaining, validation.In("true", "false")),
 	)

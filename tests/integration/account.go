@@ -18,9 +18,10 @@ import (
 var (
 	as_token    string
 	as_testuser types.User
-	as_tsidx    int
-	as_instidx  int
-	as_depidx   int
+
+	as_tsidx   int
+	as_instidx int
+	as_depidx  int
 )
 
 func TestAccountService(t *testing.T) {

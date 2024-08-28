@@ -7,7 +7,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-type AssetCategory string
+type AssetCategory = string
 
 const (
 	CASH        AssetCategory = "CASH"
@@ -92,6 +92,14 @@ type GetHoldingsStoreOptions struct {
 type CreateHoldingResponse struct {
 	Data struct {
 		Holding Holding `json:"holding"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
+type GetHoldingsResponse struct {
+	Data struct {
+		Holdings   []Holding          `json:"holdings"`
+		Pagination PaginationMetadata `json:"pagination"`
 	} `json:"data"`
 	Error string `json:"error"`
 }
