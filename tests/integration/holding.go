@@ -4,11 +4,9 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/holding"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	holdingTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/holding"
-	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/auth"
 	holdingTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/holding"
 	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
@@ -39,30 +37,7 @@ func TestHoldingService(t *testing.T) {
 }
 
 func holdingServiceSetup(t *testing.T) {
-	email := utils.GetRotatingEmail()
-	password := "abcd1234"
-
-	t.Run("Register", func(t2 *testing.T) {
-		authTester.TestRegister(
-			t2,
-			auth.RegisterPayload{
-				Email:    email,
-				Password: password,
-			},
-			fiber.StatusCreated,
-		)
-	})
-
-	t.Run("Login", func(t2 *testing.T) {
-		hs_testuser, hs_token = authTester.TestLogin(
-			t2,
-			auth.LoginPayload{
-				Email:    email,
-				Password: password,
-			},
-			fiber.StatusCreated,
-		)
-	})
+	hs_testuser, hs_token = newUserSetup(t)
 }
 
 func createHoldingTests(t *testing.T) {

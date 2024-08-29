@@ -5,11 +5,9 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/account"
-	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	accountTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/account"
 	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/account"
-	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/auth"
 	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
@@ -38,30 +36,7 @@ func TestAccountService(t *testing.T) {
 }
 
 func accountServiceSetup(t *testing.T) {
-	email := utils.GetRotatingEmail()
-	password := "abcd1234"
-
-	t.Run("Register", func(t2 *testing.T) {
-		authTester.TestRegister(
-			t2,
-			auth.RegisterPayload{
-				Email:    email,
-				Password: password,
-			},
-			fiber.StatusCreated,
-		)
-	})
-
-	t.Run("Login", func(t2 *testing.T) {
-		as_testuser, as_token = authTester.TestLogin(
-			t2,
-			auth.LoginPayload{
-				Email:    email,
-				Password: password,
-			},
-			fiber.StatusCreated,
-		)
-	})
+	as_testuser, as_token = newUserSetup(t)
 }
 
 func createAccountTests(t *testing.T) {
