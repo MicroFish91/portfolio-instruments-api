@@ -1,4 +1,4 @@
-package account
+package holding
 
 import (
 	"testing"
@@ -8,21 +8,21 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func DeleteAccountTests(t *testing.T, userId int, email string) []shared.DeleteTestCase {
+func GetHoldingTestCases(t *testing.T, holdId, userId int, email string) []shared.GetTestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.DeleteTestCase{
+	return []shared.GetTestCase{
 		{
 			Title:              "200",
-			ParameterId:        1,
+			ParameterId:        holdId,
 			ExpectedStatusCode: fiber.StatusOK,
 		},
 		{
 			Title:              "401",
-			ParameterId:        2,
+			ParameterId:        holdId,
 			ReplacementToken:   tok401,
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},

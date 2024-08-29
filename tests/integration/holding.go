@@ -18,6 +18,7 @@ var (
 	hs_token    string
 	hs_testuser types.User
 
+	holdId    int
 	hs_eridx  int
 	hs_depidx int
 	hs_incidx int
@@ -30,6 +31,7 @@ func TestHoldingService(t *testing.T) {
 	t.Run("Setup", holdingServiceSetup)
 	t.Run("POST://api/v1/holdings", createHoldingTests)
 	t.Run("GET://api/v1/holdings", getHoldingsTests)
+	t.Run("GET://api/v1/holdings/:id", getHoldingTests)
 }
 
 func holdingServiceSetup(t *testing.T) {
@@ -106,8 +108,8 @@ func getHoldingsTests(t *testing.T) {
 			)
 		}
 
-		// Create an asset with expired maturation date
-		holdingTester.TestCreateHolding(
+		// Create asset with an expired maturation date
+		holdId = holdingTester.TestCreateHolding(
 			t2,
 			holding.CreateHoldingPayload{
 				Name:              "Hold26",
@@ -141,6 +143,25 @@ func getHoldingsTests(t *testing.T) {
 				hs_testuser.User_id,
 				tc.ExpectedStatusCode,
 				response,
+			)
+		})
+	}
+}
+
+func getHoldingTests(t *testing.T) {
+	for _, tc := range holdingTestCases.GetHoldingTestCases(t, holdId, hs_testuser.User_id, hs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := hs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			holdingTester.TestGetHolding(
+				t2,
+				tc.ParameterId,
+				tok,
+				hs_testuser.User_id,
+				tc.ExpectedStatusCode,
 			)
 		})
 	}

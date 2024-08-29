@@ -28,7 +28,7 @@ func GetAccountTests(t *testing.T, userId int, email string) []shared.GetTestCas
 		},
 		{
 			Title:              "404",
-			ParameterId:        300,
+			ParameterId:        9999,
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 	}

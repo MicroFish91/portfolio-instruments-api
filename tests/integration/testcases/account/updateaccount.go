@@ -87,7 +87,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "404",
-			ParameterId: 300,
+			ParameterId: 9999,
 			Payload: account.UpdateAccountPayload{
 				Name:        "VAN037",
 				Tax_shelter: "TAXABLE",

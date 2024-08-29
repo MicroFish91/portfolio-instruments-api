@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateHolding(t *testing.T, payload any, token string, expectedUserId int, expectedStatusCode int) {
+func TestCreateHolding(t *testing.T, payload any, token string, expectedUserId int, expectedStatusCode int) int {
 	var createHoldingResponse types.CreateHoldingResponse
 	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v1/holdings", token, &payload, &createHoldingResponse)
 
@@ -36,7 +36,10 @@ func TestCreateHolding(t *testing.T, payload any, token string, expectedUserId i
 			},
 			createHoldingResponse.Data.Holding,
 		)
+		return createHoldingResponse.Data.Holding.Holding_id
 	default:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}
+
+	return 0
 }

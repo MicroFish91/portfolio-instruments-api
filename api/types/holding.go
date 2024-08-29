@@ -103,3 +103,10 @@ type GetHoldingsResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type GetHoldingResponse struct {
+	Data struct {
+		Holding Holding `json:"holding"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
