@@ -32,6 +32,7 @@ func TestHoldingService(t *testing.T) {
 	t.Run("POST://api/v1/holdings", createHoldingTests)
 	t.Run("GET://api/v1/holdings", getHoldingsTests)
 	t.Run("GET://api/v1/holdings/:id", getHoldingTests)
+	t.Run("PUT://api/v1/holdings/:id", updateHoldingTests)
 }
 
 func holdingServiceSetup(t *testing.T) {
@@ -62,7 +63,7 @@ func holdingServiceSetup(t *testing.T) {
 }
 
 func createHoldingTests(t *testing.T) {
-	for _, tc := range holdingTestCases.GetCreateHoldingTests(t, hs_testuser.User_id, hs_token) {
+	for _, tc := range holdingTestCases.GetCreateHoldingTestCases(t, hs_testuser.User_id, hs_token) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := hs_token
 			if tc.ReplacementToken != "" {
@@ -159,6 +160,26 @@ func getHoldingTests(t *testing.T) {
 			holdingTester.TestGetHolding(
 				t2,
 				tc.ParameterId,
+				tok,
+				hs_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func updateHoldingTests(t *testing.T) {
+	for _, tc := range holdingTestCases.GetUpdateHoldingTestCases(t, holdId, hs_testuser.User_id, hs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := hs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			holdingTester.TestUpdateHolding(
+				t2,
+				tc.ParameterId,
+				tc.Payload,
 				tok,
 				hs_testuser.User_id,
 				tc.ExpectedStatusCode,

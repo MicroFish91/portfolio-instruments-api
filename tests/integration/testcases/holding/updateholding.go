@@ -9,82 +9,91 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.PostTestCase {
+func GetUpdateHoldingTestCases(t *testing.T, holdingId int, userId int, email string) []shared.PutTestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.PostTestCase{
+	return []shared.PutTestCase{
 		// ---- 200 ----
 		{
-			Title: "200 Ticker",
-			Payload: holding.CreateHoldingPayload{
-				Name:              "Vanguard Total Stock Market Index Fund",
-				Ticker:            "VTSAX",
+			Title:       "200 Ticker",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
+				Name:              "Fidelity Total Market Index Fund",
+				Ticker:            "FSKAX",
 				Asset_category:    "TSM",
 				Expense_ratio_pct: 0.04,
 			},
-			ExpectedStatusCode: fiber.StatusCreated,
+			ExpectedStatusCode: fiber.StatusOK,
 		},
 		{
-			Title: "200 No Ticker",
-			Payload: holding.CreateHoldingPayload{
-				Name:           "Bank01",
+			Title:       "200 No Ticker",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
+				Name:           "Bank02",
 				Ticker:         "",
 				Asset_category: "CASH",
 			},
-			ExpectedStatusCode: fiber.StatusCreated,
+			ExpectedStatusCode: fiber.StatusOK,
 		},
 		{
-			Title: "200 Fixed Income",
-			Payload: holding.CreateHoldingPayload{
-				Name:              "9128285M8",
+			Title:       "200 Fixed Income",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
+				Name:              "9138285M8",
 				Asset_category:    "LTB",
 				Maturation_date:   "07/01/2054",
 				Interest_rate_pct: 4.6,
 			},
-			ExpectedStatusCode: fiber.StatusCreated,
+			ExpectedStatusCode: fiber.StatusOK,
 		},
 		{
-			Title: "200 Duplicate Deprecation",
-			Payload: holding.CreateHoldingPayload{
-				Name:              "Vanguard Total Stock Market Index Fund",
-				Ticker:            "VTSAX",
-				Asset_category:    "TSM",
+			Title:       "200 Is Deprecated",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
+				Name:              "Fidelity Small Cap Value Index Fund",
+				Ticker:            "FSSNAX",
+				Asset_category:    "DSCV",
 				Expense_ratio_pct: 0.04,
 				Is_deprecated:     true,
 			},
-			ExpectedStatusCode: fiber.StatusCreated,
+			ExpectedStatusCode: fiber.StatusOK,
 		},
 
-		// ---- 401, 409 ----
+		// ---- 400, 404 ----
 		{
 			Title:            "401",
+			ParameterId:      holdingId,
 			ReplacementToken: tok401,
-			Payload: holding.CreateHoldingPayload{
-				Name:              "Vanguard Total Stock Market Index Fund",
-				Ticker:            "VTSAX",
-				Asset_category:    "TSM",
+			Payload: holding.UpdateHoldingPayload{
+				Name:              "Fidelity Small Cap Value Index Fund",
+				Ticker:            "FSSNAX",
+				Asset_category:    "DSCV",
 				Expense_ratio_pct: 0.04,
+				Is_deprecated:     true,
 			},
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
 		{
-			Title: "409",
-			Payload: holding.CreateHoldingPayload{
-				Name:              "Vanguard Total Stock Market Index Fund",
-				Ticker:            "VTSAX",
-				Asset_category:    "TSM",
+			Title:       "404",
+			ParameterId: 9999,
+			Payload: holding.UpdateHoldingPayload{
+				Name:              "Fidelity Small Cap Value Index Fund",
+				Ticker:            "FSSNAX",
+				Asset_category:    "DSCV",
 				Expense_ratio_pct: 0.04,
+				Is_deprecated:     true,
 			},
-			ExpectedStatusCode: fiber.StatusConflict,
+			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 
 		// ---- 400 ----
 		{
-			Title: "400 No Name",
-			Payload: holding.CreateHoldingPayload{
+			Title:       "400 No Name",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
 				Name:              "",
 				Ticker:            "VTSAX",
 				Asset_category:    "TSM",
@@ -93,7 +102,8 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title: "400 Bad Name",
+			Title:       "400 Bad Name",
+			ParameterId: holdingId,
 			Payload: map[string]any{
 				"Name":              5,
 				"Ticker":            "VTSAX",
@@ -103,8 +113,9 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title: "400 No Category",
-			Payload: holding.CreateHoldingPayload{
+			Title:       "400 No Category",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
 				Name:              "Vanguard Total Stock Market Index Fund",
 				Ticker:            "VTSAX",
 				Asset_category:    "",
@@ -113,8 +124,9 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title: "400 Bad Category",
-			Payload: holding.CreateHoldingPayload{
+			Title:       "400 Bad Category",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
 				Name:              "Vanguard Total Stock Market Index Fund",
 				Ticker:            "VTSAX",
 				Asset_category:    "OIL",
@@ -123,7 +135,8 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title: "400 Bad Category 2",
+			Title:       "400 Bad Category 2",
+			ParameterId: holdingId,
 			Payload: map[string]any{
 				"Name":              "Vanguard Total Stock Market Index Fund",
 				"Ticker":            "VTSAX",
@@ -133,8 +146,9 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title: "400 Bad Expense Ratio 1",
-			Payload: holding.CreateHoldingPayload{
+			Title:       "400 Bad Expense Ratio 1",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
 				Name:              "Vanguard Total Stock Market Index Fund",
 				Ticker:            "VTSAX",
 				Asset_category:    "OIL",
@@ -143,7 +157,8 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title: "400 Bad Expense Ratio 2",
+			Title:       "400 Bad Expense Ratio 2",
+			ParameterId: holdingId,
 			Payload: map[string]any{
 				"Name":              "Vanguard Total Stock Market Index Fund",
 				"Ticker":            "VTSAX",
@@ -153,8 +168,9 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title: "400 Bad Maturation Date",
-			Payload: holding.CreateHoldingPayload{
+			Title:       "400 Bad Maturation Date",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
 				Name:            "9128285M9",
 				Asset_category:  "STB",
 				Maturation_date: "07/01/26",
@@ -162,8 +178,9 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title: "400 Bad Interest Rate",
-			Payload: holding.CreateHoldingPayload{
+			Title:       "400 Bad Interest Rate",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
 				Name:              "9128285M9",
 				Asset_category:    "STB",
 				Maturation_date:   "07/01/2026",

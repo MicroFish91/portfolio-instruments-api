@@ -72,6 +72,7 @@ type HoldingStore interface {
 	CreateHolding(context.Context, Holding) (Holding, error)
 	GetHoldings(ctx context.Context, userId int, options GetHoldingsStoreOptions) ([]Holding, PaginationMetadata, error)
 	GetHoldingById(ctx context.Context, userId, holdingId int) (Holding, error)
+	GetHoldingByName(ctx context.Context, name string, userId int) (Holding, error)
 	GetHoldingByTicker(ctx context.Context, ticker string, userId int) (Holding, error)
 	UpdateHolding(context.Context, Holding) (Holding, error)
 	DeleteHolding(ctx context.Context, userId, holdingId int) (Holding, error)
@@ -105,6 +106,13 @@ type GetHoldingsResponse struct {
 }
 
 type GetHoldingResponse struct {
+	Data struct {
+		Holding Holding `json:"holding"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
+type UpdateHoldingResponse struct {
 	Data struct {
 		Holding Holding `json:"holding"`
 	} `json:"data"`
