@@ -10,7 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestCreateAccount(t *testing.T, payload any, token string, expectedUserId int, expectedStatusCode int) {
+func TestCreateAccount(t *testing.T, payload any, token string, expectedUserId int, expectedStatusCode int) int {
 	var createAccountResponse types.CreateAccountResponse
 	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v1/accounts", token, &payload, &createAccountResponse)
 
@@ -34,7 +34,10 @@ func TestCreateAccount(t *testing.T, payload any, token string, expectedUserId i
 			},
 			createAccountResponse.Data.Account,
 		)
+		return createAccountResponse.Data.Account.Account_id
 	default:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}
+
+	return 0
 }

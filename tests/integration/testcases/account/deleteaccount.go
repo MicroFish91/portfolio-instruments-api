@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func DeleteAccountTests(t *testing.T, userId int, email string) []shared.DeleteTestCase {
+func DeleteAccountTests(t *testing.T, accountId int, userId int, email string) []shared.DeleteTestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
@@ -16,19 +16,19 @@ func DeleteAccountTests(t *testing.T, userId int, email string) []shared.DeleteT
 
 	return []shared.DeleteTestCase{
 		{
-			Title:              "200",
-			ParameterId:        1,
-			ExpectedStatusCode: fiber.StatusOK,
-		},
-		{
 			Title:              "401",
-			ParameterId:        2,
+			ParameterId:        accountId,
 			ReplacementToken:   tok401,
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
 		{
+			Title:              "200",
+			ParameterId:        accountId,
+			ExpectedStatusCode: fiber.StatusOK,
+		},
+		{
 			Title:              "404",
-			ParameterId:        9999,
+			ParameterId:        accountId,
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 	}

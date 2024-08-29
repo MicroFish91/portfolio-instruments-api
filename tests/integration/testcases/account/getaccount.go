@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAccountTests(t *testing.T, userId int, email string) []shared.GetTestCase {
+func GetAccountTests(t *testing.T, accountId int, userId int, email string) []shared.GetTestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
@@ -17,12 +17,12 @@ func GetAccountTests(t *testing.T, userId int, email string) []shared.GetTestCas
 	return []shared.GetTestCase{
 		{
 			Title:              "200",
-			ParameterId:        1,
+			ParameterId:        accountId,
 			ExpectedStatusCode: fiber.StatusOK,
 		},
 		{
 			Title:              "401",
-			ParameterId:        1,
+			ParameterId:        accountId,
 			ReplacementToken:   tok401,
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},

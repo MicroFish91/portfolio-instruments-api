@@ -9,7 +9,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutTestCase {
+func GetUpdateAccountTests(t *testing.T, accountId int, userId int, email string) []shared.PutTestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
@@ -19,7 +19,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		// ---- 200 ----
 		{
 			Title:       "200 Std",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.UpdateAccountPayload{
 				Name:        "VAN031",
 				Description: "Vanguard Taxable Brokerage",
@@ -30,7 +30,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "200 No Description",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.UpdateAccountPayload{
 				Name:          "VAN032",
 				Tax_shelter:   "TAXABLE",
@@ -41,7 +41,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "200 Tax Shelter",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.UpdateAccountPayload{
 				Name:        "VAN033",
 				Description: "Vanguard Taxable Brokerage",
@@ -52,7 +52,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "200 Institution",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.UpdateAccountPayload{
 				Name:        "VAN034",
 				Description: "Vanguard Taxable Brokerage",
@@ -63,7 +63,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "200 Is Deprecated",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.UpdateAccountPayload{
 				Name:          "VAN035",
 				Description:   "Vanguard Taxable Brokerage",
@@ -76,7 +76,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 
 		{
 			Title:       "401",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.UpdateAccountPayload{
 				Name:        "VAN036",
 				Tax_shelter: "TAXABLE",
@@ -99,7 +99,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		// ---- 400 ----
 		{
 			Title:       "400 No Name",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.UpdateAccountPayload{
 				Tax_shelter: "TAXABLE",
 				Institution: "Vanguard",
@@ -108,7 +108,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "400 Bad Name",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: map[string]any{
 				"Name":        1,
 				"Tax_shelter": "TAXABLE",
@@ -118,7 +118,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "400 No Tax Shelter",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.CreateAccountPayload{
 				Name:        "VAN009",
 				Tax_shelter: "",
@@ -128,7 +128,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "400 Wrong Tax Shelter 1",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.CreateAccountPayload{
 				Name:        "VAN010",
 				Tax_shelter: "NO_TAX",
@@ -138,7 +138,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "400 Wrong Tax Shelter 2",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: map[string]any{
 				"Name":        "VAN011",
 				"Tax_shelter": 5,
@@ -148,7 +148,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "400 No Institution 1",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: account.CreateAccountPayload{
 				Name:        "VAN012",
 				Tax_shelter: "TAXABLE",
@@ -157,7 +157,7 @@ func GetUpdateAccountTests(t *testing.T, userId int, email string) []shared.PutT
 		},
 		{
 			Title:       "400 No Institution 2",
-			ParameterId: 1,
+			ParameterId: accountId,
 			Payload: map[string]any{
 				"Name":        "VAN013",
 				"Tax_shelter": "TAXABLE",

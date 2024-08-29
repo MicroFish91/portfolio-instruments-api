@@ -19,6 +19,7 @@ var (
 	as_token    string
 	as_testuser types.User
 
+	accId      int
 	as_tsidx   int
 	as_instidx int
 	as_depidx  int
@@ -71,13 +72,16 @@ func createAccountTests(t *testing.T) {
 				tok = tc.ReplacementToken
 			}
 
-			accountTester.TestCreateAccount(
+			id := accountTester.TestCreateAccount(
 				t2,
 				tc.Payload,
 				tok,
 				as_testuser.User_id,
 				tc.ExpectedStatusCode,
 			)
+			if accId == 0 {
+				accId = id
+			}
 		})
 	}
 }
@@ -127,7 +131,7 @@ func getAccountsTests(t *testing.T) {
 }
 
 func getAccountTests(t *testing.T) {
-	for _, tc := range accountTestCases.GetAccountTests(t, as_testuser.User_id, as_testuser.Email) {
+	for _, tc := range accountTestCases.GetAccountTests(t, accId, as_testuser.User_id, as_testuser.Email) {
 		tok := as_token
 		if tc.ReplacementToken != "" {
 			tok = tc.ReplacementToken
@@ -146,7 +150,7 @@ func getAccountTests(t *testing.T) {
 }
 
 func updateAccountTests(t *testing.T) {
-	for _, tc := range accountTestCases.GetUpdateAccountTests(t, as_testuser.User_id, as_testuser.Email) {
+	for _, tc := range accountTestCases.GetUpdateAccountTests(t, accId, as_testuser.User_id, as_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := as_token
 			if tc.ReplacementToken != "" {
@@ -166,7 +170,7 @@ func updateAccountTests(t *testing.T) {
 }
 
 func deleteAccountTests(t *testing.T) {
-	for _, tc := range accountTestCases.DeleteAccountTests(t, as_testuser.User_id, as_testuser.Email) {
+	for _, tc := range accountTestCases.DeleteAccountTests(t, accId, as_testuser.User_id, as_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := as_token
 			if tc.ReplacementToken != "" {
