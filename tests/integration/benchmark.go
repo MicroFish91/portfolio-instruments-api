@@ -1,10 +1,11 @@
 package integration
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/benchmark"
+	benchmarkTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/benchmark"
 )
 
 var (
@@ -24,5 +25,20 @@ func benchmarkServiceSetup(t *testing.T) {
 }
 
 func createBenchmarkTests(t *testing.T) {
-	fmt.Println(bs_testuser, bs_token)
+	for _, tc := range benchmark.GetCreateBenchmarkTestCases(t, bs_testuser.User_id, bs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := bs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			benchmarkTester.TestCreateBenchmark(
+				t2,
+				tc.Payload,
+				tok,
+				bs_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
 }

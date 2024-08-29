@@ -50,3 +50,11 @@ type GetBenchmarksStoreOptions struct {
 	Current_page  int
 	Page_size     int
 }
+
+// ---- Benchmark Response Types ----
+type CreateBenchmarkResponse struct {
+	Data struct {
+		Benchmark Benchmark `json:"benchmark"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
