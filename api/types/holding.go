@@ -118,3 +118,11 @@ type UpdateHoldingResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type DeleteHoldingResponse struct {
+	Data struct {
+		Message string  `json:"message"`
+		Holding Holding `json:"holding"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

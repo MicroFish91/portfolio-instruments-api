@@ -189,6 +189,5 @@ func deleteAccountTests(t *testing.T) {
 }
 
 func accountServiceCleanup(t *testing.T) {
-	route := fmt.Sprintf("/api/v1/users/%d", as_testuser.User_id)
-	userTester.TestDeleteUser(t, route, as_token, as_testuser.User_id, fiber.StatusOK)
+	userTester.TestDeleteUser(t, "", as_token, as_testuser.User_id, fiber.StatusOK)
 }

@@ -33,7 +33,6 @@ func GetUpdateHoldingTestCases(t *testing.T, holdingId int, userId int, email st
 			ParameterId: holdingId,
 			Payload: holding.UpdateHoldingPayload{
 				Name:           "Bank02",
-				Ticker:         "",
 				Asset_category: "CASH",
 			},
 			ExpectedStatusCode: fiber.StatusOK,
@@ -62,7 +61,7 @@ func GetUpdateHoldingTestCases(t *testing.T, holdingId int, userId int, email st
 			ExpectedStatusCode: fiber.StatusOK,
 		},
 
-		// ---- 400, 404 ----
+		// ---- 400, 404, 409 ----
 		{
 			Title:            "401",
 			ParameterId:      holdingId,
@@ -72,7 +71,6 @@ func GetUpdateHoldingTestCases(t *testing.T, holdingId int, userId int, email st
 				Ticker:            "FSSNAX",
 				Asset_category:    "DSCV",
 				Expense_ratio_pct: 0.04,
-				Is_deprecated:     true,
 			},
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
@@ -84,9 +82,28 @@ func GetUpdateHoldingTestCases(t *testing.T, holdingId int, userId int, email st
 				Ticker:            "FSSNAX",
 				Asset_category:    "DSCV",
 				Expense_ratio_pct: 0.04,
-				Is_deprecated:     true,
 			},
 			ExpectedStatusCode: fiber.StatusNotFound,
+		},
+		{
+			Title:       "409 Ticker",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
+				Name:              "Fid Small Cap Value Index",
+				Ticker:            "VTSAX",
+				Asset_category:    "DSCV",
+				Expense_ratio_pct: 0.04,
+			},
+			ExpectedStatusCode: fiber.StatusConflict,
+		},
+		{
+			Title:       "409 Name",
+			ParameterId: holdingId,
+			Payload: holding.UpdateHoldingPayload{
+				Name:           "Bank01",
+				Asset_category: "CASH",
+			},
+			ExpectedStatusCode: fiber.StatusConflict,
 		},
 
 		// ---- 400 ----

@@ -10,6 +10,7 @@ import (
 	holdingTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/holding"
 	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/auth"
 	holdingTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/holding"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -33,6 +34,8 @@ func TestHoldingService(t *testing.T) {
 	t.Run("GET://api/v1/holdings", getHoldingsTests)
 	t.Run("GET://api/v1/holdings/:id", getHoldingTests)
 	t.Run("PUT://api/v1/holdings/:id", updateHoldingTests)
+	t.Run("DEL://api/v1/holdings/:id", deleteHoldingTests)
+	t.Run("Cleanup", holdingServiceCleanup)
 }
 
 func holdingServiceSetup(t *testing.T) {
@@ -186,4 +189,27 @@ func updateHoldingTests(t *testing.T) {
 			)
 		})
 	}
+}
+
+func deleteHoldingTests(t *testing.T) {
+	for _, tc := range holdingTestCases.GetDeleteHoldingTestCases(t, holdId, hs_testuser.User_id, hs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := hs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			holdingTester.TestDeleteHolding(
+				t2,
+				tc.ParameterId,
+				tok,
+				hs_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func holdingServiceCleanup(t *testing.T) {
+	userTester.TestDeleteUser(t, "", hs_token, hs_testuser.User_id, fiber.StatusOK)
 }
