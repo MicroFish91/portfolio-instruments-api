@@ -1,6 +1,7 @@
 package auth
 
 import (
+	"strings"
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
@@ -22,7 +23,7 @@ func TestLogin(t *testing.T, p auth.LoginPayload, expectedStatusCode int) (u typ
 			t,
 			types.User{
 				User_id:        loginResponse.Data.User.User_id,
-				Email:          p.Email,
+				Email:          strings.ToLower(p.Email),
 				User_role:      types.Default,
 				Last_logged_in: loginResponse.Data.User.Last_logged_in,
 				Created_at:     loginResponse.Data.User.Created_at,

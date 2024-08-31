@@ -1,6 +1,8 @@
 package user
 
 import (
+	"strings"
+
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
 	"github.com/gofiber/fiber/v3"
@@ -12,6 +14,14 @@ func GetLoginTestCases(email string, password string) []shared.PostTestCase {
 			Title: "201",
 			Payload: auth.LoginPayload{
 				Email:    email,
+				Password: password,
+			},
+			ExpectedStatusCode: fiber.StatusCreated,
+		},
+		{
+			Title: "201 Case Insensitive",
+			Payload: auth.LoginPayload{
+				Email:    strings.ToUpper(email[:1]) + email[1:],
 				Password: password,
 			},
 			ExpectedStatusCode: fiber.StatusCreated,
