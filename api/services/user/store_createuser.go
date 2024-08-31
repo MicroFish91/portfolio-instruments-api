@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -17,7 +18,7 @@ func (s *PostgresUserStore) CreateUser(ctx context.Context, u types.User) (types
 		(email, enc_password) 
 		VALUES ($1, $2)
 		RETURNING *`,
-		u.Email, u.Enc_password,
+		strings.ToLower(u.Email), u.Enc_password,
 	)
 
 	user, err := s.parseRowIntoUser(row)

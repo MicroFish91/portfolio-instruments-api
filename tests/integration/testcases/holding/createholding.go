@@ -73,7 +73,7 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 		{
 			Title: "409",
 			Payload: holding.CreateHoldingPayload{
-				Name:              "Vanguard Total Stock Market Index Fund",
+				Name:              "VanGuard Total STock MaRket Index Fund",
 				Ticker:            "VTSAX",
 				Asset_category:    "TSM",
 				Expense_ratio_pct: 0.04,

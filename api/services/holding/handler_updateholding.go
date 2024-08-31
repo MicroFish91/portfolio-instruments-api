@@ -30,7 +30,7 @@ func (h *HoldingHandlerImpl) UpdateHolding(c fiber.Ctx) error {
 	// Ensure only one unique "active" name per user
 	if !holdingPayload.Is_deprecated {
 		existingHolding, _ := h.store.GetHoldingByName(c.Context(), holdingPayload.Name, userPayload.User_id)
-		if existingHolding.Holding_id != 0 {
+		if existingHolding.Holding_id != 0 && existingHolding.Holding_id != holdingParams.Id {
 			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has holding with name "%s"`, existingHolding.Name))
 		}
 	}

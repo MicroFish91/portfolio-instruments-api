@@ -100,7 +100,7 @@ func GetUpdateHoldingTestCases(t *testing.T, holdingId int, userId int, email st
 			Title:       "409 Name",
 			ParameterId: holdingId,
 			Payload: holding.UpdateHoldingPayload{
-				Name:           "Bank01",
+				Name:           "baNk01",
 				Asset_category: "CASH",
 			},
 			ExpectedStatusCode: fiber.StatusConflict,

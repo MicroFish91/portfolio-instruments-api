@@ -95,6 +95,16 @@ func GetUpdateAccountTests(t *testing.T, accountId int, userId int, email string
 			},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
+		{
+			Title:       "409",
+			ParameterId: accountId,
+			Payload: account.UpdateAccountPayload{
+				Name:        "VaN002",
+				Tax_shelter: "TAXABLE",
+				Institution: "Vanguard",
+			},
+			ExpectedStatusCode: fiber.StatusConflict,
+		},
 
 		// ---- 400 ----
 		{

@@ -2,6 +2,7 @@ package benchmark
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -11,13 +12,15 @@ func (s *PostgresBenchmarkStore) GetBenchmarkByName(ctx context.Context, name st
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
+	namePattern := fmt.Sprintf("^%s$", name)
+
 	row := s.db.QueryRow(
 		c,
 		`SELECT * FROM benchmarks
 		WHERE user_id = $1
-		AND name = $2
+		AND name ~* $2
 		AND is_deprecated = false`,
-		userId, name,
+		userId, namePattern,
 	)
 
 	benchmark, err := s.parseRowIntoBenchmark(row)

@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -21,7 +22,7 @@ func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (t
 				users 
 			where 
 				email = $1`,
-		email,
+		strings.ToLower(email),
 	)
 
 	user, err := s.parseRowIntoUser(row)

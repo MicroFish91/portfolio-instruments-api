@@ -82,7 +82,7 @@ func GetCreateAccountTests(t *testing.T, userId int, email string) []shared.Post
 		{
 			Title: "409",
 			Payload: account.CreateAccountPayload{
-				Name:        "VAN001",
+				Name:        "vAn001",
 				Tax_shelter: "TAXABLE",
 				Institution: "Vanguard",
 			},

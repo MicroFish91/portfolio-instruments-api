@@ -26,6 +26,12 @@ func (h *AccountHandlerImpl) UpdateAccount(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid account params from request"))
 	}
 
+	// Verify name is unique
+	a, _ := h.store.GetAccountByName(c.Context(), accountPayload.Name, userPayload.User_id)
+	if a.Account_id != 0 && a.Account_id != accountParams.Id {
+		return utils.SendError(c, fiber.StatusConflict, errors.New("an account with the provided name already exists"))
+	}
+
 	account, err := h.store.UpdateAccount(c.Context(), types.Account{
 		Account_id:    accountParams.Id,
 		Name:          accountPayload.Name,

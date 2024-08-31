@@ -12,3 +12,6 @@ CREATE TABLE IF NOT EXISTS users (
   created_at timestamp DEFAULT current_timestamp,
   updated_at timestamp DEFAULT current_timestamp
 );
+
+-- Create a case-insensitive unique index on the `email` column
+CREATE UNIQUE INDEX unique_users_email ON users (LOWER(email));

@@ -2,6 +2,7 @@ package holding
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -11,6 +12,8 @@ func (s *PostgresHoldingStore) GetHoldingByName(ctx context.Context, name string
 	c, cancel := context.WithTimeout(ctx, time.Second*5)
 	defer cancel()
 
+	namePattern := fmt.Sprintf("^%s$", name)
+
 	row := s.db.QueryRow(
 		c,
 		`
@@ -19,11 +22,11 @@ func (s *PostgresHoldingStore) GetHoldingByName(ctx context.Context, name string
 			from
 				holdings
 			where
-				name = $1
+				name ~* $1
 				and user_id = $2
 				and is_deprecated = false
 		`,
-		name, userId,
+		namePattern, userId,
 	)
 
 	holding, err := s.parseRowIntoHolding(row)

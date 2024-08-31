@@ -130,7 +130,7 @@ func GetCreateBenchmarkTestCases(t *testing.T, userId int, email string) []share
 		{
 			Title: "409",
 			Payload: benchmark.CreateBenchmarkPayload{
-				Name: "Classic Bogleheads Portfolio",
+				Name: "claSsiC boglEheadS PortfOlio",
 				Asset_allocation: []types.AssetAllocationPct{
 					{
 						Category: "TSM",

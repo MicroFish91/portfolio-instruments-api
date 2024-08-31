@@ -1,6 +1,8 @@
 package user
 
 import (
+	"strings"
+
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
 	"github.com/gofiber/fiber/v3"
@@ -19,7 +21,7 @@ func GetRegisterTestCases(email string, password string) []shared.PostTestCase {
 		{
 			Title: "409",
 			Payload: auth.RegisterPayload{
-				Email:    email,
+				Email:    strings.ToUpper(email[:1]) + email[1:],
 				Password: password,
 			},
 			ExpectedStatusCode: fiber.StatusConflict,
