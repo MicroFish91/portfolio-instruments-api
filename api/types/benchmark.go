@@ -66,3 +66,10 @@ type GetBenchmarksResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type GetBenchmarkResponse struct {
+	Data struct {
+		Benchmark Benchmark `json:"benchmark"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

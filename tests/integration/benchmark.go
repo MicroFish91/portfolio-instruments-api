@@ -16,7 +16,8 @@ var (
 	bs_testuser types.User
 	bs_token    string
 
-	bs_depidx int
+	benchmarkId int
+	bs_depidx   int
 )
 
 func TestBenchmarkService(t *testing.T) {
@@ -24,7 +25,9 @@ func TestBenchmarkService(t *testing.T) {
 
 	t.Run("Setup", benchmarkServiceSetup)
 	t.Run("POST://api/v1/benchmarks", createBenchmarkTests)
-	t.Run("GET://api/v1/benchmarks", getBenchmarkTests)
+	t.Run("GET://api/v1/benchmarks", getBenchmarksTests)
+	t.Run("GET://api/v1/benchmarks/:id", getBenchmarkTests)
+
 }
 
 func benchmarkServiceSetup(t *testing.T) {
@@ -39,18 +42,21 @@ func createBenchmarkTests(t *testing.T) {
 				tok = tc.ReplacementToken
 			}
 
-			benchmarkTester.TestCreateBenchmark(
+			id := benchmarkTester.TestCreateBenchmark(
 				t2,
 				tc.Payload,
 				tok,
 				bs_testuser.User_id,
 				tc.ExpectedStatusCode,
 			)
+			if benchmarkId == 0 && id != 0 {
+				benchmarkId = id
+			}
 		})
 	}
 }
 
-func getBenchmarkTests(t *testing.T) {
+func getBenchmarksTests(t *testing.T) {
 	// Get benchmarks test setup
 	t.Run("Setup", func(t2 *testing.T) {
 		for i := 1; i <= 26; i += 1 {
@@ -81,7 +87,7 @@ func getBenchmarkTests(t *testing.T) {
 	})
 
 	// Get benchmarks tests
-	for _, tc := range benchmarkTestCases.GetBenchmarkTestCases(t, bs_testuser.User_id, bs_testuser.Email) {
+	for _, tc := range benchmarkTestCases.GetBenchmarksTestCases(t, bs_testuser.User_id, bs_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			response, ok := tc.ExpectedResponse.(benchmarkTestCases.GetBenchmarksExpectedResponse)
 			if !ok {
@@ -102,6 +108,24 @@ func getBenchmarkTests(t *testing.T) {
 				response,
 			)
 		})
+	}
+}
 
+func getBenchmarkTests(t *testing.T) {
+	for _, tc := range benchmarkTestCases.GetBenchmarkTestCases(t, benchmarkId, bs_testuser.User_id, bs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := bs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			benchmarkTester.TestGetBenchmark(
+				t2,
+				tc.ParameterId,
+				tok,
+				bs_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
 	}
 }

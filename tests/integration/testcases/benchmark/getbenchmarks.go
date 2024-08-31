@@ -14,7 +14,7 @@ type GetBenchmarksExpectedResponse struct {
 	Pagination types.PaginationMetadata
 }
 
-func GetBenchmarkTestCases(t *testing.T, userId int, email string) []shared.GetTestCase {
+func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.GetTestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
