@@ -134,5 +134,32 @@ func GetBenchmarkTestCases(t *testing.T, userId int, email string) []shared.GetT
 		},
 
 		// ---- 400 ----
+		{
+			Title:              "400 Ids",
+			Route:              "/api/v1/benchmarks?ids=eleven",
+			ExpectedStatusCode: fiber.StatusBadRequest,
+			ExpectedResponse: GetBenchmarksExpectedResponse{
+				Benchmarks: 0,
+				Pagination: types.PaginationMetadata{},
+			},
+		},
+		{
+			Title:              "400 Is Deprecated",
+			Route:              "/api/v1/benchmarks?is_deprecated=1",
+			ExpectedStatusCode: fiber.StatusBadRequest,
+			ExpectedResponse: GetBenchmarksExpectedResponse{
+				Benchmarks: 0,
+				Pagination: types.PaginationMetadata{},
+			},
+		},
+		{
+			Title:              "400 Combination",
+			Route:              "/api/v1/benchmarks?is_deprecated=true&ids=true",
+			ExpectedStatusCode: fiber.StatusBadRequest,
+			ExpectedResponse: GetBenchmarksExpectedResponse{
+				Benchmarks: 0,
+				Pagination: types.PaginationMetadata{},
+			},
+		},
 	}
 }
