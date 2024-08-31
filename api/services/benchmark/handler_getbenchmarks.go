@@ -25,7 +25,7 @@ func (h *BenchmarkHandlerImpl) GetBenchmarks(c fiber.Ctx) error {
 		c.Context(),
 		userPayload.User_id,
 		types.GetBenchmarksStoreOptions{
-			Benchmark_ids: queryPayload.Benchmark_ids,
+			Benchmark_ids: queryPayload.Ids,
 			Name:          queryPayload.Name,
 			Is_deprecated: queryPayload.Is_deprecated,
 			Current_page:  queryPayload.Current_page,

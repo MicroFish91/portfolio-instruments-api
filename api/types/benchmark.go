@@ -58,3 +58,11 @@ type CreateBenchmarkResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type GetBenchmarksResponse struct {
+	Data struct {
+		Benchmarks []Benchmark        `json:"benchmarks"`
+		Pagination PaginationMetadata `json:"pagination"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

@@ -2,6 +2,7 @@ package benchmark
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"time"
 
@@ -28,7 +29,8 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 	pgxb.AddQueryWithPositionals("WHERE user_id = $x", []any{userId})
 
 	if options.Name != "" {
-		pgxb.AddQueryWithPositionals("AND name ~* $x", []any{options.Name})
+		pattern := fmt.Sprintf("^%s$", options.Name)
+		pgxb.AddQueryWithPositionals("AND name ~* $x", []any{pattern})
 	}
 
 	if options.Is_deprecated != "" {
@@ -62,6 +64,9 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 	benchmarks, total_items, err := s.parseRowsIntoBenchmarks(rows)
 	if err != nil {
 		return nil, types.PaginationMetadata{}, err
+	}
+	if len(benchmarks) == 0 {
+		return nil, types.PaginationMetadata{}, errors.New("no rows in result set")
 	}
 
 	return benchmarks, types.PaginationMetadata{

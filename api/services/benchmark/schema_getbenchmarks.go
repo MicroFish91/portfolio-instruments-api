@@ -6,7 +6,7 @@ import (
 )
 
 type GetBenchmarksQuery struct {
-	Benchmark_ids []int  `json:"benchmark_ids"`
+	Ids           []int  `json:"ids"`
 	Name          string `json:"name"`
 	Is_deprecated string `json:"is_deprecated"`
 
@@ -20,7 +20,7 @@ func (q GetBenchmarksQuery) Validate() error {
 	}
 
 	return validation.ValidateStruct(&q,
-		validation.Field(&q.Benchmark_ids),
+		validation.Field(&q.Ids),
 		validation.Field(&q.Name, validation.Length(1, 64)),
 		validation.Field(&q.Is_deprecated, validation.In("true", "false")),
 	)
