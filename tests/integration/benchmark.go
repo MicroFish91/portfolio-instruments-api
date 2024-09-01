@@ -28,6 +28,7 @@ func TestBenchmarkService(t *testing.T) {
 	t.Run("GET://api/v1/benchmarks", getBenchmarksTests)
 	t.Run("GET://api/v1/benchmarks/:id", getBenchmarkTests)
 	t.Run("PUT://api/v1/benchmarks/:id", updateBenchmarkTests)
+	t.Run("DEL://api/v1/benchmarks/:id", deleteBenchmarkTests)
 }
 
 func benchmarkServiceSetup(t *testing.T) {
@@ -142,6 +143,25 @@ func updateBenchmarkTests(t *testing.T) {
 				t2,
 				tc.ParameterId,
 				tc.Payload,
+				tok,
+				bs_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func deleteBenchmarkTests(t *testing.T) {
+	for _, tc := range benchmarkTestCases.DeleteBenchmarkTestCases(t, benchmarkId, bs_testuser.User_id, bs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := bs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			benchmarkTester.TestDeleteBenchmark(
+				t2,
+				tc.ParameterId,
 				tok,
 				bs_testuser.User_id,
 				tc.ExpectedStatusCode,

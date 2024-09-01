@@ -80,3 +80,11 @@ type UpdateBenchmarkResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type DeleteBenchmarkResponse struct {
+	Data struct {
+		Message   string    `json:"message"`
+		Benchmark Benchmark `json:"benchmark"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
