@@ -27,7 +27,7 @@ func TestBenchmarkService(t *testing.T) {
 	t.Run("POST://api/v1/benchmarks", createBenchmarkTests)
 	t.Run("GET://api/v1/benchmarks", getBenchmarksTests)
 	t.Run("GET://api/v1/benchmarks/:id", getBenchmarkTests)
-
+	t.Run("PUT://api/v1/benchmarks/:id", updateBenchmarkTests)
 }
 
 func benchmarkServiceSetup(t *testing.T) {
@@ -122,6 +122,26 @@ func getBenchmarkTests(t *testing.T) {
 			benchmarkTester.TestGetBenchmark(
 				t2,
 				tc.ParameterId,
+				tok,
+				bs_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func updateBenchmarkTests(t *testing.T) {
+	for _, tc := range benchmarkTestCases.UpdateBenchmarkTestCases(t, benchmarkId, bs_testuser.User_id, bs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := bs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			benchmarkTester.TestUpdateBenchmark(
+				t2,
+				tc.ParameterId,
+				tc.Payload,
 				tok,
 				bs_testuser.User_id,
 				tc.ExpectedStatusCode,

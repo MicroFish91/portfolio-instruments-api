@@ -26,6 +26,12 @@ func (h *BenchmarkHandlerImpl) UpdateBenchmark(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid benchmark params from request"))
 	}
 
+	// Ensure no duplicate benchmarks per user
+	b, _ := h.benchmarkStore.GetBenchmarkByName(c.Context(), benchmarkPayload.Name, userPayload.User_id)
+	if b.Benchmark_id != 0 && b.Benchmark_id != benchmarkParams.Id {
+		return utils.SendError(c, fiber.StatusConflict, errors.New("benchmark with the given name already exists for the user"))
+	}
+
 	benchmark, err := h.benchmarkStore.UpdateBenchmark(c.Context(), types.Benchmark{
 		Benchmark_id:     benchmarkParams.Id,
 		Name:             benchmarkPayload.Name,
