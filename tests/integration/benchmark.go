@@ -8,6 +8,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	benchmarkTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/benchmark"
 	benchmarkTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/benchmark"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -29,6 +30,7 @@ func TestBenchmarkService(t *testing.T) {
 	t.Run("GET://api/v1/benchmarks/:id", getBenchmarkTests)
 	t.Run("PUT://api/v1/benchmarks/:id", updateBenchmarkTests)
 	t.Run("DEL://api/v1/benchmarks/:id", deleteBenchmarkTests)
+	t.Run("Cleanup", benchmarkServiceCleanup)
 }
 
 func benchmarkServiceSetup(t *testing.T) {
@@ -168,4 +170,8 @@ func deleteBenchmarkTests(t *testing.T) {
 			)
 		})
 	}
+}
+
+func benchmarkServiceCleanup(t *testing.T) {
+	userTester.TestDeleteUser(t, "", bs_token, bs_testuser.User_id, fiber.StatusOK)
 }
