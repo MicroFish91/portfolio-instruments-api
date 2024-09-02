@@ -22,8 +22,6 @@ var (
 )
 
 func TestBenchmarkService(t *testing.T) {
-	t.Parallel()
-
 	t.Run("Setup", benchmarkServiceSetup)
 	t.Run("POST://api/v1/benchmarks", createBenchmarkTests)
 	t.Run("GET://api/v1/benchmarks", getBenchmarksTests)

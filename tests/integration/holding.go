@@ -25,8 +25,6 @@ var (
 )
 
 func TestHoldingService(t *testing.T) {
-	t.Parallel()
-
 	t.Run("Setup", holdingServiceSetup)
 	t.Run("POST://api/v1/holdings", createHoldingTests)
 	t.Run("GET://api/v1/holdings", getHoldingsTests)

@@ -20,8 +20,6 @@ var (
 )
 
 func TestUserService(t *testing.T) {
-	t.Parallel()
-
 	t.Run("POST://api/v1/register", registerTests)
 	t.Run("POST://api/v1/login", loginTests)
 	t.Run("GET://api/v1/me", getMeTests)

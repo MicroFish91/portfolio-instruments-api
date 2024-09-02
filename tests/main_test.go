@@ -24,5 +24,6 @@ func TestApi(t *testing.T) {
 		t.Run("Benchmarks", integration.TestBenchmarkService)
 		t.Run("Accounts", integration.TestAccountService)
 		t.Run("Holdings", integration.TestHoldingService)
+		t.Run("Snapshots", integration.TestSnapshotService)
 	})
 }

@@ -24,8 +24,6 @@ var (
 )
 
 func TestAccountService(t *testing.T) {
-	t.Parallel()
-
 	t.Run("Setup", accountServiceSetup)
 	t.Run("POST://api/v1/accounts", createAccountTests)
 	t.Run("GET://api/v1/accounts", getAccountsTests)
