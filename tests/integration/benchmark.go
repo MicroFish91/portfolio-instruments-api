@@ -32,7 +32,7 @@ func TestBenchmarkService(t *testing.T) {
 }
 
 func benchmarkServiceSetup(t *testing.T) {
-	bs_testuser, bs_token = newUserSetup(t)
+	bs_testuser, bs_token = NewUserSetup(t)
 }
 
 func createBenchmarkTests(t *testing.T) {

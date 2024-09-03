@@ -34,7 +34,7 @@ func TestAccountService(t *testing.T) {
 }
 
 func accountServiceSetup(t *testing.T) {
-	as_testuser, as_token = newUserSetup(t)
+	as_testuser, as_token = NewUserSetup(t)
 }
 
 func createAccountTests(t *testing.T) {

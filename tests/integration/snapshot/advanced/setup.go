@@ -1,4 +1,4 @@
-package snapshot
+package advanced
 
 import (
 	"fmt"
@@ -15,13 +15,8 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-// Create snapshots
-func CreateSnapshot(t *testing.T) {
-	//
-}
-
 // Create benchmark
-func CreateAdvancedSnapshotBenchmark(t *testing.T, token string, userId int) int {
+func createAdvancedSnapshotBenchmark(t *testing.T, token string, userId int) int {
 	var id int
 
 	t.Run("Benchmark", func(t2 *testing.T) {
@@ -63,11 +58,11 @@ func CreateAdvancedSnapshotBenchmark(t *testing.T, token string, userId int) int
 }
 
 // Create accounts
-func CreateAdvancedSnapshotAccounts(t *testing.T, token string, userId int) []int {
+func createAdvancedSnapshotAccounts(t *testing.T, token string, userId int) []int {
 	var i = 1
 	var ids []int
 
-	for _, institution := range []string{"Vanguard", "Fidelity", "Schwab", "Ameritrade"} {
+	for _, institution := range []string{"Vanguard", "Fidelity", "Schwab"} {
 		for _, ts := range []string{"TAXABLE", "ROTH", "TRADITIONAL"} {
 			name := fmt.Sprintf("Account%d", i)
 
@@ -170,7 +165,7 @@ var assets = []struct {
 	},
 }
 
-func CreateAdvancedSnapshotHoldings(t *testing.T, token string, userId int) []int {
+func createAdvancedSnapshotHoldings(t *testing.T, token string, userId int) []int {
 	var i = 1
 	var ids []int
 

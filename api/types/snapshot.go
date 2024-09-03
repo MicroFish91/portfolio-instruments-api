@@ -99,3 +99,12 @@ type GetGroupByMaturationDateStoreOptions struct {
 type GetSnapshotTotalStoreOptions struct {
 	Omit_skip_reb bool
 }
+
+// ---- Snapshot Response Types ----
+type CreateSnapshotResponse struct {
+	Data struct {
+		Snapshot        Snapshot        `json:"snapshot"`
+		Snapshot_values []SnapshotValue `json:"snapshot_values"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

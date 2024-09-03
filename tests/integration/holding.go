@@ -35,7 +35,7 @@ func TestHoldingService(t *testing.T) {
 }
 
 func holdingServiceSetup(t *testing.T) {
-	hs_testuser, hs_token = newUserSetup(t)
+	hs_testuser, hs_token = NewUserSetup(t)
 }
 
 func createHoldingTests(t *testing.T) {

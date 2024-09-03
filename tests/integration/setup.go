@@ -10,7 +10,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func newUserSetup(t *testing.T) (u types.User, tok string) {
+func NewUserSetup(t *testing.T) (u types.User, tok string) {
 	email := utils.GetRotatingEmail()
 	password := "abcd1234"
 
