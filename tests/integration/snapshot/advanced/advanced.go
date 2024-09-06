@@ -23,6 +23,7 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("Setup", advancedSnapshotSetup)
 	t.Run("POST://api/v1/snapshots", createSnapshotTest)
 	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
+	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_NAME", getSnapshotByAccountNameTest)
 }
 
 func advancedSnapshotSetup(t *testing.T) {
@@ -61,6 +62,24 @@ func getSnapshotTest(t *testing.T) {
 	expected.HoldingIds = ss_adv_holdingids
 
 	snapshotTester.TestGetSnapshot(
+		t,
+		ss_adv_snapid,
+		ss_adv_token,
+		expected,
+		ss_adv_testuser.User_id,
+		tc.ExpectedStatusCode,
+	)
+}
+
+func getSnapshotByAccountNameTest(t *testing.T) {
+	tc := advancedSnapshotTestCases.GetAdvancedSnapshotByAccountsTestCase(t)
+
+	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotByAccountResponse)
+	if !ok {
+		t.Fatal("invalid ExpectedGetSnapshotResponse")
+	}
+
+	snapshotTester.TestGetSnapshotByAccount(
 		t,
 		ss_adv_snapid,
 		ss_adv_token,

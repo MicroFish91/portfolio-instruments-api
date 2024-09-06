@@ -10,7 +10,7 @@ import (
 
 func GetAdvancedSnapshotTestCase(*testing.T) shared.GetTestCase {
 	return shared.GetTestCase{
-		Title: "201",
+		Title: "200",
 		ExpectedResponse: snapshot.ExpectedGetSnapshotResponse{
 			Total:         AdvancedSnapshotTotal,
 			WeightedErPct: AdvancedSnapshotExpenseRatio,
