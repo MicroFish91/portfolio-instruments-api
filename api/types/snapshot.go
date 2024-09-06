@@ -108,3 +108,39 @@ type CreateSnapshotResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type GetSnapshotResponse struct {
+	Data struct {
+		Snapshot        Snapshot        `json:"snapshot"`
+		Snapshot_values []SnapshotValue `json:"snapshot_values"`
+		Accounts        []Account       `json:"accounts"`
+		Holdings        []Holding       `json:"holdings"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
+type GetSnapshotAccountsResponse struct {
+	Data struct {
+		Accounts_grouped ResourcesGrouped `json:"accounts_grouped"`
+		Field_type       string           `json:"field_type"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
+type GetSnapshotHoldingsResponse struct {
+	Data struct {
+		Holdings_grouped ResourcesGrouped `json:"holdings_grouped"`
+		Field_type       string           `json:"field_type"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
+type GetSnapshotMaturationDateResponse struct {
+	Data struct {
+		Resources        []MaturationDateResource `json:"resources"`
+		Field_type       string                   `json:"field_type"`
+		Maturation_start string                   `json:"maturation_start"`
+		Maturation_end   string                   `json:"maturation_end"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

@@ -21,7 +21,8 @@ var (
 
 func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("Setup", advancedSnapshotSetup)
-	t.Run("POST://api/v1/snapshots", createAdvancedSnapshotTests)
+	t.Run("POST://api/v1/snapshots", createSnapshotTest)
+	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
 }
 
 func advancedSnapshotSetup(t *testing.T) {
@@ -31,7 +32,7 @@ func advancedSnapshotSetup(t *testing.T) {
 	ss_adv_holdingids = createAdvancedSnapshotHoldings(t, ss_adv_token, ss_adv_testuser.User_id)
 }
 
-func createAdvancedSnapshotTests(t *testing.T) {
+func createSnapshotTest(t *testing.T) {
 	tc := advancedSnapshotTestCases.GetCreateSnapshotAdvancedTestCase(t, ss_adv_benchmarkid, ss_adv_accountids, ss_adv_holdingids)
 
 	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedCreateSnapshotResponse)
@@ -42,6 +43,26 @@ func createAdvancedSnapshotTests(t *testing.T) {
 	ss_adv_snapid, _ = snapshotTester.TestCreateSnapshot(
 		t,
 		tc.Payload,
+		ss_adv_token,
+		expected,
+		ss_adv_testuser.User_id,
+		tc.ExpectedStatusCode,
+	)
+}
+
+func getSnapshotTest(t *testing.T) {
+	tc := advancedSnapshotTestCases.GetAdvancedSnapshotTestCase(t)
+
+	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotResponse)
+	if !ok {
+		t.Fatal("invalid ExpectedGetSnapshotResponse")
+	}
+	expected.AccountIds = ss_adv_accountids
+	expected.HoldingIds = ss_adv_holdingids
+
+	snapshotTester.TestGetSnapshot(
+		t,
+		ss_adv_snapid,
 		ss_adv_token,
 		expected,
 		ss_adv_testuser.User_id,

@@ -1,4 +1,4 @@
-package snapshot
+package advanced
 
 import (
 	"testing"
@@ -11,6 +11,9 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
+var AdvancedSnapshotTotal = 507108.10
+var AdvancedSnapshotExpenseRatio = 0.389
+
 func GetCreateSnapshotAdvancedTestCase(t *testing.T, benchmarkId int, accountIds []int, holdingIds []int) shared.PostTestCase {
 	if len(accountIds) != 9 {
 		t.Fatal("unexpected accountId length for creating advanced snapshot")
@@ -20,7 +23,7 @@ func GetCreateSnapshotAdvancedTestCase(t *testing.T, benchmarkId int, accountIds
 	}
 
 	return shared.PostTestCase{
-		Title: "200",
+		Title: "201",
 		Payload: snapshot.CreateSnapshotPayload{
 			Snap_date: utils.Calc_target_date(0, -3),
 			Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
@@ -126,8 +129,8 @@ func GetCreateSnapshotAdvancedTestCase(t *testing.T, benchmarkId int, accountIds
 			Benchmark_id: benchmarkId,
 		},
 		ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
-			Total:         507108.10,
-			WeightedErPct: 0.389,
+			Total:         AdvancedSnapshotTotal,
+			WeightedErPct: AdvancedSnapshotExpenseRatio,
 		},
 		ExpectedStatusCode: fiber.StatusCreated,
 	}

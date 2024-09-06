@@ -40,6 +40,10 @@
 // 13
 // expense_ratio: 0,
 
+// asset_category
+// maturation_date
+
+
 const assets: { Total: number, holdingER: number, Skip: boolean }[] = [
     // 0
     { Total: 10341.01, holdingER: 0, Skip: false },
