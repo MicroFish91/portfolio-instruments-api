@@ -65,7 +65,7 @@ func TestCreateSnapshot(t *testing.T, payload any, token string, expectedRespons
 			sv_ids = append(sv_ids, createSnapshotResponse.Data.Snapshot_values[i].Snap_val_id)
 		}
 
-		return createSnapshotResponse.Data.Snapshot.Snap_id, svIds
+		return createSnapshotResponse.Data.Snapshot.Snap_id, sv_ids
 	default:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}

@@ -13,16 +13,14 @@ type RegisterResponse struct {
 	Data struct {
 		User     User     `json:"user"`
 		Settings Settings `json:"settings"`
-		Status   string   `json:"status"`
 	} `json:"data"`
-	Error *string `json:"error"`
+	Error string `json:"error"`
 }
 
 type LoginResponse struct {
 	Data struct {
-		Token  string `json:"token"`
-		User   User   `json:"user"`
-		Status string `json:"status"`
+		Token string `json:"token"`
+		User  User   `json:"user"`
 	} `json:"data"`
-	Error *string `json:"error"`
+	Error string `json:"error"`
 }
