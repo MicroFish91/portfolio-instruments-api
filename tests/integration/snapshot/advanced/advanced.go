@@ -25,6 +25,7 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_NAME", getSnapshotByAccountNameTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_INSTITUTION", getSnapshotByInstitutionTest)
+	t.Run("GET://api/v1/snapshots/:id?group_by=TAX_SHELTER", getSnapshotByTaxShelter)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
 }
 
@@ -118,6 +119,24 @@ func getSnapshotByInstitutionTest(t *testing.T) {
 	}
 
 	snapshotTester.TestGetSnapshotByInstitution(
+		t,
+		ss_adv_snapid,
+		ss_adv_token,
+		expected,
+		ss_adv_testuser.User_id,
+		tc.ExpectedStatusCode,
+	)
+}
+
+func getSnapshotByTaxShelter(t *testing.T) {
+	tc := advancedSnapshotTestCases.GetAdvancedSnapshotByTaxShelterTestCase(t)
+
+	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotByTaxShelterResponse)
+	if !ok {
+		t.Fatal("invalid ExpectedGetSnapshotByTaxShelterResponse")
+	}
+
+	snapshotTester.TestGetSnapshotByTaxShelter(
 		t,
 		ss_adv_snapid,
 		ss_adv_token,
