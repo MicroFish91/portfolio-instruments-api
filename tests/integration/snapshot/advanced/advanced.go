@@ -24,6 +24,7 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("POST://api/v1/snapshots", createSnapshotTest)
 	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_NAME", getSnapshotByAccountNameTest)
+	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_INSTITUTION", getSnapshotByInstitutionTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
 }
 
@@ -99,6 +100,24 @@ func getSnapshotByAssetCategoryTest(t *testing.T) {
 	}
 
 	snapshotTester.TestGetSnapshotByAssetCategory(
+		t,
+		ss_adv_snapid,
+		ss_adv_token,
+		expected,
+		ss_adv_testuser.User_id,
+		tc.ExpectedStatusCode,
+	)
+}
+
+func getSnapshotByInstitutionTest(t *testing.T) {
+	tc := advancedSnapshotTestCases.GetAdvancedSnapshotByInstitutionTestCase(t)
+
+	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotByInstitutionResponse)
+	if !ok {
+		t.Fatal("invalid ExpectedGetSnapshotByInstitutionResponse")
+	}
+
+	snapshotTester.TestGetSnapshotByInstitution(
 		t,
 		ss_adv_snapid,
 		ss_adv_token,
