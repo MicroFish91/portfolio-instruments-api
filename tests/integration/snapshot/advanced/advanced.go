@@ -27,6 +27,7 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_INSTITUTION", getSnapshotByInstitutionTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=TAX_SHELTER", getSnapshotByTaxShelter)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
+	t.Run("GET://api/v1/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDate)
 }
 
 func advancedSnapshotSetup(t *testing.T) {
@@ -144,4 +145,24 @@ func getSnapshotByTaxShelter(t *testing.T) {
 		ss_adv_testuser.User_id,
 		tc.ExpectedStatusCode,
 	)
+}
+
+func getSnapshotByMaturationDate(t *testing.T) {
+	for _, tc := range advancedSnapshotTestCases.GetAdvancedSnapshotByMaturationDateTestCases(t) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotByMaturationDateResponse)
+			if !ok {
+				t2.Fatal("invalid ExpectedGetSnapshotByMaturationDateResponse")
+			}
+
+			snapshotTester.TestGetSnapshotByMaturationDate(
+				t2,
+				ss_adv_snapid,
+				ss_adv_token,
+				expected,
+				ss_adv_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
 }
