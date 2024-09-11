@@ -28,6 +28,9 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v1/snapshots/:id?group_by=TAX_SHELTER", getSnapshotByTaxShelter)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDate)
+	// Add Update
+	// Delete
+	// Delete user
 }
 
 func advancedSnapshotSetup(t *testing.T) {

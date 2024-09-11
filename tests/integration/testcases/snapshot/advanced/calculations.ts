@@ -108,15 +108,15 @@ const assets: { holdingName: string, maturationDate?: string, total: number, tax
 ];
 
 // Back of the envelope calculations for computing the different `Advanced Snapshot` test values
-// console.log(getSnapshotTotalSummary());
-// console.log(parseSnapshotWithGroupByKey("accountName"));
-// console.log(parseSnapshotWithGroupByKey("assetCategory"));
-// console.log(parseSnapshotWithGroupByKey("institution"));
-// console.log(parseSnapshotWithGroupByKey("taxShelter"));
+console.log(getSnapshotTotalSummary());
+console.log(parseSnapshotWithGroupByKey("accountName"));
+console.log(parseSnapshotWithGroupByKey("assetCategory"));
+console.log(parseSnapshotWithGroupByKey("institution"));
+console.log(parseSnapshotWithGroupByKey("taxShelter"));
 
-// console.log("Maturation Dates Filtering...");
-// console.log(getSnapshotByMaturationDateRange(undefined, undefined));
-// console.log(getSnapshotByMaturationDateRange("01/01/2028", undefined));
+console.log("Maturation Dates Filtering...");
+console.log(getSnapshotByMaturationDateRange(undefined, undefined));
+console.log(getSnapshotByMaturationDateRange("01/01/2028", undefined));
 console.log(getSnapshotByMaturationDateRange(undefined, "08/01/2011"));
 
 function getSnapshotTotalSummary(): { sum: number, er: number } {
