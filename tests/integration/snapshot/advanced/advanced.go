@@ -1,12 +1,16 @@
 package advanced
 
 import (
+	"math"
 	"testing"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
 	advancedSnapshotTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshot/advanced"
 	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	snapshotValueTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshotvalue"
+	"github.com/gofiber/fiber/v3"
 )
 
 var (
@@ -16,6 +20,7 @@ var (
 	ss_adv_benchmarkid int
 	ss_adv_accountids  []int
 	ss_adv_holdingids  []int
+	ss_adv_svids       []int
 	ss_adv_snapid      int
 )
 
@@ -25,10 +30,10 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_NAME", getSnapshotByAccountNameTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_INSTITUTION", getSnapshotByInstitutionTest)
-	t.Run("GET://api/v1/snapshots/:id?group_by=TAX_SHELTER", getSnapshotByTaxShelter)
+	t.Run("GET://api/v1/snapshots/:id?group_by=TAX_SHELTER", getSnapshotByTaxShelterTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
-	t.Run("GET://api/v1/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDate)
-	// Add Update
+	t.Run("GET://api/v1/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDateTest)
+	t.Run("PUT://api/v1/snapshots/:id/values/:id", updateSnapshotTest)
 	// Delete
 	// Delete user
 }
@@ -48,7 +53,7 @@ func createSnapshotTest(t *testing.T) {
 		t.Fatal("invalid ExpectedCreateSnapshotResponse")
 	}
 
-	ss_adv_snapid, _ = snapshotTester.TestCreateSnapshot(
+	ss_adv_snapid, ss_adv_svids = snapshotTester.TestCreateSnapshot(
 		t,
 		tc.Payload,
 		ss_adv_token,
@@ -132,7 +137,7 @@ func getSnapshotByInstitutionTest(t *testing.T) {
 	)
 }
 
-func getSnapshotByTaxShelter(t *testing.T) {
+func getSnapshotByTaxShelterTest(t *testing.T) {
 	tc := advancedSnapshotTestCases.GetAdvancedSnapshotByTaxShelterTestCase(t)
 
 	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotByTaxShelterResponse)
@@ -150,7 +155,7 @@ func getSnapshotByTaxShelter(t *testing.T) {
 	)
 }
 
-func getSnapshotByMaturationDate(t *testing.T) {
+func getSnapshotByMaturationDateTest(t *testing.T) {
 	for _, tc := range advancedSnapshotTestCases.GetAdvancedSnapshotByMaturationDateTestCases(t) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotByMaturationDateResponse)
@@ -168,4 +173,50 @@ func getSnapshotByMaturationDate(t *testing.T) {
 			)
 		})
 	}
+}
+
+func updateSnapshotTest(t *testing.T) {
+	oldSvTotal := 10341.01 // See original create advanced snapshot test case
+	newSvTotal := 650.99   // New value we'll be using
+	expectedNewSnapshotTotal := advancedSnapshotTestCases.AdvancedSnapshotTotal - oldSvTotal + newSvTotal
+
+	// ER of holding 0 is 0
+	erSum := advancedSnapshotTestCases.AdvancedSnapshotExpenseRatio * advancedSnapshotTestCases.AdvancedSnapshotTotal
+	expectedNewErTotal := erSum / expectedNewSnapshotTotal
+
+	// Round values
+	expectedNewSnapshotTotal = math.Round(math.Abs(expectedNewSnapshotTotal*100)) / 100
+	expectedNewErTotal = math.Round(math.Abs(expectedNewErTotal*1000)) / 1000
+
+	snapshotValueTester.TestUpdateSnapshotValue(
+		t,
+		ss_adv_snapid,
+		ss_adv_svids[0],
+		snapshotvalue.UpdateSnapshotValuePayload{
+			Account_id: ss_adv_accountids[0],
+			Holding_id: ss_adv_holdingids[0],
+			Total:      newSvTotal,
+		},
+		ss_adv_token,
+		snapshotValueTester.ExpectedUpdateSnapshotValueResponse{
+			Total: expectedNewSnapshotTotal,
+			Er:    expectedNewErTotal,
+		},
+		ss_adv_testuser.User_id,
+		fiber.StatusOK,
+	)
+
+	snapshotTester.TestGetSnapshot(
+		t,
+		ss_adv_snapid,
+		ss_adv_token,
+		snapshotTester.ExpectedGetSnapshotResponse{
+			AccountIds:    ss_adv_accountids,
+			HoldingIds:    ss_adv_holdingids,
+			Total:         expectedNewSnapshotTotal,
+			WeightedErPct: expectedNewErTotal,
+		},
+		ss_adv_testuser.User_id,
+		fiber.StatusOK,
+	)
 }

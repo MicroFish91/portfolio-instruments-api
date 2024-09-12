@@ -21,6 +21,7 @@ type GetTestCase struct {
 type PutTestCase struct {
 	Title              string
 	ParameterId        int
+	ParameterId2       int
 	Route              string
 	ReplacementToken   string
 	Payload            any

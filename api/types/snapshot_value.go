@@ -34,3 +34,21 @@ type SnapshotValueStore interface {
 	UpdateSnapshotValue(context.Context, SnapshotValue) (SnapshotValue, error)
 	DeleteSnapshotValue(ctx context.Context, snapId, snapValId, userId int) (SnapshotValue, error)
 }
+
+// ---- Snapshot Value Response Types ----
+type UpdateSnapshotValueResponse struct {
+	Data struct {
+		Snapshot_value      SnapshotValue `json:"snapshot_value"`
+		Snapshot_total      float64       `json:"snapshot_total"`
+		Snapshot_weighteder float64       `json:"snapshot_weighteder"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
+type DeleteSnapshotValueResponse struct {
+	Data struct {
+		Snapshot_value SnapshotValue `json:"snapshot_value"`
+		Message        string        `json:"message"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

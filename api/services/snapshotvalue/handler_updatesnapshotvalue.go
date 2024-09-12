@@ -39,5 +39,19 @@ func (h *SnapshotValueHandlerImpl) UpdateSnapshotValue(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"snapshot_value": snapshotValue})
+	total, err := h.snapshotStore.RefreshSnapshotTotal(c.Context(), userPayload.User_id, svParams.Snap_id)
+	if err != nil {
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
+	}
+
+	er, err := h.snapshotStore.RefreshSnapshotWeightedER(c.Context(), userPayload.User_id, svParams.Snap_id)
+	if err != nil {
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
+	}
+
+	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
+		"snapshot_value":      snapshotValue,
+		"snapshot_total":      total,
+		"snapshot_weighteder": er,
+	})
 }
