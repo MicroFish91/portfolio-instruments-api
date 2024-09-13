@@ -28,17 +28,21 @@ func (h *SnapshotValueHandlerImpl) DeleteSnapshotValue(c fiber.Ctx) error {
 	}
 
 	// Refresh snapshot total
-	if _, err = h.snapshotStore.RefreshSnapshotTotal(c.Context(), userPayload.User_id, svParams.Snap_id); err != nil {
+	total, err := h.snapshotStore.RefreshSnapshotTotal(c.Context(), userPayload.User_id, svParams.Snap_id)
+	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), fmt.Errorf("failed to refresh snapshot total: %s", err.Error()))
 	}
 
 	// Refresh snapshot weighted_er
-	if _, err = h.snapshotStore.RefreshSnapshotWeightedER(c.Context(), snapshotvalue.User_id, svParams.Snap_id); err != nil {
+	er, err := h.snapshotStore.RefreshSnapshotWeightedER(c.Context(), snapshotvalue.User_id, svParams.Snap_id)
+	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), fmt.Errorf("failed to refresh snapshot weighted_er: %s", err.Error()))
 	}
 
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
-		"message":        "resource deleted successfully",
-		"snapshot_value": snapshotvalue,
+		"message":             "resource deleted successfully",
+		"snapshot_value":      snapshotvalue,
+		"snapshot_total":      total,
+		"snapshot_weighteder": er,
 	})
 }

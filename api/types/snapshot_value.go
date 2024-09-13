@@ -47,8 +47,10 @@ type UpdateSnapshotValueResponse struct {
 
 type DeleteSnapshotValueResponse struct {
 	Data struct {
-		Snapshot_value SnapshotValue `json:"snapshot_value"`
-		Message        string        `json:"message"`
+		Snapshot_value      SnapshotValue `json:"snapshot_value"`
+		Snapshot_total      float64       `json:"snapshot_total"`
+		Snapshot_weighteder float64       `json:"snapshot_weighteder"`
+		Message             string        `json:"message"`
 	} `json:"data"`
 	Error string `json:"error"`
 }

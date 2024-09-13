@@ -9,7 +9,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestDeleteSnapshotValue(t *testing.T, snapId int, snapValId int, token string, expectedUserId int, expectedStatusCode int) {
+type ExpectedDeleteSnapshotValueResponse struct {
+	Total float64
+	Er    float64
+}
+
+func TestDeleteSnapshotValue(t *testing.T, snapId int, snapValId int, token string, expectedResponse ExpectedDeleteSnapshotValueResponse, expectedUserId int, expectedStatusCode int) {
 	var route = fmt.Sprintf("/api/v1/snapshots/%d/values/%d", snapId, snapValId)
 
 	var response types.DeleteSnapshotValueResponse
@@ -34,6 +39,8 @@ func TestDeleteSnapshotValue(t *testing.T, snapId int, snapValId int, token stri
 			},
 			response.Data.Snapshot_value,
 		)
+		assert.Equal(t, expectedResponse.Total, response.Data.Snapshot_total)
+		assert.Equal(t, expectedResponse.Er, response.Data.Snapshot_weighteder)
 	default:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}

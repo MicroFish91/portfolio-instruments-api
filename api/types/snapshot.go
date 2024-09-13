@@ -144,3 +144,11 @@ type GetSnapshotMaturationDateResponse struct {
 	} `json:"data"`
 	Error string `json:"error"`
 }
+
+type DeleteSnapshotResponse struct {
+	Data struct {
+		Message  string   `json:"message"`
+		Snapshot Snapshot `json:"snapshot"`
+	} `json:"data"`
+	Error string `json:"error"`
+}

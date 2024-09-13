@@ -10,6 +10,7 @@ import (
 	advancedSnapshotTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshot/advanced"
 	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
 	snapshotValueTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshotvalue"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -33,9 +34,13 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v1/snapshots/:id?group_by=TAX_SHELTER", getSnapshotByTaxShelterTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDateTest)
-	t.Run("PUT://api/v1/snapshots/:id/values/:id", updateSnapshotTest)
-	// Delete
-	// Delete user
+
+	// snapshot_value
+	t.Run("PUT://api/v1/snapshots/:id/values/:id", updateSnapshotValueTest)
+	t.Run("DEL://api/v1/snapshots/:id/values/:id", deleteSnapshotValueTest)
+
+	t.Run("DEL://api/v1/snapshots/:id", deleteSnapshotTest)
+	t.Run("Cleanup", snapshotServiceCleaner)
 }
 
 func advancedSnapshotSetup(t *testing.T) {
@@ -175,7 +180,10 @@ func getSnapshotByMaturationDateTest(t *testing.T) {
 	}
 }
 
-func updateSnapshotTest(t *testing.T) {
+var updateSnapshotTotal float64
+var updateSnapshotExpenseRatio float64
+
+func updateSnapshotValueTest(t *testing.T) {
 	oldSvTotal := 10341.01 // See original create advanced snapshot test case
 	newSvTotal := 650.99   // New value we'll be using
 	expectedNewSnapshotTotal := advancedSnapshotTestCases.AdvancedSnapshotTotal - oldSvTotal + newSvTotal
@@ -184,39 +192,104 @@ func updateSnapshotTest(t *testing.T) {
 	erSum := advancedSnapshotTestCases.AdvancedSnapshotExpenseRatio * advancedSnapshotTestCases.AdvancedSnapshotTotal
 	expectedNewErTotal := erSum / expectedNewSnapshotTotal
 
+	updateSnapshotTotal = expectedNewSnapshotTotal
+	updateSnapshotExpenseRatio = expectedNewErTotal
+
 	// Round values
-	expectedNewSnapshotTotal = math.Round(math.Abs(expectedNewSnapshotTotal*100)) / 100
-	expectedNewErTotal = math.Round(math.Abs(expectedNewErTotal*1000)) / 1000
+	expectedNewSnapshotTotal = math.Round(expectedNewSnapshotTotal*100) / 100
+	expectedNewErTotal = math.Round(expectedNewErTotal*1000) / 1000
 
-	snapshotValueTester.TestUpdateSnapshotValue(
+	t.Run("200 PUT", func(t2 *testing.T) {
+		snapshotValueTester.TestUpdateSnapshotValue(
+			t2,
+			ss_adv_snapid,
+			ss_adv_svids[0],
+			snapshotvalue.UpdateSnapshotValuePayload{
+				Account_id: ss_adv_accountids[0],
+				Holding_id: ss_adv_holdingids[0],
+				Total:      newSvTotal,
+			},
+			ss_adv_token,
+			snapshotValueTester.ExpectedUpdateSnapshotValueResponse{
+				Total: expectedNewSnapshotTotal,
+				Er:    expectedNewErTotal,
+			},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+	})
+
+	t.Run("200 GET Verify", func(t2 *testing.T) {
+		snapshotTester.TestGetSnapshot(
+			t2,
+			ss_adv_snapid,
+			ss_adv_token,
+			snapshotTester.ExpectedGetSnapshotResponse{
+				AccountIds:    ss_adv_accountids,
+				HoldingIds:    ss_adv_holdingids,
+				Total:         expectedNewSnapshotTotal,
+				WeightedErPct: expectedNewErTotal,
+			},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+	})
+}
+
+func deleteSnapshotValueTest(t *testing.T) {
+	deletedSvTotal := 650.99
+	expectedNewSnapshotTotal := updateSnapshotTotal - deletedSvTotal
+
+	// ER of holding 0 is 0
+	erSum := updateSnapshotExpenseRatio * updateSnapshotTotal
+	expectedNewErTotal := erSum / expectedNewSnapshotTotal
+
+	// Round values
+	expectedNewSnapshotTotal = math.Round(expectedNewSnapshotTotal*100) / 100
+	expectedNewErTotal = math.Round(expectedNewErTotal*1000) / 1000
+
+	t.Run("200 DEL", func(t2 *testing.T) {
+		snapshotValueTester.TestDeleteSnapshotValue(
+			t2,
+			ss_adv_snapid,
+			ss_adv_svids[0],
+			ss_adv_token,
+			snapshotValueTester.ExpectedDeleteSnapshotValueResponse{
+				Total: expectedNewSnapshotTotal,
+				Er:    expectedNewErTotal,
+			},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+	})
+
+	t.Run("200 GET Verify", func(t2 *testing.T) {
+		snapshotTester.TestGetSnapshot(
+			t2,
+			ss_adv_snapid,
+			ss_adv_token,
+			snapshotTester.ExpectedGetSnapshotResponse{
+				AccountIds:    ss_adv_accountids,
+				HoldingIds:    ss_adv_holdingids,
+				Total:         expectedNewSnapshotTotal,
+				WeightedErPct: expectedNewErTotal,
+			},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+	})
+}
+
+func deleteSnapshotTest(t *testing.T) {
+	snapshotTester.TestDeleteSnapshot(
 		t,
 		ss_adv_snapid,
-		ss_adv_svids[0],
-		snapshotvalue.UpdateSnapshotValuePayload{
-			Account_id: ss_adv_accountids[0],
-			Holding_id: ss_adv_holdingids[0],
-			Total:      newSvTotal,
-		},
 		ss_adv_token,
-		snapshotValueTester.ExpectedUpdateSnapshotValueResponse{
-			Total: expectedNewSnapshotTotal,
-			Er:    expectedNewErTotal,
-		},
 		ss_adv_testuser.User_id,
 		fiber.StatusOK,
 	)
+}
 
-	snapshotTester.TestGetSnapshot(
-		t,
-		ss_adv_snapid,
-		ss_adv_token,
-		snapshotTester.ExpectedGetSnapshotResponse{
-			AccountIds:    ss_adv_accountids,
-			HoldingIds:    ss_adv_holdingids,
-			Total:         expectedNewSnapshotTotal,
-			WeightedErPct: expectedNewErTotal,
-		},
-		ss_adv_testuser.User_id,
-		fiber.StatusOK,
-	)
+func snapshotServiceCleaner(t *testing.T) {
+	userTester.TestDeleteUser(t, "", ss_adv_token, ss_adv_testuser.User_id, fiber.StatusOK)
 }
