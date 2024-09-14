@@ -17,6 +17,10 @@ type CreateSnapshotPayload struct {
 }
 
 func (p CreateSnapshotPayload) Validate() error {
+	if len(p.Snapshot_values) == 0 {
+		return errors.New("must provide a list of values for snapshot_values")
+	}
+
 	for _, snapshotValue := range p.Snapshot_values {
 		if err := snapshotValue.Validate(); err != nil {
 			return err

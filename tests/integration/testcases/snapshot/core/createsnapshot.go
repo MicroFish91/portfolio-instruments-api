@@ -61,6 +61,24 @@ func GetCreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdi
 			},
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
+		{
+			Title: "201 Description",
+			Payload: snapshot.CreateSnapshotPayload{
+				Snap_date:   utils.Calc_target_date(0, -3),
+				Description: "With Description",
+				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
+					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
+					{Account_id: accountIds[0], Holding_id: holdingIds[1], Total: 500.50, Skip_rebalance: false},
+					{Account_id: accountIds[1], Holding_id: holdingIds[0], Total: 750.75, Skip_rebalance: false},
+					{Account_id: accountIds[1], Holding_id: holdingIds[1], Total: 1000.00, Skip_rebalance: false},
+				},
+			},
+			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
+				Total:         2501.50,
+				WeightedErPct: 0.180,
+			},
+			ExpectedStatusCode: fiber.StatusCreated,
+		},
 
 		// ---- 401 ----
 		{
@@ -77,9 +95,11 @@ func GetCreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdi
 		{
 			Title: "409 Benchmark",
 			Payload: snapshot.CreateSnapshotPayload{
-				Snap_date:       utils.Calc_target_date(0, -3),
-				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{},
-				Benchmark_id:    9999,
+				Snap_date: utils.Calc_target_date(0, -3),
+				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
+					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
+				},
+				Benchmark_id: 9999,
 			},
 			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusConflict,
@@ -129,6 +149,123 @@ func GetCreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdi
 					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
 				},
 				Benchmark_id: benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Empty Snapshot",
+			Payload: snapshot.CreateSnapshotPayload{
+				Snap_date:    utils.Calc_target_date(0, -3),
+				Benchmark_id: benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Bad Date 1",
+			Payload: snapshot.CreateSnapshotPayload{
+				Snap_date: "Oct 23, 2010",
+				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
+					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
+				},
+				Benchmark_id: benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Bad Date 2",
+			Payload: map[string]any{
+				"Snap_date": 10,
+				"Snapshot_values": []snapshotvalue.CreateSnapshotValuePayload{
+					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
+				},
+				"Benchmark_id": benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 No Account",
+			Payload: snapshot.CreateSnapshotPayload{
+				Snap_date: utils.Calc_target_date(0, -3),
+				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
+					{Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
+				},
+				Benchmark_id: benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Bad Account",
+			Payload: map[string]any{
+				"Snap_date": utils.Calc_target_date(0, -3),
+				"Snapshot_values": []map[string]any{
+					{"Account_id": "1", "Holding_id": holdingIds[0], "Total": 250.25, "Skip_rebalance": false},
+				},
+				"Benchmark_id": benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 No Holding",
+			Payload: snapshot.CreateSnapshotPayload{
+				Snap_date: utils.Calc_target_date(0, -3),
+				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
+					{Account_id: accountIds[0], Total: 250.25, Skip_rebalance: false},
+				},
+				Benchmark_id: benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Bad Holding",
+			Payload: map[string]any{
+				"Snap_date": utils.Calc_target_date(0, -3),
+				"Snapshot_values": []map[string]any{
+					{"Account_id": accountIds[0], "Holding_id": true, "Total": 250.25, "Skip_rebalance": false},
+				},
+				"Benchmark_id": benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 No Total",
+			Payload: snapshot.CreateSnapshotPayload{
+				Snap_date: utils.Calc_target_date(0, -3),
+				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
+					{Account_id: accountIds[0], Holding_id: holdingIds[0], Skip_rebalance: false},
+				},
+				Benchmark_id: benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Bad Total",
+			Payload: map[string]any{
+				"Snap_date": utils.Calc_target_date(0, -3),
+				"Snapshot_values": []map[string]any{
+					{"Account_id": accountIds[0], "Holding_id": holdingIds[0], "Total": "abcd", "Skip_rebalance": false},
+				},
+				"Benchmark_id": benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Bad Benchmark",
+			Payload: map[string]any{
+				"Snap_date": utils.Calc_target_date(0, -3),
+				"Snapshot_values": []snapshotvalue.CreateSnapshotValuePayload{
+					{Account_id: accountIds[0], Holding_id: holdingIds[0], Skip_rebalance: false},
+				},
+				"Benchmark_id": []int{1, 2, 3},
 			},
 			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
