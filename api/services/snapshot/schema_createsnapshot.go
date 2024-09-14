@@ -3,6 +3,7 @@ package snapshot
 import (
 	"errors"
 	"regexp"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
@@ -24,6 +25,16 @@ func (p CreateSnapshotPayload) Validate() error {
 
 	if !regexp.MustCompile(`^\d{2}/\d{2}/\d{4}$`).Match([]byte(p.Snap_date)) {
 		return errors.New("snap_date must follow string format mm/dd/yyyy")
+	}
+
+	snapDate, err := time.Parse("01/02/2006", p.Snap_date)
+	if err != nil {
+		return errors.New("snap_date must follow string format mm/dd/yyyy")
+	}
+
+	now := time.Now()
+	if snapDate.After(now) {
+		return errors.New("snap_date cannot be a date in the future")
 	}
 
 	return validation.ValidateStruct(&p,

@@ -35,7 +35,7 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		if _, checked := accIdsSet[svpayload.Account_id]; checked {
 			continue
 		}
-		if err := h.verifyAccountById(c, svpayload.Holding_id, userPayload.User_id); err != nil {
+		if err := h.verifyAccountById(c, svpayload.Account_id, userPayload.User_id); err != nil {
 			return utils.SendError(c, fiber.StatusConflict, err)
 		}
 		accIdsSet[svpayload.Account_id] = struct{}{}

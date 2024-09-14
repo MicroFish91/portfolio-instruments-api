@@ -19,7 +19,7 @@ func GetCreateSnapshotAdvancedTestCase(t *testing.T, benchmarkId int, accountIds
 		t.Fatal("unexpected accountId length for creating advanced snapshot")
 	}
 	if len(holdingIds) != 14 {
-		t.Fatal("unexpeted holdingId length for creating advanced snapshot")
+		t.Fatal("unexpected holdingId length for creating advanced snapshot")
 	}
 
 	return shared.PostTestCase{

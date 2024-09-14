@@ -6,7 +6,7 @@ const mockDateOfOrigin: string = "07/01/2000";
 
 // Equivalent to the assets provided under `createsnapshot.go`.
 // Calculations for a quick sanity check when computing group by values.
-const assets: { holdingName: string, maturationDate?: string, total: number, taxShelter: string, assetCategory: string, institution: string, accountName: string, holdingER: number, skip: boolean }[] = [
+const advancedAssets: { holdingName: string, maturationDate?: string, total: number, taxShelter: string, assetCategory: string, institution: string, accountName: string, holdingER: number, skip: boolean }[] = [
     // Indices -
     // Accounts: 0
     // Holdings: 2, 12, 6, 3, 7, 5, 9
@@ -108,7 +108,7 @@ const assets: { holdingName: string, maturationDate?: string, total: number, tax
 ];
 
 // Back of the envelope calculations for computing the different `Advanced Snapshot` test values
-console.log(getSnapshotTotalSummary());
+console.log(getSnapshotTotalSummary(advancedAssets));
 console.log(parseSnapshotWithGroupByKey("accountName"));
 console.log(parseSnapshotWithGroupByKey("assetCategory"));
 console.log(parseSnapshotWithGroupByKey("institution"));
@@ -119,7 +119,7 @@ console.log(getSnapshotByMaturationDateRange(undefined, undefined));
 console.log(getSnapshotByMaturationDateRange("01/01/2028", undefined));
 console.log(getSnapshotByMaturationDateRange(undefined, "08/01/2011"));
 
-function getSnapshotTotalSummary(): { sum: number, er: number } {
+export function getSnapshotTotalSummary(assets: typeof advancedAssets): { sum: number, er: number } {
     let sum = 0;
     let erSum = 0;
     for (const { total, holdingER } of assets) {
@@ -130,13 +130,13 @@ function getSnapshotTotalSummary(): { sum: number, er: number } {
     return { sum, er: erSum / sum };
 }
 
-function parseSnapshotWithGroupByKey(groupByKey: keyof typeof assets[number]): { fields: string[], totals: number[] } {
+export function parseSnapshotWithGroupByKey(groupByKey: keyof typeof advancedAssets[number]): { fields: string[], totals: number[] } {
     if (typeof groupByKey != 'string' && typeof groupByKey != 'number') {
         throw new Error("Incompatible groupByKey type");
     }
 
     const resourcesGrouped: Record<string | number, number> = {};
-    for (const asset of assets) {
+    for (const asset of advancedAssets) {
         const key = asset[groupByKey] as string | number;
         resourcesGrouped[key] = (resourcesGrouped[key] ?? 0) + asset.total;
     }
@@ -152,12 +152,12 @@ function parseSnapshotWithGroupByKey(groupByKey: keyof typeof assets[number]): {
 }
 
 
-function getSnapshotByMaturationDateRange(maturationStart?: string, maturationEnd?: string) {
+export function getSnapshotByMaturationDateRange(maturationStart?: string, maturationEnd?: string) {
     console.log("Start Date: ", maturationStart, ", End Date: ", maturationEnd);
     maturationStart ??= mockDateOfOrigin;
 
     const resources: any = [];  // Don't care about strict typing, just use any
-    for (const asset of assets) {
+    for (const asset of advancedAssets) {
         if (!asset.maturationDate) {
             continue;
         }
