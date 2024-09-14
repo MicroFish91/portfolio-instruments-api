@@ -35,6 +35,7 @@ type SnapshotStore interface {
 	UpdateSnapshot(context.Context, Snapshot) (Snapshot, error)
 	DeleteSnapshot(ctx context.Context, snapshotId, userId int) (Snapshot, error)
 
+	GetSnapshotByDate(ctx context.Context, snapshotDate string, userId int) (Snapshot, error)
 	GetSnapshotTotal(ctx context.Context, userId, snapId int, options GetSnapshotTotalStoreOptions) (total float64, err error)
 	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (total float64, err error)
 	RefreshSnapshotWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, err error)

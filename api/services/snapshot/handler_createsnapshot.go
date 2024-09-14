@@ -22,6 +22,12 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot payload from request body"))
 	}
 
+	// Verify unique snap_date by user
+	existingSnapshot, _ := h.snapshotStore.GetSnapshotByDate(c.Context(), snapshotPayload.Snap_date, userPayload.User_id)
+	if existingSnapshot.Snap_id != 0 {
+		return utils.SendError(c, fiber.StatusConflict, errors.New("snapshot with the given snap_date already exists"))
+	}
+
 	// Verify benchmark_id if provided
 	if snapshotPayload.Benchmark_id != 0 {
 		if err := h.verifyBenchmarkById(c, snapshotPayload.Benchmark_id, userPayload.User_id); err != nil {
