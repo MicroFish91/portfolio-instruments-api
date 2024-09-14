@@ -11,6 +11,9 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
+var CoreSnapshotTotal float64 = 2501.50
+var CoreWeightedEr float64 = 0.180
+
 func GetCreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingIds []int, userId int, email string) []shared.PostTestCase {
 	if len(accountIds) != 3 {
 		t.Fatal("unexpected accountId length for creating core snapshot")
@@ -39,8 +42,8 @@ func GetCreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdi
 				Benchmark_id: benchmarkId,
 			},
 			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
-				Total:         2501.50,
-				WeightedErPct: 0.180,
+				Total:         CoreSnapshotTotal,
+				WeightedErPct: CoreWeightedEr,
 			},
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
@@ -56,8 +59,8 @@ func GetCreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdi
 				},
 			},
 			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
-				Total:         2501.50,
-				WeightedErPct: 0.180,
+				Total:         CoreSnapshotTotal,
+				WeightedErPct: CoreWeightedEr,
 			},
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
@@ -74,8 +77,8 @@ func GetCreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdi
 				},
 			},
 			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
-				Total:         2501.50,
-				WeightedErPct: 0.180,
+				Total:         CoreSnapshotTotal,
+				WeightedErPct: CoreWeightedEr,
 			},
 			ExpectedStatusCode: fiber.StatusCreated,
 		},

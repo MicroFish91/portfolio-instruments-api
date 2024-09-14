@@ -24,6 +24,7 @@ var (
 func CoreSnapshotScenarioTests(t *testing.T) {
 	t.Run("Setup", coreSnapshotSetup)
 	t.Run("POST://api/v1/snapshots", createSnapshotTest)
+	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
 }
 
 func coreSnapshotSetup(t *testing.T) {
@@ -34,9 +35,7 @@ func coreSnapshotSetup(t *testing.T) {
 }
 
 func createSnapshotTest(t *testing.T) {
-	testcases := coreSnapshotTestCases.GetCreateSnapshotTestCases(t, ss_core_benchmarkid, ss_core_accountids, ss_core_holdingids, ss_core_testuser.User_id, ss_core_testuser.Email)
-
-	for _, tc := range testcases {
+	for _, tc := range coreSnapshotTestCases.GetCreateSnapshotTestCases(t, ss_core_benchmarkid, ss_core_accountids, ss_core_holdingids, ss_core_testuser.User_id, ss_core_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := ss_core_token
 			if tc.ReplacementToken != "" {
@@ -45,7 +44,7 @@ func createSnapshotTest(t *testing.T) {
 
 			expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedCreateSnapshotResponse)
 			if !ok {
-				t.Fatal("invalid ExpectedCreateSnapshotResponse")
+				t2.Fatal("invalid ExpectedCreateSnapshotResponse")
 			}
 
 			snapid, svids := snapshotTester.TestCreateSnapshot(
@@ -61,6 +60,36 @@ func createSnapshotTest(t *testing.T) {
 				ss_core_snapid = snapid
 				ss_core_svids = svids
 			}
+		})
+	}
+}
+
+func getSnapshotTest(t *testing.T) {
+	for _, tc := range coreSnapshotTestCases.GetCoreSnapshotTestCases(t, ss_core_snapid, ss_core_testuser.User_id, ss_core_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := ss_core_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotResponse)
+			if !ok {
+				t2.Fatal("invalid ExpectedGetSnapshotResponse")
+			}
+
+			snapshotTester.TestGetSnapshot(
+				t2,
+				tc.ParameterId,
+				tok,
+				snapshotTester.ExpectedGetSnapshotResponse{
+					AccountIds:    []int{ss_core_accountids[0], ss_core_accountids[1]},
+					HoldingIds:    ss_core_holdingids,
+					Total:         expected.Total,
+					WeightedErPct: expected.WeightedErPct,
+				},
+				ss_core_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
 		})
 	}
 }
