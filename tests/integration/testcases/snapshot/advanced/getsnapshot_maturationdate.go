@@ -5,7 +5,7 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -14,7 +14,7 @@ func GetAdvancedSnapshotByMaturationDateTestCases(*testing.T) []shared.GetTestCa
 	return []shared.GetTestCase{
 		{
 			Title: "200 Date 1",
-			ExpectedResponse: snapshot.ExpectedGetSnapshotByMaturationDateResponse{
+			ExpectedResponse: snapshotTester.ExpectedGetSnapshotByMaturationDateResponse{
 				Resources: []types.MaturationDateResource{
 					{
 						Account_name:   "Account2",
@@ -45,7 +45,7 @@ func GetAdvancedSnapshotByMaturationDateTestCases(*testing.T) []shared.GetTestCa
 		},
 		{
 			Title: "200 Date 2",
-			ExpectedResponse: snapshot.ExpectedGetSnapshotByMaturationDateResponse{
+			ExpectedResponse: snapshotTester.ExpectedGetSnapshotByMaturationDateResponse{
 				Resources: []types.MaturationDateResource{
 					{
 						Account_name:   "Account1",
@@ -174,7 +174,7 @@ func GetAdvancedSnapshotByMaturationDateTestCases(*testing.T) []shared.GetTestCa
 		},
 		{
 			Title: "200 Date 3",
-			ExpectedResponse: snapshot.ExpectedGetSnapshotByMaturationDateResponse{
+			ExpectedResponse: snapshotTester.ExpectedGetSnapshotByMaturationDateResponse{
 				Resources: []types.MaturationDateResource{
 					{
 						Account_name:    "Account1",

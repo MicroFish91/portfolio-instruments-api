@@ -2,11 +2,15 @@ package core
 
 import (
 	"testing"
+	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
 	coreSnapshotTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshot/core"
 	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	"github.com/gofiber/fiber/v3"
 )
 
 var (
@@ -24,6 +28,7 @@ var (
 func CoreSnapshotScenarioTests(t *testing.T) {
 	t.Run("Setup", coreSnapshotSetup)
 	t.Run("POST://api/v1/snapshots", createSnapshotTest)
+	t.Run("GET://api/v1/snapshots", getSnapshotsTests)
 	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
 }
 
@@ -64,8 +69,64 @@ func createSnapshotTest(t *testing.T) {
 	}
 }
 
+func getSnapshotsTests(t *testing.T) {
+	t.Run("Setup", func(t2 *testing.T) {
+		snapDate := time.Now()
+		snapDate = snapDate.AddDate(-1, -3, 0)
+
+		for i := 0; i <= 25; i += 1 {
+			snapDate = snapDate.AddDate(0, -1, 0)
+
+			snapshotTester.TestCreateSnapshot(
+				t2,
+				snapshot.CreateSnapshotPayload{
+					Snap_date: snapDate.Format("01/02/2006"),
+					Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
+						{
+							Account_id: ss_core_accountids[0],
+							Holding_id: ss_core_holdingids[0],
+							Total:      1000.00,
+						},
+					},
+					Benchmark_id: ss_core_benchmarkid,
+				},
+				ss_core_token,
+				snapshotTester.ExpectedCreateSnapshotResponse{
+					Total:         1000,
+					WeightedErPct: 0.3,
+				},
+				ss_core_testuser.User_id,
+				fiber.StatusCreated,
+			)
+		}
+	})
+
+	for _, tc := range coreSnapshotTestCases.GetSnapshotsTestCases(t, ss_core_snapid, ss_core_testuser.User_id, ss_core_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := ss_core_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			expectedResponse, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotsResponse)
+			if !ok {
+				t2.Fatal("invalid ExpectedGetSnapshotsResponse")
+			}
+
+			snapshotTester.TestGetSnapshots(
+				t2,
+				tc.Route,
+				tok,
+				ss_core_testuser.User_id,
+				tc.ExpectedStatusCode,
+				expectedResponse,
+			)
+		})
+	}
+}
+
 func getSnapshotTest(t *testing.T) {
-	for _, tc := range coreSnapshotTestCases.GetCoreSnapshotTestCases(t, ss_core_snapid, ss_core_testuser.User_id, ss_core_testuser.Email) {
+	for _, tc := range coreSnapshotTestCases.GetSnapshotTestCases(t, ss_core_snapid, ss_core_testuser.User_id, ss_core_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := ss_core_token
 			if tc.ReplacementToken != "" {

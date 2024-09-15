@@ -4,14 +4,14 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
 	"github.com/gofiber/fiber/v3"
 )
 
 func GetAdvancedSnapshotByAccountsTestCase(*testing.T) shared.GetTestCase {
 	return shared.GetTestCase{
 		Title: "200",
-		ExpectedResponse: snapshot.ExpectedGetSnapshotByAccountResponse{
+		ExpectedResponse: snapshotTester.ExpectedGetSnapshotByAccountResponse{
 			AccountNames: []string{
 				"Account1",
 				"Account2",

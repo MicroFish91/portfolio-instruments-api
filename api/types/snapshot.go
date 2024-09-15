@@ -120,6 +120,14 @@ type GetSnapshotResponse struct {
 	Error string `json:"error"`
 }
 
+type GetSnapshotsResponse struct {
+	Data struct {
+		Snapshots  []Snapshot         `json:"snapshots"`
+		Pagination PaginationMetadata `json:"pagination"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
 type GetSnapshotAccountsResponse struct {
 	Data struct {
 		Accounts_grouped ResourcesGrouped `json:"accounts_grouped"`
