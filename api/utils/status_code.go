@@ -13,7 +13,8 @@ func StatusCodeFromError(err error) int {
 	case regexp.MustCompile(`(?i)no[\s]rows[\s]in[\s]result[\s]set`).Match([]byte(err.Error())):
 		return fiber.StatusNotFound
 	case regexp.MustCompile(`(?i)duplicate`).Match([]byte(err.Error())) ||
-		regexp.MustCompile(`(?i)violates[\s]*unique`).Match([]byte(err.Error())):
+		regexp.MustCompile(`(?i)violates[\s]*unique`).Match([]byte(err.Error())) ||
+		regexp.MustCompile(`(?i)violates[\s]*foreign[\s]*key[\s]*constraint`).Match([]byte(err.Error())):
 		return fiber.StatusConflict
 	case regexp.MustCompile(`(?i)deadline[\s]*exceeded`).Match([]byte(err.Error())):
 		return fiber.StatusGatewayTimeout

@@ -30,6 +30,7 @@ func CoreSnapshotScenarioTests(t *testing.T) {
 	t.Run("POST://api/v1/snapshots", createSnapshotTest)
 	t.Run("GET://api/v1/snapshots", getSnapshotsTests)
 	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
+	t.Run("PUT://api/v1/snapshots/:id", updateSnapshotTest)
 }
 
 func coreSnapshotSetup(t *testing.T) {
@@ -148,6 +149,26 @@ func getSnapshotTest(t *testing.T) {
 					Total:         expected.Total,
 					WeightedErPct: expected.WeightedErPct,
 				},
+				ss_core_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func updateSnapshotTest(t *testing.T) {
+	for _, tc := range coreSnapshotTestCases.UpdateSnapshotTestCases(t, ss_core_snapid, ss_core_benchmarkid, ss_core_testuser.User_id, ss_core_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := ss_core_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			snapshotTester.TestUpdateSnapshot(
+				t2,
+				tc.ParameterId,
+				tc.Payload,
+				tok,
 				ss_core_testuser.User_id,
 				tc.ExpectedStatusCode,
 			)

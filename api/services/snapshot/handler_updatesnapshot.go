@@ -26,6 +26,11 @@ func (h *SnapshotHandlerImpl) UpdateSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
+	existing, _ := h.snapshotStore.GetSnapshotByDate(c.Context(), snapshotPayload.Snap_date, userPayload.User_id)
+	if existing.Snap_id != 0 && existing.Snap_id != snapshotParams.Id {
+		return utils.SendError(c, fiber.StatusConflict, errors.New("snap_date must be unique"))
+	}
+
 	snapshot, _, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotParams.Id, userPayload.User_id)
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
