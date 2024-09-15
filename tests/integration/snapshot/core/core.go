@@ -31,6 +31,7 @@ func CoreSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v1/snapshots", getSnapshotsTests)
 	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
 	t.Run("PUT://api/v1/snapshots/:id", updateSnapshotTest)
+	t.Run("DEL://api/v1/snapshots/:id", deleteSnapshotTest)
 }
 
 func coreSnapshotSetup(t *testing.T) {
@@ -41,7 +42,7 @@ func coreSnapshotSetup(t *testing.T) {
 }
 
 func createSnapshotTest(t *testing.T) {
-	for _, tc := range coreSnapshotTestCases.GetCreateSnapshotTestCases(t, ss_core_benchmarkid, ss_core_accountids, ss_core_holdingids, ss_core_testuser.User_id, ss_core_testuser.Email) {
+	for _, tc := range coreSnapshotTestCases.CreateSnapshotTestCases(t, ss_core_benchmarkid, ss_core_accountids, ss_core_holdingids, ss_core_testuser.User_id, ss_core_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := ss_core_token
 			if tc.ReplacementToken != "" {
@@ -168,6 +169,25 @@ func updateSnapshotTest(t *testing.T) {
 				t2,
 				tc.ParameterId,
 				tc.Payload,
+				tok,
+				ss_core_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func deleteSnapshotTest(t *testing.T) {
+	for _, tc := range coreSnapshotTestCases.DeleteSnapshotTestCases(t, ss_core_snapid, ss_core_testuser.User_id, ss_core_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := ss_core_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			snapshotTester.TestDeleteSnapshot(
+				t2,
+				tc.ParameterId,
 				tok,
 				ss_core_testuser.User_id,
 				tc.ExpectedStatusCode,

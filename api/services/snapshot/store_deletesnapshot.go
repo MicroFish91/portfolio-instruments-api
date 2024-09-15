@@ -2,6 +2,7 @@ package snapshot
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -28,7 +29,11 @@ func (s *PostgresSnapshotStore) DeleteSnapshot(ctx context.Context, snapId, user
 
 	snapshot, err := s.parseRowIntoSnapshot(row)
 	if err != nil {
-		return types.Snapshot{}, nil
+		return types.Snapshot{}, err
 	}
+	if snapshot.Snap_id == 0 {
+		return types.Snapshot{}, errors.New("snapshot not found")
+	}
+
 	return snapshot, nil
 }
