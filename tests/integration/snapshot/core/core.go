@@ -10,6 +10,7 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
 	coreSnapshotTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshot/core"
 	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/gofiber/fiber/v3"
 )
 
@@ -32,6 +33,7 @@ func CoreSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
 	t.Run("PUT://api/v1/snapshots/:id", updateSnapshotTest)
 	t.Run("DEL://api/v1/snapshots/:id", deleteSnapshotTest)
+	t.Run("Cleanup", snapshotServiceCleaner)
 }
 
 func coreSnapshotSetup(t *testing.T) {
@@ -194,4 +196,8 @@ func deleteSnapshotTest(t *testing.T) {
 			)
 		})
 	}
+}
+
+func snapshotServiceCleaner(t *testing.T) {
+	userTester.TestDeleteUser(t, "", ss_core_token, ss_core_testuser.User_id, fiber.StatusOK)
 }
