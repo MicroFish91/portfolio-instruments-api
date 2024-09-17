@@ -70,29 +70,24 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 	})
 }
 
-type AssetAllocation struct {
-	Category string  `json:"category"`
-	Value    float64 `json:"value"`
-}
-
-func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct, halloc types.ResourcesGrouped, total float64) (target *[]AssetAllocation, current *[]AssetAllocation, change *[]AssetAllocation, rebThreshPct int, e error) {
+func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct, halloc types.ResourcesGrouped, total float64) (target *[]types.AssetAllocation, current *[]types.AssetAllocation, change *[]types.AssetAllocation, rebThreshPct int, e error) {
 	if len(halloc.Fields) != len(halloc.Total) {
 		return nil, nil, nil, 0, errors.New("internal: could not compute rebalance, mismatching number of fields and totals for grouped holdings")
 	}
 
 	// Benchmark target allocation
-	var tar []AssetAllocation
+	var tar []types.AssetAllocation
 	for _, b := range balloc {
-		var t AssetAllocation
+		var t types.AssetAllocation
 		t.Category = string(b.Category)
 		t.Value = math.Round(float64(b.Percent)/float64(100)*total*100) / 100 // Potential for small rounding errors, however, decimal point accuracy for this value is not super important
 		tar = append(tar, t)
 	}
 
 	// Current holding allocation
-	var cur []AssetAllocation
+	var cur []types.AssetAllocation
 	for i := 0; i < len(halloc.Fields); i++ {
-		var c AssetAllocation
+		var c types.AssetAllocation
 		c.Category = halloc.Fields[i]
 		c.Value = halloc.Total[i]
 		cur = append(cur, c)
@@ -107,7 +102,7 @@ func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct
 	return &tar, &cur, ch, rebThresh, nil
 }
 
-func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, current []AssetAllocation) (alloc *[]AssetAllocation, rebThreshPct int, e error) {
+func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []types.AssetAllocation, current []types.AssetAllocation) (alloc *[]types.AssetAllocation, rebThreshPct int, e error) {
 	var (
 		maxDeviation = 0
 		chmap        = make(map[string]float64)
@@ -121,7 +116,7 @@ func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, cur
 		}
 
 		// Check if this value also exists in our current holding allocation; use it to compute the diff
-		var alloc AssetAllocation
+		var alloc types.AssetAllocation
 		for _, a := range current {
 			if a.Category == t.Category {
 				alloc = a
@@ -148,9 +143,9 @@ func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []AssetAllocation, cur
 	}
 
 	// Transform map into an allocation slice
-	var ch []AssetAllocation
+	var ch []types.AssetAllocation
 	for key, value := range chmap {
-		var alloc AssetAllocation
+		var alloc types.AssetAllocation
 		alloc.Category = key
 		alloc.Value = value
 		ch = append(ch, alloc)

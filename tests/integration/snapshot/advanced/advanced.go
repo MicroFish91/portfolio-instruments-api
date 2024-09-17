@@ -34,6 +34,7 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v1/snapshots/:id?group_by=TAX_SHELTER", getSnapshotByTaxShelterTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
 	t.Run("GET://api/v1/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDateTest)
+	t.Run("GET://api/v1/snapshots/:id/rebalance", getSnapshotRebalanceTest)
 
 	// snapshot_value
 	t.Run("PUT://api/v1/snapshots/:id/values/:id", updateSnapshotValueTest)
@@ -178,6 +179,10 @@ func getSnapshotByMaturationDateTest(t *testing.T) {
 			)
 		})
 	}
+}
+
+func getSnapshotRebalanceTest(t *testing.T) {
+	//
 }
 
 var updateSnapshotTotal float64

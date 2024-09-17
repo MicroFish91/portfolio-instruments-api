@@ -11,7 +11,6 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/tests/testserver"
 )
 
-// params
 // p = incoming payload
 // body = unmarshalled response body
 func SendAuthRequest(t *testing.T, route string, p any, body any) *http.Response {

@@ -107,22 +107,38 @@ const advancedAssets: { holdingName: string, maturationDate?: string, total: num
     { holdingName: "Holding14", maturationDate: "07/01/2010", taxShelter: "TRADITIONAL", institution: "Schwab", assetCategory: "ITB", accountName: "Account9", total: 11859.11, holdingER: 0, skip: true },
 ];
 
+const benchmark: { category: string, percent: number }[] = [
+    { category: "TSM", percent: 20 },
+    { category: "LTB", percent: 20 },
+    { category: "CASH", percent: 20 },
+    { category: "GOLD", percent: 20 },
+    { category: "DSCV", percent: 20 },
+];
+
 // Back of the envelope calculations for computing the different `Advanced Snapshot` test values
-console.log(getSnapshotTotalSummary(advancedAssets));
-console.log(parseSnapshotWithGroupByKey("accountName"));
-console.log(parseSnapshotWithGroupByKey("assetCategory"));
-console.log(parseSnapshotWithGroupByKey("institution"));
-console.log(parseSnapshotWithGroupByKey("taxShelter"));
+// console.log(getSnapshotTotalSummary(advancedAssets));
+// console.log(parseSnapshotWithGroupByKey("accountName"));
+// console.log(parseSnapshotWithGroupByKey("assetCategory"));
+// console.log(parseSnapshotWithGroupByKey("institution"));
+// console.log(parseSnapshotWithGroupByKey("taxShelter"));
 
-console.log("Maturation Dates Filtering...");
-console.log(getSnapshotByMaturationDateRange(undefined, undefined));
-console.log(getSnapshotByMaturationDateRange("01/01/2028", undefined));
-console.log(getSnapshotByMaturationDateRange(undefined, "08/01/2011"));
+// console.log("Maturation Dates Filtering...");
+// console.log(getSnapshotByMaturationDateRange(undefined, undefined));
+// console.log(getSnapshotByMaturationDateRange("01/01/2028", undefined));
+// console.log(getSnapshotByMaturationDateRange(undefined, "08/01/2011"));
 
-export function getSnapshotTotalSummary(assets: typeof advancedAssets): { sum: number, er: number } {
+console.log("Rebalance Figures...")
+console.log(getSnapshotCurrentAllocation(advancedAssets));
+console.log(getSnapshotTargetAllocation(advancedAssets, benchmark));
+
+export function getSnapshotTotalSummary(assets: typeof advancedAssets, excludeSkips?: boolean): { sum: number, er: number } {
     let sum = 0;
     let erSum = 0;
-    for (const { total, holdingER } of assets) {
+    for (const { total, holdingER, skip } of assets) {
+        if (excludeSkips && skip) {
+            continue;
+        }
+
         sum += total;
         erSum += total * holdingER;
     }
@@ -185,4 +201,43 @@ export function getSnapshotByMaturationDateRange(maturationStart?: string, matur
     }
 
     return resources;
+}
+
+export function getSnapshotCurrentAllocation(assets: typeof advancedAssets, excludeSkips: boolean = true): { category: string; value: number }[] {
+    console.log("Current Allocation:")
+
+    const allocMap: Record<string, number> = {};
+    for (const asset of assets) {
+        if (excludeSkips && asset.skip) {
+            continue;
+        }
+        allocMap[asset.assetCategory] = (allocMap[asset.assetCategory] ?? 0) + asset.total;
+    }
+
+    const allocList: { category: string, value: number }[] = [];
+    for (const [category, value] of Object.entries(allocMap)) {
+        allocList.push({
+            category,
+            value,
+        });
+    }
+
+    return allocList;
+}
+
+export function getSnapshotTargetAllocation(assets: typeof advancedAssets, benchmarkTarget: { category: string, percent: number }[], excludeSkips: boolean = true): { category: string; value: number }[] {
+    console.log("Target Allocation:")
+
+    const { sum } = getSnapshotTotalSummary(assets, excludeSkips);
+    const target: number = sum / Object.keys(benchmarkTarget).length;
+
+    const tarList: { category: string, value: number }[] = [];
+    for (const asset of Object.values(benchmarkTarget)) {
+        tarList.push({
+            category: asset.category,
+            value: target,
+        });
+    }
+
+    return tarList;
 }

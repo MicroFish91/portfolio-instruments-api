@@ -101,6 +101,11 @@ type GetSnapshotTotalStoreOptions struct {
 	Omit_skip_reb bool
 }
 
+type AssetAllocation struct {
+	Category string  `json:"category"`
+	Value    float64 `json:"value"`
+}
+
 // ---- Snapshot Response Types ----
 type CreateSnapshotResponse struct {
 	Data struct {
@@ -150,6 +155,18 @@ type GetSnapshotMaturationDateResponse struct {
 		Field_type       string                   `json:"field_type"`
 		Maturation_start string                   `json:"maturation_start"`
 		Maturation_end   string                   `json:"maturation_end"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
+type GetSnapshotRebalanceResponse struct {
+	Data struct {
+		Target_allocation         *[]AssetAllocation `json:"target_allocation"`
+		Current_allocation        *[]AssetAllocation `json:"current_allocation"`
+		Change_required           *[]AssetAllocation `json:"change_required"`
+		Rebalance_thresh_pct      int                `json:"rebalance_thresh_pct"`
+		Snapshot_total            float64            `json:"snapshot_total"`
+		Snapshot_total_omit_skips float64            `json:"snapshot_total_omit_skips"`
 	} `json:"data"`
 	Error string `json:"error"`
 }
