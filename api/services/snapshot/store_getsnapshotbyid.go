@@ -3,6 +3,7 @@ package snapshot
 import (
 	"context"
 	"database/sql"
+	"errors"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -31,6 +32,9 @@ func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId,
 	snapshot, err := s.parseRowIntoSnapshot(row)
 	if err != nil {
 		return types.Snapshot{}, nil, err
+	}
+	if snapshot.Snap_id == 0 {
+		return types.Snapshot{}, nil, errors.New("snapshot not found")
 	}
 
 	rows, err := s.db.Query(

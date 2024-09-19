@@ -161,21 +161,28 @@ func getSnapshotTest(t *testing.T) {
 }
 
 func getSnapshotRebalanceTest(t *testing.T) {
-	tc := coreSnapshotTestCases.GetSnapshotRebalanceTestCase(t)
+	for _, tc := range coreSnapshotTestCases.GetSnapshotRebalanceTestCases(t, ss_core_snapid, ss_core_snapid+1, ss_core_testuser.User_id, ss_core_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := ss_core_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
 
-	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotRebalanceResponse)
-	if !ok {
-		t.Fatal("invalid ExpectedGetSnapshotRebalanceResponse")
+			expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotRebalanceResponse)
+			if !ok {
+				t2.Fatal("invalid ExpectedGetSnapshotRebalanceResponse")
+			}
+
+			snapshotTester.TestGetSnapshotRebalance(
+				t2,
+				tc.ParameterId,
+				tok,
+				expected,
+				ss_core_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
 	}
-
-	snapshotTester.TestGetSnapshotRebalance(
-		t,
-		ss_core_snapid,
-		ss_core_token,
-		expected,
-		ss_core_testuser.User_id,
-		tc.ExpectedStatusCode,
-	)
 }
 
 func updateSnapshotTest(t *testing.T) {

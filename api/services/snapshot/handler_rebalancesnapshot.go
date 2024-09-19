@@ -22,14 +22,6 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot params from request"))
 	}
 
-	// Get total of all values where skip_rebalance = false
-	omitSkipsTotal, err := h.snapshotStore.GetSnapshotTotal(c.Context(), userPayload.User_id, snapshotParams.Id, types.GetSnapshotTotalStoreOptions{
-		Omit_skip_reb: true,
-	})
-	if err != nil {
-		return utils.SendError(c, utils.StatusCodeFromError(err), err)
-	}
-
 	// snapshot
 	snapshot, _, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotParams.Id, userPayload.User_id)
 	if err != nil {
@@ -37,6 +29,14 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 	}
 	if snapshot.Benchmark_id == 0 {
 		return utils.SendError(c, fiber.StatusConflict, errors.New("snapshot must include a target benchmark_id for a rebalance computation to take place"))
+	}
+
+	// Get total of all values where skip_rebalance = false
+	omitSkipsTotal, err := h.snapshotStore.GetSnapshotTotal(c.Context(), userPayload.User_id, snapshotParams.Id, types.GetSnapshotTotalStoreOptions{
+		Omit_skip_reb: true,
+	})
+	if err != nil {
+		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
 	// benchmark
