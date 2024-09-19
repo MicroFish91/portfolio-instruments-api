@@ -130,6 +130,7 @@ const benchmark: { category: string, percent: number }[] = [
 console.log("Rebalance Figures...")
 console.log(getSnapshotCurrentAllocation(advancedAssets));
 console.log(getSnapshotTargetAllocation(advancedAssets, benchmark));
+console.log(getSnapshotChangedRequired(advancedAssets, benchmark));
 
 export function getSnapshotTotalSummary(assets: typeof advancedAssets, excludeSkips?: boolean): { sum: number, er: number } {
     let sum = 0;
@@ -240,4 +241,52 @@ export function getSnapshotTargetAllocation(assets: typeof advancedAssets, bench
     }
 
     return tarList;
+}
+
+export function getSnapshotChangedRequired(assets: typeof advancedAssets, benchmarkTarget: { category: string, percent: number }[], excludeSkips: boolean = true): { changeRequired: { category: string; value: number }[], rebThreshPct: number } {
+    console.log("Change required:")
+
+    const current: Record<string, number> = {};
+    for (const asset of assets) {
+        if (excludeSkips && asset.skip) {
+            continue;
+        }
+        current[asset.assetCategory] = (current[asset.assetCategory] ?? 0) + asset.total;
+    }
+
+    const { sum } = getSnapshotTotalSummary(assets, excludeSkips);
+    const target: number = sum / Object.keys(benchmarkTarget).length;
+
+    let maxDeviationPct: number = 0;
+    const changeRequired: Record<string, number> = {};
+
+    // Benchmark
+    for (const b of benchmarkTarget) {
+        const diff = target - current[b.category];
+        changeRequired[b.category] = diff;
+
+        const deviationPct = Math.abs(diff / target * 100);
+        if (deviationPct > maxDeviationPct) {
+            maxDeviationPct = deviationPct;
+        }
+    }
+
+    // Other
+    for (const [category, value] of Object.entries(current)) {
+        if (Object.keys(changeRequired).find(cr => cr === category)) {
+            continue;
+        }
+        changeRequired[category] = -value;
+    }
+
+    // Build list
+    const crList: { category: string; value: number }[] = [];
+    for (const [category, value] of Object.entries(changeRequired)) {
+        crList.push({
+            category,
+            value,
+        });
+    }
+
+    return { changeRequired: crList, rebThreshPct: maxDeviationPct };
 }
