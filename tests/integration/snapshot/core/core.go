@@ -31,6 +31,7 @@ func CoreSnapshotScenarioTests(t *testing.T) {
 	t.Run("POST://api/v1/snapshots", createSnapshotTest)
 	t.Run("GET://api/v1/snapshots", getSnapshotsTests)
 	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
+	t.Run("GET://api/v1/snapshots/:id/rebalance", getSnapshotRebalanceTest)
 	t.Run("PUT://api/v1/snapshots/:id", updateSnapshotTest)
 	t.Run("DEL://api/v1/snapshots/:id", deleteSnapshotTest)
 	t.Run("Cleanup", snapshotServiceCleaner)
@@ -157,6 +158,24 @@ func getSnapshotTest(t *testing.T) {
 			)
 		})
 	}
+}
+
+func getSnapshotRebalanceTest(t *testing.T) {
+	tc := coreSnapshotTestCases.GetSnapshotRebalanceTestCase(t)
+
+	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotRebalanceResponse)
+	if !ok {
+		t.Fatal("invalid ExpectedGetSnapshotRebalanceResponse")
+	}
+
+	snapshotTester.TestGetSnapshotRebalance(
+		t,
+		ss_core_snapid,
+		ss_core_token,
+		expected,
+		ss_core_testuser.User_id,
+		tc.ExpectedStatusCode,
+	)
 }
 
 func updateSnapshotTest(t *testing.T) {

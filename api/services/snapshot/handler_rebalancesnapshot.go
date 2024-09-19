@@ -124,7 +124,7 @@ func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []types.AssetAllocatio
 			}
 		}
 
-		diff := t.Value - alloc.Value
+		diff := math.Round((t.Value-alloc.Value)*100) / 100
 		chmap[t.Category] = diff
 
 		deviation := int(math.Round(math.Abs(diff / t.Value * 100)))

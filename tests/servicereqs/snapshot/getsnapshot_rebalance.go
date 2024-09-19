@@ -15,6 +15,7 @@ type ExpectedGetSnapshotRebalanceResponse struct {
 	Change_required           []types.AssetAllocation
 	Snapshot_total            float64
 	Snapshot_total_omit_skips float64
+	Rebalance_thresh_pct      int
 }
 
 func TestGetSnapshotRebalance(t *testing.T, snapshotId int, token string, expectedResponse ExpectedGetSnapshotRebalanceResponse, expectedUserId int, expectedStatusCode int) {
@@ -26,11 +27,12 @@ func TestGetSnapshotRebalance(t *testing.T, snapshotId int, token string, expect
 	switch expectedStatusCode {
 	case 200:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
-		assert.EqualExportedValues(t, expectedResponse.Target_allocation, *response.Data.Target_allocation)
-		assert.EqualExportedValues(t, expectedResponse.Current_allocation, *response.Data.Current_allocation)
-		assert.EqualExportedValues(t, expectedResponse.Change_required, *response.Data.Change_required)
-		assert.EqualExportedValues(t, expectedResponse.Snapshot_total, response.Data.Snapshot_total)
-		assert.EqualExportedValues(t, expectedResponse.Snapshot_total_omit_skips, response.Data.Snapshot_total_omit_skips)
+		assert.ElementsMatch(t, expectedResponse.Target_allocation, *response.Data.Target_allocation)
+		assert.ElementsMatch(t, expectedResponse.Current_allocation, *response.Data.Current_allocation)
+		assert.ElementsMatch(t, expectedResponse.Change_required, *response.Data.Change_required)
+		assert.Equal(t, expectedResponse.Snapshot_total, response.Data.Snapshot_total)
+		assert.Equal(t, expectedResponse.Snapshot_total_omit_skips, response.Data.Snapshot_total_omit_skips)
+		assert.Equal(t, expectedResponse.Rebalance_thresh_pct, response.Data.Rebalance_thresh_pct)
 	default:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}

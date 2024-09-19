@@ -182,7 +182,21 @@ func getSnapshotByMaturationDateTest(t *testing.T) {
 }
 
 func getSnapshotRebalanceTest(t *testing.T) {
-	//
+	tc := advancedSnapshotTestCases.GetAdvancedSnapshotRebalanceTestCase(t)
+
+	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedGetSnapshotRebalanceResponse)
+	if !ok {
+		t.Fatal("invalid ExpectedGetSnapshotRebalanceResponse")
+	}
+
+	snapshotTester.TestGetSnapshotRebalance(
+		t,
+		ss_adv_snapid,
+		ss_adv_token,
+		expected,
+		ss_adv_testuser.User_id,
+		tc.ExpectedStatusCode,
+	)
 }
 
 var updateSnapshotTotal float64

@@ -107,7 +107,7 @@ const advancedAssets: { holdingName: string, maturationDate?: string, total: num
     { holdingName: "Holding14", maturationDate: "07/01/2010", taxShelter: "TRADITIONAL", institution: "Schwab", assetCategory: "ITB", accountName: "Account9", total: 11859.11, holdingER: 0, skip: true },
 ];
 
-const benchmark: { category: string, percent: number }[] = [
+const advancedBenchmark: { category: string, percent: number }[] = [
     { category: "TSM", percent: 20 },
     { category: "LTB", percent: 20 },
     { category: "CASH", percent: 20 },
@@ -116,21 +116,21 @@ const benchmark: { category: string, percent: number }[] = [
 ];
 
 // Back of the envelope calculations for computing the different `Advanced Snapshot` test values
-// console.log(getSnapshotTotalSummary(advancedAssets));
-// console.log(parseSnapshotWithGroupByKey("accountName"));
-// console.log(parseSnapshotWithGroupByKey("assetCategory"));
-// console.log(parseSnapshotWithGroupByKey("institution"));
-// console.log(parseSnapshotWithGroupByKey("taxShelter"));
+console.log(getSnapshotTotalSummary(advancedAssets));
+console.log(parseSnapshotWithGroupByKey("accountName"));
+console.log(parseSnapshotWithGroupByKey("assetCategory"));
+console.log(parseSnapshotWithGroupByKey("institution"));
+console.log(parseSnapshotWithGroupByKey("taxShelter"));
 
-// console.log("Maturation Dates Filtering...");
-// console.log(getSnapshotByMaturationDateRange(undefined, undefined));
-// console.log(getSnapshotByMaturationDateRange("01/01/2028", undefined));
-// console.log(getSnapshotByMaturationDateRange(undefined, "08/01/2011"));
+console.log("Maturation Dates Filtering...");
+console.log(getSnapshotByMaturationDateRange(undefined, undefined));
+console.log(getSnapshotByMaturationDateRange("01/01/2028", undefined));
+console.log(getSnapshotByMaturationDateRange(undefined, "08/01/2011"));
 
 console.log("Rebalance Figures...")
 console.log(getSnapshotCurrentAllocation(advancedAssets));
-console.log(getSnapshotTargetAllocation(advancedAssets, benchmark));
-console.log(getSnapshotChangedRequired(advancedAssets, benchmark));
+console.log(getSnapshotTargetAllocation(advancedAssets, advancedBenchmark));
+console.log(getSnapshotChangedRequired(advancedAssets, advancedBenchmark));
 
 export function getSnapshotTotalSummary(assets: typeof advancedAssets, excludeSkips?: boolean): { sum: number, er: number } {
     let sum = 0;
@@ -230,13 +230,12 @@ export function getSnapshotTargetAllocation(assets: typeof advancedAssets, bench
     console.log("Target Allocation:")
 
     const { sum } = getSnapshotTotalSummary(assets, excludeSkips);
-    const target: number = sum / Object.keys(benchmarkTarget).length;
 
     const tarList: { category: string, value: number }[] = [];
-    for (const asset of Object.values(benchmarkTarget)) {
+    for (const { category, percent } of benchmarkTarget) {
         tarList.push({
-            category: asset.category,
-            value: target,
+            category,
+            value: sum * percent / 100,
         });
     }
 
@@ -254,18 +253,17 @@ export function getSnapshotChangedRequired(assets: typeof advancedAssets, benchm
         current[asset.assetCategory] = (current[asset.assetCategory] ?? 0) + asset.total;
     }
 
-    const { sum } = getSnapshotTotalSummary(assets, excludeSkips);
-    const target: number = sum / Object.keys(benchmarkTarget).length;
+    const targets = getSnapshotTargetAllocation(assets, benchmarkTarget);
 
     let maxDeviationPct: number = 0;
     const changeRequired: Record<string, number> = {};
 
-    // Benchmark
-    for (const b of benchmarkTarget) {
-        const diff = target - current[b.category];
-        changeRequired[b.category] = diff;
+    // Benchmark targets
+    for (const target of targets) {
+        const diff = target.value - current[target.category];
+        changeRequired[target.category] = diff;
 
-        const deviationPct = Math.abs(diff / target * 100);
+        const deviationPct = Math.abs(diff / target.value * 100);
         if (deviationPct > maxDeviationPct) {
             maxDeviationPct = deviationPct;
         }
