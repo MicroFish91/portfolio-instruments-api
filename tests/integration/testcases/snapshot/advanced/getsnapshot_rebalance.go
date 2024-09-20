@@ -9,8 +9,8 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAdvancedSnapshotRebalanceTestCase(*testing.T) shared.GetTestCase {
-	return shared.GetTestCase{
+func GetAdvancedSnapshotRebalanceTestCase(*testing.T) shared.TestCase {
+	return shared.TestCase{
 		Title: "200",
 		ExpectedResponse: snapshotTester.ExpectedGetSnapshotRebalanceResponse{
 			Target_allocation: []types.AssetAllocation{

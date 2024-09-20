@@ -29,17 +29,17 @@ func (h *SnapshotValueHandlerImpl) CreateSnapshotValue(c fiber.Ctx) error {
 
 	// Verify account
 	if err := h.verifyAccountById(c, svPayload.Account_id, userPayload.User_id); err != nil {
-		return utils.SendError(c, fiber.StatusConflict, err)
+		return utils.SendError(c, fiber.StatusNotFound, err)
 	}
 
 	// Verify holding
 	if err := h.verifyHoldingById(c, svPayload.Holding_id, userPayload.User_id); err != nil {
-		return utils.SendError(c, fiber.StatusConflict, err)
+		return utils.SendError(c, fiber.StatusNotFound, err)
 	}
 
 	// Verify snapshot
 	if err := h.verifySnapshotById(c, svParams.Snap_id, userPayload.User_id); err != nil {
-		return utils.SendError(c, fiber.StatusConflict, err)
+		return utils.SendError(c, fiber.StatusNotFound, err)
 	}
 
 	// snapshotvalue
@@ -71,7 +71,7 @@ func (h *SnapshotValueHandlerImpl) CreateSnapshotValue(c fiber.Ctx) error {
 func (h *SnapshotValueHandlerImpl) verifyAccountById(c fiber.Ctx, accountId, userId int) error {
 	_, err := h.accountStore.GetAccountById(c.Context(), userId, accountId)
 	if err != nil {
-		return fmt.Errorf(`specified account with id "%d" does not exist for the current user`, accountId)
+		return fmt.Errorf(`specified account with id "%d" not found for the current user`, accountId)
 	}
 	return nil
 }
@@ -79,7 +79,7 @@ func (h *SnapshotValueHandlerImpl) verifyAccountById(c fiber.Ctx, accountId, use
 func (h *SnapshotValueHandlerImpl) verifyHoldingById(c fiber.Ctx, holdingId, userId int) error {
 	_, err := h.holdingStore.GetHoldingById(c.Context(), userId, holdingId)
 	if err != nil {
-		return fmt.Errorf(`specified holding with id "%d" does not exist for the current user`, holdingId)
+		return fmt.Errorf(`specified holding with id "%d" not found for the current user`, holdingId)
 	}
 	return nil
 }
@@ -87,7 +87,7 @@ func (h *SnapshotValueHandlerImpl) verifyHoldingById(c fiber.Ctx, holdingId, use
 func (h *SnapshotValueHandlerImpl) verifySnapshotById(c fiber.Ctx, snapshotId, userId int) error {
 	_, _, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotId, userId)
 	if err != nil {
-		return fmt.Errorf(`specified snapshot with id "%d" does not exist for the current user`, snapshotId)
+		return fmt.Errorf(`specified snapshot with id "%d" not found for the current user`, snapshotId)
 	}
 	return nil
 }

@@ -10,8 +10,8 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAdvancedSnapshotByMaturationDateTestCases(*testing.T) []shared.GetTestCase {
-	return []shared.GetTestCase{
+func GetAdvancedSnapshotByMaturationDateTestCases(*testing.T) []shared.TestCase {
+	return []shared.TestCase{
 		{
 			Title: "200 Date 1",
 			ExpectedResponse: snapshotTester.ExpectedGetSnapshotByMaturationDateResponse{

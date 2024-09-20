@@ -8,8 +8,8 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAdvancedSnapshotByAssetCategoryTestCase(*testing.T) shared.GetTestCase {
-	return shared.GetTestCase{
+func GetAdvancedSnapshotByAssetCategoryTestCase(*testing.T) shared.TestCase {
+	return shared.TestCase{
 		Title: "200",
 		ExpectedResponse: snapshotTester.ExpectedGetSnapshotByAssetCategoryResponse{
 			HoldingNames: []string{

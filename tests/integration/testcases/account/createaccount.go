@@ -9,13 +9,13 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetCreateAccountTests(t *testing.T, userId int, email string) []shared.PostTestCase {
+func GetCreateAccountTests(t *testing.T, userId int, email string) []shared.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.PostTestCase{
+	return []shared.TestCase{
 		// ---- 201 ----
 		{
 			Title: "201 Std",

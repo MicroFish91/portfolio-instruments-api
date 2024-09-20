@@ -10,16 +10,16 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetCreateBenchmarkTestCases(t *testing.T, userId int, email string) []shared.PostTestCase {
+func GetCreateBenchmarkTestCases(t *testing.T, userId int, email string) []shared.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.PostTestCase{
-		// ---- 200 ----
+	return []shared.TestCase{
+		// ---- 201 ----
 		{
-			Title: "200",
+			Title: "201",
 			Payload: benchmark.CreateBenchmarkPayload{
 				Name:        "Classic Bogleheads Portfolio",
 				Description: "The classic 60/40 split",
@@ -41,7 +41,7 @@ func GetCreateBenchmarkTestCases(t *testing.T, userId int, email string) []share
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
 		{
-			Title: "200 Valid Duplicate",
+			Title: "201 Valid Duplicate",
 			Payload: benchmark.CreateBenchmarkPayload{
 				Name:        "Classic Bogleheads Portfolio",
 				Description: "The classic 60/40 split",
@@ -63,7 +63,7 @@ func GetCreateBenchmarkTestCases(t *testing.T, userId int, email string) []share
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
 		{
-			Title: "200 No Description",
+			Title: "201 No Description",
 			Payload: benchmark.CreateBenchmarkPayload{
 				Name: "Golden Butterfly",
 				Asset_allocation: []types.AssetAllocationPct{
@@ -95,7 +95,7 @@ func GetCreateBenchmarkTestCases(t *testing.T, userId int, email string) []share
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
 		{
-			Title: "200 Name & Payload",
+			Title: "201 Name & Payload",
 			Payload: benchmark.CreateBenchmarkPayload{
 				Name: "Permanent Portfolio",
 				Asset_allocation: []types.AssetAllocationPct{

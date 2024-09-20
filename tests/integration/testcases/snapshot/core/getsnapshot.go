@@ -9,13 +9,13 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetSnapshotTestCases(t *testing.T, snapshotId, userId int, email string) []shared.GetTestCase {
+func GetSnapshotTestCases(t *testing.T, snapshotId, userId int, email string) []shared.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.GetTestCase{
+	return []shared.TestCase{
 		{
 			Title:       "200",
 			ParameterId: snapshotId,

@@ -8,8 +8,8 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetRegisterTestCases(email string, password string) []shared.PostTestCase {
-	return []shared.PostTestCase{
+func GetRegisterTestCases(email string, password string) []shared.TestCase {
+	return []shared.TestCase{
 		{
 			Title: "201",
 			Payload: auth.RegisterPayload{

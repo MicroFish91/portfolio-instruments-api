@@ -8,8 +8,8 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAdvancedSnapshotByAccountsTestCase(*testing.T) shared.GetTestCase {
-	return shared.GetTestCase{
+func GetAdvancedSnapshotByAccountsTestCase(*testing.T) shared.TestCase {
+	return shared.TestCase{
 		Title: "200",
 		ExpectedResponse: snapshotTester.ExpectedGetSnapshotByAccountResponse{
 			AccountNames: []string{

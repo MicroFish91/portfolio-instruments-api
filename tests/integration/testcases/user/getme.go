@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetMeTestCases(t *testing.T, userId int, email string) []shared.GetTestCase {
+func GetMeTestCases(t *testing.T, userId int, email string) []shared.TestCase {
 	tok401, err := auth.GenerateSignedJwt(userId, email, "Default")
 	if err != nil {
 		t.Fatal(err)
@@ -20,7 +20,7 @@ func GetMeTestCases(t *testing.T, userId int, email string) []shared.GetTestCase
 		t.Fatal(err)
 	}
 
-	return []shared.GetTestCase{
+	return []shared.TestCase{
 		{
 			Title:              "200",
 			ParameterId:        userId,

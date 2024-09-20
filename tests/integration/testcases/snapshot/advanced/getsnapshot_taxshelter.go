@@ -8,8 +8,8 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAdvancedSnapshotByTaxShelterTestCase(*testing.T) shared.GetTestCase {
-	return shared.GetTestCase{
+func GetAdvancedSnapshotByTaxShelterTestCase(*testing.T) shared.TestCase {
+	return shared.TestCase{
 		Title: "200",
 		ExpectedResponse: snapshotTester.ExpectedGetSnapshotByTaxShelterResponse{
 			TaxShelters: []string{

@@ -6,6 +6,7 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
 	snapIntegration "github.com/MicroFish91/portfolio-instruments-api/tests/integration/snapshot"
+	svIntegration "github.com/MicroFish91/portfolio-instruments-api/tests/integration/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/testserver"
 )
 
@@ -26,6 +27,6 @@ func TestApi(t *testing.T) {
 		t2.Run("Accounts", integration.TestAccountService)
 		t2.Run("Holdings", integration.TestHoldingService)
 		t2.Run("Snapshots", snapIntegration.TestSnapshotService)
-		t2.Run("SnapshotValue", integration.TestSnapshotValueService)
+		t2.Run("SnapshotValue", svIntegration.TestSnapshotValueService)
 	})
 }

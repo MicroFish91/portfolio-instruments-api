@@ -14,7 +14,7 @@ import (
 var CoreSnapshotTotal float64 = 2501.50
 var CoreWeightedEr float64 = 0.180
 
-func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingIds []int, userId int, email string) []shared.PostTestCase {
+func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingIds []int, userId int, email string) []shared.TestCase {
 	if len(accountIds) != 3 {
 		t.Fatal("unexpected accountId length for creating core snapshot")
 	}
@@ -27,7 +27,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 		t.Fatal(err)
 	}
 
-	return []shared.PostTestCase{
+	return []shared.TestCase{
 		// ---- 201 ----
 		{
 			Title: "201",

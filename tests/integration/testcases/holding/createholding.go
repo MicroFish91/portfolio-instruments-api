@@ -9,16 +9,16 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.PostTestCase {
+func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.PostTestCase{
+	return []shared.TestCase{
 		// ---- 200 ----
 		{
-			Title: "200 Ticker",
+			Title: "201 Ticker",
 			Payload: holding.CreateHoldingPayload{
 				Name:              "Vanguard Total Stock Market Index Fund",
 				Ticker:            "VTSAX",
@@ -28,7 +28,7 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
 		{
-			Title: "200 No Ticker",
+			Title: "201 No Ticker",
 			Payload: holding.CreateHoldingPayload{
 				Name:           "Bank01",
 				Ticker:         "",
@@ -37,7 +37,7 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
 		{
-			Title: "200 Fixed Income",
+			Title: "201 Fixed Income",
 			Payload: holding.CreateHoldingPayload{
 				Name:              "9128285M8",
 				Asset_category:    "LTB",
@@ -47,7 +47,7 @@ func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
 		{
-			Title: "200 Duplicate Deprecation",
+			Title: "201 Duplicate Deprecation",
 			Payload: holding.CreateHoldingPayload{
 				Name:              "Vanguard Total Stock Market Index Fund",
 				Ticker:            "VTSAX",

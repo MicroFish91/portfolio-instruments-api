@@ -9,13 +9,13 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetUpdateHoldingTestCases(t *testing.T, holdingId int, userId int, email string) []shared.PutTestCase {
+func GetUpdateHoldingTestCases(t *testing.T, holdingId int, userId int, email string) []shared.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.PutTestCase{
+	return []shared.TestCase{
 		// ---- 200 ----
 		{
 			Title:       "200 Ticker",

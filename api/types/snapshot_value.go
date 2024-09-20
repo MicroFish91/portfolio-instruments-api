@@ -36,6 +36,13 @@ type SnapshotValueStore interface {
 }
 
 // ---- Snapshot Value Response Types ----
+type CreateSnapshotValueResponse struct {
+	Data struct {
+		Snapshot_value SnapshotValue `json:"snapshot_value"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
 type UpdateSnapshotValueResponse struct {
 	Data struct {
 		Snapshot_value      SnapshotValue `json:"snapshot_value"`
