@@ -90,7 +90,7 @@ func getBenchmarksTests(t *testing.T) {
 	// Get benchmarks tests
 	for _, tc := range benchmarkTestCases.GetBenchmarksTestCases(t, bs_testuser.User_id, bs_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
-			response, ok := tc.ExpectedResponse.(benchmarkTestCases.GetBenchmarksExpectedResponse)
+			response, ok := tc.ExpectedResponse.(benchmarkTester.GetBenchmarksExpectedResponse)
 			if !ok {
 				t.Fatal("invalid GetBenchmarksExpectedResponse")
 			}

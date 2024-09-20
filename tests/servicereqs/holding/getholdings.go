@@ -4,12 +4,16 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/holding"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetHoldings(t *testing.T, route string, token string, expectedUserId int, expectedStatusCode int, expectedResponse holding.GetHoldingsExpectedResponse) {
+type GetHoldingsExpectedResponse struct {
+	Holdings   int
+	Pagination types.PaginationMetadata
+}
+
+func TestGetHoldings(t *testing.T, route string, token string, expectedUserId int, expectedStatusCode int, expectedResponse GetHoldingsExpectedResponse) {
 	var r string
 	if route == "" {
 		r = "/api/v1/holdings"

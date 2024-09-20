@@ -103,7 +103,7 @@ func getHoldingsTests(t *testing.T) {
 	// Get holdings tests
 	for _, tc := range holdingTestCases.GetHoldingsTestCases(t, hs_testuser.User_id, hs_token) {
 		t.Run(tc.Title, func(t2 *testing.T) {
-			response, ok := tc.ExpectedResponse.(holdingTestCases.GetHoldingsExpectedResponse)
+			response, ok := tc.ExpectedResponse.(holdingTester.GetHoldingsExpectedResponse)
 			if !ok {
 				t.Fatal("invalid GetHoldingsExpectedResponse")
 			}

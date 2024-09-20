@@ -4,12 +4,16 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/benchmark"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/stretchr/testify/assert"
 )
 
-func TestGetBenchmarks(t *testing.T, route string, token string, expectedUserId int, expectedStatusCode int, expectedResponse benchmark.GetBenchmarksExpectedResponse) {
+type GetBenchmarksExpectedResponse struct {
+	Benchmarks int
+	Pagination types.PaginationMetadata
+}
+
+func TestGetBenchmarks(t *testing.T, route string, token string, expectedUserId int, expectedStatusCode int, expectedResponse GetBenchmarksExpectedResponse) {
 	var r string
 	if route == "" {
 		r = "/api/v1/benchmarks"
