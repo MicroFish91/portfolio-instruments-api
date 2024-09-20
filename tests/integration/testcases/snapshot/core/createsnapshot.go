@@ -94,21 +94,9 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
 
-		// ---- 409 ----
+		// ---- 404 ----
 		{
-			Title: "409 Existing Snapshot",
-			Payload: snapshot.CreateSnapshotPayload{
-				Snap_date: utils.Calc_target_date(0, -1),
-				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
-					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
-				},
-				Benchmark_id: benchmarkId,
-			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
-			ExpectedStatusCode: fiber.StatusConflict,
-		},
-		{
-			Title: "409 Benchmark",
+			Title: "404 Benchmark",
 			Payload: snapshot.CreateSnapshotPayload{
 				Snap_date: utils.Calc_target_date(0, -5),
 				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
@@ -117,10 +105,10 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				Benchmark_id: 9999,
 			},
 			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
-			ExpectedStatusCode: fiber.StatusConflict,
+			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 		{
-			Title: "409 Account",
+			Title: "404 Account",
 			Payload: snapshot.CreateSnapshotPayload{
 				Snap_date: utils.Calc_target_date(0, -6),
 				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
@@ -129,14 +117,28 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				Benchmark_id: benchmarkId,
 			},
 			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
-			ExpectedStatusCode: fiber.StatusConflict,
+			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 		{
-			Title: "409 Holding",
+			Title: "404 Holding",
 			Payload: snapshot.CreateSnapshotPayload{
 				Snap_date: utils.Calc_target_date(0, -7),
 				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
 					{Account_id: accountIds[0], Holding_id: 9999, Total: 250.25, Skip_rebalance: false},
+				},
+				Benchmark_id: benchmarkId,
+			},
+			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedStatusCode: fiber.StatusNotFound,
+		},
+
+		// ---- 409 ----
+		{
+			Title: "409 Existing Snapshot",
+			Payload: snapshot.CreateSnapshotPayload{
+				Snap_date: utils.Calc_target_date(0, -1),
+				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
+					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
 				},
 				Benchmark_id: benchmarkId,
 			},
