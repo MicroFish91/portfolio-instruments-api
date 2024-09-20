@@ -30,7 +30,7 @@ func TestUserService(t *testing.T) {
 }
 
 func registerTests(t *testing.T) {
-	for _, tc := range userTestCases.GetRegisterTestCases(email, password) {
+	for _, tc := range userTestCases.RegisterTestCases(email, password) {
 		payload, ok := tc.Payload.(auth.RegisterPayload)
 		if !ok {
 			t.Fatal("invalid auth register payload")
@@ -47,7 +47,7 @@ func registerTests(t *testing.T) {
 }
 
 func loginTests(t *testing.T) {
-	for _, tc := range userTestCases.GetLoginTestCases(email, password) {
+	for _, tc := range userTestCases.LoginTestCases(email, password) {
 		payload, ok := tc.Payload.(auth.LoginPayload)
 		if !ok {
 			t.Fatal("invalid auth login payload")

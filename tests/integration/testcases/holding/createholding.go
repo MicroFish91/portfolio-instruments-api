@@ -9,7 +9,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetCreateHoldingTestCases(t *testing.T, userId int, email string) []shared.TestCase {
+func CreateHoldingTestCases(t *testing.T, userId int, email string) []shared.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)

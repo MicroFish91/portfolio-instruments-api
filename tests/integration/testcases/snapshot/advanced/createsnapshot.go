@@ -14,7 +14,7 @@ import (
 var AdvancedSnapshotTotal = 507108.10
 var AdvancedSnapshotExpenseRatio = 0.389
 
-func GetCreateSnapshotAdvancedTestCase(t *testing.T, benchmarkId int, accountIds []int, holdingIds []int) shared.TestCase {
+func CreateAdvancedSnapshotTestCase(t *testing.T, benchmarkId int, accountIds []int, holdingIds []int) shared.TestCase {
 	if len(accountIds) != 9 {
 		t.Fatal("unexpected accountId length for creating advanced snapshot")
 	}

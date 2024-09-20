@@ -9,7 +9,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetUpdateAccountTests(t *testing.T, accountId int, userId int, email string) []shared.TestCase {
+func UpdateAccountsTestCases(t *testing.T, accountId int, userId int, email string) []shared.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)

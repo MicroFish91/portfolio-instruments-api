@@ -36,7 +36,7 @@ func benchmarkServiceSetup(t *testing.T) {
 }
 
 func createBenchmarkTests(t *testing.T) {
-	for _, tc := range benchmarkTestCases.GetCreateBenchmarkTestCases(t, bs_testuser.User_id, bs_testuser.Email) {
+	for _, tc := range benchmarkTestCases.CreateBenchmarkTestCases(t, bs_testuser.User_id, bs_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := bs_token
 			if tc.ReplacementToken != "" {

@@ -10,7 +10,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetCreateBenchmarkTestCases(t *testing.T, userId int, email string) []shared.TestCase {
+func CreateBenchmarkTestCases(t *testing.T, userId int, email string) []shared.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)

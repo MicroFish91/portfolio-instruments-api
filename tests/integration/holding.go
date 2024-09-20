@@ -39,7 +39,7 @@ func holdingServiceSetup(t *testing.T) {
 }
 
 func createHoldingTests(t *testing.T) {
-	for _, tc := range holdingTestCases.GetCreateHoldingTestCases(t, hs_testuser.User_id, hs_token) {
+	for _, tc := range holdingTestCases.CreateHoldingTestCases(t, hs_testuser.User_id, hs_token) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := hs_token
 			if tc.ReplacementToken != "" {
@@ -101,7 +101,7 @@ func getHoldingsTests(t *testing.T) {
 	})
 
 	// Get holdings tests
-	for _, tc := range holdingTestCases.GetHoldingsTestsCases(t, hs_testuser.User_id, hs_token) {
+	for _, tc := range holdingTestCases.GetHoldingsTestCases(t, hs_testuser.User_id, hs_token) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			response, ok := tc.ExpectedResponse.(holdingTestCases.GetHoldingsExpectedResponse)
 			if !ok {
@@ -145,7 +145,7 @@ func getHoldingTests(t *testing.T) {
 }
 
 func updateHoldingTests(t *testing.T) {
-	for _, tc := range holdingTestCases.GetUpdateHoldingTestCases(t, holdId, hs_testuser.User_id, hs_testuser.Email) {
+	for _, tc := range holdingTestCases.UpdateHoldingTestCases(t, holdId, hs_testuser.User_id, hs_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := hs_token
 			if tc.ReplacementToken != "" {
@@ -165,7 +165,7 @@ func updateHoldingTests(t *testing.T) {
 }
 
 func deleteHoldingTests(t *testing.T) {
-	for _, tc := range holdingTestCases.GetDeleteHoldingTestCases(t, holdId, hs_testuser.User_id, hs_testuser.Email) {
+	for _, tc := range holdingTestCases.DeleteHoldingTestCases(t, holdId, hs_testuser.User_id, hs_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := hs_token
 			if tc.ReplacementToken != "" {

@@ -14,7 +14,7 @@ type GetHoldingsExpectedResponse struct {
 	Pagination types.PaginationMetadata
 }
 
-func GetHoldingsTestsCases(t *testing.T, userId int, email string) []shared.TestCase {
+func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)

@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetLoginTestCases(email string, password string) []shared.TestCase {
+func LoginTestCases(email string, password string) []shared.TestCase {
 	return []shared.TestCase{
 		{
 			Title: "201",

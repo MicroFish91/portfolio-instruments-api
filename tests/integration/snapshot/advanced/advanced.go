@@ -52,7 +52,7 @@ func advancedSnapshotSetup(t *testing.T) {
 }
 
 func createSnapshotTest(t *testing.T) {
-	tc := advancedSnapshotTestCases.GetCreateSnapshotAdvancedTestCase(t, ss_adv_benchmarkid, ss_adv_accountids, ss_adv_holdingids)
+	tc := advancedSnapshotTestCases.CreateAdvancedSnapshotTestCase(t, ss_adv_benchmarkid, ss_adv_accountids, ss_adv_holdingids)
 
 	expected, ok := tc.ExpectedResponse.(snapshotTester.ExpectedCreateSnapshotResponse)
 	if !ok {
