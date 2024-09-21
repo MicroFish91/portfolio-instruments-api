@@ -17,11 +17,13 @@ var (
 	svs_benchmarkid int
 	svs_accountids  []int
 	svs_holdingids  []int
+	svs_svids       []int
 )
 
 func TestSnapshotValueService(t *testing.T) {
 	t.Run("Setup", snapshotValueServiceSetup)
-	t.Run("POST://api/v1/snapshots/:sid/values/:svid", createSnapshotValueTests)
+	t.Run("POST://api/v1/snapshots/:sid/values", createSnapshotValueTests)
+	t.Run("GET://api/v1/snapshots/:sid/values", getSnapshotValuesTests)
 }
 
 func snapshotValueServiceSetup(t *testing.T) {
@@ -40,13 +42,39 @@ func createSnapshotValueTests(t *testing.T) {
 				tok = tc.ReplacementToken
 			}
 
-			snapshotValueTester.TestCreateSnapshotValue(
+			svid := snapshotValueTester.TestCreateSnapshotValue(
 				t2,
 				tc.Payload,
 				tok,
 				tc.ParameterId,
 				svs_testuser.User_id,
 				tc.ExpectedStatusCode,
+			)
+			svs_svids = append(svs_svids, svid)
+		})
+	}
+}
+
+func getSnapshotValuesTests(t *testing.T) {
+	for _, tc := range snapshotValueTestCases.GetSnapshotValuesTestCases(t, svs_snapshotid, svs_testuser.User_id, svs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := svs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			expectedResponse, ok := tc.ExpectedResponse.(snapshotValueTester.ExpectedGetSnapshotValuesResponse)
+			if !ok {
+				t.Fatal("invalid ExpectedGetSnapshotValuesResponse")
+			}
+
+			snapshotValueTester.TestGetSnapshotValues(
+				t2,
+				tok,
+				tc.ParameterId,
+				svs_testuser.User_id,
+				tc.ExpectedStatusCode,
+				expectedResponse,
 			)
 		})
 	}

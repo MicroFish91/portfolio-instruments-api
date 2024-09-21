@@ -2,6 +2,7 @@ package snapshotvalue
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -36,6 +37,10 @@ func (s *PostgresSnapshotValueStore) GetSnapshotValues(ctx context.Context, snap
 	if err != nil {
 		return []types.SnapshotValue{}, err
 	}
+	if len(snapshotValues) == 0 {
+		return []types.SnapshotValue{}, errors.New("snapshot_values for the given snapshot id not found")
+	}
+
 	return snapshotValues, nil
 }
 
