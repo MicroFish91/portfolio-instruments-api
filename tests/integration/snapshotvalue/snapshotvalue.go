@@ -26,6 +26,7 @@ func TestSnapshotValueService(t *testing.T) {
 	t.Run("GET://api/v1/snapshots/:sid/values", getSnapshotValuesTests)
 	t.Run("GET://api/v1/snapshots/:sid/values/:svid", getSnapshotValueTests)
 	t.Run("PUT://api/v1/snapshots/:sid/values/:svid", updateSnapshotValueTests)
+	t.Run("DEL://api/v1/snapshots/:sid/values/:svid", deleteSnapshotValueTests)
 }
 
 func snapshotValueServiceSetup(t *testing.T) {
@@ -120,6 +121,32 @@ func updateSnapshotValueTests(t *testing.T) {
 				tc.ParameterId,
 				tc.ParameterId2,
 				tc.Payload,
+				tok,
+				expectedResponse,
+				svs_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func deleteSnapshotValueTests(t *testing.T) {
+	for _, tc := range snapshotValueTestCases.DeleteSnapshotValueTestCases(t, svs_snapshotid, svs_svids[0], svs_testuser.User_id, svs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := svs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			expectedResponse, ok := tc.ExpectedResponse.(snapshotValueTester.ExpectedDeleteSnapshotValueResponse)
+			if !ok {
+				t.Fatal("invalid ExpectedDeleteSnapshotValueResponse")
+			}
+
+			snapshotValueTester.TestDeleteSnapshotValue(
+				t2,
+				tc.ParameterId,
+				tc.ParameterId2,
 				tok,
 				expectedResponse,
 				svs_testuser.User_id,

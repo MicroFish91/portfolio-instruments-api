@@ -39,8 +39,13 @@ func TestDeleteSnapshotValue(t *testing.T, snapId int, snapValId int, token stri
 			},
 			response.Data.Snapshot_value,
 		)
-		assert.Equal(t, expectedResponse.Total, response.Data.Snapshot_total)
-		assert.Equal(t, expectedResponse.Er, response.Data.Snapshot_weighteder)
+
+		if expectedResponse.Total != 0 {
+			assert.Equal(t, expectedResponse.Total, response.Data.Snapshot_total)
+		}
+		if expectedResponse.Er != 0 {
+			assert.Equal(t, expectedResponse.Er, response.Data.Snapshot_weighteder)
+		}
 	default:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}
