@@ -7,6 +7,8 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
 	snapshotValueTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshotvalue"
 	snapshotValueTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshotvalue"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
+	"github.com/gofiber/fiber/v3"
 )
 
 var (
@@ -27,6 +29,7 @@ func TestSnapshotValueService(t *testing.T) {
 	t.Run("GET://api/v1/snapshots/:sid/values/:svid", getSnapshotValueTests)
 	t.Run("PUT://api/v1/snapshots/:sid/values/:svid", updateSnapshotValueTests)
 	t.Run("DEL://api/v1/snapshots/:sid/values/:svid", deleteSnapshotValueTests)
+	t.Run("Cleanup", snapshotValueServiceCleanup)
 }
 
 func snapshotValueServiceSetup(t *testing.T) {
@@ -154,4 +157,8 @@ func deleteSnapshotValueTests(t *testing.T) {
 			)
 		})
 	}
+}
+
+func snapshotValueServiceCleanup(t *testing.T) {
+	userTester.TestDeleteUser(t, "", svs_token, svs_testuser.User_id, fiber.StatusOK)
 }
