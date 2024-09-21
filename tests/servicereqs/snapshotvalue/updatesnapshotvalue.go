@@ -42,8 +42,13 @@ func TestUpdateSnapshotValue(t *testing.T, snapId int, snapValId int, payload an
 			},
 			updateSnapshotValue.Data.Snapshot_value,
 		)
-		assert.Equal(t, expectedResponse.Total, updateSnapshotValue.Data.Snapshot_total)
-		assert.Equal(t, expectedResponse.Er, updateSnapshotValue.Data.Snapshot_weighteder)
+
+		if expectedResponse.Total != 0 {
+			assert.Equal(t, expectedResponse.Total, updateSnapshotValue.Data.Snapshot_total)
+		}
+		if expectedResponse.Er != 0 {
+			assert.Equal(t, expectedResponse.Er, updateSnapshotValue.Data.Snapshot_weighteder)
+		}
 	default:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}

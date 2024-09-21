@@ -42,5 +42,6 @@ func (s *PostgresSnapshotValueStore) UpdateSnapshotValue(ctx context.Context, sv
 	if err != nil {
 		return types.SnapshotValue{}, err
 	}
+
 	return snapshotValue, nil
 }

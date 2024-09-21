@@ -26,6 +26,21 @@ func (h *SnapshotValueHandlerImpl) UpdateSnapshotValue(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid snapshot_value params from request"))
 	}
 
+	// Verify account
+	if err := h.verifyAccountById(c, svPayload.Account_id, userPayload.User_id); err != nil {
+		return utils.SendError(c, fiber.StatusNotFound, err)
+	}
+
+	// Verify holding
+	if err := h.verifyHoldingById(c, svPayload.Holding_id, userPayload.User_id); err != nil {
+		return utils.SendError(c, fiber.StatusNotFound, err)
+	}
+
+	// Verify snapshot
+	if err := h.verifySnapshotById(c, svParams.Snap_id, userPayload.User_id); err != nil {
+		return utils.SendError(c, fiber.StatusNotFound, err)
+	}
+
 	snapshotValue, err := h.snapshotValueStore.UpdateSnapshotValue(c.Context(), types.SnapshotValue{
 		Snap_val_id:    svParams.Snap_val_id,
 		Snap_id:        svParams.Snap_id,
