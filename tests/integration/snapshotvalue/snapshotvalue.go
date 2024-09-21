@@ -24,6 +24,7 @@ func TestSnapshotValueService(t *testing.T) {
 	t.Run("Setup", snapshotValueServiceSetup)
 	t.Run("POST://api/v1/snapshots/:sid/values", createSnapshotValueTests)
 	t.Run("GET://api/v1/snapshots/:sid/values", getSnapshotValuesTests)
+	t.Run("GET://api/v1/snapshots/:sid/values/:svid", getSnapshotValueTests)
 }
 
 func snapshotValueServiceSetup(t *testing.T) {
@@ -75,6 +76,26 @@ func getSnapshotValuesTests(t *testing.T) {
 				svs_testuser.User_id,
 				tc.ExpectedStatusCode,
 				expectedResponse,
+			)
+		})
+	}
+}
+
+func getSnapshotValueTests(t *testing.T) {
+	for _, tc := range snapshotValueTestCases.GetSnapshotValueTestCases(t, svs_snapshotid, svs_svids[0], svs_testuser.User_id, svs_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := svs_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			snapshotValueTester.TestGetSnapshotValue(
+				t2,
+				tc.ParameterId,
+				tc.ParameterId2,
+				tok,
+				svs_testuser.User_id,
+				tc.ExpectedStatusCode,
 			)
 		})
 	}

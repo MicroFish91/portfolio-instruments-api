@@ -50,6 +50,13 @@ type GetSnapshotValuesResponse struct {
 	Error string `json:"error"`
 }
 
+type GetSnapshotValueResponse struct {
+	Data struct {
+		Snapshot_value SnapshotValue `json:"snapshot_value"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
 type UpdateSnapshotValueResponse struct {
 	Data struct {
 		Snapshot_value      SnapshotValue `json:"snapshot_value"`
