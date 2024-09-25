@@ -1,4 +1,4 @@
-## ThunderClient
+## ⚡ ThunderClient
 
 ThunderClient is a lightweight VS Code extension designed for quickly testing API endpoints, similar to Postman. Install it directly from the VS Code marketplace for local use.
 
