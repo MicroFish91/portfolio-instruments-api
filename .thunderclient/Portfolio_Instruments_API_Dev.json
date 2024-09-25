@@ -1,0 +1,53 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "Portfolio_Instruments_API",
+    "collectionId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
+    "dateExported": "2024-09-25T04:33:26.224Z",
+    "version": "1.2",
+    "folders": [
+        {
+            "_id": "d3a6a604-4b21-413a-83d7-24e7ad849e9a",
+            "name": "Auth",
+            "containerId": "",
+            "created": "2024-09-25T04:30:09.211Z",
+            "sortNum": 10000
+        }
+    ],
+    "requests": [
+        {
+            "_id": "c93b027d-6f5f-40b4-a6a0-fdcdba2c4356",
+            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
+            "containerId": "d3a6a604-4b21-413a-83d7-24e7ad849e9a",
+            "name": "Registration",
+            "url": "http://localhost:3000/api/v1/register",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-09-25T04:30:34.615Z",
+            "modified": "2024-09-25T04:32:09.532Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"test_user@gmail.com\",\n  \"password\": \"abcd1234\"\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "32376936-772f-41e0-88ea-10dc79f18afc",
+            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
+            "containerId": "d3a6a604-4b21-413a-83d7-24e7ad849e9a",
+            "name": "Login",
+            "url": "http://localhost:3000/api/v1/login",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2024-09-25T04:32:54.067Z",
+            "modified": "2024-09-25T04:33:06.345Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"email\": \"test_user@gmail.com\",\n  \"password\": \"abcd1234\"\n}",
+                "form": []
+            }
+        }
+    ],
+    "ref": "_fUgu0uXCXoFRR9z5MYGpTmSriOyXYYiIXfR1de4YXZhA7oOWsghH6eNoU-dBo1aXc83zz2eRTzkzgBE82VRAQ"
+}
