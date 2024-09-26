@@ -2,7 +2,7 @@
     "clientName": "Thunder Client",
     "collectionName": "Portfolio_Instruments_API",
     "collectionId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-    "dateExported": "2024-09-25T04:33:26.224Z",
+    "dateExported": "2024-09-26T02:43:39.161Z",
     "version": "1.2",
     "folders": [
         {
@@ -11,6 +11,13 @@
             "containerId": "",
             "created": "2024-09-25T04:30:09.211Z",
             "sortNum": 10000
+        },
+        {
+            "_id": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "name": "Accounts",
+            "containerId": "",
+            "created": "2024-09-26T02:05:47.507Z",
+            "sortNum": 20000
         }
     ],
     "requests": [
@@ -47,7 +54,103 @@
                 "raw": "{\n  \"email\": \"test_user@gmail.com\",\n  \"password\": \"abcd1234\"\n}",
                 "form": []
             }
+        },
+        {
+            "_id": "fc733d3e-7192-44e6-aa4a-509bf57f8684",
+            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
+            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "name": "Create_Account",
+            "url": "http://localhost:3000/api/v1/accounts",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2024-09-26T02:07:01.651Z",
+            "modified": "2024-09-26T02:42:37.444Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"FID001\",\n  \"description\": \"Fidelity account ending in 7895\",\n  \"tax_shelter\": \"ROTH\",\n  \"institution\": \"Fidelity\",\n  \"is_deprecated\": false\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "71b3de36-54fd-430d-80b0-db07dc8a8e06",
+            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
+            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "name": "Get_Accounts",
+            "url": "http://localhost:3000/api/v1/accounts",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2024-09-26T02:24:01.952Z",
+            "modified": "2024-09-26T02:42:46.017Z",
+            "headers": [],
+            "params": [
+                {
+                    "name": "ids",
+                    "value": "2,5,9",
+                    "isDisabled": true,
+                    "isPath": false
+                },
+                {
+                    "name": "tax_shelter",
+                    "value": "TAXABLE",
+                    "isDisabled": true,
+                    "isPath": false
+                },
+                {
+                    "name": "institution",
+                    "value": "Fidelity",
+                    "isDisabled": true,
+                    "isPath": false
+                },
+                {
+                    "name": "is_deprecated",
+                    "value": "true",
+                    "isDisabled": true,
+                    "isPath": false
+                }
+            ]
+        },
+        {
+            "_id": "91be8cd4-1e90-4b03-a3ab-4594367d47e6",
+            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
+            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "name": "Get_Account",
+            "url": "http://localhost:3000/api/v1/accounts/1",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2024-09-26T02:24:48.446Z",
+            "modified": "2024-09-26T02:43:02.660Z",
+            "headers": []
+        },
+        {
+            "_id": "b759a91f-6ad7-43db-b6b1-3ad65367b7a9",
+            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
+            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "name": "Update_Account",
+            "url": "http://localhost:3000/api/v1/accounts/1",
+            "method": "PUT",
+            "sortNum": 60000,
+            "created": "2024-09-26T02:30:18.243Z",
+            "modified": "2024-09-26T02:43:09.249Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\": \"FID001\",\n  \"description\": \"Fidelity account ending in 7895\",\n  \"tax_shelter\": \"TAXABLE\",\n  \"institution\": \"Fidelity\",\n  \"is_deprecated\": false\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "5545b995-feff-4604-8bd8-fa5c9e1b1683",
+            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
+            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "name": "Delete_Account",
+            "url": "http://localhost:3000/api/v1/accounts/1",
+            "method": "DELETE",
+            "sortNum": 70000,
+            "created": "2024-09-26T02:37:52.604Z",
+            "modified": "2024-09-26T02:43:14.942Z",
+            "headers": []
         }
     ],
-    "ref": "_fUgu0uXCXoFRR9z5MYGpTmSriOyXYYiIXfR1de4YXZhA7oOWsghH6eNoU-dBo1aXc83zz2eRTzkzgBE82VRAQ"
+    "ref": "_fUgu0uXCXoFRR9z5MYGpZB-kpPB_VeHKaRONgMvfWBZQjxE_vpjRjmvFabTSl42pc0ADFbHozofSJTyzxrb1Q"
 }
