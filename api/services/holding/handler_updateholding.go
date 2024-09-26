@@ -38,7 +38,7 @@ func (h *HoldingHandlerImpl) UpdateHolding(c fiber.Ctx) error {
 	// Ensure only one unique "active" ticker per user
 	if holdingPayload.Ticker != "" && !holdingPayload.Is_deprecated {
 		existingHolding, _ := h.store.GetHoldingByTicker(c.Context(), holdingPayload.Ticker, userPayload.User_id)
-		if existingHolding.Holding_id != 0 {
+		if existingHolding.Holding_id != 0 && existingHolding.Holding_id != holdingParams.Id {
 			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has holding with ticker symbol "%s"`, existingHolding.Ticker))
 		}
 	}

@@ -1,36 +1,43 @@
 {
     "clientName": "Thunder Client",
     "collectionName": "Portfolio_Instruments_API",
-    "collectionId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
-    "dateExported": "2024-09-26T05:49:31.011Z",
+    "collectionId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+    "dateExported": "2024-09-26T07:14:17.158Z",
     "version": "1.2",
     "folders": [
         {
-            "_id": "68141fc9-80ac-4356-96a6-86239968d69f",
+            "_id": "2bfeab2f-6124-4d36-9868-85a9071dda2b",
             "name": "Auth",
             "containerId": "",
-            "created": "2024-09-26T05:48:15.679Z",
+            "created": "2024-09-26T06:59:47.380Z",
             "sortNum": 10000
         },
         {
-            "_id": "e494e0ae-f256-4538-b79b-3468f833a281",
+            "_id": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
             "name": "Accounts",
             "containerId": "",
-            "created": "2024-09-26T05:48:15.680Z",
+            "created": "2024-09-26T06:59:47.381Z",
             "sortNum": 20000
+        },
+        {
+            "_id": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "name": "Holdings",
+            "containerId": "",
+            "created": "2024-09-26T07:00:07.333Z",
+            "sortNum": 30000
         }
     ],
     "requests": [
         {
-            "_id": "9b3bebb2-d4a0-43b5-bbbd-bea15f984ebe",
-            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
-            "containerId": "68141fc9-80ac-4356-96a6-86239968d69f",
+            "_id": "70f9c931-bf37-4205-b5e2-c3b0d4e67fbe",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "2bfeab2f-6124-4d36-9868-85a9071dda2b",
             "name": "Registration",
             "url": "http://localhost:3000/api/v1/register",
             "method": "POST",
             "sortNum": 10000,
-            "created": "2024-09-26T05:48:15.679Z",
-            "modified": "2024-09-26T05:48:22.503Z",
+            "created": "2024-09-26T06:59:47.380Z",
+            "modified": "2024-09-26T06:59:47.380Z",
             "headers": [],
             "auth": null,
             "body": {
@@ -41,15 +48,15 @@
             "params": null
         },
         {
-            "_id": "be8daa2d-80e3-4c35-873c-5bf416f4109e",
-            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
-            "containerId": "68141fc9-80ac-4356-96a6-86239968d69f",
+            "_id": "6efb53c6-f531-4789-a0b2-dc0a590b1fdf",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "2bfeab2f-6124-4d36-9868-85a9071dda2b",
             "name": "Login",
             "url": "http://localhost:3000/api/v1/login",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2024-09-26T05:48:15.680Z",
-            "modified": "2024-09-26T05:48:28.747Z",
+            "created": "2024-09-26T06:59:47.381Z",
+            "modified": "2024-09-26T06:59:54.434Z",
             "headers": [],
             "auth": null,
             "body": {
@@ -60,37 +67,34 @@
             "params": null
         },
         {
-            "_id": "6dfcef17-d5aa-44ef-93eb-e2f08642304a",
-            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
-            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
+            "_id": "6b0df2ea-f947-4c88-a928-028586b2cd44",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
             "name": "Create_Account",
             "url": "http://localhost:3000/api/v1/accounts",
             "method": "POST",
             "sortNum": 30000,
-            "created": "2024-09-26T05:48:15.681Z",
-            "modified": "2024-09-26T05:48:45.128Z",
+            "created": "2024-09-26T06:59:47.382Z",
+            "modified": "2024-09-26T07:06:21.242Z",
             "headers": [],
-            "auth": {
-                "type": "bearer",
-                "bearer": ""
-            },
+            "auth": null,
             "body": {
                 "form": [],
-                "raw": "{\n  \"name\": \"FID001\",\n  \"description\": \"Fidelity account ending in 7895\",\n  \"tax_shelter\": \"ROTH\",\n  \"institution\": \"Fidelity\",\n  \"is_deprecated\": false\n}",
+                "raw": "{\n  \"name\": \"FID001\",\n  \"description\": \"Fidelity account ending in 7895\",\n  \"tax_shelter\": \"ROTH\",\n  \"institution\": \"Fidelity\"\n}",
                 "type": "json"
             },
             "params": null
         },
         {
-            "_id": "1e1f0109-023b-4a37-88be-6da1b78a32d5",
-            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
-            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
+            "_id": "65d4cb76-be16-4eac-9738-8635030ca01b",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
             "name": "Get_Accounts",
             "url": "http://localhost:3000/api/v1/accounts",
             "method": "GET",
             "sortNum": 40000,
-            "created": "2024-09-26T05:48:15.682Z",
-            "modified": "2024-09-26T05:48:53.124Z",
+            "created": "2024-09-26T06:59:47.383Z",
+            "modified": "2024-09-26T06:59:47.383Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -125,15 +129,15 @@
             ]
         },
         {
-            "_id": "d1d54dda-7d3e-4ab5-9268-e470759987c5",
-            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
-            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
+            "_id": "da930a2d-b938-47d9-8ad5-dea702eaa128",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
             "name": "Get_Account",
             "url": "http://localhost:3000/api/v1/accounts/1",
             "method": "GET",
             "sortNum": 50000,
-            "created": "2024-09-26T05:48:15.683Z",
-            "modified": "2024-09-26T05:49:05.418Z",
+            "created": "2024-09-26T06:59:47.384Z",
+            "modified": "2024-09-26T06:59:47.384Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -143,15 +147,52 @@
             "params": null
         },
         {
-            "_id": "49e48449-c67b-4a38-9223-db40f7d6b560",
-            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
-            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
+            "_id": "d7a72004-6c43-4948-a852-b9be843530f7",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
             "name": "Update_Account",
             "url": "http://localhost:3000/api/v1/accounts/1",
             "method": "PUT",
             "sortNum": 60000,
-            "created": "2024-09-26T05:48:15.684Z",
-            "modified": "2024-09-26T05:49:16.628Z",
+            "created": "2024-09-26T06:59:47.385Z",
+            "modified": "2024-09-26T07:06:19.808Z",
+            "headers": [],
+            "auth": null,
+            "body": {
+                "form": [],
+                "raw": "{\n  \"name\": \"FID001\",\n  \"description\": \"Fidelity account ending in 7895\",\n  \"tax_shelter\": \"ROTH\",\n  \"institution\": \"Fidelity\",\n  \"is_deprecated\": true\n}",
+                "type": "json"
+            },
+            "params": null
+        },
+        {
+            "_id": "821f6668-459a-4bc3-a7a8-36d464b4467e",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
+            "name": "Delete_Account",
+            "url": "http://localhost:3000/api/v1/accounts/1",
+            "method": "DELETE",
+            "sortNum": 70000,
+            "created": "2024-09-26T06:59:47.386Z",
+            "modified": "2024-09-26T06:59:47.386Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
+        },
+        {
+            "_id": "07fdb939-96d0-4fdf-b36a-ba66dae080ee",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "name": "Create_Holding_Ticker",
+            "url": "http://localhost:3000/api/v1/holdings",
+            "method": "POST",
+            "sortNum": 80000,
+            "created": "2024-09-26T07:00:12.740Z",
+            "modified": "2024-09-26T07:05:16.323Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -159,21 +200,132 @@
             },
             "body": {
                 "form": [],
-                "raw": "{\n  \"name\": \"FID001\",\n  \"description\": \"Fidelity account ending in 7895\",\n  \"tax_shelter\": \"TAXABLE\",\n  \"institution\": \"Fidelity\",\n  \"is_deprecated\": false\n}",
+                "raw": "{\n  \"name\": \"Fidelity Total Market Index Fund\",\n  \"ticker\": \"FSKAXB\",\n  \"asset_category\": \"TSM\",\n  \"expense_ratio_pct\": 0.1\n}",
                 "type": "json"
             },
             "params": null
         },
         {
-            "_id": "caadcacb-4843-454d-a085-579f74174cdf",
-            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
-            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
-            "name": "Delete_Account",
-            "url": "http://localhost:3000/api/v1/accounts/1",
+            "_id": "51a4f947-d6d8-4cd5-89a4-adc97bafd3bd",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "name": "Create_Holding_Fixed_Income",
+            "url": "http://localhost:3000/api/v1/holdings",
+            "method": "POST",
+            "sortNum": 90000,
+            "created": "2024-09-26T07:02:09.130Z",
+            "modified": "2024-09-26T07:06:11.352Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": {
+                "form": [],
+                "raw": "{\n  \"name\": \"Treasury #79821\",\n  \"asset_category\": \"ITB\",\n  \"maturation_date\": \"01/01/2020\",\n  \"interest_rate_pct\": 5.8\n}",
+                "type": "json"
+            },
+            "params": null
+        },
+        {
+            "_id": "bb321e45-8aac-49a7-9aeb-57d64a85eddf",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "name": "Get_Holdings",
+            "url": "http://localhost:3000/api/v1/holdings",
+            "method": "GET",
+            "sortNum": 100000,
+            "created": "2024-09-26T07:07:08.686Z",
+            "modified": "2024-09-26T07:09:26.576Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": [
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "ids",
+                    "value": "1,4,6"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "ticker",
+                    "value": "FSKAX"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "asset_category",
+                    "value": "TSM"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "has_maturation_remaining",
+                    "value": "true"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "is_deprecated",
+                    "value": "true"
+                }
+            ]
+        },
+        {
+            "_id": "91feafc7-f0e3-4a73-8610-025c121cb41d",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "name": "Get_Holding",
+            "url": "http://localhost:3000/api/v1/holdings/1",
+            "method": "GET",
+            "sortNum": 110000,
+            "created": "2024-09-26T07:09:36.424Z",
+            "modified": "2024-09-26T07:09:58.493Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
+        },
+        {
+            "_id": "9d0a3a73-f72f-4afa-8957-952852507393",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "name": "Update_Holding",
+            "url": "http://localhost:3000/api/v1/holdings/1",
+            "method": "PUT",
+            "sortNum": 120000,
+            "created": "2024-09-26T07:10:17.849Z",
+            "modified": "2024-09-26T07:11:49.988Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": {
+                "form": [],
+                "raw": "{\n  \"name\": \"Fidelity Total Market Index Fund\",\n  \"ticker\": \"FSKAX\",\n  \"asset_category\": \"DLCB\",\n  \"expense_ratio_pct\": 0.1\n}",
+                "type": "json"
+            },
+            "params": null
+        },
+        {
+            "_id": "9f93ab88-79e3-4d66-bff1-4cfbc1b292c5",
+            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
+            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "name": "Delete_Holding",
+            "url": "http://localhost:3000/api/v1/holdings/1",
             "method": "DELETE",
-            "sortNum": 70000,
-            "created": "2024-09-26T05:48:15.685Z",
-            "modified": "2024-09-26T05:49:24.046Z",
+            "sortNum": 130000,
+            "created": "2024-09-26T07:13:48.828Z",
+            "modified": "2024-09-26T07:14:08.442Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -183,5 +335,5 @@
             "params": null
         }
     ],
-    "ref": "yL9vgHcr-DCVU7BPTouAWSL_C51bKRNjevlU7YUYaWrh6Hfx5ocpZwL9ocPQUC7_aSK42esWi5qKsu86gdaMew"
+    "ref": "w-nBiEUKeAMsNWcVblJjle3-DMIYFAWje_2t1QtVttLfe64cnd73G4KxpDnISCaUXTOp_79seiHMVe6ys8P8AQ"
 }

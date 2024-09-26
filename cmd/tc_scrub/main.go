@@ -21,7 +21,7 @@ func main() {
 
 	// Scrub tokens
 	for i, req := range tc_requests.Requests {
-		if req.Auth != nil && req.Auth.Bearer != "" {
+		if req.Auth != nil && req.Auth.Type != "" {
 			tc_requests.Requests[i].Auth.Bearer = ""
 		} else {
 			tc_requests.Requests[i].Auth = nil
