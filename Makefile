@@ -16,6 +16,9 @@ migrate-up:
 migrate-down:
 	@go run cmd/migrate/main.go down 
 
+tc-scrub:
+	@go run cmd/tc_scrub/main.go
+
 config-up:
 	@docker-compose up
 

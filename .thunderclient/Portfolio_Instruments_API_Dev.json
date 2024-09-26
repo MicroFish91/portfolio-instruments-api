@@ -2,7 +2,7 @@
     "clientName": "Thunder Client",
     "collectionName": "Portfolio_Instruments_API",
     "collectionId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-    "dateExported": "2024-09-26T02:43:39.161Z",
+    "dateExported": "2024-09-26T05:11:22.808Z",
     "version": "1.2",
     "folders": [
         {
@@ -32,11 +32,16 @@
             "created": "2024-09-25T04:30:34.615Z",
             "modified": "2024-09-25T04:32:09.532Z",
             "headers": [],
+            "auth": {
+                "type": "",
+                "bearer": ""
+            },
             "body": {
-                "type": "json",
+                "form": [],
                 "raw": "{\n  \"email\": \"test_user@gmail.com\",\n  \"password\": \"abcd1234\"\n}",
-                "form": []
-            }
+                "type": "json"
+            },
+            "params": null
         },
         {
             "_id": "32376936-772f-41e0-88ea-10dc79f18afc",
@@ -49,11 +54,16 @@
             "created": "2024-09-25T04:32:54.067Z",
             "modified": "2024-09-25T04:33:06.345Z",
             "headers": [],
+            "auth": {
+                "type": "",
+                "bearer": ""
+            },
             "body": {
-                "type": "json",
+                "form": [],
                 "raw": "{\n  \"email\": \"test_user@gmail.com\",\n  \"password\": \"abcd1234\"\n}",
-                "form": []
-            }
+                "type": "json"
+            },
+            "params": null
         },
         {
             "_id": "fc733d3e-7192-44e6-aa4a-509bf57f8684",
@@ -64,13 +74,18 @@
             "method": "POST",
             "sortNum": 30000,
             "created": "2024-09-26T02:07:01.651Z",
-            "modified": "2024-09-26T02:42:37.444Z",
+            "modified": "2024-09-26T05:11:03.774Z",
             "headers": [],
+            "auth": {
+                "type": "",
+                "bearer": ""
+            },
             "body": {
-                "type": "json",
+                "form": [],
                 "raw": "{\n  \"name\": \"FID001\",\n  \"description\": \"Fidelity account ending in 7895\",\n  \"tax_shelter\": \"ROTH\",\n  \"institution\": \"Fidelity\",\n  \"is_deprecated\": false\n}",
-                "form": []
-            }
+                "type": "json"
+            },
+            "params": null
         },
         {
             "_id": "71b3de36-54fd-430d-80b0-db07dc8a8e06",
@@ -83,30 +98,35 @@
             "created": "2024-09-26T02:24:01.952Z",
             "modified": "2024-09-26T02:42:46.017Z",
             "headers": [],
+            "auth": {
+                "type": "",
+                "bearer": ""
+            },
+            "body": null,
             "params": [
                 {
+                    "isDisabled": true,
+                    "isPath": false,
                     "name": "ids",
-                    "value": "2,5,9",
-                    "isDisabled": true,
-                    "isPath": false
+                    "value": "2,5,9"
                 },
                 {
+                    "isDisabled": true,
+                    "isPath": false,
                     "name": "tax_shelter",
-                    "value": "TAXABLE",
-                    "isDisabled": true,
-                    "isPath": false
+                    "value": "TAXABLE"
                 },
                 {
+                    "isDisabled": true,
+                    "isPath": false,
                     "name": "institution",
-                    "value": "Fidelity",
-                    "isDisabled": true,
-                    "isPath": false
+                    "value": "Fidelity"
                 },
                 {
-                    "name": "is_deprecated",
-                    "value": "true",
                     "isDisabled": true,
-                    "isPath": false
+                    "isPath": false,
+                    "name": "is_deprecated",
+                    "value": "true"
                 }
             ]
         },
@@ -120,7 +140,13 @@
             "sortNum": 50000,
             "created": "2024-09-26T02:24:48.446Z",
             "modified": "2024-09-26T02:43:02.660Z",
-            "headers": []
+            "headers": [],
+            "auth": {
+                "type": "",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
         },
         {
             "_id": "b759a91f-6ad7-43db-b6b1-3ad65367b7a9",
@@ -133,11 +159,16 @@
             "created": "2024-09-26T02:30:18.243Z",
             "modified": "2024-09-26T02:43:09.249Z",
             "headers": [],
+            "auth": {
+                "type": "",
+                "bearer": ""
+            },
             "body": {
-                "type": "json",
+                "form": [],
                 "raw": "{\n  \"name\": \"FID001\",\n  \"description\": \"Fidelity account ending in 7895\",\n  \"tax_shelter\": \"TAXABLE\",\n  \"institution\": \"Fidelity\",\n  \"is_deprecated\": false\n}",
-                "form": []
-            }
+                "type": "json"
+            },
+            "params": null
         },
         {
             "_id": "5545b995-feff-4604-8bd8-fa5c9e1b1683",
@@ -149,8 +180,14 @@
             "sortNum": 70000,
             "created": "2024-09-26T02:37:52.604Z",
             "modified": "2024-09-26T02:43:14.942Z",
-            "headers": []
+            "headers": [],
+            "auth": {
+                "type": "",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
         }
     ],
-    "ref": "_fUgu0uXCXoFRR9z5MYGpZB-kpPB_VeHKaRONgMvfWBZQjxE_vpjRjmvFabTSl42pc0ADFbHozofSJTyzxrb1Q"
+    "ref": "_fUgu0uXCXoFRR9z5MYGpZB-kpPB_VeHKaRONgMvfWBV4uSfpLuEv8aABbDyA-1qUChfflsctRYBY4EtdsJ3Fg"
 }
