@@ -20,9 +20,12 @@ func main() {
 	json.Unmarshal(readBytes, &tc_requests)
 
 	// Scrub tokens
-	for i := range tc_requests.Requests {
-		tc_requests.Requests[i].Auth.Type = ""
-		tc_requests.Requests[i].Auth.Bearer = ""
+	for i, req := range tc_requests.Requests {
+		if req.Auth != nil && req.Auth.Bearer != "" {
+			tc_requests.Requests[i].Auth.Bearer = ""
+		} else {
+			tc_requests.Requests[i].Auth = nil
+		}
 	}
 
 	// Write
@@ -60,19 +63,19 @@ type ThunderClientFolder struct {
 }
 
 type ThunderClientRequest struct {
-	Id          string            `json:"_id"`
-	ColId       string            `json:"colId"`
-	ContainerId string            `json:"containerId"`
-	Name        string            `json:"name"`
-	Url         string            `json:"url"`
-	Method      string            `json:"method"`
-	SortNum     int               `json:"sortNum"`
-	Created     string            `json:"created"`
-	Modified    string            `json:"modified"`
-	Headers     []string          `json:"headers"`
-	Auth        ThunderClientAuth `json:"auth"`
-	Body        any               `json:"body"`
-	Params      any               `json:"params"`
+	Id          string             `json:"_id"`
+	ColId       string             `json:"colId"`
+	ContainerId string             `json:"containerId"`
+	Name        string             `json:"name"`
+	Url         string             `json:"url"`
+	Method      string             `json:"method"`
+	SortNum     int                `json:"sortNum"`
+	Created     string             `json:"created"`
+	Modified    string             `json:"modified"`
+	Headers     []string           `json:"headers"`
+	Auth        *ThunderClientAuth `json:"auth"`
+	Body        any                `json:"body"`
+	Params      any                `json:"params"`
 }
 
 type ThunderClientAuth struct {

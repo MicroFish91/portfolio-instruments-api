@@ -1,41 +1,38 @@
 {
     "clientName": "Thunder Client",
     "collectionName": "Portfolio_Instruments_API",
-    "collectionId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-    "dateExported": "2024-09-26T05:11:22.808Z",
+    "collectionId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
+    "dateExported": "2024-09-26T05:49:31.011Z",
     "version": "1.2",
     "folders": [
         {
-            "_id": "d3a6a604-4b21-413a-83d7-24e7ad849e9a",
+            "_id": "68141fc9-80ac-4356-96a6-86239968d69f",
             "name": "Auth",
             "containerId": "",
-            "created": "2024-09-25T04:30:09.211Z",
+            "created": "2024-09-26T05:48:15.679Z",
             "sortNum": 10000
         },
         {
-            "_id": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "_id": "e494e0ae-f256-4538-b79b-3468f833a281",
             "name": "Accounts",
             "containerId": "",
-            "created": "2024-09-26T02:05:47.507Z",
+            "created": "2024-09-26T05:48:15.680Z",
             "sortNum": 20000
         }
     ],
     "requests": [
         {
-            "_id": "c93b027d-6f5f-40b4-a6a0-fdcdba2c4356",
-            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-            "containerId": "d3a6a604-4b21-413a-83d7-24e7ad849e9a",
+            "_id": "9b3bebb2-d4a0-43b5-bbbd-bea15f984ebe",
+            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
+            "containerId": "68141fc9-80ac-4356-96a6-86239968d69f",
             "name": "Registration",
             "url": "http://localhost:3000/api/v1/register",
             "method": "POST",
             "sortNum": 10000,
-            "created": "2024-09-25T04:30:34.615Z",
-            "modified": "2024-09-25T04:32:09.532Z",
+            "created": "2024-09-26T05:48:15.679Z",
+            "modified": "2024-09-26T05:48:22.503Z",
             "headers": [],
-            "auth": {
-                "type": "",
-                "bearer": ""
-            },
+            "auth": null,
             "body": {
                 "form": [],
                 "raw": "{\n  \"email\": \"test_user@gmail.com\",\n  \"password\": \"abcd1234\"\n}",
@@ -44,20 +41,17 @@
             "params": null
         },
         {
-            "_id": "32376936-772f-41e0-88ea-10dc79f18afc",
-            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-            "containerId": "d3a6a604-4b21-413a-83d7-24e7ad849e9a",
+            "_id": "be8daa2d-80e3-4c35-873c-5bf416f4109e",
+            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
+            "containerId": "68141fc9-80ac-4356-96a6-86239968d69f",
             "name": "Login",
             "url": "http://localhost:3000/api/v1/login",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2024-09-25T04:32:54.067Z",
-            "modified": "2024-09-25T04:33:06.345Z",
+            "created": "2024-09-26T05:48:15.680Z",
+            "modified": "2024-09-26T05:48:28.747Z",
             "headers": [],
-            "auth": {
-                "type": "",
-                "bearer": ""
-            },
+            "auth": null,
             "body": {
                 "form": [],
                 "raw": "{\n  \"email\": \"test_user@gmail.com\",\n  \"password\": \"abcd1234\"\n}",
@@ -66,18 +60,18 @@
             "params": null
         },
         {
-            "_id": "fc733d3e-7192-44e6-aa4a-509bf57f8684",
-            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "_id": "6dfcef17-d5aa-44ef-93eb-e2f08642304a",
+            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
+            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
             "name": "Create_Account",
             "url": "http://localhost:3000/api/v1/accounts",
             "method": "POST",
             "sortNum": 30000,
-            "created": "2024-09-26T02:07:01.651Z",
-            "modified": "2024-09-26T05:11:03.774Z",
+            "created": "2024-09-26T05:48:15.681Z",
+            "modified": "2024-09-26T05:48:45.128Z",
             "headers": [],
             "auth": {
-                "type": "",
+                "type": "bearer",
                 "bearer": ""
             },
             "body": {
@@ -88,18 +82,18 @@
             "params": null
         },
         {
-            "_id": "71b3de36-54fd-430d-80b0-db07dc8a8e06",
-            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "_id": "1e1f0109-023b-4a37-88be-6da1b78a32d5",
+            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
+            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
             "name": "Get_Accounts",
             "url": "http://localhost:3000/api/v1/accounts",
             "method": "GET",
             "sortNum": 40000,
-            "created": "2024-09-26T02:24:01.952Z",
-            "modified": "2024-09-26T02:42:46.017Z",
+            "created": "2024-09-26T05:48:15.682Z",
+            "modified": "2024-09-26T05:48:53.124Z",
             "headers": [],
             "auth": {
-                "type": "",
+                "type": "bearer",
                 "bearer": ""
             },
             "body": null,
@@ -131,36 +125,36 @@
             ]
         },
         {
-            "_id": "91be8cd4-1e90-4b03-a3ab-4594367d47e6",
-            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "_id": "d1d54dda-7d3e-4ab5-9268-e470759987c5",
+            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
+            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
             "name": "Get_Account",
             "url": "http://localhost:3000/api/v1/accounts/1",
             "method": "GET",
             "sortNum": 50000,
-            "created": "2024-09-26T02:24:48.446Z",
-            "modified": "2024-09-26T02:43:02.660Z",
+            "created": "2024-09-26T05:48:15.683Z",
+            "modified": "2024-09-26T05:49:05.418Z",
             "headers": [],
             "auth": {
-                "type": "",
+                "type": "bearer",
                 "bearer": ""
             },
             "body": null,
             "params": null
         },
         {
-            "_id": "b759a91f-6ad7-43db-b6b1-3ad65367b7a9",
-            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "_id": "49e48449-c67b-4a38-9223-db40f7d6b560",
+            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
+            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
             "name": "Update_Account",
             "url": "http://localhost:3000/api/v1/accounts/1",
             "method": "PUT",
             "sortNum": 60000,
-            "created": "2024-09-26T02:30:18.243Z",
-            "modified": "2024-09-26T02:43:09.249Z",
+            "created": "2024-09-26T05:48:15.684Z",
+            "modified": "2024-09-26T05:49:16.628Z",
             "headers": [],
             "auth": {
-                "type": "",
+                "type": "bearer",
                 "bearer": ""
             },
             "body": {
@@ -171,23 +165,23 @@
             "params": null
         },
         {
-            "_id": "5545b995-feff-4604-8bd8-fa5c9e1b1683",
-            "colId": "d8de6e49-b610-4d94-bba6-d9b4a73f6862",
-            "containerId": "fe5115f3-99d7-4a95-b438-2c0b8a8dbae5",
+            "_id": "caadcacb-4843-454d-a085-579f74174cdf",
+            "colId": "dfd3dd40-4333-4931-a919-7f3f0b1c406e",
+            "containerId": "e494e0ae-f256-4538-b79b-3468f833a281",
             "name": "Delete_Account",
             "url": "http://localhost:3000/api/v1/accounts/1",
             "method": "DELETE",
             "sortNum": 70000,
-            "created": "2024-09-26T02:37:52.604Z",
-            "modified": "2024-09-26T02:43:14.942Z",
+            "created": "2024-09-26T05:48:15.685Z",
+            "modified": "2024-09-26T05:49:24.046Z",
             "headers": [],
             "auth": {
-                "type": "",
+                "type": "bearer",
                 "bearer": ""
             },
             "body": null,
             "params": null
         }
     ],
-    "ref": "_fUgu0uXCXoFRR9z5MYGpZB-kpPB_VeHKaRONgMvfWBV4uSfpLuEv8aABbDyA-1qUChfflsctRYBY4EtdsJ3Fg"
+    "ref": "yL9vgHcr-DCVU7BPTouAWSL_C51bKRNjevlU7YUYaWrh6Hfx5ocpZwL9ocPQUC7_aSK42esWi5qKsu86gdaMew"
 }
