@@ -71,14 +71,14 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "200 Query Name",
-			Route:              "/api/v1/benchmarks?name=Classic Portfolio 1",
+			Route:              "/api/v1/benchmarks?name=classic",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
-				Benchmarks: 1,
+				Benchmarks: 28,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    50,
-					Total_items:  1,
+					Total_items:  28,
 				},
 			},
 		},
