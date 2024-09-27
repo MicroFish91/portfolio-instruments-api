@@ -1,43 +1,50 @@
 {
     "clientName": "Thunder Client",
     "collectionName": "Portfolio_Instruments_API",
-    "collectionId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-    "dateExported": "2024-09-26T07:14:17.158Z",
+    "collectionId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+    "dateExported": "2024-09-27T06:18:07.358Z",
     "version": "1.2",
     "folders": [
         {
-            "_id": "2bfeab2f-6124-4d36-9868-85a9071dda2b",
+            "_id": "09ca6c87-ae2b-489b-82dc-ae27a9ecc26f",
             "name": "Auth",
             "containerId": "",
-            "created": "2024-09-26T06:59:47.380Z",
+            "created": "2024-09-26T07:17:04.466Z",
             "sortNum": 10000
         },
         {
-            "_id": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
+            "_id": "f62634e6-f041-45ca-94f2-f0b0f66e3b75",
+            "name": "Benchmarks",
+            "containerId": "",
+            "created": "2024-09-26T07:17:54.131Z",
+            "sortNum": 15000
+        },
+        {
+            "_id": "2d219569-eb4f-439d-8b1e-cc3626608463",
             "name": "Accounts",
             "containerId": "",
-            "created": "2024-09-26T06:59:47.381Z",
+            "created": "2024-09-26T07:17:04.467Z",
             "sortNum": 20000
         },
         {
-            "_id": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "_id": "b8071407-25d0-47e3-9732-c1ed3fa1628b",
             "name": "Holdings",
             "containerId": "",
-            "created": "2024-09-26T07:00:07.333Z",
+            "created": "2024-09-26T07:17:04.468Z",
             "sortNum": 30000
         }
     ],
     "requests": [
         {
-            "_id": "70f9c931-bf37-4205-b5e2-c3b0d4e67fbe",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "2bfeab2f-6124-4d36-9868-85a9071dda2b",
+            "_id": "fa7522b8-5c5f-4730-adbf-8f4fef4d0fca",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "09ca6c87-ae2b-489b-82dc-ae27a9ecc26f",
             "name": "Registration",
             "url": "http://localhost:3000/api/v1/register",
             "method": "POST",
             "sortNum": 10000,
-            "created": "2024-09-26T06:59:47.380Z",
-            "modified": "2024-09-26T06:59:47.380Z",
+            "created": "2024-09-26T07:17:04.466Z",
+            "modified": "2024-09-26T07:17:04.466Z",
             "headers": [],
             "auth": null,
             "body": {
@@ -48,15 +55,15 @@
             "params": null
         },
         {
-            "_id": "6efb53c6-f531-4789-a0b2-dc0a590b1fdf",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "2bfeab2f-6124-4d36-9868-85a9071dda2b",
+            "_id": "6da1f3ca-3fb9-48a8-845e-279e5b5388bb",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "09ca6c87-ae2b-489b-82dc-ae27a9ecc26f",
             "name": "Login",
             "url": "http://localhost:3000/api/v1/login",
             "method": "POST",
             "sortNum": 20000,
-            "created": "2024-09-26T06:59:47.381Z",
-            "modified": "2024-09-26T06:59:54.434Z",
+            "created": "2024-09-26T07:17:04.467Z",
+            "modified": "2024-09-26T07:17:12.117Z",
             "headers": [],
             "auth": null,
             "body": {
@@ -67,15 +74,15 @@
             "params": null
         },
         {
-            "_id": "6b0df2ea-f947-4c88-a928-028586b2cd44",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
+            "_id": "ecb11e05-8145-410a-84db-dc535eaca827",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "2d219569-eb4f-439d-8b1e-cc3626608463",
             "name": "Create_Account",
             "url": "http://localhost:3000/api/v1/accounts",
             "method": "POST",
             "sortNum": 30000,
-            "created": "2024-09-26T06:59:47.382Z",
-            "modified": "2024-09-26T07:06:21.242Z",
+            "created": "2024-09-26T07:17:04.468Z",
+            "modified": "2024-09-26T07:17:04.468Z",
             "headers": [],
             "auth": null,
             "body": {
@@ -86,15 +93,15 @@
             "params": null
         },
         {
-            "_id": "65d4cb76-be16-4eac-9738-8635030ca01b",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
+            "_id": "5fe6d3e3-517b-4f07-9123-8f7e01a69678",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "2d219569-eb4f-439d-8b1e-cc3626608463",
             "name": "Get_Accounts",
             "url": "http://localhost:3000/api/v1/accounts",
             "method": "GET",
             "sortNum": 40000,
-            "created": "2024-09-26T06:59:47.383Z",
-            "modified": "2024-09-26T06:59:47.383Z",
+            "created": "2024-09-26T07:17:04.469Z",
+            "modified": "2024-09-27T06:17:37.865Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -125,19 +132,31 @@
                     "isPath": false,
                     "name": "is_deprecated",
                     "value": "true"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "current_page",
+                    "value": "2"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "page_size",
+                    "value": "20"
                 }
             ]
         },
         {
-            "_id": "da930a2d-b938-47d9-8ad5-dea702eaa128",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
+            "_id": "eab9ea70-190a-4501-8b52-3a9580504d06",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "2d219569-eb4f-439d-8b1e-cc3626608463",
             "name": "Get_Account",
             "url": "http://localhost:3000/api/v1/accounts/1",
             "method": "GET",
             "sortNum": 50000,
-            "created": "2024-09-26T06:59:47.384Z",
-            "modified": "2024-09-26T06:59:47.384Z",
+            "created": "2024-09-26T07:17:04.470Z",
+            "modified": "2024-09-26T07:17:04.470Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -147,15 +166,15 @@
             "params": null
         },
         {
-            "_id": "d7a72004-6c43-4948-a852-b9be843530f7",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
+            "_id": "12f20856-91d2-4551-805d-ab2013d18f41",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "2d219569-eb4f-439d-8b1e-cc3626608463",
             "name": "Update_Account",
             "url": "http://localhost:3000/api/v1/accounts/1",
             "method": "PUT",
             "sortNum": 60000,
-            "created": "2024-09-26T06:59:47.385Z",
-            "modified": "2024-09-26T07:06:19.808Z",
+            "created": "2024-09-26T07:17:04.471Z",
+            "modified": "2024-09-26T07:17:04.471Z",
             "headers": [],
             "auth": null,
             "body": {
@@ -166,15 +185,15 @@
             "params": null
         },
         {
-            "_id": "821f6668-459a-4bc3-a7a8-36d464b4467e",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "0ebabb7d-1466-4d8e-afe5-2bced3cdd830",
+            "_id": "95941d24-b351-4e99-9b01-713c2e2a3772",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "2d219569-eb4f-439d-8b1e-cc3626608463",
             "name": "Delete_Account",
             "url": "http://localhost:3000/api/v1/accounts/1",
             "method": "DELETE",
             "sortNum": 70000,
-            "created": "2024-09-26T06:59:47.386Z",
-            "modified": "2024-09-26T06:59:47.386Z",
+            "created": "2024-09-26T07:17:04.472Z",
+            "modified": "2024-09-26T07:17:04.472Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -184,15 +203,15 @@
             "params": null
         },
         {
-            "_id": "07fdb939-96d0-4fdf-b36a-ba66dae080ee",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "_id": "017a10c3-ea43-490a-8a1a-247741fc66c9",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "b8071407-25d0-47e3-9732-c1ed3fa1628b",
             "name": "Create_Holding_Ticker",
             "url": "http://localhost:3000/api/v1/holdings",
             "method": "POST",
             "sortNum": 80000,
-            "created": "2024-09-26T07:00:12.740Z",
-            "modified": "2024-09-26T07:05:16.323Z",
+            "created": "2024-09-26T07:17:04.473Z",
+            "modified": "2024-09-26T07:17:04.473Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -206,15 +225,15 @@
             "params": null
         },
         {
-            "_id": "51a4f947-d6d8-4cd5-89a4-adc97bafd3bd",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "_id": "c8d83648-39b5-45fb-9d83-7b517c724a7d",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "b8071407-25d0-47e3-9732-c1ed3fa1628b",
             "name": "Create_Holding_Fixed_Income",
             "url": "http://localhost:3000/api/v1/holdings",
             "method": "POST",
             "sortNum": 90000,
-            "created": "2024-09-26T07:02:09.130Z",
-            "modified": "2024-09-26T07:06:11.352Z",
+            "created": "2024-09-26T07:17:04.474Z",
+            "modified": "2024-09-26T07:17:04.474Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -228,15 +247,15 @@
             "params": null
         },
         {
-            "_id": "bb321e45-8aac-49a7-9aeb-57d64a85eddf",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "_id": "a5ba7e9d-6a0c-45a5-a24a-a31ba0fc7289",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "b8071407-25d0-47e3-9732-c1ed3fa1628b",
             "name": "Get_Holdings",
             "url": "http://localhost:3000/api/v1/holdings",
             "method": "GET",
             "sortNum": 100000,
-            "created": "2024-09-26T07:07:08.686Z",
-            "modified": "2024-09-26T07:09:26.576Z",
+            "created": "2024-09-26T07:17:04.475Z",
+            "modified": "2024-09-27T06:17:55.803Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -273,19 +292,31 @@
                     "isPath": false,
                     "name": "is_deprecated",
                     "value": "true"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "current_page",
+                    "value": "2"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "page_size",
+                    "value": "20"
                 }
             ]
         },
         {
-            "_id": "91feafc7-f0e3-4a73-8610-025c121cb41d",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "_id": "dc0c64fe-1303-45ff-b5a8-9a1d367aee4b",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "b8071407-25d0-47e3-9732-c1ed3fa1628b",
             "name": "Get_Holding",
             "url": "http://localhost:3000/api/v1/holdings/1",
             "method": "GET",
             "sortNum": 110000,
-            "created": "2024-09-26T07:09:36.424Z",
-            "modified": "2024-09-26T07:09:58.493Z",
+            "created": "2024-09-26T07:17:04.476Z",
+            "modified": "2024-09-26T07:17:04.476Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -295,15 +326,15 @@
             "params": null
         },
         {
-            "_id": "9d0a3a73-f72f-4afa-8957-952852507393",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "_id": "73866bb2-b392-4252-8905-30943887a150",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "b8071407-25d0-47e3-9732-c1ed3fa1628b",
             "name": "Update_Holding",
             "url": "http://localhost:3000/api/v1/holdings/1",
             "method": "PUT",
             "sortNum": 120000,
-            "created": "2024-09-26T07:10:17.849Z",
-            "modified": "2024-09-26T07:11:49.988Z",
+            "created": "2024-09-26T07:17:04.477Z",
+            "modified": "2024-09-26T07:17:04.477Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -317,15 +348,144 @@
             "params": null
         },
         {
-            "_id": "9f93ab88-79e3-4d66-bff1-4cfbc1b292c5",
-            "colId": "b1221341-0cc5-4a8d-a3dc-e3b09c099441",
-            "containerId": "93ecdbfb-1ce1-4f8e-a626-8cbaacecb94c",
+            "_id": "834c4632-1acc-41de-b233-bed6f6311417",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "b8071407-25d0-47e3-9732-c1ed3fa1628b",
             "name": "Delete_Holding",
             "url": "http://localhost:3000/api/v1/holdings/1",
             "method": "DELETE",
             "sortNum": 130000,
-            "created": "2024-09-26T07:13:48.828Z",
-            "modified": "2024-09-26T07:14:08.442Z",
+            "created": "2024-09-26T07:17:04.478Z",
+            "modified": "2024-09-26T07:17:04.478Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
+        },
+        {
+            "_id": "e593c15d-24c6-46d9-9e87-432a99b0b44a",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "f62634e6-f041-45ca-94f2-f0b0f66e3b75",
+            "name": "Create_Benchmark",
+            "url": "http://localhost:3000/api/v1/benchmarks",
+            "method": "POST",
+            "sortNum": 140000,
+            "created": "2024-09-27T05:53:49.876Z",
+            "modified": "2024-09-27T06:12:47.810Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": {
+                "form": [],
+                "raw": "{\n  \"name\": \"Permanent Portfolio\",\n  \"asset_allocation\": [\n    {\n      \"category\": \"GOLD\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"LTB\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"CASH\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"TSM\",\n      \"percent\": 25\n    }\n  ],\n  \"std_dev_pct\": 7.1,\n  \"real_return_pct\": 6.8,\n  \"drawdown_yrs\": 3\n}",
+                "type": "json"
+            },
+            "params": null
+        },
+        {
+            "_id": "e1f1c559-30b1-4d92-bb74-c0a5d5ce7a1d",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "f62634e6-f041-45ca-94f2-f0b0f66e3b75",
+            "name": "Get_Benchmarks",
+            "url": "http://localhost:3000/api/v1/benchmarks",
+            "method": "GET",
+            "sortNum": 150000,
+            "created": "2024-09-27T05:57:00.708Z",
+            "modified": "2024-09-27T06:14:09.025Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": [
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "ids",
+                    "value": "1,5,9"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "name",
+                    "value": "permanent"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "is_deprecated",
+                    "value": "true"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "current_page",
+                    "value": "2"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "page_size",
+                    "value": "10"
+                }
+            ]
+        },
+        {
+            "_id": "c2b91fbf-3ddf-44b6-bf24-287fa0704202",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "f62634e6-f041-45ca-94f2-f0b0f66e3b75",
+            "name": "Get_Benchmark",
+            "url": "http://localhost:3000/api/v1/benchmarks/1",
+            "method": "GET",
+            "sortNum": 160000,
+            "created": "2024-09-27T06:14:30.320Z",
+            "modified": "2024-09-27T06:14:56.093Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
+        },
+        {
+            "_id": "4019cc64-5c91-4860-8dd9-de8f8aa79e1e",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "f62634e6-f041-45ca-94f2-f0b0f66e3b75",
+            "name": "Update_Benchmark",
+            "url": "http://localhost:3000/api/v1/benchmarks/1",
+            "method": "PUT",
+            "sortNum": 170000,
+            "created": "2024-09-27T06:15:05.329Z",
+            "modified": "2024-09-27T06:16:18.759Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": {
+                "form": [],
+                "raw": "{\n  \"name\": \"Permanent Portfolio5\",\n  \"asset_allocation\": [\n    {\n      \"category\": \"GOLD\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"LTB\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"CASH\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"TSM\",\n      \"percent\": 25\n    }\n  ],\n  \"std_dev_pct\": 7.1,\n  \"real_return_pct\": 6.8,\n  \"drawdown_yrs\": 3\n}",
+                "type": "json"
+            },
+            "params": null
+        },
+        {
+            "_id": "d7bcc340-f862-4a9a-9b98-0dfcaccdc4c7",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "f62634e6-f041-45ca-94f2-f0b0f66e3b75",
+            "name": "Delete_Benchmark",
+            "url": "http://localhost:3000/api/v1/benchmarks/1",
+            "method": "DELETE",
+            "sortNum": 180000,
+            "created": "2024-09-27T06:16:34.691Z",
+            "modified": "2024-09-27T06:16:52.673Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -335,5 +495,5 @@
             "params": null
         }
     ],
-    "ref": "w-nBiEUKeAMsNWcVblJjle3-DMIYFAWje_2t1QtVttLfe64cnd73G4KxpDnISCaUXTOp_79seiHMVe6ys8P8AQ"
+    "ref": "nIDeI9uzONvy6Mq0mEimNTIgJce1qh8pI6HxX5-5jOahxZQkp1RvTBbhiHlnv0vSPTIawH_edQ0sED-8Iudzfw"
 }

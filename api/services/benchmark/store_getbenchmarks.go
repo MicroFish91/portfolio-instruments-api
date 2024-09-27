@@ -29,8 +29,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 	pgxb.AddQueryWithPositionals("WHERE user_id = $x", []any{userId})
 
 	if options.Name != "" {
-		pattern := fmt.Sprintf("^%s$", options.Name)
-		pgxb.AddQueryWithPositionals("AND name ~* $x", []any{pattern})
+		pgxb.AddQueryWithPositionals("AND name ~* $x", []any{options.Name})
 	}
 
 	if options.Is_deprecated != "" {
