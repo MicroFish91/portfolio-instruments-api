@@ -2,7 +2,7 @@
     "clientName": "Thunder Client",
     "collectionName": "Portfolio_Instruments_API",
     "collectionId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
-    "dateExported": "2024-09-27T06:18:07.358Z",
+    "dateExported": "2024-09-28T02:34:56.257Z",
     "version": "1.2",
     "folders": [
         {
@@ -32,6 +32,20 @@
             "containerId": "",
             "created": "2024-09-26T07:17:04.468Z",
             "sortNum": 30000
+        },
+        {
+            "_id": "1f8894cf-8b02-4c8b-8316-4accb6fd8c88",
+            "name": "Snapshots",
+            "containerId": "",
+            "created": "2024-09-28T02:04:22.954Z",
+            "sortNum": 40000
+        },
+        {
+            "_id": "cafac7fa-ac6a-4989-8f9c-c349dea1a671",
+            "name": "Snapshot_Values",
+            "containerId": "",
+            "created": "2024-09-28T02:24:01.662Z",
+            "sortNum": 50000
         }
     ],
     "requests": [
@@ -82,9 +96,12 @@
             "method": "POST",
             "sortNum": 30000,
             "created": "2024-09-26T07:17:04.468Z",
-            "modified": "2024-09-26T07:17:04.468Z",
+            "modified": "2024-09-28T02:11:35.437Z",
             "headers": [],
-            "auth": null,
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
             "body": {
                 "form": [],
                 "raw": "{\n  \"name\": \"FID001\",\n  \"description\": \"Fidelity account ending in 7895\",\n  \"tax_shelter\": \"ROTH\",\n  \"institution\": \"Fidelity\"\n}",
@@ -211,7 +228,7 @@
             "method": "POST",
             "sortNum": 80000,
             "created": "2024-09-26T07:17:04.473Z",
-            "modified": "2024-09-26T07:17:04.473Z",
+            "modified": "2024-09-28T02:11:51.774Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -233,7 +250,7 @@
             "method": "POST",
             "sortNum": 90000,
             "created": "2024-09-26T07:17:04.474Z",
-            "modified": "2024-09-26T07:17:04.474Z",
+            "modified": "2024-09-28T02:12:02.923Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -374,7 +391,7 @@
             "method": "POST",
             "sortNum": 140000,
             "created": "2024-09-27T05:53:49.876Z",
-            "modified": "2024-09-27T06:12:47.810Z",
+            "modified": "2024-09-28T02:11:00.088Z",
             "headers": [],
             "auth": {
                 "type": "bearer",
@@ -382,7 +399,7 @@
             },
             "body": {
                 "form": [],
-                "raw": "{\n  \"name\": \"Permanent Portfolio\",\n  \"asset_allocation\": [\n    {\n      \"category\": \"GOLD\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"LTB\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"CASH\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"TSM\",\n      \"percent\": 25\n    }\n  ],\n  \"std_dev_pct\": 7.1,\n  \"real_return_pct\": 6.8,\n  \"drawdown_yrs\": 3\n}",
+                "raw": "{\n  \"name\": \"Permanent Portfolio1\",\n  \"asset_allocation\": [\n    {\n      \"category\": \"GOLD\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"LTB\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"CASH\",\n      \"percent\": 25\n    },\n    {\n      \"category\": \"TSM\",\n      \"percent\": 25\n    }\n  ],\n  \"std_dev_pct\": 7.1,\n  \"real_return_pct\": 6.8,\n  \"drawdown_yrs\": 3\n}",
                 "type": "json"
             },
             "params": null
@@ -493,7 +510,240 @@
             },
             "body": null,
             "params": null
+        },
+        {
+            "_id": "eebeca3e-9c36-4964-a06b-d27729d9cb49",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "1f8894cf-8b02-4c8b-8316-4accb6fd8c88",
+            "name": "Create_Snapshot",
+            "url": "http://localhost:3000/api/v1/snapshots",
+            "method": "POST",
+            "sortNum": 200000,
+            "created": "2024-09-28T02:04:33.830Z",
+            "modified": "2024-09-28T02:13:57.159Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": {
+                "form": [],
+                "raw": "{\n  \"snap_date\": \"07/21/2023\",\n  \"description\": \"My first snapshot\",\n  \"benchmark_id\": 2,\n  \"snapshot_values\": [\n    {\n      \"account_id\": 1,\n      \"holding_id\": 1,\n      \"total\": 2250.50\n    },\n    {\n      \"account_id\": 1,\n      \"holding_id\": 2,\n      \"total\": 1525.25,\n      \"skip_rebalance\": true\n    },\n    {\n      \"account_id\": 2,\n      \"holding_id\": 1,\n      \"total\": 1000\n    }\n  ]\n}",
+                "type": "json"
+            },
+            "params": null
+        },
+        {
+            "_id": "f9b52e7b-169a-468a-b6a4-52dd0d9a5e17",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "1f8894cf-8b02-4c8b-8316-4accb6fd8c88",
+            "name": "Get_Snapshots",
+            "url": "http://localhost:3000/api/v1/snapshots",
+            "method": "GET",
+            "sortNum": 210000,
+            "created": "2024-09-28T02:12:56.445Z",
+            "modified": "2024-09-28T02:16:28.316Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": [
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "snap_ids",
+                    "value": "1,2,5"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "snap_date_lower",
+                    "value": "07/20/2022"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "snap_date_upper",
+                    "value": "07/20/2023"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "order_date_by",
+                    "value": "ASC"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "current_page",
+                    "value": "2"
+                },
+                {
+                    "isDisabled": true,
+                    "isPath": false,
+                    "name": "page_size",
+                    "value": "20"
+                }
+            ]
+        },
+        {
+            "_id": "091173af-0ea2-44d3-b64d-bec1bb018601",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "1f8894cf-8b02-4c8b-8316-4accb6fd8c88",
+            "name": "Get_Snapshot",
+            "url": "http://localhost:3000/api/v1/snapshots/1",
+            "method": "GET",
+            "sortNum": 220000,
+            "created": "2024-09-28T02:16:39.752Z",
+            "modified": "2024-09-28T02:18:09.135Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
+        },
+        {
+            "_id": "6686d394-f557-4f9b-9850-505cf18ac4cb",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "1f8894cf-8b02-4c8b-8316-4accb6fd8c88",
+            "name": "Update_Snapshot",
+            "url": "http://localhost:3000/api/v1/snapshots/1",
+            "method": "PUT",
+            "sortNum": 230000,
+            "created": "2024-09-28T02:22:49.228Z",
+            "modified": "2024-09-28T02:23:25.374Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": {
+                "form": [],
+                "raw": "{\n  \"snap_date\": \"07/20/2022\",\n  \"description\": \"My first snapshot\",\n  \"benchmark_id\": 2\n}",
+                "type": "json"
+            },
+            "params": null
+        },
+        {
+            "_id": "0c145ff1-e948-46b1-aba1-abdd87ae6dc1",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "cafac7fa-ac6a-4989-8f9c-c349dea1a671",
+            "name": "Create_Snapshot_Value",
+            "url": "http://localhost:3000/api/v1/snapshots/1/values",
+            "method": "POST",
+            "sortNum": 240000,
+            "created": "2024-09-28T02:24:34.763Z",
+            "modified": "2024-09-28T02:27:40.598Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": {
+                "form": [],
+                "raw": "{\n  \"account_id\": 1,\n  \"holding_id\": 1,\n  \"total\": 2000\n}",
+                "type": "json"
+            },
+            "params": null
+        },
+        {
+            "_id": "5435c45f-aed3-43e9-8446-d18bb4092974",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "cafac7fa-ac6a-4989-8f9c-c349dea1a671",
+            "name": "Get_Snapshot_Values",
+            "url": "http://localhost:3000/api/v1/snapshots/1/values",
+            "method": "GET",
+            "sortNum": 250000,
+            "created": "2024-09-28T02:28:01.402Z",
+            "modified": "2024-09-28T02:28:17.894Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
+        },
+        {
+            "_id": "c0e2fe9a-56bd-48c5-98f8-d7464199bae9",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "cafac7fa-ac6a-4989-8f9c-c349dea1a671",
+            "name": "Get_Snapshot_Value",
+            "url": "http://localhost:3000/api/v1/snapshots/1/values/1",
+            "method": "GET",
+            "sortNum": 260000,
+            "created": "2024-09-28T02:30:20.742Z",
+            "modified": "2024-09-28T02:31:19.299Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
+        },
+        {
+            "_id": "3e385f66-84f5-4326-a202-8935ae481826",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "cafac7fa-ac6a-4989-8f9c-c349dea1a671",
+            "name": "Update_Snapshot_Value",
+            "url": "http://localhost:3000/api/v1/snapshots/1/values/1",
+            "method": "PUT",
+            "sortNum": 270000,
+            "created": "2024-09-28T02:31:36.558Z",
+            "modified": "2024-09-28T02:32:30.599Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": {
+                "form": [],
+                "raw": "{\n  \"account_id\": 1,\n  \"holding_id\": 1,\n  \"total\": 2000\n}",
+                "type": "json"
+            },
+            "params": null
+        },
+        {
+            "_id": "5279c196-4ada-4192-b995-887c3afcd1a7",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "cafac7fa-ac6a-4989-8f9c-c349dea1a671",
+            "name": "Delete_Snapshot_Value",
+            "url": "http://localhost:3000/api/v1/snapshots/1/values/1",
+            "method": "DELETE",
+            "sortNum": 280000,
+            "created": "2024-09-28T02:32:44.205Z",
+            "modified": "2024-09-28T02:33:05.799Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
+        },
+        {
+            "_id": "6b790a3a-057d-494e-b577-ddf07e59f0ad",
+            "colId": "cb5107dd-8c41-4c23-a359-a4acceec42fd",
+            "containerId": "1f8894cf-8b02-4c8b-8316-4accb6fd8c88",
+            "name": "Delete_Snapshot",
+            "url": "http://localhost:3000/api/v1/snapshots/1",
+            "method": "DELETE",
+            "sortNum": 290000,
+            "created": "2024-09-28T02:34:20.597Z",
+            "modified": "2024-09-28T02:34:38.003Z",
+            "headers": [],
+            "auth": {
+                "type": "bearer",
+                "bearer": ""
+            },
+            "body": null,
+            "params": null
         }
     ],
-    "ref": "nIDeI9uzONvy6Mq0mEimNTIgJce1qh8pI6HxX5-5jOahxZQkp1RvTBbhiHlnv0vSPTIawH_edQ0sED-8Iudzfw"
+    "ref": "nIDeI9uzONvy6Mq0mEimNUUiR9EEpNvY7G8qpEQQlPC9hL5Vghn7e_MMBunLJLFaZ5hesrlK1fWBMkRwvmaHPw"
 }
