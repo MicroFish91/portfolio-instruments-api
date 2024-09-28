@@ -7,6 +7,7 @@ import (
 	"log/slog"
 	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api"
 	"github.com/MicroFish91/portfolio-instruments-api/db"
 	"github.com/MicroFish91/portfolio-instruments-api/logger"
 	"github.com/MicroFish91/portfolio-instruments-api/migrator"
@@ -60,7 +61,13 @@ func initTestServerWrapper() *TestServerWrapper {
 
 	// Server
 	logger := logger.NewLogger(slog.LevelError)
-	return newTestServerWrapper(connStr, db, logger, pgc)
+	apiConfig := api.ApiConfig{
+		Addr:              connStr,
+		ShortRequestLimit: 99999,
+		LongRequestLimit:  99999,
+	}
+
+	return newTestServerWrapper(apiConfig, db, logger, pgc)
 }
 
 func runDatabaseMigrations(connStr string) {

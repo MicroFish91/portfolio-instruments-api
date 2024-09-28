@@ -2,6 +2,7 @@ package api
 
 import (
 	"log/slog"
+	"time"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/middleware"
 	"github.com/MicroFish91/portfolio-instruments-api/api/routes"
@@ -16,16 +17,22 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 )
 
+type ApiConfig struct {
+	Addr              string
+	ShortRequestLimit int
+	LongRequestLimit  int
+}
+
 type ApiServer struct {
-	addr   string
+	cfg    ApiConfig
 	db     *pgxpool.Pool
 	logger *slog.Logger
 	App    *fiber.App
 }
 
-func NewApiServer(addr string, db *pgxpool.Pool, logger *slog.Logger) *ApiServer {
+func NewApiServer(cfg ApiConfig, db *pgxpool.Pool, logger *slog.Logger) *ApiServer {
 	api := &ApiServer{
-		addr:   addr,
+		cfg:    cfg,
 		db:     db,
 		logger: logger,
 	}
@@ -43,6 +50,8 @@ func (s *ApiServer) init() {
 	s.App = fiber.New(getFiberConfig())
 
 	// Middleware
+	s.App.Use(middleware.AddRateLimiter(s.cfg.ShortRequestLimit, 1*time.Minute))
+	s.App.Use(middleware.AddRateLimiter(s.cfg.LongRequestLimit, 30*time.Minute))
 	s.App.Use(middleware.AddIncomingTrafficLogger(s.logger))
 	s.App.Use(middleware.AddLocalsContextLogger(s.logger))
 
@@ -68,7 +77,7 @@ func (s *ApiServer) init() {
 }
 
 func (s *ApiServer) Run() error {
-	return s.App.Listen(s.addr)
+	return s.App.Listen(s.cfg.Addr)
 }
 
 func (s *ApiServer) Shutdown() {
