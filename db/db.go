@@ -15,6 +15,7 @@ type PostgresDbConfig struct {
 	DbName     string
 	DbUser     string
 	DbPassword string
+	DbSslMode  string
 	DbUrl      string
 
 	DbMaxConnections int
@@ -30,7 +31,7 @@ func NewPostgresStorage(dbConfig PostgresDbConfig) (*pgxpool.Pool, error) {
 		if dbConfig.DbUser != "" && dbConfig.DbPassword != "" {
 			dbLogin = fmt.Sprintf("%s:%s@", dbConfig.DbUser, dbConfig.DbPassword)
 		}
-		connStr = fmt.Sprintf("postgresql://%s%s:%s/%s", dbLogin, dbConfig.DbHost, dbConfig.DbPort, dbConfig.DbName)
+		connStr = fmt.Sprintf("postgresql://%s%s:%s/%s?sslmode=%s", dbLogin, dbConfig.DbHost, dbConfig.DbPort, dbConfig.DbName, dbConfig.DbSslMode)
 	}
 
 	config, err := pgxpool.ParseConfig(connStr)

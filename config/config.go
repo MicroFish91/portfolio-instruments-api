@@ -21,6 +21,7 @@ type Config struct {
 	DbName           string
 	DbUser           string
 	DbPassword       string
+	DbSslMode        string
 	DbMaxConnections int
 	DbMinConnections int
 }
@@ -43,6 +44,7 @@ func initConfig() Config {
 		DbName:           getEnv("DB_NAME", "postgres"),
 		DbUser:           getEnv("DB_USER", ""),
 		DbPassword:       getEnv("DB_PASSWORD", ""),
+		DbSslMode:        getEnv("DB_SSL_MODE", "disable"),
 		DbMaxConnections: getInt(getEnv("DB_MAX_CONNECTIONS", "4")),
 		DbMinConnections: getInt(getEnv("DB_MIN_CONNECTIONS", "0")),
 	}

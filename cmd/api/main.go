@@ -17,6 +17,7 @@ func main() {
 		DbName:           config.Env.DbName,
 		DbUser:           config.Env.DbUser,
 		DbPassword:       config.Env.DbPassword,
+		DbSslMode:        config.Env.DbSslMode,
 		DbMaxConnections: config.Env.DbMaxConnections,
 		DbMinConnections: config.Env.DbMinConnections,
 	}
