@@ -29,6 +29,7 @@ func main() {
 	logger := logger.NewLogger(slog.Level(config.Env.LogLevel))
 	apiConfig := api.ApiConfig{
 		Addr:                     config.Env.Port,
+		JwtSecret:                config.Env.JwtSecret,
 		UnauthorizedRequestLimit: config.Env.UnauthorizedRequestLimit,
 		ShortRequestLimit:        config.Env.ShortRequestLimit,
 		LongRequestLimit:         config.Env.LongRequestLimit,

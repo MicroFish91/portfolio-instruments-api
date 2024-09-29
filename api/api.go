@@ -19,6 +19,7 @@ import (
 
 type ApiConfig struct {
 	Addr                     string
+	JwtSecret                string
 	UnauthorizedRequestLimit int
 	ShortRequestLimit        int
 	LongRequestLimit         int
@@ -53,7 +54,7 @@ func (s *ApiServer) init() {
 	// Middleware
 	s.App.Use(middleware.AddIncomingTrafficLogger(s.logger))
 	s.App.Use(middleware.AddLocalsContextLogger(s.logger))
-	s.App.Use(middleware.ParseAuthUserIfExists)
+	s.App.Use(middleware.ParseAuthUserIfExists(s.cfg.JwtSecret))
 	s.App.Use(middleware.AddUnauthorizedRateLimiter(s.cfg.UnauthorizedRequestLimit, 60*time.Minute))
 	s.App.Use(middleware.AddRateLimiter(s.cfg.ShortRequestLimit, 1*time.Minute))
 	s.App.Use(middleware.AddRateLimiter(s.cfg.LongRequestLimit, 30*time.Minute))
@@ -67,7 +68,7 @@ func (s *ApiServer) init() {
 	snapshotValueStore := snapshotvalue.NewPostgresSnapshotValueStore(s.db, s.logger)
 
 	// Handlers
-	authHandler := auth.NewAuthHandler(userStore, s.logger)
+	authHandler := auth.NewAuthHandler(userStore, s.logger, s.cfg.JwtSecret)
 	userHandler := user.NewUserHandler(userStore, benchmarkStore, s.logger)
 	accountHandler := account.NewAccountHandler(accountStore, s.logger)
 	holdingHandler := holding.NewHoldingHandler(holdingStore, s.logger)

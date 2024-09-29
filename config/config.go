@@ -10,17 +10,17 @@ import (
 
 type Config struct {
 	Port                     string
+	JwtSecret                string
 	UnauthorizedRequestLimit int
 	ShortRequestLimit        int
 	LongRequestLimit         int
 	LogLevel                 int
 
-	DbHost     string
-	DbPort     string
-	DbName     string
-	DbUser     string
-	DbPassword string
-
+	DbHost           string
+	DbPort           string
+	DbName           string
+	DbUser           string
+	DbPassword       string
 	DbMaxConnections int
 	DbMinConnections int
 }
@@ -29,19 +29,20 @@ var Env Config = initConfig()
 
 func initConfig() Config {
 	godotenv.Load()
+
 	return Config{
 		Port:                     getEnv("PORT", ":3000"),
+		JwtSecret:                getEnv("JWT_SECRET", "not-so-secret-jwt-secret"),
 		UnauthorizedRequestLimit: getInt(getEnv("UNAUTHORIZED_REQUEST_LIMIT", "99999")),
 		ShortRequestLimit:        getInt(getEnv("SHORT_REQUEST_LIMIT", "99999")),
 		LongRequestLimit:         getInt(getEnv("LONG_REQUEST_LIMIT", "99999")),
 		LogLevel:                 getInt(getEnv("LOG_LEVEL", "0")),
 
-		DbHost:     getEnv("DB_HOST", "localhost"),
-		DbPort:     getEnv("DB_PORT", "5432"),
-		DbName:     getEnv("DB_NAME", "postgres"),
-		DbUser:     getEnv("DB_USER", ""),
-		DbPassword: getEnv("DB_PASSWORD", ""),
-
+		DbHost:           getEnv("DB_HOST", "localhost"),
+		DbPort:           getEnv("DB_PORT", "5432"),
+		DbName:           getEnv("DB_NAME", "postgres"),
+		DbUser:           getEnv("DB_USER", ""),
+		DbPassword:       getEnv("DB_PASSWORD", ""),
 		DbMaxConnections: getInt(getEnv("DB_MAX_CONNECTIONS", "4")),
 		DbMinConnections: getInt(getEnv("DB_MIN_CONNECTIONS", "0")),
 	}

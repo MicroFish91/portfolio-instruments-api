@@ -19,6 +19,7 @@ import (
 )
 
 var testServerWrapper *TestServerWrapper
+var TestJwtSecret string = "test-jwt-secret"
 
 func GetTestServerWrapper() *TestServerWrapper {
 	if testServerWrapper == nil {
@@ -69,6 +70,7 @@ func initTestServerWrapper() *TestServerWrapper {
 	logger := logger.NewLogger(slog.LevelError)
 	apiConfig := api.ApiConfig{
 		Addr:                     connStr,
+		JwtSecret:                TestJwtSecret,
 		UnauthorizedRequestLimit: 99999,
 		ShortRequestLimit:        99999,
 		LongRequestLimit:         99999,

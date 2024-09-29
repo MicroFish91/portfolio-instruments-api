@@ -7,13 +7,15 @@ import (
 )
 
 type AuthHandlerImpl struct {
-	store  types.UserStore
-	logger *slog.Logger
+	store     types.UserStore
+	logger    *slog.Logger
+	jwtSecret string
 }
 
-func NewAuthHandler(store types.UserStore, logger *slog.Logger) *AuthHandlerImpl {
+func NewAuthHandler(store types.UserStore, logger *slog.Logger, jwtSecret string) *AuthHandlerImpl {
 	return &AuthHandlerImpl{
-		store:  store,
-		logger: logger,
+		store:     store,
+		logger:    logger,
+		jwtSecret: jwtSecret,
 	}
 }

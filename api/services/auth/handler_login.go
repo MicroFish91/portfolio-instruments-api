@@ -28,7 +28,7 @@ func (h *AuthHandlerImpl) Login(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	jwt, err := GenerateSignedJwt(user.User_id, user.Email, user.User_role)
+	jwt, err := GenerateSignedJwt(user.User_id, user.Email, user.User_role, h.jwtSecret)
 	if err != nil {
 		return utils.SendError(c, fiber.StatusInternalServerError, err)
 	}

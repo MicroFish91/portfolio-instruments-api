@@ -8,8 +8,6 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-const JWT_SECRET = "the-not-so-secret-jwt-secret"
-
 type JwtClaims struct {
 	UserId   int
 	Email    string
@@ -17,7 +15,7 @@ type JwtClaims struct {
 	jwt.RegisteredClaims
 }
 
-func GenerateSignedJwt(userId int, email string, role types.UserRole) (string, error) {
+func GenerateSignedJwt(userId int, email string, role types.UserRole, jwtSecret string) (string, error) {
 	claims := JwtClaims{
 		UserId:   userId,
 		Email:    email,
@@ -30,16 +28,16 @@ func GenerateSignedJwt(userId int, email string, role types.UserRole) (string, e
 	}
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 
-	tokenString, err := token.SignedString([]byte(JWT_SECRET))
+	tokenString, err := token.SignedString([]byte(jwtSecret))
 	if err != nil {
 		return "", err
 	}
 	return tokenString, err
 }
 
-func VerifyJwt(tokenString string) (*JwtClaims, error) {
+func VerifyJwt(tokenString string, jwtSecret string) (*JwtClaims, error) {
 	t, err := jwt.ParseWithClaims(tokenString, &JwtClaims{}, func(t *jwt.Token) (interface{}, error) {
-		return []byte(JWT_SECRET), nil
+		return []byte(jwtSecret), nil
 	})
 	if err != nil {
 		return nil, err
