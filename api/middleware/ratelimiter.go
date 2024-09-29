@@ -26,7 +26,7 @@ func AddRateLimiter(limit int, expiration time.Duration) func(fiber.Ctx) error {
 
 func AddUnauthorizedRateLimiter() func(fiber.Ctx) error {
 	return limiter.New(limiter.Config{
-		Max:        30,
+		Max:        20,
 		Expiration: 60 * time.Minute,
 		Next: func(c fiber.Ctx) bool {
 			authUser, ok := c.Locals(constants.LOCALS_REQ_USER).(auth.AuthUserPayload)
