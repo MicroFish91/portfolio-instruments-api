@@ -3,14 +3,14 @@ package user
 import (
 	"context"
 	"database/sql"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresUserStore) CreateSettings(ctx context.Context, settings types.Settings) (types.Settings, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	row := s.db.QueryRow(

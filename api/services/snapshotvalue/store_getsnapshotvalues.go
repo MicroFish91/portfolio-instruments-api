@@ -3,14 +3,14 @@ package snapshotvalue
 import (
 	"context"
 	"errors"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresSnapshotValueStore) GetSnapshotValues(ctx context.Context, snapId, userId int) ([]types.SnapshotValue, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	rows, err := s.db.Query(

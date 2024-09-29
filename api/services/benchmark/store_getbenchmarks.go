@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
@@ -46,7 +46,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 	pgxb.AddQuery("ORDER BY created_at ASC")
 	pgxb.AddQuery(fmt.Sprintf("LIMIT %d OFFSET %d", pageSize, (currentPage-1)*pageSize))
 
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	rows, err := s.db.Query(

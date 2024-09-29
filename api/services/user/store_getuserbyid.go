@@ -2,13 +2,13 @@ package user
 
 import (
 	"context"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresUserStore) GetUserById(ctx context.Context, userId int) (types.User, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	row := s.db.QueryRow(

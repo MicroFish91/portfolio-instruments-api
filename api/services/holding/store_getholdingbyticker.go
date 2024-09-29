@@ -2,13 +2,13 @@ package holding
 
 import (
 	"context"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresHoldingStore) GetHoldingByTicker(ctx context.Context, ticker string, userId int) (types.Holding, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	row := s.db.QueryRow(

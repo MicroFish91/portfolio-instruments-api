@@ -4,14 +4,14 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId, userId int) (types.Snapshot, []types.SnapshotValue, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*10)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_LONG)
 	defer cancel()
 
 	row := s.db.QueryRow(

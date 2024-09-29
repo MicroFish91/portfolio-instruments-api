@@ -2,13 +2,13 @@ package snapshot
 
 import (
 	"context"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
 func (s *PostgresSnapshotStore) RefreshSnapshotTotal(ctx context.Context, userId, snapshotId int) (float64, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*10)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_LONG)
 	defer cancel()
 
 	// Use an aggregate function to sum row totals

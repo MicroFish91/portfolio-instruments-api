@@ -9,7 +9,7 @@ import (
 )
 
 func (s *PostgresUserStore) DeleteUser(ctx context.Context, userId int) (types.User, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*40)
+	c, cancel := context.WithTimeout(ctx, 1*time.Minute)
 	defer cancel()
 
 	foreignTables := []string{

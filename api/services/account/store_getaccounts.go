@@ -4,8 +4,8 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
@@ -52,7 +52,7 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 		return nil, types.PaginationMetadata{}, fmt.Errorf("error formatting sql query using query builder: %s", err.Error())
 	}
 
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	rows, err := s.db.Query(c, pgxb.Query, pgxb.QueryParams...)

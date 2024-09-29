@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
@@ -61,7 +62,7 @@ func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, opti
 	pgxb.AddQuery("ORDER BY created_at ASC")
 	pgxb.AddQueryWithPositionals("LIMIT $x OFFSET $x", []any{pageSize, (currentPage - 1) * pageSize})
 
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	rows, err := s.db.Query(c, pgxb.Query, pgxb.QueryParams...)

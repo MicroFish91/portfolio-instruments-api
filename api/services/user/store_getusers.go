@@ -2,14 +2,14 @@ package user
 
 import (
 	"context"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresUserStore) GetUsers(ctx context.Context, options types.GetUsersStoreOptions) ([]types.User, types.PaginationMetadata, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	currentPage := 1

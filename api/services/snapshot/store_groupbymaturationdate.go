@@ -2,15 +2,15 @@ package snapshot
 
 import (
 	"context"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresSnapshotStore) GroupByMaturationDate(ctx context.Context, userId, snapId int, options types.GetGroupByMaturationDateStoreOptions) ([]types.MaturationDateResource, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	pgxb := querybuilder.NewPgxQueryBuilder()

@@ -4,14 +4,14 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresSnapshotStore) GroupByAccount(ctx context.Context, snapId, userId int, options types.GetGroupByAccountStoreOptions) (types.ResourcesGrouped, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*5)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 
 	if options.Group_by == "" {

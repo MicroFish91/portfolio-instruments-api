@@ -3,13 +3,13 @@ package snapshot
 import (
 	"context"
 	"math"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresSnapshotStore) RefreshSnapshotWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, e error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*10)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_LONG)
 	defer cancel()
 
 	// Pre-sum the holding values into a separate table first, then cross join so that we have access to the total when aggregating the final value.

@@ -4,15 +4,15 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"time"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresSnapshotStore) GroupByHolding(ctx context.Context, userId, snapId int, options types.GetGroupByHoldingStoreOptions) (types.ResourcesGrouped, error) {
-	c, cancel := context.WithTimeout(ctx, time.Second*10)
+	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_LONG)
 	defer cancel()
 
 	if options.Group_by == "" {
