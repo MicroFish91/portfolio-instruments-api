@@ -1,0 +1,9 @@
+.env*
+.git/
+.thunderclient/
+.vscode/
+tests/
+docs/
+bin/
+vendor/
+docker-compose.yml

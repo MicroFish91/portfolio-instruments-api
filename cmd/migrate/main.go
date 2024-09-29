@@ -10,6 +10,8 @@ import (
 	_ "github.com/lib/pq"
 )
 
+// Todo: Pass another command line arg to signify which env file to use to building the connection string
+
 func main() {
 	m, err := migrator.NewPostgresMigrator(
 		"postgresql://localhost:5432/postgres?sslmode=disable", // connection string

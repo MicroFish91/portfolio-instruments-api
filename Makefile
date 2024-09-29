@@ -1,8 +1,8 @@
 build:
-	@go build -o bin/portfolioinstruments cmd/api/main.go 
+	@go build -o bin/portfolio-instruments cmd/api/main.go 
 
 run: build
-	@./bin/portfolioinstruments	
+	@./bin/portfolio-instruments	
 
 test:
 	@go test -count=1 -v ./...

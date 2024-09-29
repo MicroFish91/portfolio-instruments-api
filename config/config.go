@@ -31,6 +31,13 @@ var Env Config = initConfig()
 func initConfig() Config {
 	godotenv.Load()
 
+	var appEnv string = getEnv("APP_ENV", "development")
+	if appEnv == "production" {
+		godotenv.Load(".env.prod")
+	} else {
+		godotenv.Load(".env.dev")
+	}
+
 	return Config{
 		Port:                     getEnv("PORT", ":3000"),
 		JwtSecret:                getEnv("JWT_SECRET", "not-so-secret-jwt-secret"),

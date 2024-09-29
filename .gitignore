@@ -1,4 +1,7 @@
 bin
 __debug*
 .DS_Store
-*.env*
+
+.env
+.env.prod
+.env.dev
