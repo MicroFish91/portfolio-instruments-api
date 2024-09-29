@@ -8,10 +8,10 @@ import (
 )
 
 func registerSnapshotRoutes(r fiber.Router, h types.SnapshotHandler) {
-	r.Get("/snapshots", h.GetSnapshots, middleware.RequireAuth, middleware.AddQueryValidator[snapshot.GetSnapshotsQuery]())
-	r.Get("/snapshots/:id", h.GetSnapshotById, middleware.RequireAuth, middleware.AddParamsValidator[snapshot.GetSnapshotByIdParams](), middleware.AddQueryValidator[snapshot.GetSnapshotByIdQuery]())
-	r.Get("/snapshots/:id/rebalance", h.RebalanceSnapshot, middleware.RequireAuth, middleware.AddParamsValidator[snapshot.GetSnapshotByIdParams]())
-	r.Post("/snapshots", h.CreateSnapshot, middleware.RequireAuth, middleware.AddBodyValidator[snapshot.CreateSnapshotPayload]())
-	r.Put("/snapshots/:id", h.UpdateSnapshot, middleware.RequireAuth, middleware.AddBodyValidator[snapshot.UpdateSnapshotPayload](), middleware.AddParamsValidator[snapshot.UpdateSnapshotParams]())
-	r.Delete("/snapshots/:id", h.DeleteSnapshot, middleware.RequireAuth, middleware.AddParamsValidator[snapshot.DeleteSnapshotParams]())
+	r.Get("/snapshots", h.GetSnapshots, middleware.RequireAuth(types.Default), middleware.AddQueryValidator[snapshot.GetSnapshotsQuery]())
+	r.Get("/snapshots/:id", h.GetSnapshotById, middleware.RequireAuth(types.Default), middleware.AddParamsValidator[snapshot.GetSnapshotByIdParams](), middleware.AddQueryValidator[snapshot.GetSnapshotByIdQuery]())
+	r.Get("/snapshots/:id/rebalance", h.RebalanceSnapshot, middleware.RequireAuth(types.Default), middleware.AddParamsValidator[snapshot.GetSnapshotByIdParams]())
+	r.Post("/snapshots", h.CreateSnapshot, middleware.RequireAuth(types.Default), middleware.AddBodyValidator[snapshot.CreateSnapshotPayload]())
+	r.Put("/snapshots/:id", h.UpdateSnapshot, middleware.RequireAuth(types.Default), middleware.AddBodyValidator[snapshot.UpdateSnapshotPayload](), middleware.AddParamsValidator[snapshot.UpdateSnapshotParams]())
+	r.Delete("/snapshots/:id", h.DeleteSnapshot, middleware.RequireAuth(types.Default), middleware.AddParamsValidator[snapshot.DeleteSnapshotParams]())
 }

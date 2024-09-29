@@ -9,12 +9,12 @@ import (
 
 func registerUserRoutes(r fiber.Router, h types.UserHandler) {
 	// User
-	r.Get("/me", h.GetMe, middleware.RequireAuth)
-	r.Get("/users", h.GetUsers, middleware.RequireAuth, middleware.AddQueryValidator[user.GetUsersQuery]())
-	r.Get("/users/:id", h.GetUser, middleware.RequireAuth, middleware.AddParamsValidator[user.GetUserParams]())
-	r.Delete("/users/:id", h.DeleteUser, middleware.RequireAuth, middleware.AddParamsValidator[user.DeleteUserParams]())
+	r.Get("/me", h.GetMe, middleware.RequireAuth(types.Default))
+	r.Get("/users", h.GetUsers, middleware.RequireAuth(types.Admin), middleware.AddQueryValidator[user.GetUsersQuery]())
+	r.Get("/users/:id", h.GetUser, middleware.RequireAuth(types.Default), middleware.AddParamsValidator[user.GetUserParams]())
+	r.Delete("/users/:id", h.DeleteUser, middleware.RequireAuth(types.Default), middleware.AddParamsValidator[user.DeleteUserParams]())
 
 	// Settings
-	r.Get("/users/:id/settings", h.GetSettings, middleware.RequireAuth, middleware.AddParamsValidator[user.GetSettingsParams]())
-	r.Put("/users/:id/settings", h.UpdateSettings, middleware.RequireAuth, middleware.AddBodyValidator[user.UpdateSettingsPayload](), middleware.AddParamsValidator[user.UpdateSettingsParams]())
+	r.Get("/users/:id/settings", h.GetSettings, middleware.RequireAuth(types.Default), middleware.AddParamsValidator[user.GetSettingsParams]())
+	r.Put("/users/:id/settings", h.UpdateSettings, middleware.RequireAuth(types.Default), middleware.AddBodyValidator[user.UpdateSettingsPayload](), middleware.AddParamsValidator[user.UpdateSettingsParams]())
 }

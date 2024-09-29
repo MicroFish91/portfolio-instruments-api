@@ -50,10 +50,12 @@ func (s *ApiServer) init() {
 	s.App = fiber.New(getFiberConfig())
 
 	// Middleware
-	s.App.Use(middleware.AddRateLimiter(s.cfg.ShortRequestLimit, 1*time.Minute))
-	s.App.Use(middleware.AddRateLimiter(s.cfg.LongRequestLimit, 30*time.Minute))
 	s.App.Use(middleware.AddIncomingTrafficLogger(s.logger))
 	s.App.Use(middleware.AddLocalsContextLogger(s.logger))
+	s.App.Use(middleware.ParseAuthUserIfExists)
+	s.App.Use(middleware.AddUnauthorizedRateLimiter())
+	s.App.Use(middleware.AddRateLimiter(s.cfg.ShortRequestLimit, 1*time.Minute))
+	s.App.Use(middleware.AddRateLimiter(s.cfg.LongRequestLimit, 30*time.Minute))
 
 	// Stores
 	userStore := user.NewPostgresUserStore(s.db, s.logger)

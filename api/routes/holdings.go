@@ -8,9 +8,9 @@ import (
 )
 
 func registerHoldingRoutes(r fiber.Router, h types.HoldingHandler) {
-	r.Get("/holdings", h.GetHoldings, middleware.RequireAuth, middleware.AddQueryValidator[holding.GetHoldingsQuery]())
-	r.Get("/holdings/:id", h.GetHoldingById, middleware.RequireAuth, middleware.AddParamsValidator[holding.GetHoldingByIdParams]())
-	r.Post("/holdings", h.CreateHolding, middleware.RequireAuth, middleware.AddBodyValidator[holding.CreateHoldingPayload]())
-	r.Put("/holdings/:id", h.UpdateHolding, middleware.RequireAuth, middleware.AddBodyValidator[holding.UpdateHoldingPayload](), middleware.AddParamsValidator[holding.UpdateHoldingParams]())
-	r.Delete("/holdings/:id", h.DeleteHolding, middleware.RequireAuth, middleware.AddParamsValidator[holding.DeleteHoldingParams]())
+	r.Get("/holdings", h.GetHoldings, middleware.RequireAuth(types.Default), middleware.AddQueryValidator[holding.GetHoldingsQuery]())
+	r.Get("/holdings/:id", h.GetHoldingById, middleware.RequireAuth(types.Default), middleware.AddParamsValidator[holding.GetHoldingByIdParams]())
+	r.Post("/holdings", h.CreateHolding, middleware.RequireAuth(types.Default), middleware.AddBodyValidator[holding.CreateHoldingPayload]())
+	r.Put("/holdings/:id", h.UpdateHolding, middleware.RequireAuth(types.Default), middleware.AddBodyValidator[holding.UpdateHoldingPayload](), middleware.AddParamsValidator[holding.UpdateHoldingParams]())
+	r.Delete("/holdings/:id", h.DeleteHolding, middleware.RequireAuth(types.Default), middleware.AddParamsValidator[holding.DeleteHoldingParams]())
 }
