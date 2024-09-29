@@ -11,16 +11,27 @@ import (
 )
 
 func main() {
-	db, err := db.NewPostgresStorage("postgresql://localhost:5432/postgres")
+	dbConfig := db.PostgresDbConfig{
+		DbHost:           config.Env.DbHost,
+		DbPort:           config.Env.DbPort,
+		DbName:           config.Env.DbName,
+		DbUser:           config.Env.DbUser,
+		DbPassword:       config.Env.DbPassword,
+		DbMaxConnections: config.Env.DbMaxConnections,
+		DbMinConnections: config.Env.DbMinConnections,
+	}
+
+	db, err := db.NewPostgresStorage(dbConfig)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	logger := logger.NewLogger(slog.LevelDebug) // Todo: Set log level via environment variable
+	logger := logger.NewLogger(slog.Level(config.Env.LogLevel))
 	apiConfig := api.ApiConfig{
-		Addr:              config.Env.Port,
-		ShortRequestLimit: config.Env.ShortRequestLimit,
-		LongRequestLimit:  config.Env.LongRequestLimit,
+		Addr:                     config.Env.Port,
+		UnauthorizedRequestLimit: config.Env.UnauthorizedRequestLimit,
+		ShortRequestLimit:        config.Env.ShortRequestLimit,
+		LongRequestLimit:         config.Env.LongRequestLimit,
 	}
 
 	server := api.NewApiServer(apiConfig, db, logger)

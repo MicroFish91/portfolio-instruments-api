@@ -24,10 +24,10 @@ func AddRateLimiter(limit int, expiration time.Duration) func(fiber.Ctx) error {
 	})
 }
 
-func AddUnauthorizedRateLimiter() func(fiber.Ctx) error {
+func AddUnauthorizedRateLimiter(limit int, expiration time.Duration) func(fiber.Ctx) error {
 	return limiter.New(limiter.Config{
-		Max:        20,
-		Expiration: 60 * time.Minute,
+		Max:        limit,
+		Expiration: expiration,
 		Next: func(c fiber.Ctx) bool {
 			authUser, ok := c.Locals(constants.LOCALS_REQ_USER).(auth.AuthUserPayload)
 			return ok && authUser.Email != "" && authUser.User_id != 0

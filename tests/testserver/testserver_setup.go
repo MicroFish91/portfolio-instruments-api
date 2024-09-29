@@ -54,7 +54,13 @@ func initTestServerWrapper() *TestServerWrapper {
 	runDatabaseMigrations(connStr)
 
 	// Database connection (pgx driver)
-	db, err := db.NewPostgresStorage(connStr)
+	dbCfg := db.PostgresDbConfig{
+		DbUrl:            connStr,
+		DbMinConnections: 0,
+		DbMaxConnections: 5,
+	}
+
+	db, err := db.NewPostgresStorage(dbCfg)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -62,9 +68,10 @@ func initTestServerWrapper() *TestServerWrapper {
 	// Server
 	logger := logger.NewLogger(slog.LevelError)
 	apiConfig := api.ApiConfig{
-		Addr:              connStr,
-		ShortRequestLimit: 99999,
-		LongRequestLimit:  99999,
+		Addr:                     connStr,
+		UnauthorizedRequestLimit: 99999,
+		ShortRequestLimit:        99999,
+		LongRequestLimit:         99999,
 	}
 
 	return newTestServerWrapper(apiConfig, db, logger, pgc)

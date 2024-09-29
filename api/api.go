@@ -18,9 +18,10 @@ import (
 )
 
 type ApiConfig struct {
-	Addr              string
-	ShortRequestLimit int
-	LongRequestLimit  int
+	Addr                     string
+	UnauthorizedRequestLimit int
+	ShortRequestLimit        int
+	LongRequestLimit         int
 }
 
 type ApiServer struct {
@@ -53,7 +54,7 @@ func (s *ApiServer) init() {
 	s.App.Use(middleware.AddIncomingTrafficLogger(s.logger))
 	s.App.Use(middleware.AddLocalsContextLogger(s.logger))
 	s.App.Use(middleware.ParseAuthUserIfExists)
-	s.App.Use(middleware.AddUnauthorizedRateLimiter())
+	s.App.Use(middleware.AddUnauthorizedRateLimiter(s.cfg.UnauthorizedRequestLimit, 60*time.Minute))
 	s.App.Use(middleware.AddRateLimiter(s.cfg.ShortRequestLimit, 1*time.Minute))
 	s.App.Use(middleware.AddRateLimiter(s.cfg.LongRequestLimit, 30*time.Minute))
 
