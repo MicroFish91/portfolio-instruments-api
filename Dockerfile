@@ -4,10 +4,6 @@ FROM golang:1.21.5-alpine
 # Set destination for COPY
 WORKDIR /app
 
-# Download Go modules
-COPY go.mod go.sum ./
-RUN go mod download
-
 # Copy the source code
 COPY . .
 
