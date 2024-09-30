@@ -35,6 +35,10 @@ func main() {
 - `make migrate-up`
 - `make migrate-down`
 
+### Development vs. Production
+
+You can run migrations for development vs. production by specifying `.env.dev` vs `.env.prod` connection info. Specifying the `APP_ENV` in the `.env` file will tell the migrate command which of the two environments to run from.
+
 ### Issues
 
 Had to use the [pg](https://github.com/lib/pq) database driver for migrations specifically due to a legacy issue where migrate hasn't been able to fully support pgx driver yet. pg is no longer actively maintained and the creators have explicitly said to go use pgx instead, which is why I'm using pgx in the actual api implementation. pg will only be used temporarily here for migrates only.

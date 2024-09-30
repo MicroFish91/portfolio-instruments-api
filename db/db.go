@@ -23,18 +23,7 @@ type PostgresDbConfig struct {
 }
 
 func NewPostgresStorage(dbConfig PostgresDbConfig) (*pgxpool.Pool, error) {
-	var connStr string
-	if dbConfig.DbUrl != "" {
-		connStr = dbConfig.DbUrl
-	} else {
-		var dbLogin string
-		if dbConfig.DbUser != "" && dbConfig.DbPassword != "" {
-			dbLogin = fmt.Sprintf("%s:%s@", dbConfig.DbUser, dbConfig.DbPassword)
-		}
-		connStr = fmt.Sprintf("postgresql://%s%s:%s/%s?sslmode=%s", dbLogin, dbConfig.DbHost, dbConfig.DbPort, dbConfig.DbName, dbConfig.DbSslMode)
-	}
-
-	config, err := pgxpool.ParseConfig(connStr)
+	config, err := pgxpool.ParseConfig(GetDbConnectionString(dbConfig))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -46,4 +35,18 @@ func NewPostgresStorage(dbConfig PostgresDbConfig) (*pgxpool.Pool, error) {
 	defer cancel()
 
 	return pgxpool.NewWithConfig(ctx, config)
+}
+
+func GetDbConnectionString(dbConfig PostgresDbConfig) string {
+	var connStr string
+	if dbConfig.DbUrl != "" {
+		connStr = dbConfig.DbUrl
+	} else {
+		var dbLogin string
+		if dbConfig.DbUser != "" && dbConfig.DbPassword != "" {
+			dbLogin = fmt.Sprintf("%s:%s@", dbConfig.DbUser, dbConfig.DbPassword)
+		}
+		connStr = fmt.Sprintf("postgresql://%s%s:%s/%s?sslmode=%s", dbLogin, dbConfig.DbHost, dbConfig.DbPort, dbConfig.DbName, dbConfig.DbSslMode)
+	}
+	return connStr
 }

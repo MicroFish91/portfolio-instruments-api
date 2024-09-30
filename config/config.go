@@ -9,6 +9,7 @@ import (
 )
 
 type Config struct {
+	AppEnv                   string
 	Port                     string
 	JwtSecret                string
 	UnauthorizedRequestLimit int
@@ -39,6 +40,7 @@ func initConfig() Config {
 	}
 
 	return Config{
+		AppEnv:                   appEnv,
 		Port:                     getEnv("PORT", ":3000"),
 		JwtSecret:                getEnv("JWT_SECRET", "not-so-secret-jwt-secret"),
 		UnauthorizedRequestLimit: getInt(getEnv("UNAUTHORIZED_REQUEST_LIMIT", "99999")),
