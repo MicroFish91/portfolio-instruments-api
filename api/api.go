@@ -54,10 +54,11 @@ func (s *ApiServer) init() {
 	// Middleware
 	s.App.Use(middleware.AddIncomingTrafficLogger(s.logger))
 	s.App.Use(middleware.AddLocalsContextLogger(s.logger))
-	s.App.Use(middleware.ParseAuthUserIfExists(s.cfg.JwtSecret))
+	s.App.Use(middleware.AddAuthUserParser(s.cfg.JwtSecret))
 	s.App.Use(middleware.AddUnauthorizedRateLimiter(s.cfg.UnauthorizedRequestLimit, 60*time.Minute))
 	s.App.Use(middleware.AddRateLimiter(s.cfg.ShortRequestLimit, 1*time.Minute))
 	s.App.Use(middleware.AddRateLimiter(s.cfg.LongRequestLimit, 30*time.Minute))
+	s.App.Use(middleware.AddCors())
 
 	// Stores
 	userStore := user.NewPostgresUserStore(s.db, s.logger)

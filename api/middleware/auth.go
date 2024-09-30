@@ -12,7 +12,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func ParseAuthUserIfExists(jwtSecret string) func(fiber.Ctx) error {
+func AddAuthUserParser(jwtSecret string) func(fiber.Ctx) error {
 	return func(c fiber.Ctx) error {
 		authHeader := c.Get("Authorization")
 		if authHeader == "" {
