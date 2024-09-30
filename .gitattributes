@@ -1,0 +1,5 @@
+# Set behaviour for all files, in case developers don't have core.autocrlf set.
+# If fatal warning still, try:
+# git config --global core.autocrlf false
+# git config --global core.safecrlf false
+* text=auto
