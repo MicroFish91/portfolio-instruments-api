@@ -5,5 +5,4 @@
 tests/
 docs/
 bin/
-vendor/
 docker-compose.yml
