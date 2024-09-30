@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -34,8 +35,10 @@ func initConfig() Config {
 
 	var appEnv string = getEnv("APP_ENV", "development")
 	if appEnv == "production" {
+		fmt.Println("running in production mode")
 		godotenv.Load(".env.prod")
 	} else {
+		fmt.Println("running in development mode")
 		godotenv.Load(".env.dev")
 	}
 
