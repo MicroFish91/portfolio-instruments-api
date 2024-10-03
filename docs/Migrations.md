@@ -1,4 +1,4 @@
-# Migrations
+# 🕊️ Migrations
 
 Guide to running db migrations (entrypoint: `cmd/migrate/`).
 

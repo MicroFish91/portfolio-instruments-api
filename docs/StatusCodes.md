@@ -1,3 +1,3 @@
-## HTTP Status Codes
+## 🚦 HTTP Status Codes
 
 Due to laziness and my preference for simplicity (and because this project is mostly for my own use), 403 Forbidden and 409 Conflict will not always be properly accounted for.  In the majority of cases, I just use where statements and look for a specific userId + resourceId combination.  When running a SQL query with both of these values, if the resource is not found, it will trigger a 404 error.  This doesn't actually mean that a resource doesn't exist, it just means that the resource being targeted does not exist for the given user. Basically, it just lumps the 403, 404, and 409 returns into one 404 bucket and doesn't attempt to distinguish between them.  I have thought about going back and changing this behavior, but I find that the benefit is small enough that I don't really care... not to mention I kind of prefer how simple the current implementation is.

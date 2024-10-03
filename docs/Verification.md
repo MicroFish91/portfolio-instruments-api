@@ -1,4 +1,4 @@
-## User Verification
+## 🔎 User Verification
 
 I originally planned to require users to verify their email addresses. In the past, I implemented this using an automated Gmail account, verification token, and a redirect route. However, at some point in 2022, Google changed their Gmail API requirements, which completely broke my registration process.
 

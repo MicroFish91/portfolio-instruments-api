@@ -1,4 +1,4 @@
-# Resource Deprecation
+# ❌ Resource Deprecation
 
 Certain resources have an `is_deprecated` field which may be set if a user requests to delete a resource that is still being actively utilized. This is very common for benchmarks, 
 accounts, and holdings - all of which are used in the producing of snapshots.  In such cases where a resource is still being used when a delete request has been issued, 
