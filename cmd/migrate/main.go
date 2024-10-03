@@ -35,7 +35,7 @@ func main() {
 		if err := m.Up(); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("successfully ran up migration in %s", config.Env.AppEnv)
+		fmt.Printf("successfully ran up migration")
 	} else if cmd == "down" {
 		if config.Env.AppEnv == "production" {
 			log.Fatal("blocking down migrations for prod")
@@ -44,6 +44,6 @@ func main() {
 		if err := m.Down(); err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("successfully ran down migration in %s", config.Env.AppEnv)
+		fmt.Printf("successfully ran down migration")
 	}
 }

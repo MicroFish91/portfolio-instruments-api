@@ -13,6 +13,7 @@ type Config struct {
 	AppEnv                   string
 	Port                     string
 	JwtSecret                string
+	RequireVerification      bool
 	UnauthorizedRequestLimit int
 	ShortRequestLimit        int
 	LongRequestLimit         int
@@ -35,10 +36,10 @@ func initConfig() Config {
 
 	var appEnv string = getEnv("APP_ENV", "development")
 	if appEnv == "production" {
-		fmt.Println("running in production mode")
+		fmt.Println("running in production")
 		godotenv.Load(".env.prod")
 	} else {
-		fmt.Println("running in development mode")
+		fmt.Println("running in development")
 		godotenv.Load(".env.dev")
 	}
 
@@ -46,6 +47,7 @@ func initConfig() Config {
 		AppEnv:                   appEnv,
 		Port:                     getEnv("PORT", ":3000"),
 		JwtSecret:                getEnv("JWT_SECRET", "not-so-secret-jwt-secret"),
+		RequireVerification:      getBool(getEnv("REQUIRE_VERIFICATION", "true")),
 		UnauthorizedRequestLimit: getInt(getEnv("UNAUTHORIZED_REQUEST_LIMIT", "99999")),
 		ShortRequestLimit:        getInt(getEnv("SHORT_REQUEST_LIMIT", "99999")),
 		LongRequestLimit:         getInt(getEnv("LONG_REQUEST_LIMIT", "99999")),
@@ -67,6 +69,10 @@ func getEnv(key string, fallback string) string {
 		return env
 	}
 	return fallback
+}
+
+func getBool(env string) bool {
+	return env == "true"
 }
 
 func getInt(env string) int {

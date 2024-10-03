@@ -20,6 +20,7 @@ type User struct {
 	Enc_password   string    `json:"-"`
 	User_role      UserRole  `json:"user_role"`
 	Last_logged_in time.Time `json:"last_logged_in"`
+	Verified       bool      `json:"verified"`
 	Created_at     time.Time `json:"created_at"`
 	Updated_at     time.Time `json:"updated_at"`
 }
@@ -37,6 +38,7 @@ type UserHandler interface {
 	GetMe(fiber.Ctx) error
 	GetUser(fiber.Ctx) error
 	GetUsers(fiber.Ctx) error
+	UpdateVerification(fiber.Ctx) error
 	DeleteUser(fiber.Ctx) error
 
 	GetSettings(fiber.Ctx) error
@@ -49,6 +51,7 @@ type UserStore interface {
 	GetUserByEmail(ctx context.Context, email string) (User, error)
 	GetUsers(ctx context.Context, options GetUsersStoreOptions) ([]User, PaginationMetadata, error)
 	UpdateUserLoggedIn(ctx context.Context, userId int) (User, error)
+	UpdateVerification(ctx context.Context, userId int) (User, error)
 	DeleteUser(ctx context.Context, userId int) (User, error)
 
 	CreateSettings(context.Context, Settings) (Settings, error)

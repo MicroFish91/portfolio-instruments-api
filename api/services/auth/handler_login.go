@@ -18,6 +18,9 @@ func (h *AuthHandlerImpl) Login(c fiber.Ctx) error {
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
+	if h.requireVerification && !user.Verified {
+		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("user must request verification to complete account registration -- email \"portfolioinstruments@gmail.com\" requesting verification"))
+	}
 
 	if err := compareHashAndPassword(user.Enc_password, userPayload.Password); err != nil {
 		return utils.SendError(c, fiber.StatusUnauthorized, errors.New("invalid login credentials"))

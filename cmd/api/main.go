@@ -31,6 +31,7 @@ func main() {
 	apiConfig := api.ApiConfig{
 		Addr:                     config.Env.Port,
 		JwtSecret:                config.Env.JwtSecret,
+		RequireVerification:      config.Env.RequireVerification,
 		UnauthorizedRequestLimit: config.Env.UnauthorizedRequestLimit,
 		ShortRequestLimit:        config.Env.ShortRequestLimit,
 		LongRequestLimit:         config.Env.LongRequestLimit,

@@ -41,6 +41,7 @@ func (s *PostgresUserStore) parseRowIntoUser(row pgx.Row) (types.User, error) {
 		&u.Enc_password,
 		&u.User_role,
 		&u.Last_logged_in,
+		&u.Verified,
 		&u.Created_at,
 		&u.Updated_at,
 	)

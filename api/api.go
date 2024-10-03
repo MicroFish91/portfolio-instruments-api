@@ -20,6 +20,7 @@ import (
 type ApiConfig struct {
 	Addr                     string
 	JwtSecret                string
+	RequireVerification      bool
 	UnauthorizedRequestLimit int
 	ShortRequestLimit        int
 	LongRequestLimit         int
@@ -69,7 +70,7 @@ func (s *ApiServer) init() {
 	snapshotValueStore := snapshotvalue.NewPostgresSnapshotValueStore(s.db, s.logger)
 
 	// Handlers
-	authHandler := auth.NewAuthHandler(userStore, s.logger, s.cfg.JwtSecret)
+	authHandler := auth.NewAuthHandler(userStore, s.logger, s.cfg.JwtSecret, s.cfg.RequireVerification)
 	userHandler := user.NewUserHandler(userStore, benchmarkStore, s.logger)
 	accountHandler := account.NewAccountHandler(accountStore, s.logger)
 	holdingHandler := holding.NewHoldingHandler(holdingStore, s.logger)
