@@ -12,7 +12,18 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, options types.GetAccountsStoreOptions) ([]types.Account, types.PaginationMetadata, error) {
+func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, options *types.GetAccountsStoreOptions) ([]types.Account, types.PaginationMetadata, error) {
+	if options == nil {
+		options = &types.GetAccountsStoreOptions{
+			AccountIds:    []int{},
+			TaxShelter:    "",
+			Institution:   "",
+			Is_deprecated: "",
+			Current_page:  1,
+			Page_size:     50,
+		}
+	}
+
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page

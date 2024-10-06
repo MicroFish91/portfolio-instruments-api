@@ -15,7 +15,7 @@ func (s *PostgresUserStore) CreateSettings(ctx context.Context, set *types.Setti
 	defer cancel()
 
 	if set == nil {
-		return types.Settings{}, errors.New("internal error: settings struct cannot be nil, valid settings data is required")
+		return types.Settings{}, errors.New("service error: settings struct cannot be nil, valid settings data is required")
 	}
 
 	row := s.db.QueryRow(

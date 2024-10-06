@@ -36,7 +36,7 @@ func (h *AccountHandlerImpl) DeleteAccount(c fiber.Ctx) error {
 			}
 
 			if !account.Is_deprecated {
-				account, err = h.store.UpdateAccount(c.Context(), types.Account{
+				account, err = h.store.UpdateAccount(c.Context(), &types.Account{
 					Account_id:    accountParams.Id,
 					Name:          account.Name,
 					Description:   account.Description,

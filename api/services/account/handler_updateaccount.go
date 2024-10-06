@@ -32,7 +32,7 @@ func (h *AccountHandlerImpl) UpdateAccount(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusConflict, errors.New("an account with the provided name already exists"))
 	}
 
-	account, err := h.store.UpdateAccount(c.Context(), types.Account{
+	account, err := h.store.UpdateAccount(c.Context(), &types.Account{
 		Account_id:    accountParams.Id,
 		Name:          accountPayload.Name,
 		Description:   accountPayload.Description,

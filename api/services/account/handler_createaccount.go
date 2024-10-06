@@ -30,7 +30,7 @@ func (h *AccountHandlerImpl) CreateAccount(c fiber.Ctx) error {
 
 	account, err := h.store.CreateAccount(
 		c.Context(),
-		types.Account{
+		&types.Account{
 			Name:          accountPayload.Name,
 			Description:   accountPayload.Description,
 			Tax_shelter:   accountPayload.Tax_shelter,

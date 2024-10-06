@@ -2,14 +2,19 @@ package account
 
 import (
 	"context"
+	"errors"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresAccountStore) CreateAccount(ctx context.Context, a types.Account) (types.Account, error) {
+func (s *PostgresAccountStore) CreateAccount(ctx context.Context, a *types.Account) (types.Account, error) {
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
+
+	if a == nil {
+		return types.Account{}, errors.New("service error: account struct cannot be nil, valid account data is required")
+	}
 
 	row := s.db.QueryRow(
 		c,

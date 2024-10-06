@@ -14,7 +14,7 @@ func (s *PostgresUserStore) CreateUser(ctx context.Context, u *types.User) (type
 	defer cancel()
 
 	if u == nil {
-		return types.User{}, errors.New("internal error: user struct cannot be nil, valid user data is required")
+		return types.User{}, errors.New("service error: user struct cannot be nil, valid user data is required")
 	}
 
 	row := s.db.QueryRow(

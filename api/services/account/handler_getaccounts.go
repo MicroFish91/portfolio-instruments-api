@@ -24,7 +24,7 @@ func (h *AccountHandlerImpl) GetAccounts(c fiber.Ctx) error {
 	accounts, pagination, err := h.store.GetAccounts(
 		c.Context(),
 		userPayload.User_id,
-		types.GetAccountsStoreOptions{
+		&types.GetAccountsStoreOptions{
 			AccountIds:    queryPayload.Ids,
 			TaxShelter:    queryPayload.Tax_shelter,
 			Institution:   queryPayload.Institution,
