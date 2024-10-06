@@ -8,9 +8,15 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresSnapshotStore) GetSnapshotTotal(ctx context.Context, userId, snapId int, options types.GetSnapshotTotalStoreOptions) (total float64, e error) {
+func (s *PostgresSnapshotStore) GetSnapshotTotal(ctx context.Context, userId, snapId int, options *types.GetSnapshotTotalStoreOptions) (total float64, e error) {
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
+
+	if options == nil {
+		options = &types.GetSnapshotTotalStoreOptions{
+			Omit_skip_reb: false,
+		}
+	}
 
 	pgxb := querybuilder.NewPgxQueryBuilder()
 	pgxb.AddQuery("SELECT SUM(total) AS snapshot_total")

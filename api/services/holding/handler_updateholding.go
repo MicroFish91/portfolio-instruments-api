@@ -45,7 +45,7 @@ func (h *HoldingHandlerImpl) UpdateHolding(c fiber.Ctx) error {
 
 	holding, err := h.store.UpdateHolding(
 		c.Context(),
-		types.Holding{
+		&types.Holding{
 			Holding_id:        holdingParams.Id,
 			Name:              holdingPayload.Name,
 			Ticker:            holdingPayload.Ticker,

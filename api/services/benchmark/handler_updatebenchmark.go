@@ -32,7 +32,7 @@ func (h *BenchmarkHandlerImpl) UpdateBenchmark(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusConflict, errors.New("benchmark with the given name already exists for the user"))
 	}
 
-	benchmark, err := h.benchmarkStore.UpdateBenchmark(c.Context(), types.Benchmark{
+	benchmark, err := h.benchmarkStore.UpdateBenchmark(c.Context(), &types.Benchmark{
 		Benchmark_id:     benchmarkParams.Id,
 		Name:             benchmarkPayload.Name,
 		Description:      benchmarkPayload.Description,

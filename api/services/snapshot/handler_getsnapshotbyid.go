@@ -78,7 +78,7 @@ func (h *SnapshotHandlerImpl) getSnapshotHoldings(c fiber.Ctx, holdingIds []int,
 	holdings, _, err := h.holdingStore.GetHoldings(
 		c.Context(),
 		userId,
-		types.GetHoldingsStoreOptions{
+		&types.GetHoldingsStoreOptions{
 			Holding_ids: holdingIds,
 			Page_size:   100,
 		},
@@ -133,7 +133,7 @@ func (h *SnapshotHandlerImpl) handleGroupByResource(c fiber.Ctx, snapId, userId 
 			groupBy = types.BY_TAX_SHELTER
 		}
 
-		accountsGrouped, err := h.snapshotStore.GroupByAccount(c.Context(), snapId, userId, types.GetGroupByAccountStoreOptions{
+		accountsGrouped, err := h.snapshotStore.GroupByAccount(c.Context(), snapId, userId, &types.GetGroupByAccountStoreOptions{
 			Group_by: groupBy,
 		})
 
@@ -152,7 +152,7 @@ func (h *SnapshotHandlerImpl) handleGroupByResource(c fiber.Ctx, snapId, userId 
 			groupBy = types.BY_ASSET_CATEGORY
 		}
 
-		holdingsGrouped, err := h.snapshotStore.GroupByHolding(c.Context(), userId, snapId, types.GetGroupByHoldingStoreOptions{
+		holdingsGrouped, err := h.snapshotStore.GroupByHolding(c.Context(), userId, snapId, &types.GetGroupByHoldingStoreOptions{
 			Group_by:      groupBy,
 			Omit_skip_reb: false,
 		})
@@ -167,7 +167,7 @@ func (h *SnapshotHandlerImpl) handleGroupByResource(c fiber.Ctx, snapId, userId 
 
 	case BY_MATURATION_DATE:
 
-		resources, err := h.snapshotStore.GroupByMaturationDate(c.Context(), userId, snapId, types.GetGroupByMaturationDateStoreOptions{
+		resources, err := h.snapshotStore.GroupByMaturationDate(c.Context(), userId, snapId, &types.GetGroupByMaturationDateStoreOptions{
 			Maturation_start: options.Maturation_start,
 			Maturation_end:   options.Maturation_end,
 		})

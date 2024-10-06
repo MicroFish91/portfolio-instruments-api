@@ -24,7 +24,7 @@ func (h *HoldingHandlerImpl) GetHoldings(c fiber.Ctx) error {
 	holdings, pagination, err := h.store.GetHoldings(
 		c.Context(),
 		userPayload.User_id,
-		types.GetHoldingsStoreOptions{
+		&types.GetHoldingsStoreOptions{
 			Holding_ids:              queryPayload.Ids,
 			Ticker:                   queryPayload.Ticker,
 			Asset_category:           queryPayload.Asset_category,

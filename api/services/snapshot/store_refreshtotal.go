@@ -12,7 +12,7 @@ func (s *PostgresSnapshotStore) RefreshSnapshotTotal(ctx context.Context, userId
 	defer cancel()
 
 	// Use an aggregate function to sum row totals
-	snapshotTotal, err := s.GetSnapshotTotal(c, userId, snapshotId, types.GetSnapshotTotalStoreOptions{
+	snapshotTotal, err := s.GetSnapshotTotal(c, userId, snapshotId, &types.GetSnapshotTotalStoreOptions{
 		Omit_skip_reb: false,
 	})
 

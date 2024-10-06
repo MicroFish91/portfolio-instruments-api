@@ -2,14 +2,19 @@ package holding
 
 import (
 	"context"
+	"errors"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresHoldingStore) UpdateHolding(ctx context.Context, h types.Holding) (types.Holding, error) {
+func (s *PostgresHoldingStore) UpdateHolding(ctx context.Context, h *types.Holding) (types.Holding, error) {
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
+
+	if h == nil {
+		return types.Holding{}, errors.New("service error: holding struct cannot be nil, valid holding data is required")
+	}
 
 	row := s.db.QueryRow(
 		c,

@@ -32,7 +32,7 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 	}
 
 	// Get total of all values where skip_rebalance = false
-	omitSkipsTotal, err := h.snapshotStore.GetSnapshotTotal(c.Context(), userPayload.User_id, snapshotParams.Id, types.GetSnapshotTotalStoreOptions{
+	omitSkipsTotal, err := h.snapshotStore.GetSnapshotTotal(c.Context(), userPayload.User_id, snapshotParams.Id, &types.GetSnapshotTotalStoreOptions{
 		Omit_skip_reb: true,
 	})
 	if err != nil {
@@ -46,7 +46,7 @@ func (h *SnapshotHandlerImpl) RebalanceSnapshot(c fiber.Ctx) error {
 	}
 
 	// holdings
-	holdingsGrouped, err := h.snapshotStore.GroupByHolding(c.Context(), userPayload.User_id, snapshot.Snap_id, types.GetGroupByHoldingStoreOptions{
+	holdingsGrouped, err := h.snapshotStore.GroupByHolding(c.Context(), userPayload.User_id, snapshot.Snap_id, &types.GetGroupByHoldingStoreOptions{
 		Group_by:      types.BY_ASSET_CATEGORY,
 		Omit_skip_reb: true,
 	})

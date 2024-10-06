@@ -11,9 +11,16 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) GroupByHolding(ctx context.Context, userId, snapId int, options types.GetGroupByHoldingStoreOptions) (types.ResourcesGrouped, error) {
+func (s *PostgresSnapshotStore) GroupByHolding(ctx context.Context, userId, snapId int, options *types.GetGroupByHoldingStoreOptions) (types.ResourcesGrouped, error) {
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_LONG)
 	defer cancel()
+
+	if options == nil {
+		options = &types.GetGroupByHoldingStoreOptions{
+			Group_by:      "",
+			Omit_skip_reb: false,
+		}
+	}
 
 	if options.Group_by == "" {
 		return types.ResourcesGrouped{}, errors.New("required to designate a group_by options parameter")

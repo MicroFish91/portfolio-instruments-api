@@ -9,9 +9,16 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) GroupByMaturationDate(ctx context.Context, userId, snapId int, options types.GetGroupByMaturationDateStoreOptions) ([]types.MaturationDateResource, error) {
+func (s *PostgresSnapshotStore) GroupByMaturationDate(ctx context.Context, userId, snapId int, options *types.GetGroupByMaturationDateStoreOptions) ([]types.MaturationDateResource, error) {
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
+
+	if options == nil {
+		options = &types.GetGroupByMaturationDateStoreOptions{
+			Maturation_start: "",
+			Maturation_end:   "",
+		}
+	}
 
 	pgxb := querybuilder.NewPgxQueryBuilder()
 	pgxb.AddQuery(

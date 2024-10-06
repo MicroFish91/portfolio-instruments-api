@@ -29,19 +29,19 @@ type SnapshotHandler interface {
 }
 
 type SnapshotStore interface {
-	GetSnapshots(ctx context.Context, userId int, options GetSnapshotsStoreOptions) ([]Snapshot, PaginationMetadata, error)
+	GetSnapshots(ctx context.Context, userId int, options *GetSnapshotsStoreOptions) ([]Snapshot, PaginationMetadata, error)
 	GetSnapshotById(ctx context.Context, snapshotId, userId int) (Snapshot, []SnapshotValue, error)
-	CreateSnapshot(context.Context, Snapshot) (Snapshot, error)
-	UpdateSnapshot(context.Context, Snapshot) (Snapshot, error)
+	CreateSnapshot(context.Context, *Snapshot) (Snapshot, error)
+	UpdateSnapshot(context.Context, *Snapshot) (Snapshot, error)
 	DeleteSnapshot(ctx context.Context, snapshotId, userId int) (Snapshot, error)
 
 	GetSnapshotByDate(ctx context.Context, snapshotDate string, userId int) (Snapshot, error)
-	GetSnapshotTotal(ctx context.Context, userId, snapId int, options GetSnapshotTotalStoreOptions) (total float64, err error)
+	GetSnapshotTotal(ctx context.Context, userId, snapId int, options *GetSnapshotTotalStoreOptions) (total float64, err error)
 	RefreshSnapshotTotal(ctx context.Context, userId, snapId int) (total float64, err error)
 	RefreshSnapshotWeightedER(ctx context.Context, userId, snapId int) (weightedER float64, err error)
-	GroupByAccount(ctx context.Context, userId, snapId int, options GetGroupByAccountStoreOptions) (ResourcesGrouped, error)
-	GroupByHolding(ctx context.Context, userId, snapId int, options GetGroupByHoldingStoreOptions) (ResourcesGrouped, error)
-	GroupByMaturationDate(ctx context.Context, userId, snapId int, options GetGroupByMaturationDateStoreOptions) ([]MaturationDateResource, error)
+	GroupByAccount(ctx context.Context, userId, snapId int, options *GetGroupByAccountStoreOptions) (ResourcesGrouped, error)
+	GroupByHolding(ctx context.Context, userId, snapId int, options *GetGroupByHoldingStoreOptions) (ResourcesGrouped, error)
+	GroupByMaturationDate(ctx context.Context, userId, snapId int, options *GetGroupByMaturationDateStoreOptions) ([]MaturationDateResource, error)
 }
 
 type ResourcesGrouped struct {

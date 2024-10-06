@@ -12,7 +12,17 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, options types.GetBenchmarksStoreOptions) ([]types.Benchmark, types.PaginationMetadata, error) {
+func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, options *types.GetBenchmarksStoreOptions) ([]types.Benchmark, types.PaginationMetadata, error) {
+	if options == nil {
+		options = &types.GetBenchmarksStoreOptions{
+			Benchmark_ids: []int{},
+			Name:          "",
+			Is_deprecated: "",
+			Current_page:  1,
+			Page_size:     50,
+		}
+	}
+
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page

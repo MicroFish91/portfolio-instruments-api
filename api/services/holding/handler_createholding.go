@@ -32,7 +32,7 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 
 	holding, err := h.store.CreateHolding(
 		c.Context(),
-		types.Holding{
+		&types.Holding{
 			Name:              holdingPayload.Name,
 			Ticker:            holdingPayload.Ticker,
 			Asset_category:    holdingPayload.Asset_category,

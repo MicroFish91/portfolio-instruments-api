@@ -39,7 +39,7 @@ func (h *SnapshotHandlerImpl) UpdateSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusNotFound, errors.New("snapshot with the provided id does not exist"))
 	}
 
-	snapshot, err = h.snapshotStore.UpdateSnapshot(c.Context(), types.Snapshot{
+	snapshot, err = h.snapshotStore.UpdateSnapshot(c.Context(), &types.Snapshot{
 		Snap_id:         snapshot.Snap_id,
 		Description:     snapshotPayload.Description,
 		Snap_date:       snapshotPayload.Snap_date,

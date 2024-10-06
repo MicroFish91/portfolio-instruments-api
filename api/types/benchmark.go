@@ -35,11 +35,11 @@ type BenchmarkHandler interface {
 }
 
 type BenchmarkStore interface {
-	CreateBenchmark(context.Context, Benchmark) (Benchmark, error)
-	GetBenchmarks(ctx context.Context, userId int, options GetBenchmarksStoreOptions) ([]Benchmark, PaginationMetadata, error)
+	CreateBenchmark(context.Context, *Benchmark) (Benchmark, error)
+	GetBenchmarks(ctx context.Context, userId int, options *GetBenchmarksStoreOptions) ([]Benchmark, PaginationMetadata, error)
 	GetBenchmarkById(ctx context.Context, userId, benchmarkId int) (Benchmark, error)
 	GetBenchmarkByName(ctx context.Context, name string, userId int) (Benchmark, error)
-	UpdateBenchmark(context.Context, Benchmark) (Benchmark, error)
+	UpdateBenchmark(context.Context, *Benchmark) (Benchmark, error)
 	DeleteBenchmark(ctx context.Context, userId, benchmarkId int) (Benchmark, error)
 }
 

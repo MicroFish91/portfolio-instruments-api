@@ -30,7 +30,7 @@ func (h *BenchmarkHandlerImpl) CreateBenchmark(c fiber.Ctx) error {
 
 	benchmark, err := h.benchmarkStore.CreateBenchmark(
 		c.Context(),
-		types.Benchmark{
+		&types.Benchmark{
 			Name:             benchmarkPayload.Name,
 			Description:      benchmarkPayload.Description,
 			Asset_allocation: benchmarkPayload.Asset_allocation,

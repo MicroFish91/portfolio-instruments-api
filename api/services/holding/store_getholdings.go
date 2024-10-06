@@ -13,7 +13,19 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, options types.GetHoldingsStoreOptions) ([]types.Holding, types.PaginationMetadata, error) {
+func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, options *types.GetHoldingsStoreOptions) ([]types.Holding, types.PaginationMetadata, error) {
+	if options == nil {
+		options = &types.GetHoldingsStoreOptions{
+			Holding_ids:              []int{},
+			Ticker:                   "",
+			Asset_category:           "",
+			Has_maturation_remaining: "",
+			Is_deprecated:            "",
+			Current_page:             1,
+			Page_size:                50,
+		}
+	}
+
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page

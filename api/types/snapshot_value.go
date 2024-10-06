@@ -28,10 +28,10 @@ type SnapshotValueHandler interface {
 }
 
 type SnapshotValueStore interface {
-	CreateSnapshotValue(context.Context, SnapshotValue) (SnapshotValue, error)
+	CreateSnapshotValue(context.Context, *SnapshotValue) (SnapshotValue, error)
 	GetSnapshotValues(ctx context.Context, snapId, userId int) ([]SnapshotValue, error)
 	GetSnapshotValue(ctx context.Context, snapId, snapValId, userId int) (SnapshotValue, error)
-	UpdateSnapshotValue(context.Context, SnapshotValue) (SnapshotValue, error)
+	UpdateSnapshotValue(context.Context, *SnapshotValue) (SnapshotValue, error)
 	DeleteSnapshotValue(ctx context.Context, snapId, snapValId, userId int) (SnapshotValue, error)
 }
 

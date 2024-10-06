@@ -43,7 +43,7 @@ func (h *BenchmarkHandlerImpl) DeleteBenchmark(c fiber.Ctx) error {
 			}
 
 			if !benchmark.Is_deprecated {
-				benchmark, err = h.benchmarkStore.UpdateBenchmark(c.Context(), types.Benchmark{
+				benchmark, err = h.benchmarkStore.UpdateBenchmark(c.Context(), &types.Benchmark{
 					Benchmark_id:     benchmarkParams.Id,
 					Name:             benchmark.Name,
 					Description:      benchmark.Description,

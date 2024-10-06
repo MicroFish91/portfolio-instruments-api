@@ -12,7 +12,18 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, options types.GetSnapshotsStoreOptions) ([]types.Snapshot, types.PaginationMetadata, error) {
+func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, options *types.GetSnapshotsStoreOptions) ([]types.Snapshot, types.PaginationMetadata, error) {
+	if options == nil {
+		options = &types.GetSnapshotsStoreOptions{
+			Snap_ids:        []int{},
+			Snap_date_lower: "",
+			Snap_date_upper: "",
+			Order_date_by:   "",
+			Current_page:    1,
+			Page_size:       50,
+		}
+	}
+
 	currentPage := 1
 	if options.Current_page > 1 {
 		currentPage = options.Current_page

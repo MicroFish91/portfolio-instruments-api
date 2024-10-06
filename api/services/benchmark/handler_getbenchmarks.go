@@ -24,7 +24,7 @@ func (h *BenchmarkHandlerImpl) GetBenchmarks(c fiber.Ctx) error {
 	benchmarks, pagination, err := h.benchmarkStore.GetBenchmarks(
 		c.Context(),
 		userPayload.User_id,
-		types.GetBenchmarksStoreOptions{
+		&types.GetBenchmarksStoreOptions{
 			Benchmark_ids: queryPayload.Ids,
 			Name:          queryPayload.Name,
 			Is_deprecated: queryPayload.Is_deprecated,

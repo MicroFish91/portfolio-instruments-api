@@ -2,14 +2,19 @@ package benchmark
 
 import (
 	"context"
+	"errors"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresBenchmarkStore) CreateBenchmark(ctx context.Context, b types.Benchmark) (types.Benchmark, error) {
+func (s *PostgresBenchmarkStore) CreateBenchmark(ctx context.Context, b *types.Benchmark) (types.Benchmark, error) {
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
+
+	if b == nil {
+		return types.Benchmark{}, errors.New("service error: benchmark struct cannot be nil, valid benchmark data is required")
+	}
 
 	row := s.db.QueryRow(
 		c,

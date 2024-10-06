@@ -41,7 +41,7 @@ func (h *SnapshotValueHandlerImpl) UpdateSnapshotValue(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusNotFound, err)
 	}
 
-	snapshotValue, err := h.snapshotValueStore.UpdateSnapshotValue(c.Context(), types.SnapshotValue{
+	snapshotValue, err := h.snapshotValueStore.UpdateSnapshotValue(c.Context(), &types.SnapshotValue{
 		Snap_val_id:    svParams.Snap_val_id,
 		Snap_id:        svParams.Snap_id,
 		Account_id:     svPayload.Account_id,

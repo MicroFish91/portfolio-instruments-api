@@ -2,14 +2,19 @@ package snapshotvalue
 
 import (
 	"context"
+	"errors"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 )
 
-func (s *PostgresSnapshotValueStore) UpdateSnapshotValue(ctx context.Context, sv types.SnapshotValue) (types.SnapshotValue, error) {
+func (s *PostgresSnapshotValueStore) UpdateSnapshotValue(ctx context.Context, sv *types.SnapshotValue) (types.SnapshotValue, error) {
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
+
+	if sv == nil {
+		return types.SnapshotValue{}, errors.New("service error: snapshotvalue struct cannot be nil, valid snapshotvalue data is required")
+	}
 
 	row := s.db.QueryRow(
 		c,

@@ -10,9 +10,15 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresSnapshotStore) GroupByAccount(ctx context.Context, snapId, userId int, options types.GetGroupByAccountStoreOptions) (types.ResourcesGrouped, error) {
+func (s *PostgresSnapshotStore) GroupByAccount(ctx context.Context, snapId, userId int, options *types.GetGroupByAccountStoreOptions) (types.ResourcesGrouped, error) {
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
+
+	if options == nil {
+		options = &types.GetGroupByAccountStoreOptions{
+			Group_by: "",
+		}
+	}
 
 	if options.Group_by == "" {
 		return types.ResourcesGrouped{}, errors.New("required to designate a group_by options parameter")
