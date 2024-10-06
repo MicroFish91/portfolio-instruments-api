@@ -9,7 +9,6 @@ import (
 
 func registerUserRoutes(r fiber.Router, h types.UserHandler) {
 	// User
-	r.Get("/me", h.GetMe, middleware.RequireAuth(types.Default))
 	r.Get("/users", h.GetUsers, middleware.RequireAuth(types.Admin), middleware.AddQueryValidator[user.GetUsersQuery]())
 	r.Get("/users/:id", h.GetUser, middleware.RequireAuth(types.Default), middleware.AddParamsValidator[user.GetUserParams]())
 	r.Put("/users/:id/verify", h.UpdateVerification, middleware.RequireAuth(types.Admin), middleware.AddParamsValidator[user.UpdateVerificationParams]())

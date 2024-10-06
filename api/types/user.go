@@ -35,7 +35,6 @@ type Settings struct {
 }
 
 type UserHandler interface {
-	GetMe(fiber.Ctx) error
 	GetUser(fiber.Ctx) error
 	GetUsers(fiber.Ctx) error
 	UpdateVerification(fiber.Ctx) error
@@ -65,14 +64,6 @@ type GetUsersStoreOptions struct {
 }
 
 // ---- User Response Types ----
-
-type GetMeResponse struct {
-	Data struct {
-		User     User     `json:"user"`
-		Settings Settings `json:"settings"`
-	} `json:"data"`
-	Error string `json:"error"`
-}
 
 type GetUserByIdResponse struct {
 	Data struct {
