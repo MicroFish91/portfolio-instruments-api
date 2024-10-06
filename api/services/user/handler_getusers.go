@@ -25,7 +25,7 @@ func (h *UserHandlerImpl) GetUsers(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusForbidden, errors.New("insufficient permissions level to access this route"))
 	}
 
-	users, pagination, err := h.userStore.GetUsers(c.Context(), types.GetUsersStoreOptions{
+	users, pagination, err := h.userStore.GetUsers(c.Context(), &types.GetUsersStoreOptions{
 		Current_page: queryPayload.Current_page,
 		Page_size:    queryPayload.Page_size,
 	})

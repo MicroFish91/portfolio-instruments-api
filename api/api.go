@@ -27,13 +27,13 @@ type ApiConfig struct {
 }
 
 type ApiServer struct {
-	cfg    ApiConfig
+	cfg    *ApiConfig
 	db     *pgxpool.Pool
 	logger *slog.Logger
 	App    *fiber.App
 }
 
-func NewApiServer(cfg ApiConfig, db *pgxpool.Pool, logger *slog.Logger) *ApiServer {
+func NewApiServer(cfg *ApiConfig, db *pgxpool.Pool, logger *slog.Logger) *ApiServer {
 	api := &ApiServer{
 		cfg:    cfg,
 		db:     db,

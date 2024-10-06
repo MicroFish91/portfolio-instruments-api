@@ -46,17 +46,17 @@ type UserHandler interface {
 }
 
 type UserStore interface {
-	CreateUser(context.Context, User) (User, error)
+	CreateUser(context.Context, *User) (User, error)
 	GetUserById(ctx context.Context, userId int) (User, error)
 	GetUserByEmail(ctx context.Context, email string) (User, error)
-	GetUsers(ctx context.Context, options GetUsersStoreOptions) ([]User, PaginationMetadata, error)
+	GetUsers(ctx context.Context, options *GetUsersStoreOptions) ([]User, PaginationMetadata, error)
 	UpdateUserLoggedIn(ctx context.Context, userId int) (User, error)
 	UpdateVerification(ctx context.Context, userId int) (User, error)
 	DeleteUser(ctx context.Context, userId int) (User, error)
 
-	CreateSettings(context.Context, Settings) (Settings, error)
+	CreateSettings(context.Context, *Settings) (Settings, error)
 	GetSettings(ctx context.Context, userId int) (Settings, error)
-	UpdateSettings(context.Context, Settings) (Settings, error)
+	UpdateSettings(context.Context, *Settings) (Settings, error)
 }
 
 type GetUsersStoreOptions struct {

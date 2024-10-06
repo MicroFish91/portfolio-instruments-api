@@ -8,19 +8,16 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresUserStore) GetUsers(ctx context.Context, options types.GetUsersStoreOptions) ([]types.User, types.PaginationMetadata, error) {
+func (s *PostgresUserStore) GetUsers(ctx context.Context, options *types.GetUsersStoreOptions) ([]types.User, types.PaginationMetadata, error) {
+	if options == nil {
+		options = &types.GetUsersStoreOptions{
+			Current_page: 1,
+			Page_size:    50,
+		}
+	}
+
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
-
-	currentPage := 1
-	if options.Current_page > 1 {
-		currentPage = options.Current_page
-	}
-
-	pageSize := 50
-	if options.Page_size != 0 {
-		pageSize = options.Page_size
-	}
 
 	rows, err := s.db.Query(
 		c,
@@ -39,8 +36,8 @@ func (s *PostgresUserStore) GetUsers(ctx context.Context, options types.GetUsers
 			offset
 				$2	
 		`,
-		pageSize,
-		(currentPage-1)*pageSize,
+		options.Page_size,
+		(options.Current_page-1)*options.Page_size,
 	)
 
 	if err != nil {
@@ -54,8 +51,8 @@ func (s *PostgresUserStore) GetUsers(ctx context.Context, options types.GetUsers
 	}
 
 	return users, types.PaginationMetadata{
-		Current_page: currentPage,
-		Page_size:    pageSize,
+		Current_page: options.Current_page,
+		Page_size:    options.Page_size,
 		Total_items:  totalItems,
 	}, nil
 }

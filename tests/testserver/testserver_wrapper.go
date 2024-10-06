@@ -14,7 +14,7 @@ type TestServerWrapper struct {
 	TestServer *api.ApiServer
 }
 
-func newTestServerWrapper(cfg api.ApiConfig, db *pgxpool.Pool, logger *slog.Logger, tc *pg.PostgresContainer) *TestServerWrapper {
+func newTestServerWrapper(cfg *api.ApiConfig, db *pgxpool.Pool, logger *slog.Logger, tc *pg.PostgresContainer) *TestServerWrapper {
 	return &TestServerWrapper{
 		tc:         tc,
 		TestServer: api.NewApiServer(cfg, db, logger),

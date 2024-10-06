@@ -27,7 +27,7 @@ func (h *AuthHandlerImpl) Register(c fiber.Ctx) error {
 
 	user, err := h.store.CreateUser(
 		c.Context(),
-		types.User{
+		&types.User{
 			Email:        userPayload.Email,
 			Enc_password: encpw,
 		},
@@ -37,7 +37,7 @@ func (h *AuthHandlerImpl) Register(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	settings, err := h.store.CreateSettings(c.Context(), types.Settings{
+	settings, err := h.store.CreateSettings(c.Context(), &types.Settings{
 		Reb_thresh_pct: 10,
 		User_id:        user.User_id,
 	})

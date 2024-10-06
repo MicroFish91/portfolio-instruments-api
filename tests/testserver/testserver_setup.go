@@ -68,7 +68,7 @@ func initTestServerWrapper() *TestServerWrapper {
 
 	// Server
 	logger := logger.NewLogger(slog.LevelError)
-	apiConfig := api.ApiConfig{
+	apiConfig := &api.ApiConfig{
 		Addr:                     connStr,
 		JwtSecret:                TestJwtSecret,
 		UnauthorizedRequestLimit: 99999,

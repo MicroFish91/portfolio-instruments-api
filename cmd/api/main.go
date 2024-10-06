@@ -28,7 +28,7 @@ func main() {
 	}
 
 	logger := logger.NewLogger(slog.Level(config.Env.LogLevel))
-	apiConfig := api.ApiConfig{
+	apiConfig := &api.ApiConfig{
 		Addr:                     config.Env.Port,
 		JwtSecret:                config.Env.JwtSecret,
 		RequireVerification:      config.Env.RequireVerification,

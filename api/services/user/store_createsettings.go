@@ -3,15 +3,20 @@ package user
 import (
 	"context"
 	"database/sql"
+	"errors"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/jackc/pgx/v5"
 )
 
-func (s *PostgresUserStore) CreateSettings(ctx context.Context, settings types.Settings) (types.Settings, error) {
+func (s *PostgresUserStore) CreateSettings(ctx context.Context, set *types.Settings) (types.Settings, error) {
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
+
+	if set == nil {
+		return types.Settings{}, errors.New("internal error: settings struct cannot be nil, valid settings data is required")
+	}
 
 	row := s.db.QueryRow(
 		c,
@@ -19,7 +24,7 @@ func (s *PostgresUserStore) CreateSettings(ctx context.Context, settings types.S
 		(reb_thresh_pct, user_id)
 		VALUES ($1, $2)
 		RETURNING *`,
-		settings.Reb_thresh_pct, settings.User_id,
+		set.Reb_thresh_pct, set.User_id,
 	)
 
 	settings, err := s.parseRowIntoSettings(row)
