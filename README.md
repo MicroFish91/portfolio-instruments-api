@@ -4,8 +4,8 @@ The Portfolio Instruments API is a Go-based REST API designed to streamline the 
 
 ### Key Features:
 * 📷 <u>Snapshot Tracking</u>: Capture and monitor portfolio snapshots at different points in time.
-* 📈 <u>Rebalance Calculations</u>: Automatically generate rebalancing recommendations based on your chosen benchmark portfolio.
 * 📁 <u>Benchmark Portfolios</u>: Define and reference stable, pre-selected portfolios for easier portfolio management.
+* 📈 <u>Rebalance Calculations</u>: Automatically generate rebalancing recommendations based on your chosen benchmark portfolio.
 
 This API automates the process of calculating portfolio rebalances, eliminating the need for manual spreadsheet work and providing a more efficient API-driven solution.
 
@@ -49,11 +49,9 @@ For deployment:
 ## ✏️ Other API Docs
 
 * [Routes](docs/Swagger.md)
-* [Status Codes](docs/StatusCodes.md)
 * [Database Design](docs/DatabaseDesign.md)
 * [Migrations](docs/Migrations.md)
 * [ThunderClient](docs/ThunderClient.md)
-* [Verification Process](docs/Verification.md)
 
 ## 🔗 Useful Links
 
