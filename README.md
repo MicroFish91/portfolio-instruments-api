@@ -1,7 +1,7 @@
-<h1 style="display: flex; align-items: center; margin: 0;">
-  <img src="resources/pi_logo.png" alt="PI Logo" height="50" style="margin-right: 10px;" />
-  Portfolio Instruments API
-</h1> <br />
+<h1 style="display: flex; justify-content: space-between; align-items: center; margin: 0;">
+  <span>Portfolio Instruments API</span>
+  <img src="resources/pi_logo.png" alt="PI Logo" height="50" style="margin-left: 10px;" />
+</h1>
 
 The Portfolio Instruments API is a Go-based REST API designed to streamline the management of passive investment portfolios. It allows users to input portfolio data and receive rebalancing guidelines based on user-defined criteria.
 
