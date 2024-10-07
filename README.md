@@ -7,7 +7,9 @@ The Portfolio Instruments API is a Go-based REST API designed to streamline the 
 * 📁 <u>Benchmark Portfolios</u>: Define and reference stable, pre-selected portfolios for easier portfolio management.
 * 📈 <u>Rebalance Calculations</u>: Automatically generate rebalancing recommendations based on your chosen benchmark portfolio.
 
-This API automates the process of calculating portfolio rebalances, eliminating the need for manual spreadsheet work and providing a more efficient API-driven solution.
+This API automates the process of calculating portfolio rebalances, eliminating the need for manual spreadsheet tracking and providing a more efficient one-stop portfolio solution.
+
+This project is mostly for my personal use, however, you are free to use it as well if you wish.
 
 ## 📖 Getting Started
 
