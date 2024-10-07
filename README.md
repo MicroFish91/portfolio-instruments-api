@@ -1,7 +1,4 @@
-<h1 style="display: flex; justify-content: space-between; align-items: center; margin: 0;">
-  <span>Portfolio Instruments API</span>
-  <img src="resources/pi_logo.png" alt="PI Logo" height="50" style="margin-left: 10px;" />
-</h1>
+# Portfolio Instruments API
 
 The Portfolio Instruments API is a Go-based REST API designed to streamline the management of passive investment portfolios. It allows users to input portfolio data and receive rebalancing guidelines based on user-defined criteria.
 
@@ -34,7 +31,7 @@ To get the API up and running, simply execute:
 
 You can test the API routes using an API client like `Postman` or `ThunderClient`. To quickly test endpoints using `ThunderClient`, follow the steps outlined [here](docs/ThunderClient.md).
 
-### ✅ Running Tests
+### 🏃 Running Tests
 To run the test suite, use:
 > make test
 
