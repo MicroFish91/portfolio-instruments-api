@@ -11,7 +11,7 @@ This API automates the process of calculating portfolio rebalances, eliminating 
 
 ## 📖 Getting Started
 
-### 🛠️ Local Database Setup
+### 🛠 ️Local Database Setup
 1. Spin up a local Postgres database container by running:
     > make config-up
 
@@ -25,7 +25,7 @@ This API automates the process of calculating portfolio rebalances, eliminating 
     * To stop the database container, use:
         > make config-down
 
-### 🏁 Start the Server
+### 🏁 Starting the Server
 To get the API up and running, simply execute:
 > make run
 
