@@ -25,7 +25,7 @@ Portfolio Instruments API is a Go-based REST API built to simplify the managemen
     * To stop the database container, use:
         > make config-down
 
-### 🏁 Starting the Server
+### 💻 Starting the Server
 To get the API up and running, simply execute:
 > make run
 
