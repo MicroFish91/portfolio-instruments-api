@@ -1,13 +1,13 @@
-# Portfolio Instruments API
+# <img src="resources/pi_logo.png" width="35" /> Portfolio Instruments API
 
-The Portfolio Instruments API is a Go-based REST API designed to streamline the management of passive investment portfolios. It allows users to input portfolio data and receive rebalancing guidelines based on user-defined criteria. This API automates the process of calculating portfolio rebalances, eliminating the need for manual spreadsheet tracking and providing a more efficient one-stop portfolio solution.
+Portfolio Instruments API is a Go-based REST API designed to streamline the management of passive investment portfolios. It allows users to input portfolio data and receive rebalancing guidelines based on benchmark criteria. This API streamlines the process of calculating rebalancing requirements, offering a comprehensive solution for portfolio management. Additionally, users can efficiently query their accounts and assets to gain insights into their holdings across different tax shelters, financial institutions, liquidity levels, and more.
 
 ### Key Features:
 * 📷 <u>Snapshot Tracking</u>: Capture and monitor portfolio snapshots at different points in time.
-* 📁 <u>Benchmark Portfolios</u>: Define portfolio reference targets to monitor your portfolio snapshots against.
-* 📈 <u>Rebalance Calculations</u>: Automatically generate rebalancing recommendations based on your chosen benchmark portfolio.
+* 📁 <u>Benchmark Portfolios</u>: Provide portfolio benchmarks to monitor your portfolio snapshots against.
+* 📈 <u>Rebalance Calculations</u>: Automatically generate rebalancing recommendations based on your chosen benchmarks.
 
-Note: This project is mostly for my personal use, however, you are free to use it as well if you wish.
+<b>Note</b>: This project is mostly for my personal use, however, you are free to use it as well if you find it to be useful!
 
 ## 📖 Getting Started
 
@@ -44,7 +44,6 @@ For deployment:
 
 * 🐳 Docker: A Dockerfile is provided, ensuring a simple and consistent containerized deployment process.
 * ️☁️ Azure: If deploying to Azure Container Apps (my preferred cloud solution), the VS Code extension makes deployment fast and efficient. A more detailed guide for this process will be provided soon.
-
 
 ## ✏️ Other API Docs
 
