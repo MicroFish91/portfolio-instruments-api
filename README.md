@@ -1,6 +1,6 @@
 # <img src="resources/pi_logo.png" width="35" /> Portfolio Instruments API
 
-Portfolio Instruments API is a Go-based REST API designed to streamline the management of passive investment portfolios. It allows users to input portfolio data and receive rebalancing guidelines based on benchmark criteria. This API streamlines the process of calculating rebalancing requirements, offering a comprehensive solution for portfolio management. Additionally, users can efficiently query their accounts and assets to gain insights into their holdings across different tax shelters, financial institutions, liquidity levels, and more.
+Portfolio Instruments API is a Go-based REST API built to simplify the management of passive investment portfolios. It enables users to input portfolio data and receive automated rebalancing recommendations based on benchmark criteria, eliminating the need for manual spreadsheet tracking. This API streamlines the process of calculating rebalancing requirements, offering a comprehensive solution for portfolio management. Additionally, users can efficiently query their accounts and assets to gain insights into their holdings across different tax shelters, financial institutions, liquidity levels, and more.
 
 ### Key Features:
 * 📷 <u>Snapshot Tracking</u>: Capture and monitor portfolio snapshots at different points in time.
