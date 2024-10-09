@@ -1,4 +1,4 @@
-# PG Commands
+# 🗄️ PG Commands
 
 This project includes `make pg-dump` and `make pg-restore` commands that utilize the environment variable files `.env.pgdump` and `.env.pgrestore` for efficiently dumping and restoring data across databases. I added these utilities in case I ever need to migrate my databases across cloud providers, or in case I want to just backup my databases.  In general, a dump should be run first, and then the output dump file should be added to the restore environment variables before finally running the restore.  Example environment files are provided in the `env/` folder at the project root.
 
