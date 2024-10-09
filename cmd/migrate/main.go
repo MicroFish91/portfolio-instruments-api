@@ -13,13 +13,15 @@ import (
 )
 
 func main() {
+	c := config.GetAppConfig()
+
 	dbConfig := db.PostgresDbConfig{
-		DbHost:     config.Env.DbHost,
-		DbPort:     config.Env.DbPort,
-		DbName:     config.Env.DbName,
-		DbUser:     config.Env.DbUser,
-		DbPassword: config.Env.DbPassword,
-		DbSslMode:  config.Env.DbSslMode,
+		DbHost:     c.DbHost,
+		DbPort:     c.DbPort,
+		DbName:     c.DbName,
+		DbUser:     c.DbUser,
+		DbPassword: c.DbPassword,
+		DbSslMode:  c.DbSslMode,
 	}
 
 	m, err := migrator.NewPostgresMigrator(
@@ -37,7 +39,7 @@ func main() {
 		}
 		fmt.Printf("successfully ran up migration")
 	} else if cmd == "down" {
-		if config.Env.AppEnv == "production" {
+		if c.AppEnv == "production" {
 			log.Fatal("blocking down migrations for prod")
 		}
 

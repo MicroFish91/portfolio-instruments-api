@@ -29,9 +29,7 @@ type Config struct {
 	DbMinConnections int
 }
 
-var Env Config = initConfig()
-
-func initConfig() Config {
+func GetAppConfig() Config {
 	godotenv.Load()
 
 	var appEnv string = getEnv("APP_ENV", "development")
