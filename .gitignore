@@ -1,7 +1,10 @@
 bin
 __debug*
 .DS_Store
+*.tar.gz
 
 .env
 .env.prod
 .env.dev
+.env.pgdump
+.env.pgrestore
