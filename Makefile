@@ -24,3 +24,9 @@ config-up:
 
 config-down:
 	@docker-compose down
+
+pg-dump:
+	@go run cmd/pg_commands/main.go dump
+
+pg-restore:
+	@go run cmd/pg_commands/main.go restore
