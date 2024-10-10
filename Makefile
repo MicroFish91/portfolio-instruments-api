@@ -20,7 +20,7 @@ tc-redact:
 	@go run cmd/tc_redact/main.go
 
 config-up:
-	@docker-compose up
+	@docker-compose up -d
 
 config-down:
 	@docker-compose down
