@@ -43,19 +43,19 @@ func GetAppConfig() Config {
 
 	return Config{
 		AppEnv:                   appEnv,
-		Port:                     getEnv("PORT", ":3000"),
+		Port:                     getEnv("PORT", ":5431"),
 		JwtSecret:                getEnv("JWT_SECRET", "not-so-secret-jwt-secret"),
-		RequireVerification:      getBool(getEnv("REQUIRE_VERIFICATION", "true")),
+		RequireVerification:      getBool(getEnv("REQUIRE_VERIFICATION", "false")),
 		UnauthorizedRequestLimit: getInt(getEnv("UNAUTHORIZED_REQUEST_LIMIT", "99999")),
 		ShortRequestLimit:        getInt(getEnv("SHORT_REQUEST_LIMIT", "99999")),
 		LongRequestLimit:         getInt(getEnv("LONG_REQUEST_LIMIT", "99999")),
 		LogLevel:                 getInt(getEnv("LOG_LEVEL", "0")),
 
 		DbHost:           getEnv("DB_HOST", "localhost"),
-		DbPort:           getEnv("DB_PORT", "5432"),
-		DbName:           getEnv("DB_NAME", "postgres"),
-		DbUser:           getEnv("DB_USER", ""),
-		DbPassword:       getEnv("DB_PASSWORD", ""),
+		DbPort:           getEnv("DB_PORT", "5431"), // Postgres typically defaults to 5432
+		DbName:           getEnv("DB_NAME", "db"),
+		DbUser:           getEnv("DB_USER", "app"),
+		DbPassword:       getEnv("DB_PASSWORD", "app"),
 		DbSslMode:        getEnv("DB_SSL_MODE", "disable"),
 		DbMaxConnections: getInt(getEnv("DB_MAX_CONNECTIONS", "4")),
 		DbMinConnections: getInt(getEnv("DB_MIN_CONNECTIONS", "0")),
