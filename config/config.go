@@ -43,7 +43,7 @@ func GetAppConfig() Config {
 
 	return Config{
 		AppEnv:                   appEnv,
-		Port:                     getEnv("PORT", ":5431"),
+		Port:                     getEnv("PORT", ":3000"),
 		JwtSecret:                getEnv("JWT_SECRET", "not-so-secret-jwt-secret"),
 		RequireVerification:      getBool(getEnv("REQUIRE_VERIFICATION", "false")),
 		UnauthorizedRequestLimit: getInt(getEnv("UNAUTHORIZED_REQUEST_LIMIT", "99999")),
