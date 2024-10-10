@@ -7,9 +7,21 @@ Portfolio Instruments API is a Go-based REST API built to simplify the managemen
 * 📁 <u>Benchmark Portfolios</u>: Provide portfolio benchmarks to monitor your portfolio snapshots against.
 * 📈 <u>Rebalance Calculations</u>: Automatically generate rebalancing recommendations based on your chosen benchmarks.
 
-<b>Note</b>: This project is mostly for my personal use, however, you are free to use it as well if you find it to be useful!
+<b>Note</b>: This project is mostly for my personal use, however, you are free to use it as well if you find it useful.
 
 ## 📖 Getting Started
+
+### 📋 Prerequisites
+1. Required
+    * [Go](https://go.dev/doc/install)
+    * [Make](https://www.gnu.org/software/make/)
+    * [Docker](https://www.docker.com/products/docker-desktop/)
+    * [Docker-compose](https://www.docker.com/products/docker-desktop/)
+2. Optional
+    * [VS Code](https://code.visualstudio.com/download)
+    * [ThunderClient](https://www.thunderclient.com/)
+    * [A DB/SQL client](https://dbeaver.io/download/)
+    * [Azure Container Apps extension](https://marketplace.visualstudio.com/items?itemName=ms-azuretools.vscode-azurecontainerapps)
 
 ### 🛠 ️Local Database Setup
 1. Spin up a local Postgres database container by running:
@@ -38,7 +50,7 @@ To run the test suite, use:
 The integration tests will automatically run using a Postgres test container, so no additional configuration is needed.
 
 ### 🚀 Deployment
-Before deploying, ensure that you've set the correct production environment variables. Example `.env` files are included at the project root.
+Before deploying, ensure that you've set the correct production environment variables. Example `.env` files are included at the project root under `env/`.
 
 For deployment:
 
