@@ -25,7 +25,7 @@ func SendError(c fiber.Ctx, status int, e error) error {
 	c.Response().Header.SetContentType("application/json")
 	err := c.Status(status).JSON(fiber.Map{
 		"status": status,
-		"error":  e.Error(),
+		"error":  redactError(e.Error()),
 	})
 
 	if err != nil {
