@@ -94,7 +94,7 @@ func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct
 	}
 
 	// Rebalance diff required
-	ch, rebThresh, err := h.computeRebalanceDiff(tar, cur)
+	ch, rebThresh, err := h.computeRebalanceDiff(tar, cur, total)
 	if err != nil {
 		return nil, nil, nil, 0, err
 	}
@@ -102,7 +102,7 @@ func (h *SnapshotHandlerImpl) computeRebalance(balloc []types.AssetAllocationPct
 	return &tar, &cur, ch, rebThresh, nil
 }
 
-func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []types.AssetAllocation, current []types.AssetAllocation) (alloc *[]types.AssetAllocation, rebThreshPct int, e error) {
+func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []types.AssetAllocation, current []types.AssetAllocation, total float64) (alloc *[]types.AssetAllocation, rebThreshPct int, e error) {
 	var (
 		maxDeviation = 0
 		chmap        = make(map[string]float64)
@@ -127,8 +127,10 @@ func (h *SnapshotHandlerImpl) computeRebalanceDiff(target []types.AssetAllocatio
 		diff := math.Round((t.Value-alloc.Value)*100) / 100
 		chmap[t.Category] = diff
 
-		deviation := int(math.Round(math.Abs(diff / t.Value * 100)))
-		if (deviation) > maxDeviation {
+		tarPct := math.Round(t.Value / total * 100)
+		curPct := math.Round(alloc.Value / total * 100)
+		deviation := int(math.Abs(tarPct - curPct))
+		if deviation > maxDeviation {
 			maxDeviation = deviation
 		}
 	}

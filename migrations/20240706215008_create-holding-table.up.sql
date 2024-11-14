@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS holdings (
     asset_category asset_type NOT NULL,
     expense_ratio_pct numeric(3,2),
     maturation_date varchar(10) CHECK (maturation_date ~ '^(\d{2}/\d{2}/\d{4})?$'), -- MM/DD/YYYY
-    interest_rate_pct numeric(3,3),
+    interest_rate_pct numeric(3,2),
     is_deprecated boolean NOT NULL,
     user_id integer NOT NULL,
     created_at timestamp DEFAULT current_timestamp,

@@ -42,6 +42,7 @@ type SnapshotStore interface {
 	GroupByAccount(ctx context.Context, userId, snapId int, options *GetGroupByAccountStoreOptions) (ResourcesGrouped, error)
 	GroupByHolding(ctx context.Context, userId, snapId int, options *GetGroupByHoldingStoreOptions) (ResourcesGrouped, error)
 	GroupByMaturationDate(ctx context.Context, userId, snapId int, options *GetGroupByMaturationDateStoreOptions) ([]MaturationDateResource, error)
+	GroupByLiquidity(ctx context.Context, userId, snapId int) (total float64, err error)
 }
 
 type ResourcesGrouped struct {
@@ -155,6 +156,14 @@ type GetSnapshotMaturationDateResponse struct {
 		Field_type       string                   `json:"field_type"`
 		Maturation_start string                   `json:"maturation_start"`
 		Maturation_end   string                   `json:"maturation_end"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
+type GetSnapshotLiquidityResponse struct {
+	Data struct {
+		Liquid_total string `json:"liquid_total"`
+		Field_type   string `json:"field_type"`
 	} `json:"data"`
 	Error string `json:"error"`
 }

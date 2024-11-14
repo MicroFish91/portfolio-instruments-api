@@ -15,6 +15,7 @@ const (
 	BY_TAX_SHELTER         GroupByCategory = "TAX_SHELTER"
 	BY_ASSET_CATEGORY      GroupByCategory = "ASSET_CATEGORY"
 	BY_MATURATION_DATE     GroupByCategory = "MATURATION_DATE"
+	BY_LIQUIDITY           GroupByCategory = "LIQUIDITY"
 )
 
 type GetSnapshotByIdQuery struct {
@@ -46,6 +47,8 @@ func (q GetSnapshotByIdQuery) Validate() error {
 	case GroupByCategory(q.Group_by) == BY_ASSET_CATEGORY:
 		break
 	case GroupByCategory(q.Group_by) == BY_MATURATION_DATE:
+		break
+	case GroupByCategory(q.Group_by) == BY_LIQUIDITY:
 		break
 	default:
 		return errors.New("provide a valid group_by category in all caps")
