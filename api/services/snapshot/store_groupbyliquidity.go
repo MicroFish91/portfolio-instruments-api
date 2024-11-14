@@ -23,7 +23,7 @@ func (s *PostgresSnapshotStore) GroupByLiquidity(ctx context.Context, userId, sn
 				a.institution,
 				a.tax_shelter,
 				sv.total,
-				SUM(sv.total) AS liquid_total
+				SUM(sv.total) OVER() AS liquid_total
 			from
 				snapshots_values sv
 			inner join
