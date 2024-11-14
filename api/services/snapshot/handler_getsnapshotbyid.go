@@ -184,12 +184,13 @@ func (h *SnapshotHandlerImpl) handleGroupByResource(c fiber.Ctx, snapId, userId 
 
 	case BY_LIQUIDITY:
 
-		liquidTotal, err := h.snapshotStore.GroupByLiquidity(c.Context(), userId, snapId)
+		resources, liquidTotal, err := h.snapshotStore.GroupByLiquidity(c.Context(), userId, snapId)
 		if err != nil {
 			return utils.SendError(c, utils.StatusCodeFromError(err), err)
 		}
 
 		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
+			"resources":    resources,
 			"liquid_total": liquidTotal,
 			"field_type":   GroupByCategory(options.Group_by),
 		})
