@@ -26,6 +26,7 @@ CREATE TYPE asset_type AS ENUM (
     'ISCB',
     'ISCG',
     'ISCV',
+    'CRYPTO',
     'OTHER'
 );
 
