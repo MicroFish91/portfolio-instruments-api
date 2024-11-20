@@ -53,7 +53,7 @@ func GetSnapshotRebalanceTestCases(t *testing.T, snapWithBenchmarkId, snapWithou
 				},
 				Snapshot_total:            2501.5,
 				Snapshot_total_omit_skips: 2501.5,
-				Rebalance_thresh_pct:      50,
+				Rebalance_thresh_pct:      20,
 			},
 			ExpectedStatusCode: fiber.StatusOK,
 		},
