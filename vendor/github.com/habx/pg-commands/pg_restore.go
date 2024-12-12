@@ -77,12 +77,12 @@ func (x *Restore) restoreOptions() []string {
 	options := x.Options
 	options = append(options, x.Postgres.Parse()...)
 
-	// if x.Role != "" {
-	// 	options = append(options, fmt.Sprintf(`--role=%v`, x.Role))
-	// } else if x.DB != "" {
-	// 	x.Role = x.DB
-	// 	options = append(options, fmt.Sprintf(`--role=%v`, x.DB))
-	// }
+	if x.Role != "" {
+		options = append(options, fmt.Sprintf(`--role=%v`, x.Role))
+	} else if x.DB != "" {
+		x.Role = x.DB
+		options = append(options, fmt.Sprintf(`--role=%v`, x.DB))
+	}
 
 	if x.Verbose {
 		options = append(options, "-v")
