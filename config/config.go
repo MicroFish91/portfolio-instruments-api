@@ -35,7 +35,6 @@ func GetAppConfig() Config {
 	var appEnv string = getEnv("APP_ENV", "development")
 	if appEnv == "production" {
 		fmt.Println("running in production")
-		godotenv.Load(".env.prod")
 	} else {
 		fmt.Println("running in development")
 		godotenv.Load(".env.dev")
