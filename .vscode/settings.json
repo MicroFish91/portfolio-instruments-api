@@ -1,0 +1,14 @@
+{
+    "containerApps.deploymentConfigurations": [
+        {
+            "label": "portfolio-instruments-api",
+            "type": "AcrDockerBuildRequest",
+            "dockerfilePath": "Dockerfile",
+            "srcPath": ".",
+            "envPath": "useRemoteConfiguration",
+            "resourceGroup": "portfolio-instr",
+            "containerApp": "portfolio-instruments-api",
+            "containerRegistry": "portfolioinstrbd03a2"
+        }
+    ]
+}
