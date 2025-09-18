@@ -1,6 +1,7 @@
 module github.com/MicroFish91/portfolio-instruments-api
 
 go 1.21.5
+toolchain go1.24.1
 
 require (
 	github.com/go-ozzo/ozzo-validation v3.6.0+incompatible
@@ -16,7 +17,7 @@ require (
 	github.com/stretchr/testify v1.9.0
 	github.com/testcontainers/testcontainers-go v0.32.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.32.0
-	golang.org/x/crypto v0.31.0
+	golang.org/x/crypto v0.35.0
 )
 
 require (
@@ -80,8 +81,8 @@ require (
 	go.opentelemetry.io/otel/metric v1.24.0 // indirect
 	go.opentelemetry.io/otel/trace v1.24.0 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
-	golang.org/x/sync v0.10.0 // indirect
-	golang.org/x/sys v0.28.0 // indirect
-	golang.org/x/text v0.21.0 // indirect
+	golang.org/x/sync v0.11.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
