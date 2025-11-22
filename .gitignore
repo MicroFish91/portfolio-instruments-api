@@ -1,4 +1,5 @@
 bin
+debug*
 __debug*
 .DS_Store
 *.tar.gz

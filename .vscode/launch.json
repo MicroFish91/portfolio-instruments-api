@@ -13,9 +13,11 @@
             "type": "go",
             "request": "launch",
             "mode": "test",
-            "program": "${workspaceRoot}/tests/main_test.go",
-            "env": {},
-            "showLog": true
-        }
+            "program": "${workspaceFolder}/tests",
+            "args": [
+                "-test.count=1",
+                "-test.v",
+            ],
+        },
     ]
 }
