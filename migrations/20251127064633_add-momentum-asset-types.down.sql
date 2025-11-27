@@ -1,0 +1,2 @@
+-- Take no action: Cannot remove enum values in PostgreSQL without recreating the entire enum type
+-- and migrating all dependent tables, which risks data integrity.
