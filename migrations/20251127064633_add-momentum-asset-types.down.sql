@@ -1,0 +1,1 @@
+-- Take no action: Do not attempt to undo enum changes.
