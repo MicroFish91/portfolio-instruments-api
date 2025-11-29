@@ -40,13 +40,14 @@ func (h *SnapshotHandlerImpl) UpdateSnapshot(c fiber.Ctx) error {
 	}
 
 	snapshot, err = h.snapshotStore.UpdateSnapshot(c.Context(), &types.Snapshot{
-		Snap_id:         snapshot.Snap_id,
-		Description:     snapshotPayload.Description,
-		Snap_date:       snapshotPayload.Snap_date,
-		Total:           snapshot.Total,
-		Weighted_er_pct: snapshot.Weighted_er_pct,
-		Benchmark_id:    snapshotPayload.Benchmark_id,
-		User_id:         snapshot.User_id,
+		Snap_id:                 snapshot.Snap_id,
+		Description:             snapshotPayload.Description,
+		Snap_date:               snapshotPayload.Snap_date,
+		Total:                   snapshot.Total,
+		Weighted_er_pct:         snapshot.Weighted_er_pct,
+		Rebalance_threshold_pct: snapshotPayload.Rebalance_threshold_pct,
+		Benchmark_id:            snapshotPayload.Benchmark_id,
+		User_id:                 snapshot.User_id,
 	})
 	if err != nil {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
