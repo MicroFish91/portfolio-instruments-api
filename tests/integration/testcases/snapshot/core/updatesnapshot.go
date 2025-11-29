@@ -115,5 +115,15 @@ func UpdateSnapshotTestCases(t *testing.T, snapshotId int, benchmarkId int, user
 			},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
+		{
+			Title:       "400 Rebalance Threshold",
+			ParameterId: snapshotId,
+			Payload: map[string]any{
+				"Snap_date":               utils.Calc_target_date(-10, -1),
+				"Benchmark_id":            benchmarkId,
+				"Rebalance_threshold_pct": "15",
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
 	}
 }
