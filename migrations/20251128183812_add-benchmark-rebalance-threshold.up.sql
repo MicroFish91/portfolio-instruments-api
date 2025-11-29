@@ -1,0 +1,1 @@
+ALTER TABLE benchmarks ADD COLUMN rebalance_threshold_pct integer DEFAULT 10;

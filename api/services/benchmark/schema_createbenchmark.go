@@ -8,13 +8,14 @@ import (
 )
 
 type CreateBenchmarkPayload struct {
-	Name             string                     `json:"name"`
-	Description      string                     `json:"description"`
-	Asset_allocation []types.AssetAllocationPct `json:"asset_allocation"`
-	Std_dev_pct      float32                    `json:"std_dev_pct"`
-	Real_return_pct  float32                    `json:"real_return_pct"`
-	Drawdown_yrs     int                        `json:"drawdown_yrs"`
-	Is_deprecated    bool                       `json:"is_deprecated"`
+	Name                    string                     `json:"name"`
+	Description             string                     `json:"description"`
+	Asset_allocation        []types.AssetAllocationPct `json:"asset_allocation"`
+	Std_dev_pct             float32                    `json:"std_dev_pct"`
+	Real_return_pct         float32                    `json:"real_return_pct"`
+	Drawdown_yrs            int                        `json:"drawdown_yrs"`
+	Rebalance_threshold_pct int                        `json:"rebalance_threshold_pct"`
+	Is_deprecated           bool                       `json:"is_deprecated"`
 }
 
 func (p CreateBenchmarkPayload) Validate() error {
@@ -42,6 +43,7 @@ func (p CreateBenchmarkPayload) Validate() error {
 		validation.Field(&p.Std_dev_pct, validation.Min(float32(0)), validation.Max(float32(100))),
 		validation.Field(&p.Real_return_pct, validation.Min(float32(0)), validation.Max(float32(100))),
 		validation.Field(&p.Drawdown_yrs, validation.Min(0), validation.Max(50)),
+		validation.Field(&p.Rebalance_threshold_pct, validation.Min(1), validation.Max(100)),
 		validation.Field(&p.Is_deprecated),
 	)
 }

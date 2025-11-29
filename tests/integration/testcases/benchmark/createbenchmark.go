@@ -41,6 +41,29 @@ func CreateBenchmarkTestCases(t *testing.T, userId int, email string) []shared.T
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
 		{
+			Title: "201 Custom Rebalance Threshold",
+			Payload: benchmark.CreateBenchmarkPayload{
+				Name:        "Classic Bogleheads Portfolio",
+				Description: "The classic 60/40 split",
+				Asset_allocation: []types.AssetAllocationPct{
+					{
+						Category: "TSM",
+						Percent:  60,
+					},
+					{
+						Category: "ITB",
+						Percent:  40,
+					},
+				},
+				Std_dev_pct:             3.4,
+				Real_return_pct:         6.8,
+				Drawdown_yrs:            10,
+				Rebalance_threshold_pct: 5,
+				Is_deprecated:           true,
+			},
+			ExpectedStatusCode: fiber.StatusCreated,
+		},
+		{
 			Title: "201 Valid Duplicate",
 			Payload: benchmark.CreateBenchmarkPayload{
 				Name:        "Classic Bogleheads Portfolio",
@@ -396,6 +419,42 @@ func CreateBenchmarkTestCases(t *testing.T, userId int, email string) []shared.T
 						Percent:  0,
 					},
 				},
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Bad Rebalance Threshold 1",
+			Payload: benchmark.CreateBenchmarkPayload{
+				Name:                    "Permanent Portfolio",
+				Description:             "Harry Browne's all-weather portfolio",
+				Std_dev_pct:             0.5,
+				Real_return_pct:         6.5,
+				Drawdown_yrs:            3,
+				Rebalance_threshold_pct: 101,
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Bad Rebalance Threshold 2",
+			Payload: map[string]any{
+				"Name":                    "Permanent Portfolio",
+				"Description":             "Harry Browne's all-weather portfolio",
+				"Std_dev_pct":             0.5,
+				"Real_return_pct":         6.5,
+				"Drawdown_yrs":            3,
+				"Rebalance_threshold_pct": 40.5,
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Bad Rebalance Threshold 3",
+			Payload: map[string]any{
+				"Name":                    "Permanent Portfolio",
+				"Description":             "Harry Browne's all-weather portfolio",
+				"Std_dev_pct":             0.5,
+				"Real_return_pct":         6.5,
+				"Drawdown_yrs":            3,
+				"Rebalance_threshold_pct": "40",
 			},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},

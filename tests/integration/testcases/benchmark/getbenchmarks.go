@@ -22,11 +22,11 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 			Title:              "200",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
-				Benchmarks: 30,
+				Benchmarks: 31,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    50,
-					Total_items:  30,
+					Total_items:  31,
 				},
 			},
 		},
@@ -39,7 +39,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    20,
-					Total_items:  30,
+					Total_items:  31,
 				},
 			},
 		},
@@ -48,11 +48,11 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 			Route:              "/api/v1/benchmarks?current_page=2&page_size=20",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
-				Benchmarks: 10,
+				Benchmarks: 11,
 				Pagination: types.PaginationMetadata{
 					Current_page: 2,
 					Page_size:    20,
-					Total_items:  30,
+					Total_items:  31,
 				},
 			},
 		},
@@ -74,11 +74,11 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 			Route:              "/api/v1/benchmarks?name=classic",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
-				Benchmarks: 28,
+				Benchmarks: 29,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    50,
-					Total_items:  28,
+					Total_items:  29,
 				},
 			},
 		},
@@ -87,17 +87,17 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 			Route:              "/api/v1/benchmarks?is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
-				Benchmarks: 3,
+				Benchmarks: 4,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    50,
-					Total_items:  3,
+					Total_items:  4,
 				},
 			},
 		},
 		{
 			Title:              "200 Combination",
-			Route:              "/api/v1/benchmarks?ids=1,11,15,29&is_deprecated=true",
+			Route:              "/api/v1/benchmarks?ids=1,12,16,30&is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 1,
