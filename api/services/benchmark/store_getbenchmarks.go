@@ -103,7 +103,7 @@ func (s *PostgresBenchmarkStore) parseRowsIntoBenchmarks(rows pgx.Rows) ([]types
 			&b.User_id,
 			&b.Created_at,
 			&b.Updated_at,
-			&b.Rebalance_threshold_pct,
+			&b.Rec_rebalance_threshold_pct,
 			&total_items,
 		)
 

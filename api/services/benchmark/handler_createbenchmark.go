@@ -31,15 +31,15 @@ func (h *BenchmarkHandlerImpl) CreateBenchmark(c fiber.Ctx) error {
 	benchmark, err := h.benchmarkStore.CreateBenchmark(
 		c.Context(),
 		&types.Benchmark{
-			Name:                    benchmarkPayload.Name,
-			Description:             benchmarkPayload.Description,
-			Asset_allocation:        benchmarkPayload.Asset_allocation,
-			Std_dev_pct:             benchmarkPayload.Std_dev_pct,
-			Real_return_pct:         benchmarkPayload.Real_return_pct,
-			Drawdown_yrs:            benchmarkPayload.Drawdown_yrs,
-			Rebalance_threshold_pct: benchmarkPayload.Rebalance_threshold_pct,
-			Is_deprecated:           benchmarkPayload.Is_deprecated,
-			User_id:                 userPayload.User_id,
+			Name:                        benchmarkPayload.Name,
+			Description:                 benchmarkPayload.Description,
+			Asset_allocation:            benchmarkPayload.Asset_allocation,
+			Std_dev_pct:                 benchmarkPayload.Std_dev_pct,
+			Real_return_pct:             benchmarkPayload.Real_return_pct,
+			Drawdown_yrs:                benchmarkPayload.Drawdown_yrs,
+			Rec_rebalance_threshold_pct: benchmarkPayload.Rec_rebalance_threshold_pct,
+			Is_deprecated:               benchmarkPayload.Is_deprecated,
+			User_id:                     userPayload.User_id,
 		},
 	)
 

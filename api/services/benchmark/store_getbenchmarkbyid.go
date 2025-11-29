@@ -49,7 +49,7 @@ func (s *PostgresBenchmarkStore) parseRowIntoBenchmark(row pgx.Row) (types.Bench
 		&b.User_id,
 		&b.Created_at,
 		&b.Updated_at,
-		&b.Rebalance_threshold_pct,
+		&b.Rec_rebalance_threshold_pct,
 	)
 
 	if err != nil {

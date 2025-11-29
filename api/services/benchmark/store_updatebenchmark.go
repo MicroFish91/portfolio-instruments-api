@@ -29,7 +29,7 @@ func (s *PostgresBenchmarkStore) UpdateBenchmark(ctx context.Context, b *types.B
 				real_return_pct = $5,
 				drawdown_yrs = $6,
 				is_deprecated = $7,
-				rebalance_threshold_pct = $10,
+				rec_rebalance_threshold_pct = $10,
 				updated_at = now()
 			where
 				benchmark_id = $8
@@ -46,7 +46,7 @@ func (s *PostgresBenchmarkStore) UpdateBenchmark(ctx context.Context, b *types.B
 		b.Is_deprecated,
 		b.Benchmark_id,
 		b.User_id,
-		b.Rebalance_threshold_pct,
+		b.Rec_rebalance_threshold_pct,
 	)
 
 	benchmark, err := s.parseRowIntoBenchmark(row)
