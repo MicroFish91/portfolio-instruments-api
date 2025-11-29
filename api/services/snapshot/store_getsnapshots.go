@@ -42,7 +42,7 @@ func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, op
 	if len(options.Snap_ids) > 0 {
 		pgxb.AddQueryWithPositionals(
 			fmt.Sprintf("AND snap_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.Snap_ids))),
-			utils.IntSliceToAny(options.Snap_ids),
+			utils.ConvertIntSliceToAny(options.Snap_ids),
 		)
 	}
 
@@ -107,6 +107,7 @@ func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) ([]types.S
 			&s.User_id,
 			&s.Created_at,
 			&s.Updated_at,
+			&s.Rebalance_threshold_pct,
 			&total_items,
 		)
 
