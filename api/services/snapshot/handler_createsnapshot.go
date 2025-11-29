@@ -63,10 +63,11 @@ func (h *SnapshotHandlerImpl) CreateSnapshot(c fiber.Ctx) error {
 	snapshot, err := h.snapshotStore.CreateSnapshot(
 		c.Context(),
 		&types.Snapshot{
-			Snap_date:    snapshotPayload.Snap_date,
-			Description:  snapshotPayload.Description,
-			User_id:      userPayload.User_id,
-			Benchmark_id: snapshotPayload.Benchmark_id,
+			Snap_date:               snapshotPayload.Snap_date,
+			Description:             snapshotPayload.Description,
+			Rebalance_threshold_pct: snapshotPayload.Rebalance_threshold_pct,
+			User_id:                 userPayload.User_id,
+			Benchmark_id:            snapshotPayload.Benchmark_id,
 		},
 	)
 	if err != nil {

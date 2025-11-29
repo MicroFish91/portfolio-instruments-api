@@ -10,10 +10,11 @@ import (
 )
 
 type CreateSnapshotPayload struct {
-	Snap_date       string                                     `json:"snap_date"`
-	Description     string                                     `json:"description"`
-	Snapshot_values []snapshotvalue.CreateSnapshotValuePayload `json:"snapshot_values"`
-	Benchmark_id    int                                        `json:"benchmark_id"`
+	Snap_date               string                                     `json:"snap_date"`
+	Description             string                                     `json:"description"`
+	Snapshot_values         []snapshotvalue.CreateSnapshotValuePayload `json:"snapshot_values"`
+	Rebalance_threshold_pct int                                        `json:"rebalance_threshold_pct"`
+	Benchmark_id            int                                        `json:"benchmark_id"`
 }
 
 func (p CreateSnapshotPayload) Validate() error {
@@ -45,6 +46,7 @@ func (p CreateSnapshotPayload) Validate() error {
 		validation.Field(&p.Snap_date, validation.Length(10, 10)),
 		validation.Field(&p.Description, validation.Length(1, 1024)),
 		validation.Field(&p.Snapshot_values),
+		validation.Field(&p.Rebalance_threshold_pct, validation.Min(0), validation.Max(100)),
 		validation.Field(&p.Benchmark_id, validation.Min(1)),
 	)
 }

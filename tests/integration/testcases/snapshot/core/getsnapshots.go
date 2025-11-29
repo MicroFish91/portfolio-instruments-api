@@ -22,11 +22,11 @@ func GetSnapshotsTestCases(t *testing.T, snapshotId, userId int, email string) [
 		{
 			Title: "200",
 			ExpectedResponse: snapshotTester.ExpectedGetSnapshotsResponse{
-				Snapshots: 29,
+				Snapshots: 30,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    50,
-					Total_items:  29,
+					Total_items:  30,
 				},
 			},
 			ExpectedStatusCode: fiber.StatusOK,
@@ -39,7 +39,7 @@ func GetSnapshotsTestCases(t *testing.T, snapshotId, userId int, email string) [
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    20,
-					Total_items:  29,
+					Total_items:  30,
 				},
 			},
 			ExpectedStatusCode: fiber.StatusOK,
@@ -48,11 +48,11 @@ func GetSnapshotsTestCases(t *testing.T, snapshotId, userId int, email string) [
 			Title: "200 Pagination 2",
 			Route: "/api/v1/snapshots?current_page=2&page_size=20",
 			ExpectedResponse: snapshotTester.ExpectedGetSnapshotsResponse{
-				Snapshots: 9,
+				Snapshots: 10,
 				Pagination: types.PaginationMetadata{
 					Current_page: 2,
 					Page_size:    20,
-					Total_items:  29,
+					Total_items:  30,
 				},
 			},
 			ExpectedStatusCode: fiber.StatusOK,
@@ -74,11 +74,11 @@ func GetSnapshotsTestCases(t *testing.T, snapshotId, userId int, email string) [
 			Title: "200 Ascending",
 			Route: "/api/v1/snapshots?order_date_by=ASC",
 			ExpectedResponse: snapshotTester.ExpectedGetSnapshotsResponse{
-				Snapshots: 29,
+				Snapshots: 30,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    50,
-					Total_items:  29,
+					Total_items:  30,
 				},
 			},
 			ExpectedStatusCode: fiber.StatusOK,
@@ -87,11 +87,11 @@ func GetSnapshotsTestCases(t *testing.T, snapshotId, userId int, email string) [
 			Title: "200 Descending",
 			Route: "/api/v1/snapshots?order_date_by=DESC",
 			ExpectedResponse: snapshotTester.ExpectedGetSnapshotsResponse{
-				Snapshots: 29,
+				Snapshots: 30,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    50,
-					Total_items:  29,
+					Total_items:  30,
 				},
 			},
 			ExpectedStatusCode: fiber.StatusOK,

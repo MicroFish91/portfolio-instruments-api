@@ -19,10 +19,10 @@ func (s *PostgresSnapshotStore) CreateSnapshot(ctx context.Context, snapshot *ty
 	row := s.db.QueryRow(
 		c,
 		`INSERT INTO snapshots
-		(snap_date, description, user_id)
-		VALUES ($1, $2, $3)
+		(snap_date, description, user_id, rebalance_threshold_pct)
+		VALUES ($1, $2, $3, $4)
 		RETURNING *`,
-		snapshot.Snap_date, snapshot.Description, snapshot.User_id,
+		snapshot.Snap_date, snapshot.Description, snapshot.User_id, snapshot.Rebalance_threshold_pct,
 	)
 
 	snap, err := s.parseRowIntoSnapshot(row)
@@ -30,6 +30,7 @@ func (s *PostgresSnapshotStore) CreateSnapshot(ctx context.Context, snapshot *ty
 		return types.Snapshot{}, err
 	}
 
+	// We skip adding the benchmark above because it could get defaulted to 0.  Instead, it's safer to have it show up as nil initially and then explicitly set it separately if necessary.
 	if snapshot.Benchmark_id != 0 {
 		row = s.db.QueryRow(
 			c,

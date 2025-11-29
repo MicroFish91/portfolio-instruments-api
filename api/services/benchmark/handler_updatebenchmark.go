@@ -33,15 +33,16 @@ func (h *BenchmarkHandlerImpl) UpdateBenchmark(c fiber.Ctx) error {
 	}
 
 	benchmark, err := h.benchmarkStore.UpdateBenchmark(c.Context(), &types.Benchmark{
-		Benchmark_id:     benchmarkParams.Id,
-		Name:             benchmarkPayload.Name,
-		Description:      benchmarkPayload.Description,
-		Asset_allocation: benchmarkPayload.Asset_allocation,
-		Std_dev_pct:      benchmarkPayload.Std_dev_pct,
-		Real_return_pct:  benchmarkPayload.Real_return_pct,
-		Drawdown_yrs:     benchmarkPayload.Drawdown_yrs,
-		Is_deprecated:    benchmarkPayload.Is_deprecated,
-		User_id:          userPayload.User_id,
+		Benchmark_id:                benchmarkParams.Id,
+		Name:                        benchmarkPayload.Name,
+		Description:                 benchmarkPayload.Description,
+		Asset_allocation:            benchmarkPayload.Asset_allocation,
+		Std_dev_pct:                 benchmarkPayload.Std_dev_pct,
+		Real_return_pct:             benchmarkPayload.Real_return_pct,
+		Drawdown_yrs:                benchmarkPayload.Drawdown_yrs,
+		Rec_rebalance_threshold_pct: benchmarkPayload.Rec_rebalance_threshold_pct,
+		Is_deprecated:               benchmarkPayload.Is_deprecated,
+		User_id:                     userPayload.User_id,
 	})
 
 	if err != nil {

@@ -26,6 +26,7 @@ func (s *PostgresSnapshotStore) UpdateSnapshot(ctx context.Context, snap *types.
 				snap_date = $2,
 				total = $3,
 				weighted_er_pct = $4,
+				rebalance_threshold_pct = $8,
 				benchmark_id = $5,
 				updated_at = now()
 			where
@@ -41,6 +42,7 @@ func (s *PostgresSnapshotStore) UpdateSnapshot(ctx context.Context, snap *types.
 		snap.Benchmark_id,
 		snap.Snap_id,
 		snap.User_id,
+		snap.Rebalance_threshold_pct,
 	)
 
 	snapshot, err := s.parseRowIntoSnapshot(row)

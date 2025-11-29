@@ -53,7 +53,7 @@ func (p UpdateBenchmarkPayload) Validate() error {
 		validation.Field(&p.Std_dev_pct, validation.Min(float32(0)), validation.Max(float32(100))),
 		validation.Field(&p.Real_return_pct, validation.Min(float32(0)), validation.Max(float32(100))),
 		validation.Field(&p.Drawdown_yrs, validation.Min(0), validation.Max(50)),
-		validation.Field(&p.Rec_rebalance_threshold_pct, validation.Min(1), validation.Max(100)),
+		validation.Field(&p.Rec_rebalance_threshold_pct, validation.Min(0), validation.Max(100)),
 		validation.Field(&p.Is_deprecated),
 	)
 }

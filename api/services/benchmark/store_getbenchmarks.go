@@ -49,7 +49,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 	if len(options.Benchmark_ids) > 0 {
 		pgxb.AddQueryWithPositionals(
 			fmt.Sprintf("AND benchmark_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.Benchmark_ids))),
-			utils.IntSliceToAny(options.Benchmark_ids),
+			utils.ConvertIntSliceToAny(options.Benchmark_ids),
 		)
 	}
 

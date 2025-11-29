@@ -67,7 +67,7 @@ func (s *PostgresHoldingStore) GetHoldings(ctx context.Context, userId int, opti
 	if len(options.Holding_ids) > 0 {
 		pgxb.AddQueryWithPositionals(
 			fmt.Sprintf("AND holding_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.Holding_ids))),
-			utils.IntSliceToAny(options.Holding_ids),
+			utils.ConvertIntSliceToAny(options.Holding_ids),
 		)
 	}
 

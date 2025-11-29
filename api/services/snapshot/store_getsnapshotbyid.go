@@ -7,6 +7,7 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 	"github.com/jackc/pgx/v5"
 )
 
@@ -70,7 +71,7 @@ func (s *PostgresSnapshotStore) GetSnapshotById(ctx context.Context, snapshotId,
 
 func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (types.Snapshot, error) {
 	var snap types.Snapshot
-	var benchmark_id sql.NullInt64
+	var benchmark_id, rebalance_threshold_pct sql.NullInt64
 
 	err := row.Scan(
 		&snap.Snap_id,
@@ -82,17 +83,15 @@ func (s *PostgresSnapshotStore) parseRowIntoSnapshot(row pgx.Row) (types.Snapsho
 		&snap.User_id,
 		&snap.Created_at,
 		&snap.Updated_at,
+		&rebalance_threshold_pct,
 	)
 
 	if err != nil {
 		return types.Snapshot{}, err
 	}
 
-	if benchmark_id.Valid {
-		snap.Benchmark_id = int(benchmark_id.Int64)
-	} else {
-		snap.Benchmark_id = 0
-	}
+	snap.Benchmark_id = utils.ConvertNullIntToInt(benchmark_id)
+	snap.Rebalance_threshold_pct = utils.ConvertNullIntToInt(rebalance_threshold_pct)
 
 	return snap, nil
 }
