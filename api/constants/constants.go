@@ -13,4 +13,6 @@ const (
 
 	TIMEOUT_MEDIUM = 5 * time.Second
 	TIMEOUT_LONG   = 10 * time.Second
+
+	BENCHMARK_REBALANCE_PCT_DEFAULT = 10
 )

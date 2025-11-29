@@ -1,0 +1,1 @@
+ALTER TABLE benchmarks DROP COLUMN rec_rebalance_threshold_pct;
