@@ -21,7 +21,7 @@ func RegisterRoutes(
 	})
 
 	app.Get("/api/v1*", func(c fiber.Ctx) error {
-		return utils.SendJSON(c, fiber.StatusGone, fiber.Map{"message": "The v1 API has been officially deprecated, please use the latest v2 API"})
+		return utils.SendJSON(c, fiber.StatusGone, fiber.Map{"message": "The v1 API has been officially deprecated, please use the v2 API"})
 	})
 
 	routerV2 := app.Group("/api/v2")
