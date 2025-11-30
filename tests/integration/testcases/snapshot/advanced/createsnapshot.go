@@ -126,7 +126,8 @@ func CreateAdvancedSnapshotTestCase(t *testing.T, benchmarkId int, accountIds []
 				{Account_id: accountIds[8], Holding_id: holdingIds[0], Total: 10426.11, Skip_rebalance: false},
 				{Account_id: accountIds[8], Holding_id: holdingIds[13], Total: 11859.11, Skip_rebalance: true},
 			},
-			Benchmark_id: benchmarkId,
+			Benchmark_id:            benchmarkId,
+			Rebalance_threshold_pct: 10,
 		},
 		ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
 			Total:         AdvancedSnapshotTotal,

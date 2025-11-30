@@ -106,6 +106,7 @@ func GetAdvancedSnapshotRebalanceTestCase(*testing.T) shared.TestCase {
 			Snapshot_total:            507108.10,
 			Snapshot_total_omit_skips: 435369.87,
 			Rebalance_deviation_pct:   13,
+			Needs_rebalance:           true,
 		},
 		ExpectedStatusCode: fiber.StatusOK,
 	}
