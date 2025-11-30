@@ -28,12 +28,12 @@ var (
 
 func CoreSnapshotScenarioTests(t *testing.T) {
 	t.Run("Setup", coreSnapshotSetup)
-	t.Run("POST://api/v1/snapshots", createSnapshotTest)
-	t.Run("GET://api/v1/snapshots", getSnapshotsTests)
-	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
-	t.Run("GET://api/v1/snapshots/:id/rebalance", getSnapshotRebalanceTest)
-	t.Run("PUT://api/v1/snapshots/:id", updateSnapshotTest)
-	t.Run("DEL://api/v1/snapshots/:id", deleteSnapshotTest)
+	t.Run("POST://api/v2/snapshots", createSnapshotTest)
+	t.Run("GET://api/v2/snapshots", getSnapshotsTests)
+	t.Run("GET://api/v2/snapshots/:id", getSnapshotTest)
+	t.Run("GET://api/v2/snapshots/:id/rebalance", getSnapshotRebalanceTest)
+	t.Run("PUT://api/v2/snapshots/:id", updateSnapshotTest)
+	t.Run("DEL://api/v2/snapshots/:id", deleteSnapshotTest)
 	t.Run("Cleanup", snapshotServiceCleaner)
 }
 

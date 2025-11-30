@@ -20,13 +20,17 @@ func RegisterRoutes(
 		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"message": "pong"})
 	})
 
-	routerV1 := app.Group("/api/v1")
+	app.Get("/api/v1*", func(c fiber.Ctx) error {
+		return utils.SendJSON(c, fiber.StatusGone, fiber.Map{"message": "The v1 API has been officially deprecated, please use the latest v2 API"})
+	})
 
-	registerAuthRoutes(routerV1, authHandler)
-	registerUserRoutes(routerV1, userHandler)
-	registerBenchmarkRoutes(routerV1, benchmarkHandler)
-	registerAccountRoutes(routerV1, accountHandler)
-	registerHoldingRoutes(routerV1, holdingHandler)
-	registerSnapshotRoutes(routerV1, snapshotHandler)
-	registerSnapshotValueRoutes(routerV1, snapshotValueHandler)
+	routerV2 := app.Group("/api/v2")
+
+	registerAuthRoutes(routerV2, authHandler)
+	registerUserRoutes(routerV2, userHandler)
+	registerBenchmarkRoutes(routerV2, benchmarkHandler)
+	registerAccountRoutes(routerV2, accountHandler)
+	registerHoldingRoutes(routerV2, holdingHandler)
+	registerSnapshotRoutes(routerV2, snapshotHandler)
+	registerSnapshotValueRoutes(routerV2, snapshotValueHandler)
 }

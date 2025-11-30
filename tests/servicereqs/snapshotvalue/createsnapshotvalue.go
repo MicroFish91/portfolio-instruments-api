@@ -13,7 +13,7 @@ import (
 
 func TestCreateSnapshotValue(t *testing.T, payload any, token string, sid, expectedUserId, expectedStatusCode int) int {
 	var response types.CreateSnapshotValueResponse
-	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, fmt.Sprintf("/api/v1/snapshots/%d/values", sid), token, &payload, &response)
+	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, fmt.Sprintf("/api/v2/snapshots/%d/values", sid), token, &payload, &response)
 
 	switch expectedStatusCode {
 	case 201:

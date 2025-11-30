@@ -13,7 +13,7 @@ import (
 
 func TestCreateBenchmark(t *testing.T, payload any, token string, expectedUserId int, expectedStatusCode int) int {
 	var createBenchmarkResponse types.CreateBenchmarkResponse
-	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v1/benchmarks", token, &payload, &createBenchmarkResponse)
+	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v2/benchmarks", token, &payload, &createBenchmarkResponse)
 
 	switch expectedStatusCode {
 	case 201:

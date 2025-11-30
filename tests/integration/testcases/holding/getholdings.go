@@ -32,7 +32,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Page 1",
-			Route:              "/api/v1/holdings?current_page=1&page_size=20",
+			Route:              "/api/v2/holdings?current_page=1&page_size=20",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 20,
@@ -45,7 +45,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Page 2",
-			Route:              "/api/v1/holdings?current_page=2&page_size=20",
+			Route:              "/api/v2/holdings?current_page=2&page_size=20",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 10,
@@ -58,7 +58,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Ids",
-			Route:              "/api/v1/holdings?ids=2,5,10,15,40",
+			Route:              "/api/v2/holdings?ids=2,5,10,15,40",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 4,
@@ -71,7 +71,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Ticker",
-			Route:              "/api/v1/holdings?ticker=T2",
+			Route:              "/api/v2/holdings?ticker=T2",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 1,
@@ -84,7 +84,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Asset Category (AC)",
-			Route:              "/api/v1/holdings?asset_category=STB",
+			Route:              "/api/v2/holdings?asset_category=STB",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 5,
@@ -97,7 +97,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Asset Category (AC) 2",
-			Route:              "/api/v1/holdings?asset_category=CASH",
+			Route:              "/api/v2/holdings?asset_category=CASH",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 3,
@@ -110,7 +110,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Is Deprecated",
-			Route:              "/api/v1/holdings?is_deprecated=true",
+			Route:              "/api/v2/holdings?is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 3,
@@ -123,7 +123,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Ticker & AC",
-			Route:              "/api/v1/holdings?ticker=T3&asset_category=DSCV",
+			Route:              "/api/v2/holdings?ticker=T3&asset_category=DSCV",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 1,
@@ -136,7 +136,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Maturation Remaining 1",
-			Route:              "/api/v1/holdings?has_maturation_remaining=true",
+			Route:              "/api/v2/holdings?has_maturation_remaining=true",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 12,
@@ -149,7 +149,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Maturation Remaining 2",
-			Route:              "/api/v1/holdings?has_maturation_remaining=false",
+			Route:              "/api/v2/holdings?has_maturation_remaining=false",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 1,
@@ -162,7 +162,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query AC & Maturation Remaining 1",
-			Route:              "/api/v1/holdings?asset_category=LTB&has_maturation_remaining=false",
+			Route:              "/api/v2/holdings?asset_category=LTB&has_maturation_remaining=false",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 1,
@@ -175,7 +175,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query AC & Maturation Remaining 2",
-			Route:              "/api/v1/holdings?asset_category=LTB&has_maturation_remaining=true",
+			Route:              "/api/v2/holdings?asset_category=LTB&has_maturation_remaining=true",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 3,
@@ -199,7 +199,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "404",
-			Route:              "/api/v1/holdings?ids=40",
+			Route:              "/api/v2/holdings?ids=40",
 			ExpectedStatusCode: fiber.StatusNotFound,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings:   0,
@@ -208,7 +208,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "404 Query Ticker & AC",
-			Route:              "/api/v1/holdings?ticker=T3&asset_category=TSM",
+			Route:              "/api/v2/holdings?ticker=T3&asset_category=TSM",
 			ExpectedStatusCode: fiber.StatusNotFound,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 0,
@@ -221,7 +221,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "404 Query Ticker & AC & IsDep",
-			Route:              "/api/v1/holdings?ticker=T3&asset_category=DSCV&is_deprecated=true",
+			Route:              "/api/v2/holdings?ticker=T3&asset_category=DSCV&is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusNotFound,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings: 0,
@@ -236,7 +236,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		// ---- 400 ----
 		{
 			Title:              "400 Bad Ids",
-			Route:              "/api/v1/holdings?ids=2.0,3.0",
+			Route:              "/api/v2/holdings?ids=2.0,3.0",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings:   0,
@@ -245,7 +245,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "400 Bad Asset Category 1",
-			Route:              "/api/v1/holdings?asset_category=10",
+			Route:              "/api/v2/holdings?asset_category=10",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings:   0,
@@ -254,7 +254,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "400 Bad Asset Category 2",
-			Route:              "/api/v1/holdings?asset_category=OIL",
+			Route:              "/api/v2/holdings?asset_category=OIL",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings:   0,
@@ -263,7 +263,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "400 Bad Is Deprecated",
-			Route:              "/api/v1/holdings?is_deprecated=maybe",
+			Route:              "/api/v2/holdings?is_deprecated=maybe",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings:   0,
@@ -272,7 +272,7 @@ func GetHoldingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "400 Bad Maturation Remaining",
-			Route:              "/api/v1/holdings?has_maturation_remaining=06/11/2029",
+			Route:              "/api/v2/holdings?has_maturation_remaining=06/11/2029",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: holding.GetHoldingsExpectedResponse{
 				Holdings:   0,

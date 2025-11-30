@@ -36,7 +36,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Page 1",
-			Route:              "/api/v1/accounts?current_page=1&page_size=20",
+			Route:              "/api/v2/accounts?current_page=1&page_size=20",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 20,
@@ -49,7 +49,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Page 2",
-			Route:              "/api/v1/accounts?current_page=2&page_size=20",
+			Route:              "/api/v2/accounts?current_page=2&page_size=20",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 10,
@@ -62,7 +62,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Ids",
-			Route:              "/api/v1/accounts?ids=1,11,15,31",
+			Route:              "/api/v2/accounts?ids=1,11,15,31",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 3,
@@ -75,7 +75,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Ids",
-			Route:              "/api/v1/accounts?ids=1,11,15,31",
+			Route:              "/api/v2/accounts?ids=1,11,15,31",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 3,
@@ -88,7 +88,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Tax Shelter 1",
-			Route:              "/api/v1/accounts?tax_shelter=TAXABLE",
+			Route:              "/api/v2/accounts?tax_shelter=TAXABLE",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 9,
@@ -101,7 +101,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Tax Shelter 2",
-			Route:              "/api/v1/accounts?tax_shelter=ROTH",
+			Route:              "/api/v2/accounts?tax_shelter=ROTH",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 6,
@@ -114,7 +114,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Institution 1",
-			Route:              "/api/v1/accounts?institution=vanguard",
+			Route:              "/api/v2/accounts?institution=vanguard",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 9,
@@ -127,7 +127,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Institution 2",
-			Route:              "/api/v1/accounts?institution=fidelity",
+			Route:              "/api/v2/accounts?institution=fidelity",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 9,
@@ -140,7 +140,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Is Deprecated",
-			Route:              "/api/v1/accounts?is_deprecated=true",
+			Route:              "/api/v2/accounts?is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 3,
@@ -153,7 +153,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "200 Query Shelter + Inst",
-			Route:              "/api/v1/accounts?institution=fidelity&tax_shelter=ROTH",
+			Route:              "/api/v2/accounts?institution=fidelity&tax_shelter=ROTH",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts: 3,
@@ -168,7 +168,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		// ---- 401, 404 ----
 		{
 			Title:              "401",
-			Route:              "/api/v1/accounts",
+			Route:              "/api/v2/accounts",
 			ReplacementToken:   tok401,
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 			ExpectedResponse: GetAccountsExpectedResponse{
@@ -178,7 +178,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "404",
-			Route:              "/api/v1/accounts?ids=32",
+			Route:              "/api/v2/accounts?ids=32",
 			ExpectedStatusCode: fiber.StatusNotFound,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts:   0,
@@ -189,7 +189,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		// --- 400 ---
 		{
 			Title:              "400 Fake Query Param",
-			Route:              "/api/v1/accounts?fake_query=true",
+			Route:              "/api/v2/accounts?fake_query=true",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts:   0,
@@ -198,7 +198,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "400 Tax Shelter 1",
-			Route:              "/api/v1/accounts?tax_shelter=TRAD",
+			Route:              "/api/v2/accounts?tax_shelter=TRAD",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts:   0,
@@ -207,7 +207,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "400 Tax Shelter 2",
-			Route:              "/api/v1/accounts?tax_shelter=5",
+			Route:              "/api/v2/accounts?tax_shelter=5",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts:   0,
@@ -216,7 +216,7 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "400 Is Deprecated",
-			Route:              "/api/v1/accounts?is_deprecated=test",
+			Route:              "/api/v2/accounts?is_deprecated=test",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: GetAccountsExpectedResponse{
 				Accounts:   0,

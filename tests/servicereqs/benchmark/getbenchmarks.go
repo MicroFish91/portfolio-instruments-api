@@ -16,7 +16,7 @@ type GetBenchmarksExpectedResponse struct {
 func TestGetBenchmarks(t *testing.T, route string, token string, expectedUserId int, expectedStatusCode int, expectedResponse GetBenchmarksExpectedResponse) {
 	var r string
 	if route == "" {
-		r = "/api/v1/benchmarks"
+		r = "/api/v2/benchmarks"
 	} else {
 		r = route
 	}

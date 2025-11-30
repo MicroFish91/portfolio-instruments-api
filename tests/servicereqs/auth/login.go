@@ -13,7 +13,7 @@ import (
 
 func TestLogin(t *testing.T, p auth.LoginPayload, expectedStatusCode int) (u types.User, token string) {
 	var loginResponse types.LoginResponse
-	res := testUtils.SendAuthRequest(t, "/api/v1/login", &p, &loginResponse)
+	res := testUtils.SendAuthRequest(t, "/api/v2/login", &p, &loginResponse)
 
 	switch expectedStatusCode {
 	case 201:

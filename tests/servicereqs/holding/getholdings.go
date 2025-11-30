@@ -16,7 +16,7 @@ type GetHoldingsExpectedResponse struct {
 func TestGetHoldings(t *testing.T, route string, token string, expectedUserId int, expectedStatusCode int, expectedResponse GetHoldingsExpectedResponse) {
 	var r string
 	if route == "" {
-		r = "/api/v1/holdings"
+		r = "/api/v2/holdings"
 	} else {
 		r = route
 	}

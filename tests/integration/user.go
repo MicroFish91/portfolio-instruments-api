@@ -20,11 +20,11 @@ var (
 )
 
 func TestUserService(t *testing.T) {
-	t.Run("POST://api/v1/register", registerTests)
-	t.Run("POST://api/v1/login", loginTests)
-	t.Run("GET://api/v1/me", getMeTests)
-	t.Run("GET://api/v1/users/:id", getUserByIdTests)
-	t.Run("DEL://api/v1/users/:id", deleteUserTests)
+	t.Run("POST://api/v2/register", registerTests)
+	t.Run("POST://api/v2/login", loginTests)
+	t.Run("GET://api/v2/me", getMeTests)
+	t.Run("GET://api/v2/users/:id", getUserByIdTests)
+	t.Run("DEL://api/v2/users/:id", deleteUserTests)
 }
 
 func registerTests(t *testing.T) {

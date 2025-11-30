@@ -36,19 +36,19 @@ func GetUserByIdTestCases(t *testing.T, userId int, email string) []shared.TestC
 		// 400
 		{
 			Title:              "400 String Id",
-			Route:              "/api/v1/users/test",
+			Route:              "/api/v2/users/test",
 			ParameterId:        userId,
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
 			Title:              "400 Float Id",
-			Route:              "/api/v1/users/1.0",
+			Route:              "/api/v2/users/1.0",
 			ParameterId:        userId,
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
 			Title:              "400 Object Id",
-			Route:              "/api/v1/users/{id:1}",
+			Route:              "/api/v2/users/{id:1}",
 			ParameterId:        userId,
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},

@@ -25,11 +25,11 @@ var (
 
 func TestAccountService(t *testing.T) {
 	t.Run("Setup", accountServiceSetup)
-	t.Run("POST://api/v1/accounts", createAccountTests)
-	t.Run("GET://api/v1/accounts", getAccountsTests)
-	t.Run("GET://api/v1/accounts/:id", getAccountTests)
-	t.Run("PUT://api/v1/accounts/:id", updateAccountTests)
-	t.Run("DEL://api/v1/accounts/:id", deleteAccountTests)
+	t.Run("POST://api/v2/accounts", createAccountTests)
+	t.Run("GET://api/v2/accounts", getAccountsTests)
+	t.Run("GET://api/v2/accounts/:id", getAccountTests)
+	t.Run("PUT://api/v2/accounts/:id", updateAccountTests)
+	t.Run("DEL://api/v2/accounts/:id", deleteAccountTests)
 	t.Run("Cleanup", accountServiceCleanup)
 }
 

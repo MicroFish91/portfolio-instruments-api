@@ -15,7 +15,7 @@ func TestGetUserById(t *testing.T, route string, token string, userId int, expec
 	var r string
 
 	if route == "" {
-		r = fmt.Sprintf("/api/v1/users/%d", userId)
+		r = fmt.Sprintf("/api/v2/users/%d", userId)
 	} else {
 		r = route
 	}

@@ -32,7 +32,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "200 Query Page 1",
-			Route:              "/api/v1/benchmarks?current_page=1&page_size=20",
+			Route:              "/api/v2/benchmarks?current_page=1&page_size=20",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 20,
@@ -45,7 +45,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "200 Query Page 2",
-			Route:              "/api/v1/benchmarks?current_page=2&page_size=20",
+			Route:              "/api/v2/benchmarks?current_page=2&page_size=20",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 11,
@@ -58,7 +58,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "200 Query Ids",
-			Route:              "/api/v1/benchmarks?ids=1,11,15,29,40",
+			Route:              "/api/v2/benchmarks?ids=1,11,15,29,40",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 4,
@@ -71,7 +71,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "200 Query Name",
-			Route:              "/api/v1/benchmarks?name=classic",
+			Route:              "/api/v2/benchmarks?name=classic",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 29,
@@ -84,7 +84,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "200 Is Deprecated",
-			Route:              "/api/v1/benchmarks?is_deprecated=true",
+			Route:              "/api/v2/benchmarks?is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 4,
@@ -97,7 +97,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "200 Combination",
-			Route:              "/api/v1/benchmarks?ids=1,12,16,30&is_deprecated=true",
+			Route:              "/api/v2/benchmarks?ids=1,12,16,30&is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 1,
@@ -121,7 +121,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "404",
-			Route:              "/api/v1/benchmarks?ids=40",
+			Route:              "/api/v2/benchmarks?ids=40",
 			ExpectedStatusCode: fiber.StatusNotFound,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 0,
@@ -132,7 +132,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		// ---- 400 ----
 		{
 			Title:              "400 Ids",
-			Route:              "/api/v1/benchmarks?ids=eleven",
+			Route:              "/api/v2/benchmarks?ids=eleven",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 0,
@@ -141,7 +141,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "400 Is Deprecated",
-			Route:              "/api/v1/benchmarks?is_deprecated=1",
+			Route:              "/api/v2/benchmarks?is_deprecated=1",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 0,
@@ -150,7 +150,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []shared.Tes
 		},
 		{
 			Title:              "400 Combination",
-			Route:              "/api/v1/benchmarks?is_deprecated=true&ids=true",
+			Route:              "/api/v2/benchmarks?is_deprecated=true&ids=true",
 			ExpectedStatusCode: fiber.StatusBadRequest,
 			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
 				Benchmarks: 0,

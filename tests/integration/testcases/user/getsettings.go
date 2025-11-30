@@ -34,7 +34,7 @@ func GetSettingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		},
 		{
 			Title:              "403 Param Id",
-			Route:              "/api/v1/users/100/settings",
+			Route:              "/api/v2/users/100/settings",
 			ParameterId:        userId,
 			ExpectedStatusCode: fiber.StatusForbidden,
 		},
@@ -42,19 +42,19 @@ func GetSettingsTestCases(t *testing.T, userId int, email string) []shared.TestC
 		// 400
 		{
 			Title:              "400 String Id",
-			Route:              "/api/v1/users/test/settings",
+			Route:              "/api/v2/users/test/settings",
 			ParameterId:        userId,
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
 			Title:              "400 Float Id",
-			Route:              "/api/v1/users/1.0/settings",
+			Route:              "/api/v2/users/1.0/settings",
 			ParameterId:        userId,
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
 			Title:              "400 Object Id",
-			Route:              "/api/v1/users/{id:1}",
+			Route:              "/api/v2/users/{id:1}",
 			ParameterId:        userId,
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},

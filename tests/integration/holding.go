@@ -26,11 +26,11 @@ var (
 
 func TestHoldingService(t *testing.T) {
 	t.Run("Setup", holdingServiceSetup)
-	t.Run("POST://api/v1/holdings", createHoldingTests)
-	t.Run("GET://api/v1/holdings", getHoldingsTests)
-	t.Run("GET://api/v1/holdings/:id", getHoldingTests)
-	t.Run("PUT://api/v1/holdings/:id", updateHoldingTests)
-	t.Run("DEL://api/v1/holdings/:id", deleteHoldingTests)
+	t.Run("POST://api/v2/holdings", createHoldingTests)
+	t.Run("GET://api/v2/holdings", getHoldingsTests)
+	t.Run("GET://api/v2/holdings/:id", getHoldingTests)
+	t.Run("PUT://api/v2/holdings/:id", updateHoldingTests)
+	t.Run("DEL://api/v2/holdings/:id", deleteHoldingTests)
 	t.Run("Cleanup", holdingServiceCleanup)
 }
 

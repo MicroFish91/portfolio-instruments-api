@@ -12,7 +12,7 @@ import (
 
 func TestCreateHolding(t *testing.T, payload any, token string, expectedUserId int, expectedStatusCode int) int {
 	var createHoldingResponse types.CreateHoldingResponse
-	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v1/holdings", token, &payload, &createHoldingResponse)
+	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v2/holdings", token, &payload, &createHoldingResponse)
 
 	switch expectedStatusCode {
 	case 201:

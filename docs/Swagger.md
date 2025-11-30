@@ -6,50 +6,50 @@ The swagger tool I want to use is only supported through Fiber v2, so I will wai
 * `GET /ping`
 
 ### Auth
-* `POST /api/v1/register`
-* `POST /api/v1/login`
-* `GET /api/v1/me`
+* `POST /api/v2/register`
+* `POST /api/v2/login`
+* `GET /api/v2/me`
 
 ### Users
-* `GET /api/v1/users/:id`
-* `PUT /api/v1/users/:id`
-* `DEL /api/v1/users/:id`
+* `GET /api/v2/users/:id`
+* `PUT /api/v2/users/:id`
+* `DEL /api/v2/users/:id`
 
-* `GET /api/v1/users/:id/settings`
-* `PUT /api/v1/users/:id/settings`
+* `GET /api/v2/users/:id/settings`
+* `PUT /api/v2/users/:id/settings`
 
 ### Benchmarks
-* `POST /api/v1/benchmarks`
-* `GET /api/v1/benchmarks`
-* `GET /api/v1/benchmarks/:id`
-* `PUT /api/v1/benchmarks/:id`
-* `DEL /api/v1/benchmarks/:id`
+* `POST /api/v2/benchmarks`
+* `GET /api/v2/benchmarks`
+* `GET /api/v2/benchmarks/:id`
+* `PUT /api/v2/benchmarks/:id`
+* `DEL /api/v2/benchmarks/:id`
 
 ### Accounts
-* `POST /api/v1/accounts`
-* `GET /api/v1/accounts`
-* `GET /api/v1/accounts/:id`
-* `PUT /api/v1/accounts/:id`
-* `DEL /api/v1/accounts/:id`
+* `POST /api/v2/accounts`
+* `GET /api/v2/accounts`
+* `GET /api/v2/accounts/:id`
+* `PUT /api/v2/accounts/:id`
+* `DEL /api/v2/accounts/:id`
 
 ### Holdings
-* `POST /api/v1/accounts`
-* `GET /api/v1/accounts`
-* `GET /api/v1/accounts/:id`
-* `PUT /api/v1/accounts/:id`
-* `DEL /api/v1/accounts/:id`
+* `POST /api/v2/accounts`
+* `GET /api/v2/accounts`
+* `GET /api/v2/accounts/:id`
+* `PUT /api/v2/accounts/:id`
+* `DEL /api/v2/accounts/:id`
 
 ### Snapshots
-* `POST /api/v1/snapshots`
-* `GET /api/v1/snapshots`
-* `GET /api/v1/snapshots/:id`
-* `GET /api/v1/snapshots/:id/rebalance`
-* `PUT /api/v1/snapshots/:id`
-* `DEL /api/v1/snapshots/:id`
+* `POST /api/v2/snapshots`
+* `GET /api/v2/snapshots`
+* `GET /api/v2/snapshots/:id`
+* `GET /api/v2/snapshots/:id/rebalance`
+* `PUT /api/v2/snapshots/:id`
+* `DEL /api/v2/snapshots/:id`
 
 ### SnapshotValues
-* `POST /api/v1/snapshots/:s_id/values`
-* `GET /api/v1/snapshots/:s_id/values`
-* `GET /api/v1/snapshots/:s_id/values/:sv_id`
-* `PUT /api/v1/snapshots/:s_id/values/:sv_id`
-* `DEL /api/v1/snapshots/:s_id/values/:sv_id`
+* `POST /api/v2/snapshots/:s_id/values`
+* `GET /api/v2/snapshots/:s_id/values`
+* `GET /api/v2/snapshots/:s_id/values/:sv_id`
+* `PUT /api/v2/snapshots/:s_id/values/:sv_id`
+* `DEL /api/v2/snapshots/:s_id/values/:sv_id`

@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetHolding(t *testing.T, holdingId int, token string, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/holdings/%d", holdingId)
+	var route = fmt.Sprintf("/api/v2/holdings/%d", holdingId)
 
 	var getHoldingResponse types.GetHoldingResponse
 	res := utils.SendGetRequest(t, route, token, &getHoldingResponse)

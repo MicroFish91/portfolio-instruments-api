@@ -15,7 +15,7 @@ type ExpectedGetSnapshotByTaxShelterResponse struct {
 }
 
 func TestGetSnapshotByTaxShelter(t *testing.T, snapshotId int, token string, expectedResponse ExpectedGetSnapshotByTaxShelterResponse, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/snapshots/%d?group_by=TAX_SHELTER", snapshotId)
+	var route = fmt.Sprintf("/api/v2/snapshots/%d?group_by=TAX_SHELTER", snapshotId)
 
 	var getSnapshotResponse types.GetSnapshotAccountsResponse
 	res := utils.SendGetRequest(t, route, token, &getSnapshotResponse)

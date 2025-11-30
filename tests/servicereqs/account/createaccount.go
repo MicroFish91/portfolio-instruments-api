@@ -12,7 +12,7 @@ import (
 
 func TestCreateAccount(t *testing.T, payload any, token string, expectedUserId int, expectedStatusCode int) int {
 	var createAccountResponse types.CreateAccountResponse
-	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v1/accounts", token, &payload, &createAccountResponse)
+	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v2/accounts", token, &payload, &createAccountResponse)
 
 	switch expectedStatusCode {
 	case 201:

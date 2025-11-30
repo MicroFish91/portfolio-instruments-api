@@ -11,7 +11,7 @@ import (
 
 func TestGetMe(t *testing.T, token string, userId int, expectedStatusCode int) {
 	var getMeResponse types.GetMeResponse
-	res := utils.SendGetRequest(t, "/api/v1/me", token, &getMeResponse)
+	res := utils.SendGetRequest(t, "/api/v2/me", token, &getMeResponse)
 
 	switch expectedStatusCode {
 	case 200:

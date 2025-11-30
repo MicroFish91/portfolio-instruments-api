@@ -20,6 +20,7 @@ func TestMain(m *testing.M) {
 
 func TestApi(t *testing.T) {
 	t.Run("Ping", TestPing)
+	t.Run("V1", TestV1)
 
 	t.Run("Integration", func(t2 *testing.T) {
 		t2.Run("Users-Auth", integration.TestUserService)
