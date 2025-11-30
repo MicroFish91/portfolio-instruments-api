@@ -161,7 +161,7 @@ func getSnapshotTest(t *testing.T) {
 }
 
 func getSnapshotRebalanceTest(t *testing.T) {
-	for _, tc := range coreSnapshotTestCases.GetSnapshotRebalanceTestCases(t, ss_core_snapid, ss_core_snapid+1, ss_core_testuser.User_id, ss_core_testuser.Email) {
+	for _, tc := range coreSnapshotTestCases.GetSnapshotRebalanceTestCases(t, ss_core_snapid, ss_core_snapid+1, ss_core_snapid+2, ss_core_testuser.User_id, ss_core_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := ss_core_token
 			if tc.ReplacementToken != "" {

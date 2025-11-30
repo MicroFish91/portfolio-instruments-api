@@ -22,21 +22,12 @@ func (h *BenchmarkHandlerImpl) DeleteBenchmark(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid benchmark params from request"))
 	}
 
-	settings, err := h.userStore.GetSettings(c.Context(), userPayload.User_id)
-	if err != nil {
-		return utils.SendError(c, utils.StatusCodeFromError(err), err)
-	}
-	if settings.Benchmark_id == benchmarkParams.Id {
-		return utils.SendError(c, fiber.StatusConflict, errors.New("provided benchmark is actively saved as the target in user settings and cannot be deleted"))
-	}
-
 	benchmark, err := h.benchmarkStore.DeleteBenchmark(c.Context(), userPayload.User_id, benchmarkParams.Id)
 
 	if err != nil {
-
 		isStillInUse := regexp.MustCompile(`(?i)violates\sforeign\skey\sconstraint`).Match([]byte(err.Error()))
-		if isStillInUse {
 
+		if isStillInUse {
 			benchmark, err = h.benchmarkStore.GetBenchmarkById(c.Context(), userPayload.User_id, benchmarkParams.Id)
 			if err != nil {
 				return utils.SendError(c, utils.StatusCodeFromError(err), err)

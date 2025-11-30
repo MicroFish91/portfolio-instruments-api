@@ -8,7 +8,7 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func DeletUserTestCases(t *testing.T, userId int, email string) []shared.TestCase {
+func DeleteUserTestCases(t *testing.T, userId int, email string) []shared.TestCase {
 	tok401, tok403, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)

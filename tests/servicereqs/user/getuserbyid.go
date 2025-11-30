@@ -28,21 +28,13 @@ func TestGetUserById(t *testing.T, route string, token string, userId int, expec
 		assert.EqualExportedValues(
 			t,
 			struct {
-				User     types.User     `json:"user"`
-				Settings types.Settings `json:"settings"`
+				User types.User `json:"user"`
 			}{
 				User: types.User{
 					User_id:        userId,
 					Email:          getUserResponse.Data.User.Email,
 					User_role:      types.Default,
 					Last_logged_in: getUserResponse.Data.User.Last_logged_in,
-					Created_at:     getUserResponse.Data.User.Created_at,
-					Updated_at:     getUserResponse.Data.User.Updated_at,
-				},
-				Settings: types.Settings{
-					Settings_id:    getUserResponse.Data.Settings.Settings_id,
-					Reb_thresh_pct: 10,
-					User_id:        userId,
 					Created_at:     getUserResponse.Data.User.Created_at,
 					Updated_at:     getUserResponse.Data.User.Updated_at,
 				},

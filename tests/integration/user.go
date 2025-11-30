@@ -24,8 +24,6 @@ func TestUserService(t *testing.T) {
 	t.Run("POST://api/v1/login", loginTests)
 	t.Run("GET://api/v1/me", getMeTests)
 	t.Run("GET://api/v1/users/:id", getUserByIdTests)
-	t.Run("GET://api/v1/users/:id/settings", getSettingsTests)
-	t.Run("PUT://api/v1/users/:id/settings", updateSettingsTests)
 	t.Run("DEL://api/v1/users/:id", deleteUserTests)
 }
 
@@ -91,32 +89,8 @@ func getUserByIdTests(t *testing.T) {
 	}
 }
 
-func getSettingsTests(t *testing.T) {
-	for _, tc := range userTestCases.GetSettingsTestCases(t, us_testuser.User_id, us_testuser.Email) {
-		t.Run(tc.Title, func(t2 *testing.T) {
-			tok := us_token
-			if tc.ReplacementToken != "" {
-				tok = tc.ReplacementToken
-			}
-			userTester.TestGetSettings(t2, tc.Route, tok, tc.ParameterId, tc.ExpectedStatusCode)
-		})
-	}
-}
-
-func updateSettingsTests(t *testing.T) {
-	for _, tc := range userTestCases.UpdateSettingsTestCases(t, us_testuser.User_id, us_testuser.Email) {
-		t.Run(tc.Title, func(t2 *testing.T) {
-			tok := us_token
-			if tc.ReplacementToken != "" {
-				tok = tc.ReplacementToken
-			}
-			userTester.TestUpdateSettings(t2, tc.Route, tok, tc.ParameterId, tc.Payload, tc.ExpectedStatusCode)
-		})
-	}
-}
-
 func deleteUserTests(t *testing.T) {
-	for _, tc := range userTestCases.DeletUserTestCases(t, us_testuser.User_id, us_testuser.Email) {
+	for _, tc := range userTestCases.DeleteUserTestCases(t, us_testuser.User_id, us_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := us_token
 			if tc.ReplacementToken != "" {

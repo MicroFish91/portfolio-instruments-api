@@ -25,23 +25,11 @@ type User struct {
 	Updated_at     time.Time `json:"updated_at"`
 }
 
-type Settings struct {
-	Settings_id    int       `json:"settings_id"`
-	Reb_thresh_pct int       `json:"reb_thresh_pct"`
-	User_id        int       `json:"user_id"`
-	Benchmark_id   int       `json:"benchmark_id,omitempty"`
-	Created_at     time.Time `json:"created_at"`
-	Updated_at     time.Time `json:"updated_at"`
-}
-
 type UserHandler interface {
 	GetUser(fiber.Ctx) error
 	GetUsers(fiber.Ctx) error
 	UpdateVerification(fiber.Ctx) error
 	DeleteUser(fiber.Ctx) error
-
-	GetSettings(fiber.Ctx) error
-	UpdateSettings(fiber.Ctx) error
 }
 
 type UserStore interface {
@@ -52,10 +40,6 @@ type UserStore interface {
 	UpdateUserLoggedIn(ctx context.Context, userId int) (User, error)
 	UpdateVerification(ctx context.Context, userId int) (User, error)
 	DeleteUser(ctx context.Context, userId int) (User, error)
-
-	CreateSettings(context.Context, *Settings) (Settings, error)
-	GetSettings(ctx context.Context, userId int) (Settings, error)
-	UpdateSettings(context.Context, *Settings) (Settings, error)
 }
 
 type GetUsersStoreOptions struct {
@@ -67,8 +51,7 @@ type GetUsersStoreOptions struct {
 
 type GetUserByIdResponse struct {
 	Data struct {
-		User     User     `json:"user"`
-		Settings Settings `json:"settings"`
+		User User `json:"user"`
 	} `json:"data"`
 	Error string `json:"error"`
 }
@@ -77,20 +60,6 @@ type DeleteUserResponse struct {
 	Data struct {
 		Message string `json:"message"`
 		User    User   `json:"user"`
-	} `json:"data"`
-	Error string `json:"error"`
-}
-
-type GetSettingsResponse struct {
-	Data struct {
-		Settings Settings `json:"settings"`
-	} `json:"data"`
-	Error string `json:"error"`
-}
-
-type UpdateSettingsResponse struct {
-	Data struct {
-		Settings Settings `json:"settings"`
 	} `json:"data"`
 	Error string `json:"error"`
 }

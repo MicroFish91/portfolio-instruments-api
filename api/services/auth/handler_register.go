@@ -37,17 +37,7 @@ func (h *AuthHandlerImpl) Register(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	settings, err := h.store.CreateSettings(c.Context(), &types.Settings{
-		Reb_thresh_pct: 10,
-		User_id:        user.User_id,
-	})
-
-	if err != nil {
-		return utils.SendError(c, utils.StatusCodeFromError(err), err)
-	}
-
 	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{
-		"user":     user,
-		"settings": settings,
+		"user": user,
 	})
 }

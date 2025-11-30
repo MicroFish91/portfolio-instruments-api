@@ -17,7 +17,6 @@ func (s *PostgresUserStore) DeleteUser(ctx context.Context, userId int) (types.U
 		"snapshots",
 		"holdings",
 		"accounts",
-		"settings",
 		"benchmarks",
 	}
 
