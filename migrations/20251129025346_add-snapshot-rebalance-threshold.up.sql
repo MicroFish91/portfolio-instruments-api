@@ -1,0 +1,1 @@
+ALTER TABLE snapshots ADD COLUMN rebalance_threshold_pct integer;

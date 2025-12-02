@@ -100,6 +100,60 @@ func UpdateBenchmarkTestCases(t *testing.T, benchmarkId int, userId int, email s
 			},
 			ExpectedStatusCode: fiber.StatusOK,
 		},
+		{
+			Title:       "200 Rebalance Threshold 1",
+			ParameterId: benchmarkId,
+			Payload: benchmark.UpdateBenchmarkPayload{
+				Name: "Permanent Portfolio 2",
+				Asset_allocation: []types.AssetAllocationPct{
+					{
+						Category: "TSM",
+						Percent:  25,
+					},
+					{
+						Category: "LTB",
+						Percent:  25,
+					},
+					{
+						Category: "GOLD",
+						Percent:  25,
+					},
+					{
+						Category: "CASH",
+						Percent:  25,
+					},
+				},
+				Rec_rebalance_threshold_pct: 25,
+			},
+			ExpectedStatusCode: fiber.StatusOK,
+		},
+		{
+			Title:       "200 Rebalance Threshold 2",
+			ParameterId: benchmarkId,
+			Payload: benchmark.UpdateBenchmarkPayload{
+				Name: "Permanent Portfolio 2",
+				Asset_allocation: []types.AssetAllocationPct{
+					{
+						Category: "TSM",
+						Percent:  25,
+					},
+					{
+						Category: "LTB",
+						Percent:  25,
+					},
+					{
+						Category: "GOLD",
+						Percent:  25,
+					},
+					{
+						Category: "CASH",
+						Percent:  25,
+					},
+				},
+				Rec_rebalance_threshold_pct: 0,
+			},
+			ExpectedStatusCode: fiber.StatusOK,
+		},
 
 		// ---- 401, 409 ----
 		{
@@ -379,6 +433,24 @@ func UpdateBenchmarkTestCases(t *testing.T, benchmarkId int, userId int, email s
 						Percent:  0,
 					},
 				},
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title: "400 Rebalance Threshold",
+			Payload: benchmark.UpdateBenchmarkPayload{
+				Name: "Total Stock Market",
+				Asset_allocation: []types.AssetAllocationPct{
+					{
+						Category: "TSM",
+						Percent:  100,
+					},
+					{
+						Category: "ITB",
+						Percent:  0,
+					},
+				},
+				Rec_rebalance_threshold_pct: 101,
 			},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
