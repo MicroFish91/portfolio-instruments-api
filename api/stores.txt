@@ -12,14 +12,6 @@
 ./api/services/snapshot/store_getsnapshots.go
 ./api/services/snapshot/store_refreshtotal.go
 ./api/services/snapshot/store_groupbyaccount.go
-./api/services/user/store_updateuserloggedin.go
-./api/services/user/store_getuserbyid.go
-./api/services/user/store.go
-./api/services/user/store_deleteuser.go
-./api/services/user/store_getuserbyemail.go
-./api/services/user/store_updateverification.go
-./api/services/user/store_createuser.go
-./api/services/user/store_getusers.go
 ./api/services/account/store_deleteaccount.go
 ./api/services/account/store.go
 ./api/services/account/store_getaccounts.go

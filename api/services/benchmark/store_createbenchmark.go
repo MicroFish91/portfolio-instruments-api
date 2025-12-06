@@ -27,7 +27,7 @@ func (s *PostgresBenchmarkStore) CreateBenchmark(ctx context.Context, b *types.B
 		fmt.Sprintf(`
 			insert into benchmarks
 				(name, description, asset_allocation, std_dev_pct, real_return_pct, drawdown_yrs, rec_rebalance_threshold_pct, is_deprecated, user_id)
-				VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+				values ($1, $2, $3, $4, $5, $6, $7, $8, $9)
 			returning
 				%s
 		`, benchmarkColumns),

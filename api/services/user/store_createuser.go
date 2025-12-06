@@ -3,6 +3,7 @@ package user
 import (
 	"context"
 	"errors"
+	"fmt"
 	"strings"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
@@ -19,10 +20,13 @@ func (s *PostgresUserStore) CreateUser(ctx context.Context, u *types.User) (type
 
 	row := s.db.QueryRow(
 		c,
-		`INSERT INTO users 
-		(email, enc_password) 
-		VALUES ($1, $2)
-		RETURNING *`,
+		fmt.Sprintf(`
+			insert into users 
+				(email, enc_password) 
+				values ($1, $2)
+			returning 
+				%s
+		`, userColumns),
 		strings.ToLower(u.Email), u.Enc_password,
 	)
 

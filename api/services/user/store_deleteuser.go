@@ -43,14 +43,14 @@ func (s *PostgresUserStore) DeleteUser(ctx context.Context, userId int) (types.U
 	// Delete user
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			delete from
 				users
 			where
 				user_id = $1
 			returning
-				*
-		`,
+				%s
+		`, userColumns),
 		userId,
 	)
 
