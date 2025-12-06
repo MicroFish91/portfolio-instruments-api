@@ -49,7 +49,7 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 		err = pgxb.AddQueryWithPositionals("AND is_deprecated = $x", []any{options.Is_deprecated})
 	}
 
-	if options.AccountIds != nil && len(options.AccountIds) > 0 {
+	if len(options.AccountIds) > 0 {
 		err = pgxb.AddQueryWithPositionals(
 			fmt.Sprintf("AND account_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.AccountIds))),
 			utils.ConvertIntSliceToAny(options.AccountIds),

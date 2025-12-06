@@ -9,7 +9,6 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
-	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, options *types.GetBenchmarksStoreOptions) ([]types.Benchmark, types.PaginationMetadata, error) {
@@ -34,7 +33,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 	}
 
 	pgxb := querybuilder.NewPgxQueryBuilder()
-	pgxb.AddQuery("SELECT *, COUNT(*) OVER() as total_items")
+	pgxb.AddQuery(fmt.Sprintf("SELECT %s, COUNT(*) OVER() as total_items", benchmarkColumns))
 	pgxb.AddQuery("FROM benchmarks")
 	pgxb.AddQueryWithPositionals("WHERE user_id = $x", []any{userId})
 
@@ -83,35 +82,4 @@ func (s *PostgresBenchmarkStore) GetBenchmarks(ctx context.Context, userId int, 
 		Page_size:    pageSize,
 		Total_items:  total_items,
 	}, nil
-}
-
-func (s *PostgresBenchmarkStore) parseRowsIntoBenchmarks(rows pgx.Rows) ([]types.Benchmark, int, error) {
-	var total_items int
-	var benchmarks []types.Benchmark
-
-	for rows.Next() {
-		var b types.Benchmark
-		err := rows.Scan(
-			&b.Benchmark_id,
-			&b.Name,
-			&b.Description,
-			&b.Asset_allocation,
-			&b.Std_dev_pct,
-			&b.Real_return_pct,
-			&b.Drawdown_yrs,
-			&b.Is_deprecated,
-			&b.User_id,
-			&b.Created_at,
-			&b.Updated_at,
-			&b.Rec_rebalance_threshold_pct,
-			&total_items,
-		)
-
-		if err != nil {
-			return nil, 0, err
-		}
-		benchmarks = append(benchmarks, b)
-	}
-
-	return benchmarks, total_items, nil
 }

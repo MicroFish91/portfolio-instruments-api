@@ -3,6 +3,7 @@ package benchmark
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -18,7 +19,7 @@ func (s *PostgresBenchmarkStore) UpdateBenchmark(ctx context.Context, b *types.B
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			update
 				benchmarks
 			set
@@ -28,25 +29,25 @@ func (s *PostgresBenchmarkStore) UpdateBenchmark(ctx context.Context, b *types.B
 				std_dev_pct = $4,
 				real_return_pct = $5,
 				drawdown_yrs = $6,
-				is_deprecated = $7,
-				rec_rebalance_threshold_pct = $10,
+				rec_rebalance_threshold_pct = $7,
+				is_deprecated = $8,
 				updated_at = now()
 			where
-				benchmark_id = $8
-				and user_id = $9
+				benchmark_id = $9
+				and user_id = $10
 			returning
-				*
-		`,
+				%s
+		`, benchmarkColumns),
 		b.Name,
 		b.Description,
 		b.Asset_allocation,
 		b.Std_dev_pct,
 		b.Real_return_pct,
 		b.Drawdown_yrs,
+		b.Rec_rebalance_threshold_pct,
 		b.Is_deprecated,
 		b.Benchmark_id,
 		b.User_id,
-		b.Rec_rebalance_threshold_pct,
 	)
 
 	benchmark, err := s.parseRowIntoBenchmark(row)
