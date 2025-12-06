@@ -16,6 +16,14 @@ func (s *PostgresUserStore) GetUsers(ctx context.Context, options *types.GetUser
 		}
 	}
 
+	if options.Current_page == 0 {
+		options.Current_page = 1
+	}
+
+	if options.Page_size == 0 {
+		options.Page_size = 50
+	}
+
 	c, cancel := context.WithTimeout(ctx, constants.TIMEOUT_MEDIUM)
 	defer cancel()
 

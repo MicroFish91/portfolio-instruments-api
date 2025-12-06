@@ -20,7 +20,7 @@ func RegisterRoutes(
 		return utils.SendJSON(c, fiber.StatusOK, fiber.Map{"message": "pong"})
 	})
 
-	app.Get("/api/v1*", func(c fiber.Ctx) error {
+	app.All("/api/v1*", func(c fiber.Ctx) error {
 		return utils.SendJSON(c, fiber.StatusGone, fiber.Map{"message": "The v1 API has been officially deprecated, please use the v2 API"})
 	})
 
