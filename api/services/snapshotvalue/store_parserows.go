@@ -17,10 +17,6 @@ const snapshotValueColumns = `
 	updated_at
 `
 
-func (s *PostgresSnapshotValueStore) GetColumns() string {
-	return snapshotValueColumns
-}
-
 func (s *PostgresSnapshotValueStore) parseRowIntoSnapshotValue(row pgx.Row) (types.SnapshotValue, error) {
 	var sv types.SnapshotValue
 	err := row.Scan(
