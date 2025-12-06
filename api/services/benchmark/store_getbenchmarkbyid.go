@@ -23,8 +23,7 @@ func (s *PostgresBenchmarkStore) GetBenchmarkById(ctx context.Context, userId, b
 				benchmark_id = $1
 				and user_id = $2
 		`, benchmarkColumns),
-		benchmarkId,
-		userId,
+		benchmarkId, userId,
 	)
 
 	benchmark, err := s.parseRowIntoBenchmark(row)

@@ -23,8 +23,7 @@ func (s *PostgresBenchmarkStore) DeleteBenchmark(ctx context.Context, userId, be
 			returning
 				%s
 		`, benchmarkColumns),
-		benchmarkId,
-		userId,
+		benchmarkId, userId,
 	)
 
 	benchmark, err := s.parseRowIntoBenchmark(row)
