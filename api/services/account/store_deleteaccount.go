@@ -2,6 +2,7 @@ package account
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -13,15 +14,15 @@ func (s *PostgresAccountStore) DeleteAccount(ctx context.Context, userId, accoun
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			delete from
 				accounts
 			where
 				account_id = $1
 				and user_id = $2
 			returning 
-				*
-		`,
+				%s
+		`, accountColumns),
 		accountId,
 		userId,
 	)

@@ -3,6 +3,7 @@ package account
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -18,7 +19,7 @@ func (s *PostgresAccountStore) UpdateAccount(ctx context.Context, account *types
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			update
 				accounts
 			set
@@ -32,8 +33,8 @@ func (s *PostgresAccountStore) UpdateAccount(ctx context.Context, account *types
 				account_id = $6
 				and user_id = $7
 			returning
-				*
-		`,
+				%s
+		`, accountColumns),
 		account.Name,
 		account.Description,
 		account.Tax_shelter,
