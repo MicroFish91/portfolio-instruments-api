@@ -31,7 +31,7 @@ type SnapshotHandler interface {
 
 type SnapshotStore interface {
 	GetSnapshots(ctx context.Context, userId int, options *GetSnapshotsStoreOptions) ([]Snapshot, PaginationMetadata, error)
-	GetSnapshotById(ctx context.Context, snapshotId, userId int) (Snapshot, []SnapshotValue, error)
+	GetSnapshotById(ctx context.Context, snapshotId, userId int) (Snapshot, error)
 	CreateSnapshot(context.Context, *Snapshot) (Snapshot, error)
 	UpdateSnapshot(context.Context, *Snapshot) (Snapshot, error)
 	DeleteSnapshot(ctx context.Context, snapshotId, userId int) (Snapshot, error)

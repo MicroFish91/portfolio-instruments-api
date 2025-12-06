@@ -2,6 +2,7 @@ package holding
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -13,10 +14,16 @@ func (s *PostgresHoldingStore) GetHoldingByTicker(ctx context.Context, ticker st
 
 	row := s.db.QueryRow(
 		c,
-		`SELECT * FROM holdings
-		WHERE user_id = $1
-		AND ticker = $2
-		AND is_deprecated = false`,
+		fmt.Sprintf(`
+			select
+				%s
+			from
+				holdings
+			where
+				user_id = $1
+				and ticker = $2
+				and is_deprecated = false
+		`, holdingsColumns),
 		userId, ticker,
 	)
 

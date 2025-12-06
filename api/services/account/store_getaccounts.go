@@ -9,7 +9,6 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
-	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, options *types.GetAccountsStoreOptions) ([]types.Account, types.PaginationMetadata, error) {
@@ -35,7 +34,7 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 	}
 
 	pgxb := querybuilder.NewPgxQueryBuilder()
-	pgxb.AddQuery("SELECT *, COUNT(*) OVER() as total_items")
+	pgxb.AddQuery(fmt.Sprintf("SELECT %s, COUNT(*) OVER() as total_items", accountColumns))
 	pgxb.AddQuery("FROM accounts")
 	err := pgxb.AddQueryWithPositionals("WHERE user_id = $x", []any{userId})
 
@@ -49,7 +48,7 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 		err = pgxb.AddQueryWithPositionals("AND is_deprecated = $x", []any{options.Is_deprecated})
 	}
 
-	if options.AccountIds != nil && len(options.AccountIds) > 0 {
+	if len(options.AccountIds) > 0 {
 		err = pgxb.AddQueryWithPositionals(
 			fmt.Sprintf("AND account_id IN (%s)", querybuilder.FillWithEmptyPositionals(len(options.AccountIds))),
 			utils.ConvertIntSliceToAny(options.AccountIds),
@@ -85,32 +84,4 @@ func (s *PostgresAccountStore) GetAccounts(ctx context.Context, userId int, opti
 		Page_size:    pageSize,
 		Total_items:  total_items,
 	}, nil
-}
-
-func (s *PostgresAccountStore) parseRowsIntoAccounts(rows pgx.Rows) ([]types.Account, int, error) {
-	var total_items int
-	var accounts []types.Account
-
-	for rows.Next() {
-		var a types.Account
-		err := rows.Scan(
-			&a.Account_id,
-			&a.Name,
-			&a.Description,
-			&a.Tax_shelter,
-			&a.Institution,
-			&a.Is_deprecated,
-			&a.User_id,
-			&a.Created_at,
-			&a.Updated_at,
-			&total_items,
-		)
-
-		if err != nil {
-			return nil, 0, err
-		}
-		accounts = append(accounts, a)
-	}
-
-	return accounts, total_items, nil
 }

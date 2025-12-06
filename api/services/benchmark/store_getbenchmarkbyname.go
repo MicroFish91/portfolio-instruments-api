@@ -16,10 +16,16 @@ func (s *PostgresBenchmarkStore) GetBenchmarkByName(ctx context.Context, name st
 
 	row := s.db.QueryRow(
 		c,
-		`SELECT * FROM benchmarks
-		WHERE user_id = $1
-		AND name ~* $2
-		AND is_deprecated = false`,
+		fmt.Sprintf(`
+			select 
+				%s 
+			from 
+				benchmarks
+			where 
+				user_id = $1
+				and name ~* $2
+				and is_deprecated = false
+		`, benchmarkColumns),
 		userId, namePattern,
 	)
 

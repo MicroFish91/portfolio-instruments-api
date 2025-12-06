@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -13,7 +14,7 @@ func (s *PostgresUserStore) UpdateVerification(ctx context.Context, userId int) 
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			update
 				users
 			set
@@ -22,8 +23,8 @@ func (s *PostgresUserStore) UpdateVerification(ctx context.Context, userId int) 
 			where
 				user_id = $1
 			returning
-				*
-		`,
+				%s
+		`, userColumns),
 		userId,
 	)
 

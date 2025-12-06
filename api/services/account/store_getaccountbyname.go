@@ -16,11 +16,18 @@ func (s *PostgresAccountStore) GetAccountByName(ctx context.Context, name string
 
 	row := s.db.QueryRow(
 		c,
-		`SELECT * FROM accounts
-		WHERE user_id = $1
-		AND name ~* $2
-		AND is_deprecated = false`,
-		userId, namePattern,
+		fmt.Sprintf(`
+			select
+				%s
+			from 
+				accounts
+			where 
+				user_id = $1
+				and name ~* $2
+				and is_deprecated = false
+		`, accountColumns),
+		userId,
+		namePattern,
 	)
 
 	account, err := s.parseRowIntoAccount(row)

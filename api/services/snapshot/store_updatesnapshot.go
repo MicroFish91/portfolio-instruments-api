@@ -3,6 +3,7 @@ package snapshot
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -18,7 +19,7 @@ func (s *PostgresSnapshotStore) UpdateSnapshot(ctx context.Context, snap *types.
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			update
 				snapshots
 			set
@@ -26,23 +27,23 @@ func (s *PostgresSnapshotStore) UpdateSnapshot(ctx context.Context, snap *types.
 				snap_date = $2,
 				total = $3,
 				weighted_er_pct = $4,
-				rebalance_threshold_pct = $8,
-				benchmark_id = $5,
+				rebalance_threshold_pct = $5,
+				benchmark_id = $6,
 				updated_at = now()
 			where
-				snap_id = $6
-				and user_id = $7
+				snap_id = $7
+				and user_id = $8
 			returning
-				*
-		`,
+				%s
+		`, snapshotColumns),
 		snap.Description,
 		snap.Snap_date,
 		snap.Total,
 		snap.Weighted_er_pct,
+		snap.Rebalance_threshold_pct,
 		snap.Benchmark_id,
 		snap.Snap_id,
 		snap.User_id,
-		snap.Rebalance_threshold_pct,
 	)
 
 	snapshot, err := s.parseRowIntoSnapshot(row)

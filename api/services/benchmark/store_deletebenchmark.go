@@ -2,6 +2,7 @@ package benchmark
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -13,17 +14,16 @@ func (s *PostgresBenchmarkStore) DeleteBenchmark(ctx context.Context, userId, be
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			delete from
 				benchmarks
 			where
 				benchmark_id = $1
 				and user_id = $2
 			returning
-				*
-		`,
-		benchmarkId,
-		userId,
+				%s
+		`, benchmarkColumns),
+		benchmarkId, userId,
 	)
 
 	benchmark, err := s.parseRowIntoBenchmark(row)

@@ -2,11 +2,11 @@ package user
 
 import (
 	"context"
+	"fmt"
 	"strings"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (types.User, error) {
@@ -15,13 +15,14 @@ func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (t
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			select
-				*
+				%s
 			from 
 				users 
 			where 
-				email = $1`,
+				email = $1
+		`, userColumns),
 		strings.ToLower(email),
 	)
 
@@ -31,23 +32,4 @@ func (s *PostgresUserStore) GetUserByEmail(ctx context.Context, email string) (t
 		return types.User{}, err
 	}
 	return user, nil
-}
-
-func (s *PostgresUserStore) parseRowIntoUser(row pgx.Row) (types.User, error) {
-	var u types.User
-	err := row.Scan(
-		&u.User_id,
-		&u.Email,
-		&u.Enc_password,
-		&u.User_role,
-		&u.Last_logged_in,
-		&u.Verified,
-		&u.Created_at,
-		&u.Updated_at,
-	)
-
-	if err != nil {
-		return types.User{}, err
-	}
-	return u, nil
 }

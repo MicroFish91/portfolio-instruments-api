@@ -3,6 +3,7 @@ package holding
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -18,7 +19,7 @@ func (s *PostgresHoldingStore) UpdateHolding(ctx context.Context, h *types.Holdi
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			update 
 				holdings
 			set
@@ -34,8 +35,8 @@ func (s *PostgresHoldingStore) UpdateHolding(ctx context.Context, h *types.Holdi
 				holding_id = $8
 				and user_id = $9
 			returning
-				*
-		`,
+				%s
+		`, holdingsColumns),
 		h.Name,
 		h.Ticker,
 		h.Asset_category,

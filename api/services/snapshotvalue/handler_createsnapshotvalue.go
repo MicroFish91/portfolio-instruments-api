@@ -85,7 +85,7 @@ func (h *SnapshotValueHandlerImpl) verifyHoldingById(c fiber.Ctx, holdingId, use
 }
 
 func (h *SnapshotValueHandlerImpl) verifySnapshotById(c fiber.Ctx, snapshotId, userId int) error {
-	_, _, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotId, userId)
+	_, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotId, userId)
 	if err != nil {
 		return fmt.Errorf(`specified snapshot with id "%d" not found for the current user`, snapshotId)
 	}
