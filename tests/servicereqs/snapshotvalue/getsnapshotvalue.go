@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetSnapshotValue(t *testing.T, sid, svid int, token string, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/snapshots/%d/values/%d", sid, svid)
+	var route = fmt.Sprintf("/api/v2/snapshots/%d/values/%d", sid, svid)
 
 	var response types.GetSnapshotValueResponse
 	res := utils.SendGetRequest(t, route, token, &response)

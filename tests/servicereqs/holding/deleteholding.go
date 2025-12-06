@@ -10,7 +10,7 @@ import (
 )
 
 func TestDeleteHolding(t *testing.T, holdingId int, token string, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/holdings/%d", holdingId)
+	var route = fmt.Sprintf("/api/v2/holdings/%d", holdingId)
 
 	var deleteHoldingResponse types.DeleteHoldingResponse
 	res := utils.SendDeleteRequest(t, route, token, &deleteHoldingResponse)

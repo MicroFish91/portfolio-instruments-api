@@ -24,11 +24,11 @@ var (
 
 func TestSnapshotValueService(t *testing.T) {
 	t.Run("Setup", snapshotValueServiceSetup)
-	t.Run("POST://api/v1/snapshots/:sid/values", createSnapshotValueTests)
-	t.Run("GET://api/v1/snapshots/:sid/values", getSnapshotValuesTests)
-	t.Run("GET://api/v1/snapshots/:sid/values/:svid", getSnapshotValueTests)
-	t.Run("PUT://api/v1/snapshots/:sid/values/:svid", updateSnapshotValueTests)
-	t.Run("DEL://api/v1/snapshots/:sid/values/:svid", deleteSnapshotValueTests)
+	t.Run("POST://api/v2/snapshots/:sid/values", createSnapshotValueTests)
+	t.Run("GET://api/v2/snapshots/:sid/values", getSnapshotValuesTests)
+	t.Run("GET://api/v2/snapshots/:sid/values/:svid", getSnapshotValueTests)
+	t.Run("PUT://api/v2/snapshots/:sid/values/:svid", updateSnapshotValueTests)
+	t.Run("DEL://api/v2/snapshots/:sid/values/:svid", deleteSnapshotValueTests)
 	t.Run("Cleanup", snapshotValueServiceCleanup)
 }
 

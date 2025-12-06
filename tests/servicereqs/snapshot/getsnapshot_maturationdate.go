@@ -16,7 +16,7 @@ type ExpectedGetSnapshotByMaturationDateResponse struct {
 }
 
 func TestGetSnapshotByMaturationDate(t *testing.T, snapshotId int, token string, expectedResponse ExpectedGetSnapshotByMaturationDateResponse, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/snapshots/%d?group_by=MATURATION_DATE", snapshotId)
+	var route = fmt.Sprintf("/api/v2/snapshots/%d?group_by=MATURATION_DATE", snapshotId)
 	if expectedResponse.Maturation_start != "" {
 		route = fmt.Sprintf("%s&maturation_start=%s", route, expectedResponse.Maturation_start)
 	}

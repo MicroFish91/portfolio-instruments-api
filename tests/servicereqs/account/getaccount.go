@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetAccount(t *testing.T, accountId int, token string, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/accounts/%d", accountId)
+	var route = fmt.Sprintf("/api/v2/accounts/%d", accountId)
 
 	var getAccountResponse types.GetAccountResponse
 	res := utils.SendGetRequest(t, route, token, &getAccountResponse)

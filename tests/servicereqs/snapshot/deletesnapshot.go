@@ -10,7 +10,7 @@ import (
 )
 
 func TestDeleteSnapshot(t *testing.T, snapshotId int, token string, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/snapshots/%d", snapshotId)
+	var route = fmt.Sprintf("/api/v2/snapshots/%d", snapshotId)
 
 	var response types.DeleteSnapshotResponse
 	res := utils.SendDeleteRequest(t, route, token, &response)

@@ -17,7 +17,7 @@ type ExpectedCreateSnapshotResponse struct {
 
 func TestCreateSnapshot(t *testing.T, payload any, token string, expectedResponse ExpectedCreateSnapshotResponse, expectedUserId int, expectedStatusCode int) (snapId int, svIds []int) {
 	var createSnapshotResponse types.CreateSnapshotResponse
-	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v1/snapshots", token, &payload, &createSnapshotResponse)
+	res := utils.SendCreateOrUpdateRequest(t, http.MethodPost, "/api/v2/snapshots", token, &payload, &createSnapshotResponse)
 
 	switch expectedStatusCode {
 	case 201:

@@ -23,11 +23,11 @@ var (
 
 func TestBenchmarkService(t *testing.T) {
 	t.Run("Setup", benchmarkServiceSetup)
-	t.Run("POST://api/v1/benchmarks", createBenchmarkTests)
-	t.Run("GET://api/v1/benchmarks", getBenchmarksTests)
-	t.Run("GET://api/v1/benchmarks/:id", getBenchmarkTests)
-	t.Run("PUT://api/v1/benchmarks/:id", updateBenchmarkTests)
-	t.Run("DEL://api/v1/benchmarks/:id", deleteBenchmarkTests)
+	t.Run("POST://api/v2/benchmarks", createBenchmarkTests)
+	t.Run("GET://api/v2/benchmarks", getBenchmarksTests)
+	t.Run("GET://api/v2/benchmarks/:id", getBenchmarkTests)
+	t.Run("PUT://api/v2/benchmarks/:id", updateBenchmarkTests)
+	t.Run("DEL://api/v2/benchmarks/:id", deleteBenchmarkTests)
 	t.Run("Cleanup", benchmarkServiceCleanup)
 }
 

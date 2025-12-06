@@ -12,7 +12,7 @@ import (
 )
 
 func TestUpdateAccount(t *testing.T, accountId int, payload any, token string, expectedUserId int, expectedStatusCode int) {
-	var route string = fmt.Sprintf("/api/v1/accounts/%d", accountId)
+	var route string = fmt.Sprintf("/api/v2/accounts/%d", accountId)
 
 	var updateAccountResponse types.UpdateAccountResponse
 	res := utils.SendCreateOrUpdateRequest(t, http.MethodPut, route, token, &payload, &updateAccountResponse)

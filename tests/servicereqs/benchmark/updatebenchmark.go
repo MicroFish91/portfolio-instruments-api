@@ -12,7 +12,7 @@ import (
 )
 
 func TestUpdateBenchmark(t *testing.T, benchmarkId int, payload any, token string, expectedUserId int, expectedStatusCode int) {
-	var route string = fmt.Sprintf("/api/v1/benchmarks/%d", benchmarkId)
+	var route string = fmt.Sprintf("/api/v2/benchmarks/%d", benchmarkId)
 
 	var updateBenchmarkResponse types.UpdateBenchmarkResponse
 	res := utils.SendCreateOrUpdateRequest(t, http.MethodPut, route, token, &payload, &updateBenchmarkResponse)

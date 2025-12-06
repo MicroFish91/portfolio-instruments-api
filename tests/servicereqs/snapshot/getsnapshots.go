@@ -16,7 +16,7 @@ type ExpectedGetSnapshotsResponse struct {
 func TestGetSnapshots(t *testing.T, route string, token string, expectedUserId int, expectedStatusCode int, expectedResponse ExpectedGetSnapshotsResponse) {
 	var r string
 	if route == "" {
-		r = "/api/v1/snapshots"
+		r = "/api/v2/snapshots"
 	} else {
 		r = route
 	}

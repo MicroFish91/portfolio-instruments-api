@@ -14,7 +14,7 @@ type ExpectedGetSnapshotValuesResponse struct {
 }
 
 func TestGetSnapshotValues(t *testing.T, token string, snapshotId, expectedUserId, expectedStatusCode int, expectedResponse ExpectedGetSnapshotValuesResponse) {
-	var route = fmt.Sprintf("/api/v1/snapshots/%d/values", snapshotId)
+	var route = fmt.Sprintf("/api/v2/snapshots/%d/values", snapshotId)
 
 	var response types.GetSnapshotValuesResponse
 	res := utils.SendGetRequest(t, route, token, &response)

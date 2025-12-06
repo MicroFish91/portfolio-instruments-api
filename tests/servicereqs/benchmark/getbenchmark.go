@@ -10,7 +10,7 @@ import (
 )
 
 func TestGetBenchmark(t *testing.T, benchmarkId int, token string, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/benchmarks/%d", benchmarkId)
+	var route = fmt.Sprintf("/api/v2/benchmarks/%d", benchmarkId)
 
 	var getBenchmarkResponse types.GetBenchmarkResponse
 	res := utils.SendGetRequest(t, route, token, &getBenchmarkResponse)

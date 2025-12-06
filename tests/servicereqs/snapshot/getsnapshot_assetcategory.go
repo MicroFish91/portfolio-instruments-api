@@ -15,7 +15,7 @@ type ExpectedGetSnapshotByAssetCategoryResponse struct {
 }
 
 func TestGetSnapshotByAssetCategory(t *testing.T, snapshotId int, token string, expectedResponse ExpectedGetSnapshotByAssetCategoryResponse, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/snapshots/%d?group_by=ASSET_CATEGORY", snapshotId)
+	var route = fmt.Sprintf("/api/v2/snapshots/%d?group_by=ASSET_CATEGORY", snapshotId)
 
 	var getSnapshotResponse types.GetSnapshotHoldingsResponse
 	res := utils.SendGetRequest(t, route, token, &getSnapshotResponse)

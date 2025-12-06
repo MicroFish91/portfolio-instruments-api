@@ -12,7 +12,7 @@ import (
 )
 
 func TestUpdateHolding(t *testing.T, holdingId int, payload any, token string, expectedUserId int, expectedStatusCode int) {
-	var route string = fmt.Sprintf("/api/v1/holdings/%d", holdingId)
+	var route string = fmt.Sprintf("/api/v2/holdings/%d", holdingId)
 
 	var updateAccountResponse types.UpdateHoldingResponse
 	res := utils.SendCreateOrUpdateRequest(t, http.MethodPut, route, token, &payload, &updateAccountResponse)

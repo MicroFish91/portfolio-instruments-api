@@ -12,7 +12,7 @@ import (
 )
 
 func TestUpdateSnapshot(t *testing.T, snapshotId int, payload any, token string, expectedUserId int, expectedStatusCode int) {
-	var route string = fmt.Sprintf("/api/v1/snapshots/%d", snapshotId)
+	var route string = fmt.Sprintf("/api/v2/snapshots/%d", snapshotId)
 
 	var response types.UpdateSnapshotResponse
 	res := utils.SendCreateOrUpdateRequest(t, http.MethodPut, route, token, &payload, &response)

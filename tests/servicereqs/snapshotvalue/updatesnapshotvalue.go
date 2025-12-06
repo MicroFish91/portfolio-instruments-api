@@ -17,7 +17,7 @@ type ExpectedUpdateSnapshotValueResponse struct {
 }
 
 func TestUpdateSnapshotValue(t *testing.T, snapId int, snapValId int, payload any, token string, expectedResponse ExpectedUpdateSnapshotValueResponse, expectedUserId int, expectedStatusCode int) {
-	var route string = fmt.Sprintf("/api/v1/snapshots/%d/values/%d", snapId, snapValId)
+	var route string = fmt.Sprintf("/api/v2/snapshots/%d/values/%d", snapId, snapValId)
 
 	var updateSnapshotValue types.UpdateSnapshotValueResponse
 	res := utils.SendCreateOrUpdateRequest(t, http.MethodPut, route, token, &payload, &updateSnapshotValue)

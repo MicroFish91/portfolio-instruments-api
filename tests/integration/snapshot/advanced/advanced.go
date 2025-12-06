@@ -27,20 +27,20 @@ var (
 
 func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("Setup", advancedSnapshotSetup)
-	t.Run("POST://api/v1/snapshots", createSnapshotTest)
-	t.Run("GET://api/v1/snapshots/:id", getSnapshotTest)
-	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_NAME", getSnapshotByAccountNameTest)
-	t.Run("GET://api/v1/snapshots/:id?group_by=ACCOUNT_INSTITUTION", getSnapshotByInstitutionTest)
-	t.Run("GET://api/v1/snapshots/:id?group_by=TAX_SHELTER", getSnapshotByTaxShelterTest)
-	t.Run("GET://api/v1/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
-	t.Run("GET://api/v1/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDateTest)
-	t.Run("GET://api/v1/snapshots/:id/rebalance", getSnapshotRebalanceTest)
+	t.Run("POST://api/v2/snapshots", createSnapshotTest)
+	t.Run("GET://api/v2/snapshots/:id", getSnapshotTest)
+	t.Run("GET://api/v2/snapshots/:id?group_by=ACCOUNT_NAME", getSnapshotByAccountNameTest)
+	t.Run("GET://api/v2/snapshots/:id?group_by=ACCOUNT_INSTITUTION", getSnapshotByInstitutionTest)
+	t.Run("GET://api/v2/snapshots/:id?group_by=TAX_SHELTER", getSnapshotByTaxShelterTest)
+	t.Run("GET://api/v2/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
+	t.Run("GET://api/v2/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDateTest)
+	t.Run("GET://api/v2/snapshots/:id/rebalance", getSnapshotRebalanceTest)
 
 	// snapshot_value
-	t.Run("PUT://api/v1/snapshots/:id/values/:id", updateSnapshotValueTest)
-	t.Run("DEL://api/v1/snapshots/:id/values/:id", deleteSnapshotValueTest)
+	t.Run("PUT://api/v2/snapshots/:id/values/:id", updateSnapshotValueTest)
+	t.Run("DEL://api/v2/snapshots/:id/values/:id", deleteSnapshotValueTest)
 
-	t.Run("DEL://api/v1/snapshots/:id", deleteSnapshotTest)
+	t.Run("DEL://api/v2/snapshots/:id", deleteSnapshotTest)
 	t.Run("Cleanup", snapshotServiceCleaner)
 }
 

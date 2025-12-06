@@ -12,7 +12,7 @@ import (
 
 func TestRegister(t *testing.T, p auth.RegisterPayload, expectedStatusCode int) {
 	var registerResponse types.RegisterResponse
-	res := testUtils.SendAuthRequest(t, "/api/v1/register", &p, &registerResponse)
+	res := testUtils.SendAuthRequest(t, "/api/v2/register", &p, &registerResponse)
 
 	switch expectedStatusCode {
 	case 201:

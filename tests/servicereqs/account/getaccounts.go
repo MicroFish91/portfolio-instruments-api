@@ -12,7 +12,7 @@ import (
 func TestGetAccounts(t *testing.T, route string, token string, expectedUserId int, expectedStatusCode int, expectedResponse account.GetAccountsExpectedResponse) {
 	var r string
 	if route == "" {
-		r = "/api/v1/accounts"
+		r = "/api/v2/accounts"
 	} else {
 		r = route
 	}

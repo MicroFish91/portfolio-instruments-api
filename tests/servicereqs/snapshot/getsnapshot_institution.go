@@ -15,7 +15,7 @@ type ExpectedGetSnapshotByInstitutionResponse struct {
 }
 
 func TestGetSnapshotByInstitution(t *testing.T, snapshotId int, token string, expectedResponse ExpectedGetSnapshotByInstitutionResponse, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/snapshots/%d?group_by=ACCOUNT_INSTITUTION", snapshotId)
+	var route = fmt.Sprintf("/api/v2/snapshots/%d?group_by=ACCOUNT_INSTITUTION", snapshotId)
 
 	var getSnapshotResponse types.GetSnapshotAccountsResponse
 	res := utils.SendGetRequest(t, route, token, &getSnapshotResponse)

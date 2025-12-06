@@ -20,7 +20,7 @@ type ExpectedGetSnapshotRebalanceResponse struct {
 }
 
 func TestGetSnapshotRebalance(t *testing.T, snapshotId int, token string, expectedResponse ExpectedGetSnapshotRebalanceResponse, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/snapshots/%d/rebalance", snapshotId)
+	var route = fmt.Sprintf("/api/v2/snapshots/%d/rebalance", snapshotId)
 
 	var response types.GetSnapshotRebalanceResponse
 	res := utils.SendGetRequest(t, route, token, &response)

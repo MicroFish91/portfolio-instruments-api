@@ -15,7 +15,7 @@ type ExpectedDeleteSnapshotValueResponse struct {
 }
 
 func TestDeleteSnapshotValue(t *testing.T, snapId int, snapValId int, token string, expectedResponse ExpectedDeleteSnapshotValueResponse, expectedUserId int, expectedStatusCode int) {
-	var route = fmt.Sprintf("/api/v1/snapshots/%d/values/%d", snapId, snapValId)
+	var route = fmt.Sprintf("/api/v2/snapshots/%d/values/%d", snapId, snapValId)
 
 	var response types.DeleteSnapshotValueResponse
 	res := utils.SendDeleteRequest(t, route, token, &response)
