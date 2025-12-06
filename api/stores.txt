@@ -2,7 +2,6 @@
 ./api/services/snapshot/store_getsnapshotbydate.go
 ./api/services/snapshot/store_getsnapshotbyid.go
 ./api/services/snapshot/store_getsnapshottotal.go
-./api/services/snapshot/store.go
 ./api/services/snapshot/store_deletesnapshot.go
 ./api/services/snapshot/store_createsnapshot.go
 ./api/services/snapshot/store_groupbyholding.go
@@ -12,9 +11,3 @@
 ./api/services/snapshot/store_getsnapshots.go
 ./api/services/snapshot/store_refreshtotal.go
 ./api/services/snapshot/store_groupbyaccount.go
-./api/services/snapshotvalue/store.go
-./api/services/snapshotvalue/store_updatesnapshotvalue.go
-./api/services/snapshotvalue/store_deletesnapshotvalue.go
-./api/services/snapshotvalue/store_createsnapshotvalue.go
-./api/services/snapshotvalue/store_getsnapshotvalue.go
-./api/services/snapshotvalue/store_getsnapshotvalues.go

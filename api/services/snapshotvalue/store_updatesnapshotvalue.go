@@ -3,6 +3,7 @@ package snapshotvalue
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -18,7 +19,7 @@ func (s *PostgresSnapshotValueStore) UpdateSnapshotValue(ctx context.Context, sv
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			update
 				snapshots_values
 			set
@@ -32,8 +33,8 @@ func (s *PostgresSnapshotValueStore) UpdateSnapshotValue(ctx context.Context, sv
 				and snap_id = $6
 				and user_id = $7
 			returning
-				*
-		`,
+				%s
+		`, snapshotValueColumns),
 		sv.Account_id,
 		sv.Holding_id,
 		sv.Total,

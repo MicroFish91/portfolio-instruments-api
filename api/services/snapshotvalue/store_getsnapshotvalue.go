@@ -2,6 +2,7 @@ package snapshotvalue
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -13,16 +14,16 @@ func (s *PostgresSnapshotValueStore) GetSnapshotValue(ctx context.Context, snapI
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			select
-				*
+				%s
 			from
 				snapshots_values
 			where
 				snap_id = $1
 				and snap_val_id = $2
 				and user_id = $3
-		`,
+		`, snapshotValueColumns),
 		snapId,
 		snapValId,
 		userId,
