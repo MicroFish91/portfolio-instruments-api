@@ -2,10 +2,10 @@ package holding
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId, holdingId int) (types.Holding, error) {
@@ -14,9 +14,15 @@ func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId, holdi
 
 	row := s.db.QueryRow(
 		c,
-		`SELECT *
-		FROM holdings
-		WHERE user_id = $1 AND holding_id = $2`,
+		fmt.Sprintf(`
+			select
+				%s
+			from 
+				holdings
+			where 
+				user_id = $1 
+				and holding_id = $2
+		`, holdingsColumns),
 		userId, holdingId,
 	)
 
@@ -25,27 +31,5 @@ func (s *PostgresHoldingStore) GetHoldingById(ctx context.Context, userId, holdi
 		return types.Holding{}, err
 	}
 
-	return holding, nil
-}
-
-func (s *PostgresHoldingStore) parseRowIntoHolding(row pgx.Row) (types.Holding, error) {
-	var holding types.Holding
-	err := row.Scan(
-		&holding.Holding_id,
-		&holding.Name,
-		&holding.Ticker,
-		&holding.Asset_category,
-		&holding.Expense_ratio_pct,
-		&holding.Maturation_date,
-		&holding.Interest_rate_pct,
-		&holding.Is_deprecated,
-		&holding.User_id,
-		&holding.Created_at,
-		&holding.Updated_at,
-	)
-
-	if err != nil {
-		return types.Holding{}, err
-	}
 	return holding, nil
 }

@@ -16,16 +16,16 @@ func (s *PostgresHoldingStore) GetHoldingByName(ctx context.Context, name string
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			select
-				*
+				%s
 			from
 				holdings
 			where
 				name ~* $1
 				and user_id = $2
 				and is_deprecated = false
-		`,
+		`, holdingsColumns),
 		namePattern, userId,
 	)
 

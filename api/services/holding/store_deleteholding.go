@@ -2,6 +2,7 @@ package holding
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -13,15 +14,15 @@ func (s *PostgresHoldingStore) DeleteHolding(ctx context.Context, userId, holdin
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			delete from
 				holdings
 			where
 				holding_id = $1
 				and user_id = $2
 			returning
-				*
-		`,
+				%s
+		`, holdingsColumns),
 		holdingId, userId,
 	)
 

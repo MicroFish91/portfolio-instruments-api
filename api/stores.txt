@@ -18,11 +18,3 @@
 ./api/services/snapshotvalue/store_createsnapshotvalue.go
 ./api/services/snapshotvalue/store_getsnapshotvalue.go
 ./api/services/snapshotvalue/store_getsnapshotvalues.go
-./api/services/holding/store_updateholding.go
-./api/services/holding/store.go
-./api/services/holding/store_getholdingbyname.go
-./api/services/holding/store_createholding.go
-./api/services/holding/store_getholdings.go
-./api/services/holding/store_getholdingbyticker.go
-./api/services/holding/store_deleteholding.go
-./api/services/holding/store_getholdingbyid.go
