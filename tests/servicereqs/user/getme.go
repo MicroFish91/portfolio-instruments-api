@@ -19,21 +19,13 @@ func TestGetMe(t *testing.T, token string, userId int, expectedStatusCode int) {
 		assert.EqualExportedValues(
 			t,
 			struct {
-				User     types.User     `json:"user"`
-				Settings types.Settings `json:"settings"`
+				User types.User `json:"user"`
 			}{
 				User: types.User{
 					User_id:        userId,
 					Email:          getMeResponse.Data.User.Email,
 					User_role:      types.Default,
 					Last_logged_in: getMeResponse.Data.User.Last_logged_in,
-					Created_at:     getMeResponse.Data.User.Created_at,
-					Updated_at:     getMeResponse.Data.User.Updated_at,
-				},
-				Settings: types.Settings{
-					Settings_id:    getMeResponse.Data.Settings.Settings_id,
-					Reb_thresh_pct: 10,
-					User_id:        userId,
 					Created_at:     getMeResponse.Data.User.Created_at,
 					Updated_at:     getMeResponse.Data.User.Updated_at,
 				},

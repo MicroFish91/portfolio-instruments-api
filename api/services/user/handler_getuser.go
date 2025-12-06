@@ -30,13 +30,7 @@ func (h *UserHandlerImpl) GetUser(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
-	settings, err := h.userStore.GetSettings(c.Context(), userParams.Id)
-	if err != nil {
-		return utils.SendError(c, utils.StatusCodeFromError(err), err)
-	}
-
 	return utils.SendJSON(c, fiber.StatusOK, fiber.Map{
-		"user":     user,
-		"settings": settings,
+		"user": user,
 	})
 }

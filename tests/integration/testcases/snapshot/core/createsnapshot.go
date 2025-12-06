@@ -39,6 +39,25 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 					{Account_id: accountIds[1], Holding_id: holdingIds[0], Total: 750.75, Skip_rebalance: false},
 					{Account_id: accountIds[1], Holding_id: holdingIds[1], Total: 1000.00, Skip_rebalance: false},
 				},
+				Benchmark_id:            benchmarkId,
+				Rebalance_threshold_pct: 15,
+			},
+			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
+				Total:         CoreSnapshotTotal,
+				WeightedErPct: CoreWeightedEr,
+			},
+			ExpectedStatusCode: fiber.StatusCreated,
+		},
+		{
+			Title: "201 No Rebalance Threshold",
+			Payload: snapshot.CreateSnapshotPayload{
+				Snap_date: utils.Calc_target_date(0, -2),
+				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
+					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
+					{Account_id: accountIds[0], Holding_id: holdingIds[1], Total: 500.50, Skip_rebalance: false},
+					{Account_id: accountIds[1], Holding_id: holdingIds[0], Total: 750.75, Skip_rebalance: false},
+					{Account_id: accountIds[1], Holding_id: holdingIds[1], Total: 1000.00, Skip_rebalance: false},
+				},
 				Benchmark_id: benchmarkId,
 			},
 			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
@@ -50,13 +69,14 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 		{
 			Title: "201 No Benchmark",
 			Payload: snapshot.CreateSnapshotPayload{
-				Snap_date: utils.Calc_target_date(0, -2),
+				Snap_date: utils.Calc_target_date(0, -3),
 				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
 					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
 					{Account_id: accountIds[0], Holding_id: holdingIds[1], Total: 500.50, Skip_rebalance: false},
 					{Account_id: accountIds[1], Holding_id: holdingIds[0], Total: 750.75, Skip_rebalance: false},
 					{Account_id: accountIds[1], Holding_id: holdingIds[1], Total: 1000.00, Skip_rebalance: false},
 				},
+				Rebalance_threshold_pct: 10,
 			},
 			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
 				Total:         CoreSnapshotTotal,
@@ -67,7 +87,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 		{
 			Title: "201 Description",
 			Payload: snapshot.CreateSnapshotPayload{
-				Snap_date:   utils.Calc_target_date(0, -3),
+				Snap_date:   utils.Calc_target_date(0, -4),
 				Description: "With Description",
 				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
 					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
@@ -85,7 +105,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 		{
 			Title: "201 Rebalance Threshold",
 			Payload: snapshot.CreateSnapshotPayload{
-				Snap_date: utils.Calc_target_date(0, -4),
+				Snap_date: utils.Calc_target_date(0, -5),
 				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
 					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
 					{Account_id: accountIds[0], Holding_id: holdingIds[1], Total: 500.50, Skip_rebalance: false},
@@ -107,7 +127,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 			Title:            "401",
 			ReplacementToken: tok401,
 			Payload: snapshot.CreateSnapshotPayload{
-				Snap_date: utils.Calc_target_date(0, -4),
+				Snap_date: utils.Calc_target_date(0, -6),
 			},
 			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusUnauthorized,
@@ -117,7 +137,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 		{
 			Title: "404 Benchmark",
 			Payload: snapshot.CreateSnapshotPayload{
-				Snap_date: utils.Calc_target_date(0, -5),
+				Snap_date: utils.Calc_target_date(0, -7),
 				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
 					{Account_id: accountIds[0], Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
 				},
@@ -129,7 +149,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 		{
 			Title: "404 Account",
 			Payload: snapshot.CreateSnapshotPayload{
-				Snap_date: utils.Calc_target_date(0, -6),
+				Snap_date: utils.Calc_target_date(0, -7),
 				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
 					{Account_id: 9999, Holding_id: holdingIds[0], Total: 250.25, Skip_rebalance: false},
 				},

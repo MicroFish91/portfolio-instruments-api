@@ -185,7 +185,8 @@ type GetSnapshotRebalanceResponse struct {
 		Target_allocation         *[]AssetAllocation `json:"target_allocation"`
 		Current_allocation        *[]AssetAllocation `json:"current_allocation"`
 		Change_required           *[]AssetAllocation `json:"change_required"`
-		Rebalance_thresh_pct      int                `json:"rebalance_thresh_pct"`
+		Rebalance_deviation_pct   int                `json:"rebalance_deviation_pct"`
+		Needs_rebalance           bool               `json:"needs_rebalance"`
 		Snapshot_total            float64            `json:"snapshot_total"`
 		Snapshot_total_omit_skips float64            `json:"snapshot_total_omit_skips"`
 	} `json:"data"`

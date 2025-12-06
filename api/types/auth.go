@@ -12,8 +12,7 @@ type AuthHandler interface {
 
 type RegisterResponse struct {
 	Data struct {
-		User     User     `json:"user"`
-		Settings Settings `json:"settings"`
+		User User `json:"user"`
 	} `json:"data"`
 	Error string `json:"error"`
 }
@@ -28,8 +27,7 @@ type LoginResponse struct {
 
 type GetMeResponse struct {
 	Data struct {
-		User     User     `json:"user"`
-		Settings Settings `json:"settings"`
+		User User `json:"user"`
 	} `json:"data"`
 	Error string `json:"error"`
 }
