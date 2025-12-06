@@ -2,14 +2,12 @@ package snapshot
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/querybuilder"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
-	"github.com/jackc/pgx/v5"
 )
 
 func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, options *types.GetSnapshotsStoreOptions) ([]types.Snapshot, types.PaginationMetadata, error) {
@@ -35,7 +33,7 @@ func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, op
 	}
 
 	pgxb := querybuilder.NewPgxQueryBuilder()
-	pgxb.AddQuery("SELECT *, COUNT(*) OVER() as total_items")
+	pgxb.AddQuery(fmt.Sprintf("SELECT %s, COUNT(*) OVER() as total_items", snapshotColumns))
 	pgxb.AddQuery("FROM snapshots")
 	pgxb.AddQueryWithPositionals("WHERE user_id = $x", []any{userId})
 
@@ -87,42 +85,4 @@ func (s *PostgresSnapshotStore) GetSnapshots(ctx context.Context, userId int, op
 		Page_size:    pageSize,
 		Total_items:  total_items,
 	}, nil
-}
-
-func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) ([]types.Snapshot, int, error) {
-	var snapshots []types.Snapshot
-	var total_items int
-
-	for rows.Next() {
-		var s types.Snapshot
-		var benchmark_id sql.NullInt64
-
-		err := rows.Scan(
-			&s.Snap_id,
-			&s.Description,
-			&s.Snap_date,
-			&s.Total,
-			&s.Weighted_er_pct,
-			&benchmark_id,
-			&s.User_id,
-			&s.Created_at,
-			&s.Updated_at,
-			&s.Rebalance_threshold_pct,
-			&total_items,
-		)
-
-		if err != nil {
-			return nil, 0, err
-		}
-
-		if benchmark_id.Valid {
-			s.Benchmark_id = int(benchmark_id.Int64)
-		} else {
-			s.Benchmark_id = 0
-		}
-
-		snapshots = append(snapshots, s)
-	}
-
-	return snapshots, total_items, nil
 }

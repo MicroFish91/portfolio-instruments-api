@@ -23,11 +23,17 @@ func (s *PostgresSnapshotStore) RefreshSnapshotTotal(ctx context.Context, userId
 	// Update snapshots with the new total
 	_, err = s.db.Exec(
 		c,
-		`UPDATE snapshots
-		SET total = $1
-		WHERE user_id = $2
-		AND snap_id = $3`,
-		snapshotTotal, userId, snapshotId,
+		`
+			update
+				snapshots
+			set 
+				total = $1
+			where
+				user_id = $2
+				and snap_id = $3`,
+		snapshotTotal,
+		userId,
+		snapshotId,
 	)
 
 	return snapshotTotal, err

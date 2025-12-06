@@ -3,6 +3,7 @@ package snapshot
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/constants"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
@@ -14,15 +15,15 @@ func (s *PostgresSnapshotStore) DeleteSnapshot(ctx context.Context, snapId, user
 
 	row := s.db.QueryRow(
 		c,
-		`
+		fmt.Sprintf(`
 			delete from
 				snapshots
 			where
 				snap_id = $1
 				and user_id = $2
 			returning
-				*
-		`,
+				%s
+		`, snapshotColumns),
 		snapId,
 		userId,
 	)
