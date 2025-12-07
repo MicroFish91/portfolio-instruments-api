@@ -22,8 +22,14 @@ func (h *HoldingHandlerImpl) CreateHolding(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusBadRequest, errors.New("unable to parse valid holding payload from request body"))
 	}
 
-	// Ensure only one unique "active" ticker per user
-	if holdingPayload.Ticker != "" && !holdingPayload.Is_deprecated {
+	// Ensure unique holding name per user
+	existingHolding, _ := h.store.GetHoldingByName(c.Context(), holdingPayload.Name, userPayload.User_id)
+	if existingHolding.Holding_id != 0 {
+		return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has holding with name "%s"`, existingHolding.Name))
+	}
+
+	// Ensure only one unique ticker per user
+	if holdingPayload.Ticker != "" {
 		existingHolding, _ := h.store.GetHoldingByTicker(c.Context(), holdingPayload.Ticker, userPayload.User_id)
 		if existingHolding.Holding_id != 0 {
 			return utils.SendError(c, fiber.StatusConflict, fmt.Errorf(`user already has holding with ticker symbol "%s"`, existingHolding.Ticker))

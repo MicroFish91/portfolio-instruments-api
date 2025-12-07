@@ -24,7 +24,6 @@ func (s *PostgresHoldingStore) GetHoldingByName(ctx context.Context, name string
 			where
 				name ~* $1
 				and user_id = $2
-				and is_deprecated = false
 		`, holdingsColumns),
 		namePattern, userId,
 	)

@@ -78,8 +78,8 @@ func UpdateHoldingTestCases(t *testing.T, holdingId int, userId int, email strin
 			Title:       "404",
 			ParameterId: 9999,
 			Payload: holding.UpdateHoldingPayload{
-				Name:              "Fidelity Small Cap Value Index Fund",
-				Ticker:            "FSSNAX",
+				Name:              "Some Mutual Fund Name",
+				Ticker:            "ABCDEFG",
 				Asset_category:    "DSCV",
 				Expense_ratio_pct: 0.04,
 			},

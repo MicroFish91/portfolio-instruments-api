@@ -22,7 +22,6 @@ func (s *PostgresHoldingStore) GetHoldingByTicker(ctx context.Context, ticker st
 			where
 				user_id = $1
 				and ticker = $2
-				and is_deprecated = false
 		`, holdingsColumns),
 		userId, ticker,
 	)
