@@ -4,12 +4,12 @@ import (
 	"strings"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/gofiber/fiber/v3"
 )
 
-func LoginTestCases(email string, password string) []shared.TestCase {
-	return []shared.TestCase{
+func LoginTestCases(email string, password string) []testcases.TestCase {
+	return []testcases.TestCase{
 		{
 			Title: "201",
 			Payload: auth.LoginPayload{

@@ -4,17 +4,17 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshot"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAdvancedSnapshotByMaturationDateTestCases(*testing.T) []shared.TestCase {
-	return []shared.TestCase{
+func GetAdvancedSnapshotByMaturationDateTestCases(*testing.T) []testcases.TestCase {
+	return []testcases.TestCase{
 		{
 			Title: "200 Date 1",
-			ExpectedResponse: snapshotTester.ExpectedGetSnapshotByMaturationDateResponse{
+			ExpectedResponse: routeTester.ExpectedGetSnapshotByMaturationDateResponse{
 				Resources: []types.MaturationDateResource{
 					{
 						Account_name:   "Account2",
@@ -45,7 +45,7 @@ func GetAdvancedSnapshotByMaturationDateTestCases(*testing.T) []shared.TestCase 
 		},
 		{
 			Title: "200 Date 2",
-			ExpectedResponse: snapshotTester.ExpectedGetSnapshotByMaturationDateResponse{
+			ExpectedResponse: routeTester.ExpectedGetSnapshotByMaturationDateResponse{
 				Resources: []types.MaturationDateResource{
 					{
 						Account_name:   "Account1",
@@ -174,7 +174,7 @@ func GetAdvancedSnapshotByMaturationDateTestCases(*testing.T) []shared.TestCase 
 		},
 		{
 			Title: "200 Date 3",
-			ExpectedResponse: snapshotTester.ExpectedGetSnapshotByMaturationDateResponse{
+			ExpectedResponse: routeTester.ExpectedGetSnapshotByMaturationDateResponse{
 				Resources: []types.MaturationDateResource{
 					{
 						Account_name:    "Account1",

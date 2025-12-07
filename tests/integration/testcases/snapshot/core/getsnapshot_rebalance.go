@@ -4,23 +4,23 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshot"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetSnapshotRebalanceTestCases(t *testing.T, snapWithBenchmarkId, snapWithBenchmarkNoThreshId, snapWithoutBenchmarkId, userId int, email string) []shared.TestCase {
+func GetSnapshotRebalanceTestCases(t *testing.T, snapWithBenchmarkId, snapWithBenchmarkNoThreshId, snapWithoutBenchmarkId, userId int, email string) []testcases.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.TestCase{
+	return []testcases.TestCase{
 		{
 			Title:       "200",
 			ParameterId: snapWithBenchmarkId,
-			ExpectedResponse: snapshotTester.ExpectedGetSnapshotRebalanceResponse{
+			ExpectedResponse: routeTester.ExpectedGetSnapshotRebalanceResponse{
 				Target_allocation: []types.AssetAllocation{
 					{
 						Category: "TSM",
@@ -61,7 +61,7 @@ func GetSnapshotRebalanceTestCases(t *testing.T, snapWithBenchmarkId, snapWithBe
 		{
 			Title:       "200",
 			ParameterId: snapWithBenchmarkNoThreshId,
-			ExpectedResponse: snapshotTester.ExpectedGetSnapshotRebalanceResponse{
+			ExpectedResponse: routeTester.ExpectedGetSnapshotRebalanceResponse{
 				Target_allocation: []types.AssetAllocation{
 					{
 						Category: "TSM",
@@ -103,19 +103,19 @@ func GetSnapshotRebalanceTestCases(t *testing.T, snapWithBenchmarkId, snapWithBe
 			Title:              "401",
 			ParameterId:        snapWithBenchmarkId,
 			ReplacementToken:   tok401,
-			ExpectedResponse:   snapshotTester.ExpectedGetSnapshotRebalanceResponse{},
+			ExpectedResponse:   routeTester.ExpectedGetSnapshotRebalanceResponse{},
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
 		{
 			Title:              "404",
 			ParameterId:        9999,
-			ExpectedResponse:   snapshotTester.ExpectedGetSnapshotRebalanceResponse{},
+			ExpectedResponse:   routeTester.ExpectedGetSnapshotRebalanceResponse{},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 		{
 			Title:              "409",
 			ParameterId:        snapWithoutBenchmarkId,
-			ExpectedResponse:   snapshotTester.ExpectedGetSnapshotRebalanceResponse{},
+			ExpectedResponse:   routeTester.ExpectedGetSnapshotRebalanceResponse{},
 			ExpectedStatusCode: fiber.StatusConflict,
 		},
 	}

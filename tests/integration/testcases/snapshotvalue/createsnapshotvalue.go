@@ -4,12 +4,12 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
-func CreateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, snapshotId, userId int, email string) []shared.TestCase {
+func CreateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, snapshotId, userId int, email string) []testcases.TestCase {
 	if len(accountIds) != 3 {
 		t.Fatal("create snapshotvalue accountids incorrect length")
 	}
@@ -22,7 +22,7 @@ func CreateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, sn
 		t.Fatal(err)
 	}
 
-	return []shared.TestCase{
+	return []testcases.TestCase{
 		// ---- 201 ----
 		{
 			Title:       "201",

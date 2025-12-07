@@ -3,15 +3,15 @@ package advanced
 import (
 	"testing"
 
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshot"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAdvancedSnapshotByAccountsTestCase(*testing.T) shared.TestCase {
-	return shared.TestCase{
+func GetAdvancedSnapshotByAccountsTestCase(*testing.T) testcases.TestCase {
+	return testcases.TestCase{
 		Title: "200",
-		ExpectedResponse: snapshotTester.ExpectedGetSnapshotByAccountResponse{
+		ExpectedResponse: routeTester.ExpectedGetSnapshotByAccountResponse{
 			AccountNames: []string{
 				"Account1",
 				"Account2",

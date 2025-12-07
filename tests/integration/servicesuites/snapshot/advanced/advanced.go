@@ -7,10 +7,10 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
+	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshot"
+	snapshotValueTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshotvalue"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/user"
 	advancedSnapshotTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshot/advanced"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
-	snapshotValueTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshotvalue"
-	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/gofiber/fiber/v3"
 )
 

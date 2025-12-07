@@ -5,9 +5,9 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
+	snapshotValueTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshotvalue"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/user"
 	snapshotValueTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshotvalue"
-	snapshotValueTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshotvalue"
-	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/gofiber/fiber/v3"
 )
 

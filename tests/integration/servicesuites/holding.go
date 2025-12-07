@@ -1,4 +1,4 @@
-package integration
+package servicesuites
 
 import (
 	"fmt"
@@ -6,9 +6,10 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/holding"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
+	holdingTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/holding"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/user"
 	holdingTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/holding"
-	holdingTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/holding"
-	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -35,7 +36,7 @@ func TestHoldingService(t *testing.T) {
 }
 
 func holdingServiceSetup(t *testing.T) {
-	hs_testuser, hs_token = NewUserSetup(t)
+	hs_testuser, hs_token = integration.NewUserSetup(t)
 }
 
 func createHoldingTests(t *testing.T) {

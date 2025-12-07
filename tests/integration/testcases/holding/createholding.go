@@ -4,18 +4,18 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/holding"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
-func CreateHoldingTestCases(t *testing.T, userId int, email string) []shared.TestCase {
+func CreateHoldingTestCases(t *testing.T, userId int, email string) []testcases.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.TestCase{
+	return []testcases.TestCase{
 		// ---- 200 ----
 		{
 			Title: "201 Ticker",

@@ -1,4 +1,4 @@
-package shared
+package testcases
 
 type TestCase struct {
 	Title              string

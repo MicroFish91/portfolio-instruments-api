@@ -5,7 +5,7 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/auth"
+	authTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/auth"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )

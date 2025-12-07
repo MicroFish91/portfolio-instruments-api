@@ -5,8 +5,8 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshot"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -14,7 +14,7 @@ import (
 var AdvancedSnapshotTotal = 507108.10
 var AdvancedSnapshotExpenseRatio = 0.389
 
-func CreateAdvancedSnapshotTestCase(t *testing.T, benchmarkId int, accountIds []int, holdingIds []int) shared.TestCase {
+func CreateAdvancedSnapshotTestCase(t *testing.T, benchmarkId int, accountIds []int, holdingIds []int) testcases.TestCase {
 	if len(accountIds) != 9 {
 		t.Fatal("unexpected accountId length for creating advanced snapshot")
 	}
@@ -22,7 +22,7 @@ func CreateAdvancedSnapshotTestCase(t *testing.T, benchmarkId int, accountIds []
 		t.Fatal("unexpected holdingId length for creating advanced snapshot")
 	}
 
-	return shared.TestCase{
+	return testcases.TestCase{
 		Title: "201",
 		Payload: snapshot.CreateSnapshotPayload{
 			Snap_date: utils.Calc_target_date(0, -3),
@@ -129,7 +129,7 @@ func CreateAdvancedSnapshotTestCase(t *testing.T, benchmarkId int, accountIds []
 			Benchmark_id:            benchmarkId,
 			Rebalance_threshold_pct: 10,
 		},
-		ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
+		ExpectedResponse: routeTester.ExpectedCreateSnapshotResponse{
 			Total:         AdvancedSnapshotTotal,
 			WeightedErPct: AdvancedSnapshotExpenseRatio,
 		},

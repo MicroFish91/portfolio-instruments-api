@@ -3,19 +3,19 @@ package snapshotvalue
 import (
 	"testing"
 
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshotvalue"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshotvalue"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetSnapshotValueTestCases(t *testing.T, sid, svid, userId int, email string) []shared.TestCase {
+func GetSnapshotValueTestCases(t *testing.T, sid, svid, userId int, email string) []testcases.TestCase {
 	tok401, _, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.TestCase{
+	return []testcases.TestCase{
 		{
 			Title:              "200",
 			ParameterId:        sid,

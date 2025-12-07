@@ -8,9 +8,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/benchmark"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/holding"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/account"
-	benchmarkTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/benchmark"
-	holdingTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/holding"
+	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/account"
+	benchmarkTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/benchmark"
+	holdingTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/holding"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )

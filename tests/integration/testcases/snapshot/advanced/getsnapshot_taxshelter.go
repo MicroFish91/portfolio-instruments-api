@@ -3,15 +3,15 @@ package advanced
 import (
 	"testing"
 
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshot"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAdvancedSnapshotByTaxShelterTestCase(*testing.T) shared.TestCase {
-	return shared.TestCase{
+func GetAdvancedSnapshotByTaxShelterTestCase(*testing.T) testcases.TestCase {
+	return testcases.TestCase{
 		Title: "200",
-		ExpectedResponse: snapshotTester.ExpectedGetSnapshotByTaxShelterResponse{
+		ExpectedResponse: routeTester.ExpectedGetSnapshotByTaxShelterResponse{
 			TaxShelters: []string{
 				"TAXABLE",
 				"ROTH",
