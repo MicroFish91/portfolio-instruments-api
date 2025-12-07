@@ -32,10 +32,9 @@ func UpdateAccountsTestCases(t *testing.T, accountId int, userId int, email stri
 			Title:       "200 No Description",
 			ParameterId: accountId,
 			Payload: account.UpdateAccountPayload{
-				Name:          "VAN032",
-				Tax_shelter:   "TAXABLE",
-				Institution:   "Vanguard",
-				Is_deprecated: false,
+				Name:        "VAN032",
+				Tax_shelter: "TAXABLE",
+				Institution: "Vanguard",
 			},
 			ExpectedStatusCode: fiber.StatusOK,
 		},

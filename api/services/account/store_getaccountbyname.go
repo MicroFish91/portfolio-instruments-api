@@ -24,7 +24,6 @@ func (s *PostgresAccountStore) GetAccountByName(ctx context.Context, name string
 			where 
 				user_id = $1
 				and name ~* $2
-				and is_deprecated = false
 		`, accountColumns),
 		userId,
 		namePattern,

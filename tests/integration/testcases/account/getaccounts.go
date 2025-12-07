@@ -143,11 +143,11 @@ func GetAccountsTestCases(t *testing.T, userId int, email string) []testcases.Te
 			Route:              "/api/v2/accounts?is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusOK,
 			ExpectedResponse: GetAccountsExpectedResponse{
-				Accounts: 3,
+				Accounts: 4,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
 					Page_size:    50,
-					Total_items:  3,
+					Total_items:  4,
 				},
 			},
 		},
