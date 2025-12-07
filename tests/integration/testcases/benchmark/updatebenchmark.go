@@ -22,7 +22,7 @@ func UpdateBenchmarkTestCases(t *testing.T, benchmarkId int, userId int, email s
 			Title:       "200",
 			ParameterId: benchmarkId,
 			Payload: benchmark.UpdateBenchmarkPayload{
-				Name:        "Classic Bogleheads Portfolio 2",
+				Name:        "Classic Bogleheads Portfolio 3",
 				Description: "The classic 60/40 split",
 				Asset_allocation: []types.AssetAllocationPct{
 					{
@@ -167,7 +167,7 @@ func UpdateBenchmarkTestCases(t *testing.T, benchmarkId int, userId int, email s
 			Title:       "409",
 			ParameterId: benchmarkId,
 			Payload: benchmark.UpdateBenchmarkPayload{
-				Name: "claSsiC boglEheadS PortfOlio",
+				Name: "claSsiC boglEheadS PortfOlio 2",
 				Asset_allocation: []types.AssetAllocationPct{
 					{
 						Category: "TSM",

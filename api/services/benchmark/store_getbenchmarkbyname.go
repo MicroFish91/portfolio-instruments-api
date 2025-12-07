@@ -24,7 +24,6 @@ func (s *PostgresBenchmarkStore) GetBenchmarkByName(ctx context.Context, name st
 			where 
 				user_id = $1
 				and name ~* $2
-				and is_deprecated = false
 		`, benchmarkColumns),
 		userId, namePattern,
 	)
