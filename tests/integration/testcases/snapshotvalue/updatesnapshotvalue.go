@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
-	snapshotValueTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshotvalue"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
@@ -26,7 +26,7 @@ func UpdateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, si
 				Holding_id: holdingIds[0],
 				Total:      1337.25,
 			},
-			ExpectedResponse:   snapshotValueTester.ExpectedUpdateSnapshotValueResponse{},
+			ExpectedResponse:   routeTester.ExpectedUpdateSnapshotValueResponse{},
 			ExpectedStatusCode: fiber.StatusOK,
 		},
 		{
@@ -39,7 +39,7 @@ func UpdateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, si
 				Holding_id: holdingIds[0],
 				Total:      1337.25,
 			},
-			ExpectedResponse:   snapshotValueTester.ExpectedUpdateSnapshotValueResponse{},
+			ExpectedResponse:   routeTester.ExpectedUpdateSnapshotValueResponse{},
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
 
@@ -53,7 +53,7 @@ func UpdateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, si
 				Holding_id: holdingIds[0],
 				Total:      1337.25,
 			},
-			ExpectedResponse:   snapshotValueTester.ExpectedUpdateSnapshotValueResponse{},
+			ExpectedResponse:   routeTester.ExpectedUpdateSnapshotValueResponse{},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 		{
@@ -65,7 +65,7 @@ func UpdateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, si
 				Holding_id: holdingIds[0],
 				Total:      1337.25,
 			},
-			ExpectedResponse:   snapshotValueTester.ExpectedUpdateSnapshotValueResponse{},
+			ExpectedResponse:   routeTester.ExpectedUpdateSnapshotValueResponse{},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 		{
@@ -77,7 +77,7 @@ func UpdateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, si
 				Holding_id: holdingIds[0],
 				Total:      1337.25,
 			},
-			ExpectedResponse:   snapshotValueTester.ExpectedUpdateSnapshotValueResponse{},
+			ExpectedResponse:   routeTester.ExpectedUpdateSnapshotValueResponse{},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 		{
@@ -89,7 +89,7 @@ func UpdateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, si
 				Holding_id: 99999,
 				Total:      1337.25,
 			},
-			ExpectedResponse:   snapshotValueTester.ExpectedUpdateSnapshotValueResponse{},
+			ExpectedResponse:   routeTester.ExpectedUpdateSnapshotValueResponse{},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 
@@ -103,7 +103,7 @@ func UpdateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, si
 				"Holding_id": holdingIds[0],
 				"Total":      1000.15,
 			},
-			ExpectedResponse:   snapshotValueTester.ExpectedUpdateSnapshotValueResponse{},
+			ExpectedResponse:   routeTester.ExpectedUpdateSnapshotValueResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -115,7 +115,7 @@ func UpdateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, si
 				"Holding_id": true,
 				"Total":      1000.15,
 			},
-			ExpectedResponse:   snapshotValueTester.ExpectedUpdateSnapshotValueResponse{},
+			ExpectedResponse:   routeTester.ExpectedUpdateSnapshotValueResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -127,7 +127,7 @@ func UpdateSnapshotValueTestCases(t *testing.T, accountIds, holdingIds []int, si
 				"Holding_id": holdingIds[0],
 				"Total":      "One Thousand and Fifty",
 			},
-			ExpectedResponse:   snapshotValueTester.ExpectedUpdateSnapshotValueResponse{},
+			ExpectedResponse:   routeTester.ExpectedUpdateSnapshotValueResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 	}

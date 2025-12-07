@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/benchmark"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/benchmark"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
@@ -21,7 +21,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 		{
 			Title:              "200",
 			ExpectedStatusCode: fiber.StatusOK,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 30,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
@@ -34,7 +34,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "200 Query Page 1",
 			Route:              "/api/v2/benchmarks?current_page=1&page_size=20",
 			ExpectedStatusCode: fiber.StatusOK,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 20,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
@@ -47,7 +47,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "200 Query Page 2",
 			Route:              "/api/v2/benchmarks?current_page=2&page_size=20",
 			ExpectedStatusCode: fiber.StatusOK,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 10,
 				Pagination: types.PaginationMetadata{
 					Current_page: 2,
@@ -60,7 +60,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "200 Query Ids",
 			Route:              "/api/v2/benchmarks?ids=1,11,15,29,40",
 			ExpectedStatusCode: fiber.StatusOK,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 4,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
@@ -73,7 +73,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "200 Query Name",
 			Route:              "/api/v2/benchmarks?name=classic",
 			ExpectedStatusCode: fiber.StatusOK,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 28,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
@@ -86,7 +86,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "200 Is Deprecated",
 			Route:              "/api/v2/benchmarks?is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusOK,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 3,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
@@ -99,7 +99,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "200 Combination",
 			Route:              "/api/v2/benchmarks?ids=2,12,16,30&is_deprecated=true",
 			ExpectedStatusCode: fiber.StatusOK,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 1,
 				Pagination: types.PaginationMetadata{
 					Current_page: 1,
@@ -114,7 +114,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "401",
 			ReplacementToken:   tok401,
 			ExpectedStatusCode: fiber.StatusUnauthorized,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 0,
 				Pagination: types.PaginationMetadata{},
 			},
@@ -123,7 +123,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "404",
 			Route:              "/api/v2/benchmarks?ids=40",
 			ExpectedStatusCode: fiber.StatusNotFound,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 0,
 				Pagination: types.PaginationMetadata{},
 			},
@@ -134,7 +134,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "400 Ids",
 			Route:              "/api/v2/benchmarks?ids=eleven",
 			ExpectedStatusCode: fiber.StatusBadRequest,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 0,
 				Pagination: types.PaginationMetadata{},
 			},
@@ -143,7 +143,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "400 Is Deprecated",
 			Route:              "/api/v2/benchmarks?is_deprecated=1",
 			ExpectedStatusCode: fiber.StatusBadRequest,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 0,
 				Pagination: types.PaginationMetadata{},
 			},
@@ -152,7 +152,7 @@ func GetBenchmarksTestCases(t *testing.T, userId int, email string) []testcases.
 			Title:              "400 Combination",
 			Route:              "/api/v2/benchmarks?is_deprecated=true&ids=true",
 			ExpectedStatusCode: fiber.StatusBadRequest,
-			ExpectedResponse: benchmark.GetBenchmarksExpectedResponse{
+			ExpectedResponse: routeTester.GetBenchmarksExpectedResponse{
 				Benchmarks: 0,
 				Pagination: types.PaginationMetadata{},
 			},

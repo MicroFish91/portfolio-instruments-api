@@ -3,7 +3,7 @@ package snapshotvalue
 import (
 	"testing"
 
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshotvalue"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
@@ -19,7 +19,7 @@ func GetSnapshotValuesTestCases(t *testing.T, snapshotId, userId int, email stri
 		{
 			Title:       "200",
 			ParameterId: snapshotId,
-			ExpectedResponse: snapshotvalue.ExpectedGetSnapshotValuesResponse{
+			ExpectedResponse: routeTester.ExpectedGetSnapshotValuesResponse{
 				SnapshotValues: 3,
 			},
 			ExpectedStatusCode: fiber.StatusOK,
@@ -28,13 +28,13 @@ func GetSnapshotValuesTestCases(t *testing.T, snapshotId, userId int, email stri
 			Title:              "401",
 			ParameterId:        snapshotId,
 			ReplacementToken:   tok401,
-			ExpectedResponse:   snapshotvalue.ExpectedGetSnapshotValuesResponse{},
+			ExpectedResponse:   routeTester.ExpectedGetSnapshotValuesResponse{},
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
 		{
 			Title:              "404",
 			ParameterId:        99999,
-			ExpectedResponse:   snapshotvalue.ExpectedGetSnapshotValuesResponse{},
+			ExpectedResponse:   routeTester.ExpectedGetSnapshotValuesResponse{},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 	}
