@@ -33,7 +33,7 @@ func CreateAccountTestCases(t *testing.T, userId int, email string) []testcases.
 				Name:          "VAN002",
 				Tax_shelter:   "TAXABLE",
 				Institution:   "Vanguard",
-				Is_deprecated: false,
+				Is_deprecated: true,
 			},
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
@@ -82,7 +82,7 @@ func CreateAccountTestCases(t *testing.T, userId int, email string) []testcases.
 		{
 			Title: "409",
 			Payload: account.CreateAccountPayload{
-				Name:        "vAn001",
+				Name:        "vAn002",
 				Tax_shelter: "TAXABLE",
 				Institution: "Vanguard",
 			},
