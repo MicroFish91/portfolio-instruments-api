@@ -28,6 +28,17 @@ func CreateHoldingTestCases(t *testing.T, userId int, email string) []shared.Tes
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
 		{
+			Title: "201 Ticker Deprecated",
+			Payload: holding.CreateHoldingPayload{
+				Name:              "Vanguard Total Stock Market Index Fund 2",
+				Ticker:            "VTSAX2",
+				Asset_category:    "TSM",
+				Expense_ratio_pct: 0.04,
+				Is_deprecated:     true,
+			},
+			ExpectedStatusCode: fiber.StatusCreated,
+		},
+		{
 			Title: "201 No Ticker",
 			Payload: holding.CreateHoldingPayload{
 				Name:           "Bank01",
@@ -46,17 +57,6 @@ func CreateHoldingTestCases(t *testing.T, userId int, email string) []shared.Tes
 			},
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
-		{
-			Title: "201 Duplicate Deprecation",
-			Payload: holding.CreateHoldingPayload{
-				Name:              "Vanguard Total Stock Market Index Fund",
-				Ticker:            "VTSAX",
-				Asset_category:    "TSM",
-				Expense_ratio_pct: 0.04,
-				Is_deprecated:     true,
-			},
-			ExpectedStatusCode: fiber.StatusCreated,
-		},
 
 		// ---- 401, 409 ----
 		{
@@ -71,10 +71,20 @@ func CreateHoldingTestCases(t *testing.T, userId int, email string) []shared.Tes
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
 		{
-			Title: "409",
+			Title: "409 Duplicate Name",
 			Payload: holding.CreateHoldingPayload{
-				Name:              "VanGuard Total STock MaRket Index Fund",
-				Ticker:            "VTSAX",
+				Name:              "Vanguard Total Stock Market Index Fund",
+				Ticker:            "VTSAXX",
+				Asset_category:    "TSM",
+				Expense_ratio_pct: 0.04,
+			},
+			ExpectedStatusCode: fiber.StatusConflict,
+		},
+		{
+			Title: "409 Duplicate Ticker + Deprecated",
+			Payload: holding.CreateHoldingPayload{
+				Name:              "Total Stock Market",
+				Ticker:            "VTSAX2",
 				Asset_category:    "TSM",
 				Expense_ratio_pct: 0.04,
 			},
