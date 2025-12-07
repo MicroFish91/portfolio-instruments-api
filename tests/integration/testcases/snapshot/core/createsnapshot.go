@@ -5,8 +5,8 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshot"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -14,7 +14,7 @@ import (
 var CoreSnapshotTotal float64 = 2501.50
 var CoreWeightedEr float64 = 0.180
 
-func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingIds []int, userId int, email string) []shared.TestCase {
+func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingIds []int, userId int, email string) []testcases.TestCase {
 	if len(accountIds) != 3 {
 		t.Fatal("unexpected accountId length for creating core snapshot")
 	}
@@ -27,7 +27,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 		t.Fatal(err)
 	}
 
-	return []shared.TestCase{
+	return []testcases.TestCase{
 		// ---- 201 ----
 		{
 			Title: "201",
@@ -42,7 +42,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				Benchmark_id:            benchmarkId,
 				Rebalance_threshold_pct: 15,
 			},
-			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
+			ExpectedResponse: routeTester.ExpectedCreateSnapshotResponse{
 				Total:         CoreSnapshotTotal,
 				WeightedErPct: CoreWeightedEr,
 			},
@@ -60,7 +60,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
+			ExpectedResponse: routeTester.ExpectedCreateSnapshotResponse{
 				Total:         CoreSnapshotTotal,
 				WeightedErPct: CoreWeightedEr,
 			},
@@ -78,7 +78,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Rebalance_threshold_pct: 10,
 			},
-			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
+			ExpectedResponse: routeTester.ExpectedCreateSnapshotResponse{
 				Total:         CoreSnapshotTotal,
 				WeightedErPct: CoreWeightedEr,
 			},
@@ -96,7 +96,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 					{Account_id: accountIds[1], Holding_id: holdingIds[1], Total: 1000.00, Skip_rebalance: false},
 				},
 			},
-			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
+			ExpectedResponse: routeTester.ExpectedCreateSnapshotResponse{
 				Total:         CoreSnapshotTotal,
 				WeightedErPct: CoreWeightedEr,
 			},
@@ -115,7 +115,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				Benchmark_id:            benchmarkId,
 				Rebalance_threshold_pct: 15,
 			},
-			ExpectedResponse: snapshotTester.ExpectedCreateSnapshotResponse{
+			ExpectedResponse: routeTester.ExpectedCreateSnapshotResponse{
 				Total:         CoreSnapshotTotal,
 				WeightedErPct: CoreWeightedEr,
 			},
@@ -129,7 +129,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 			Payload: snapshot.CreateSnapshotPayload{
 				Snap_date: utils.Calc_target_date(0, -6),
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
 
@@ -143,7 +143,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: 9999,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 		{
@@ -155,7 +155,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 		{
@@ -167,7 +167,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusNotFound,
 		},
 
@@ -181,7 +181,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusConflict,
 		},
 
@@ -194,7 +194,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -206,7 +206,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -215,7 +215,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				Snap_date:    utils.Calc_target_date(0, -8),
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -227,7 +227,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -239,7 +239,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				"Benchmark_id": benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -251,7 +251,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -263,7 +263,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				"Benchmark_id": benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -275,7 +275,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -287,7 +287,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				"Benchmark_id": benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -299,7 +299,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				Benchmark_id: benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -311,7 +311,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				"Benchmark_id": benchmarkId,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -323,7 +323,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				},
 				"Benchmark_id": []int{1, 2, 3},
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -336,7 +336,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				Benchmark_id:            benchmarkId,
 				Rebalance_threshold_pct: 101,
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
@@ -349,7 +349,7 @@ func CreateSnapshotTestCases(t *testing.T, benchmarkId int, accountIds, holdingI
 				"Benchmark_id":            benchmarkId,
 				"Rebalance_threshold_pct": "15",
 			},
-			ExpectedResponse:   snapshotTester.ExpectedCreateSnapshotResponse{},
+			ExpectedResponse:   routeTester.ExpectedCreateSnapshotResponse{},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 	}

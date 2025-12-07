@@ -1,4 +1,4 @@
-package snapshotvalue
+package core
 
 import (
 	"fmt"
@@ -7,19 +7,15 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/account"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/benchmark"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/holding"
-	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
-	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/account"
-	benchmarkTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/benchmark"
-	holdingTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/holding"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
+	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/account"
+	benchmarkTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/benchmark"
+	holdingTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/holding"
 	"github.com/gofiber/fiber/v3"
 )
 
 // Create benchmark
-func createSvsBenchmark(t *testing.T, token string, userId int) int {
+func createCoreSnapshotBenchmark(t *testing.T, token string, userId int) int {
 	var id int
 
 	t.Run("Benchmark", func(t2 *testing.T) {
@@ -49,7 +45,7 @@ func createSvsBenchmark(t *testing.T, token string, userId int) int {
 }
 
 // Create accounts
-func createSvsAccounts(t *testing.T, token string, userId int) []int {
+func createCoreSnapshotAccounts(t *testing.T, token string, userId int) []int {
 	var i = 1
 	var ids []int
 
@@ -79,7 +75,7 @@ func createSvsAccounts(t *testing.T, token string, userId int) []int {
 }
 
 // Create holdings
-var svAssets = []struct {
+var assets = []struct {
 	ticker          string
 	asset_category  string
 	expense_ratio   float32
@@ -98,11 +94,11 @@ var svAssets = []struct {
 	},
 }
 
-func createSvsHoldings(t *testing.T, token string, userId int) []int {
+func createCoreSnapshotHoldings(t *testing.T, token string, userId int) []int {
 	var i = 1
 	var ids []int
 
-	for _, asset := range svAssets {
+	for _, asset := range assets {
 		name := fmt.Sprintf("Holding%d", i)
 
 		t.Run(name, func(t2 *testing.T) {
@@ -128,35 +124,4 @@ func createSvsHoldings(t *testing.T, token string, userId int) []int {
 	}
 
 	return ids
-}
-
-func createSvsSnapshot(t *testing.T, accountIds, holdingIds []int, benchmarkId int, token string, userId int) int {
-	var snapId int
-
-	t.Run("Snapshot", func(t2 *testing.T) {
-		snapId, _ = snapshotTester.TestCreateSnapshot(
-			t,
-			snapshot.CreateSnapshotPayload{
-				Snap_date: utils.Calc_target_date(0, -3),
-				Snapshot_values: []snapshotvalue.CreateSnapshotValuePayload{
-					{
-						Account_id:     accountIds[0],
-						Holding_id:     holdingIds[1],
-						Total:          500,
-						Skip_rebalance: false,
-					},
-				},
-				Benchmark_id: benchmarkId,
-			},
-			token,
-			snapshotTester.ExpectedCreateSnapshotResponse{
-				Total:         500,
-				WeightedErPct: 0.1,
-			},
-			userId,
-			fiber.StatusCreated,
-		)
-	})
-
-	return snapId
 }

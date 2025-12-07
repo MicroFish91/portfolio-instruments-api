@@ -4,15 +4,15 @@ import (
 	"testing"
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
+	routeTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshot"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetAdvancedSnapshotRebalanceTestCase(*testing.T) shared.TestCase {
-	return shared.TestCase{
+func GetAdvancedSnapshotRebalanceTestCase(*testing.T) testcases.TestCase {
+	return testcases.TestCase{
 		Title: "200",
-		ExpectedResponse: snapshotTester.ExpectedGetSnapshotRebalanceResponse{
+		ExpectedResponse: routeTester.ExpectedGetSnapshotRebalanceResponse{
 			Target_allocation: []types.AssetAllocation{
 				{
 					Category: "TSM",

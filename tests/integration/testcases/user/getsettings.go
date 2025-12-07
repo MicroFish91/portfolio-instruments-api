@@ -3,18 +3,18 @@ package user
 import (
 	"testing"
 
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/shared"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
 
-func GetSettingsTestCases(t *testing.T, userId int, email string) []shared.TestCase {
+func GetSettingsTestCases(t *testing.T, userId int, email string) []testcases.TestCase {
 	tok401, tok403, err := utils.Generate40xTokens(userId, email)
 	if err != nil {
 		t.Fatal(err)
 	}
 
-	return []shared.TestCase{
+	return []testcases.TestCase{
 		{
 			Title:              "200",
 			ParameterId:        userId,

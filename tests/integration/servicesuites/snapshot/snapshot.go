@@ -3,8 +3,8 @@ package snapshot
 import (
 	"testing"
 
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/snapshot/advanced"
-	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/snapshot/core"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/servicesuites/snapshot/advanced"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration/servicesuites/snapshot/core"
 )
 
 func TestSnapshotService(t *testing.T) {

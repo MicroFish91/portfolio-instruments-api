@@ -1,4 +1,4 @@
-package integration
+package servicesuites
 
 import (
 	"fmt"
@@ -6,9 +6,10 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/benchmark"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
+	benchmarkTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/benchmark"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/user"
 	benchmarkTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/benchmark"
-	benchmarkTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/benchmark"
-	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -32,7 +33,7 @@ func TestBenchmarkService(t *testing.T) {
 }
 
 func benchmarkServiceSetup(t *testing.T) {
-	bs_testuser, bs_token = NewUserSetup(t)
+	bs_testuser, bs_token = integration.NewUserSetup(t)
 }
 
 func createBenchmarkTests(t *testing.T) {

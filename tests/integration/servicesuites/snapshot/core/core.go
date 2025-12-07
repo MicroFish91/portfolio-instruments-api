@@ -8,9 +8,9 @@ import (
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
+	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/snapshot"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/user"
 	coreSnapshotTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshot/core"
-	snapshotTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/snapshot"
-	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/gofiber/fiber/v3"
 )
 

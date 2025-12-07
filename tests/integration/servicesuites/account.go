@@ -1,4 +1,4 @@
-package integration
+package servicesuites
 
 import (
 	"fmt"
@@ -6,9 +6,10 @@ import (
 
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/account"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
+	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
+	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/account"
+	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/user"
 	accountTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/account"
-	accountTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/account"
-	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/servicereqs/user"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/utils"
 	"github.com/gofiber/fiber/v3"
 )
@@ -34,7 +35,7 @@ func TestAccountService(t *testing.T) {
 }
 
 func accountServiceSetup(t *testing.T) {
-	as_testuser, as_token = NewUserSetup(t)
+	as_testuser, as_token = integration.NewUserSetup(t)
 }
 
 func createAccountTests(t *testing.T) {
