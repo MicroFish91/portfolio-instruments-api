@@ -36,14 +36,13 @@ func CreateBenchmarkTestCases(t *testing.T, userId int, email string) []shared.T
 				Std_dev_pct:     3.4,
 				Real_return_pct: 6.8,
 				Drawdown_yrs:    10,
-				Is_deprecated:   true,
 			},
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
 		{
 			Title: "201 Custom Rebalance Threshold",
 			Payload: benchmark.CreateBenchmarkPayload{
-				Name:        "Classic Bogleheads Portfolio",
+				Name:        "Classic Bogleheads Portfolio 2",
 				Description: "The classic 60/40 split",
 				Asset_allocation: []types.AssetAllocationPct{
 					{
@@ -60,28 +59,6 @@ func CreateBenchmarkTestCases(t *testing.T, userId int, email string) []shared.T
 				Drawdown_yrs:                10,
 				Rec_rebalance_threshold_pct: 5,
 				Is_deprecated:               true,
-			},
-			ExpectedStatusCode: fiber.StatusCreated,
-		},
-		{
-			Title: "201 Valid Duplicate",
-			Payload: benchmark.CreateBenchmarkPayload{
-				Name:        "Classic Bogleheads Portfolio",
-				Description: "The classic 60/40 split",
-				Asset_allocation: []types.AssetAllocationPct{
-					{
-						Category: "TSM",
-						Percent:  60,
-					},
-					{
-						Category: "ITB",
-						Percent:  40,
-					},
-				},
-				Std_dev_pct:     3.4,
-				Real_return_pct: 6.8,
-				Drawdown_yrs:    10,
-				Is_deprecated:   false,
 			},
 			ExpectedStatusCode: fiber.StatusCreated,
 		},
@@ -151,9 +128,26 @@ func CreateBenchmarkTestCases(t *testing.T, userId int, email string) []shared.T
 			ExpectedStatusCode: fiber.StatusUnauthorized,
 		},
 		{
-			Title: "409",
+			Title: "409 No Duplicates 1",
 			Payload: benchmark.CreateBenchmarkPayload{
 				Name: "claSsiC boglEheadS PortfOlio",
+				Asset_allocation: []types.AssetAllocationPct{
+					{
+						Category: "TSM",
+						Percent:  60,
+					},
+					{
+						Category: "ITB",
+						Percent:  40,
+					},
+				},
+			},
+			ExpectedStatusCode: fiber.StatusConflict,
+		},
+		{
+			Title: "409 No Duplicates 2",
+			Payload: benchmark.CreateBenchmarkPayload{
+				Name: "Classic Bogleheads Portfolio 2",
 				Asset_allocation: []types.AssetAllocationPct{
 					{
 						Category: "TSM",
