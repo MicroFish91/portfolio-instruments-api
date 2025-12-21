@@ -42,12 +42,6 @@ services:
       DB_SSL_MODE: disable
     ports:
       - "3000:3000"
-    entrypoint: ["sh", "-c", "
-      while [ $(docker inspect -f '{{.State.Running}}' $(docker-compose ps -q migrate)) = true ]; do
-        echo 'Waiting for migrate to finish...';
-        sleep 2;
-      done;
-      exec ./bin/portfolio-instruments"]
 
 volumes:
   db:

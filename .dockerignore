@@ -1,4 +1,5 @@
 .env*
+*.tar.gz
 .git/
 .thunderclient/
 .vscode/

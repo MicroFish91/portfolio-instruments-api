@@ -26,8 +26,8 @@ config-app-up:
 	@docker-compose -f docker-compose.app.yml up -d
 
 config-down:
-	@docker-compose -f docker-compose.db.yml down
-	@docker-compose -f docker-compose.app.yml down
+	-@docker-compose -f docker-compose.db.yml down -v --remove-orphans
+	-@docker-compose -f docker-compose.app.yml down -v --remove-orphans
 
 pg-dump:
 	@go run cmd/pg_commands/main.go dump

@@ -38,6 +38,7 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Printf("successfully ran up migration on db \"%s\"\n", c.DbName)
+		os.Exit(0)
 	} else if cmd == "down" {
 		if c.AppEnv == "production" {
 			log.Fatal("blocking down migrations for prod")
@@ -47,5 +48,6 @@ func main() {
 			log.Fatal(err)
 		}
 		fmt.Printf("successfully ran down migration on db \"%s\"\n", c.DbName)
+		os.Exit(0)
 	}
 }
