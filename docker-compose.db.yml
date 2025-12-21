@@ -1,0 +1,29 @@
+version: "3.9"
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: app
+      POSTGRES_PASSWORD: app
+      POSTGRES_DB: db
+    ports:
+      - "5431:5432"
+    volumes:
+      - db:/var/lib/posgressql
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile.migrate
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db # Corresponds to the db service above
+      DB_PORT: 5432
+      DB_NAME: db 
+      DB_USER: app
+      DB_PASSWORD: app
+      DB_SSL_MODE: disable
+
+volumes:
+  db:

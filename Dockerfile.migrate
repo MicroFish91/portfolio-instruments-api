@@ -1,0 +1,11 @@
+FROM golang:1.25.4-alpine
+
+WORKDIR /app
+
+COPY . .
+RUN chmod +x ./scripts/wait-for-it.sh
+
+ENV GOFLAGS="-mod=vendor"
+
+# Note: Docker Compose services communicate using the internal container port (5432), not the host port (5431)
+CMD ["sh", "-c", "./scripts/wait-for-it.sh db:5432 -- go run cmd/migrate/main.go up"]

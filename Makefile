@@ -19,11 +19,15 @@ migrate-down:
 tc-redact:
 	@go run cmd/tc_redact/main.go
 
-config-up:
-	@docker-compose up -d
+config-db-up:
+	@docker-compose -f docker-compose.db.yml up -d
+
+config-app-up:
+	@docker-compose -f docker-compose.app.yml up -d
 
 config-down:
-	@docker-compose down
+	-@docker-compose -f docker-compose.db.yml down -v --remove-orphans
+	-@docker-compose -f docker-compose.app.yml down -v --remove-orphans
 
 pg-dump:
 	@go run cmd/pg_commands/main.go dump
