@@ -1,28 +1,29 @@
 // ⚡️ Fiber is an Express inspired web framework written in Go with ☕️
-// 🤖 Github Repository: https://github.com/gofiber/fiber
+// 🤖 GitHub Repository: https://github.com/gofiber/fiber
 // 📌 API Documentation: https://docs.gofiber.io
 
 package fiber
 
 import (
 	"sort"
-	"strings"
 	"sync"
 	"sync/atomic"
+
+	"github.com/gofiber/utils/v2"
 )
 
 // Put fields related to mounting.
 type mountFields struct {
 	// Mounted and main apps
 	appList map[string]*App
+	// Prefix of app if it was mounted
+	mountPath string
 	// Ordered keys of apps (sorted by key length for Render)
 	appListKeys []string
 	// check added routes of sub-apps
 	subAppsRoutesAdded sync.Once
 	// check mounted sub-apps
 	subAppsProcessed sync.Once
-	// Prefix of app if it was mounted
-	mountPath string
 }
 
 // Create empty mountFields instance
@@ -39,7 +40,7 @@ func newMountFields(app *App) *mountFields {
 // any of the fiber's sub apps are added to the application's error handlers
 // to be invoked on errors that happen within the prefix route.
 func (app *App) mount(prefix string, subApp *App) Router {
-	prefix = strings.TrimRight(prefix, "/")
+	prefix = utils.TrimRight(prefix, '/')
 	if prefix == "" {
 		prefix = "/"
 	}
@@ -54,7 +55,7 @@ func (app *App) mount(prefix string, subApp *App) Router {
 
 	// register mounted group
 	mountGroup := &Group{Prefix: prefix, app: subApp}
-	app.register([]string{methodUse}, prefix, mountGroup, nil)
+	app.register([]string{methodUse}, prefix, mountGroup)
 
 	// Execute onMount hooks
 	if err := subApp.hooks.executeOnMountHooks(app); err != nil {
@@ -69,7 +70,7 @@ func (app *App) mount(prefix string, subApp *App) Router {
 // compose them as a single service using Mount.
 func (grp *Group) mount(prefix string, subApp *App) Router {
 	groupPath := getGroupPath(grp.Prefix, prefix)
-	groupPath = strings.TrimRight(groupPath, "/")
+	groupPath = utils.TrimRight(groupPath, '/')
 	if groupPath == "" {
 		groupPath = "/"
 	}
@@ -84,7 +85,7 @@ func (grp *Group) mount(prefix string, subApp *App) Router {
 
 	// register mounted group
 	mountGroup := &Group{Prefix: groupPath, app: subApp}
-	grp.app.register([]string{methodUse}, groupPath, mountGroup, nil)
+	grp.app.register([]string{methodUse}, groupPath, mountGroup)
 
 	// Execute onMount hooks
 	if err := subApp.hooks.executeOnMountHooks(grp.app); err != nil {
@@ -94,7 +95,7 @@ func (grp *Group) mount(prefix string, subApp *App) Router {
 	return grp
 }
 
-// The MountPath property contains one or more path patterns on which a sub-app was mounted.
+// MountPath returns the route pattern where the current app instance was mounted as a sub-application.
 func (app *App) MountPath() string {
 	return app.mountFields.mountPath
 }
@@ -174,7 +175,6 @@ func (app *App) processSubAppsRoutes() {
 		}
 	}
 	var handlersCount uint32
-	var routePos uint32
 	// Iterate over the stack of the parent app
 	for m := range app.stack {
 		// Iterate over each route in the stack
@@ -183,11 +183,8 @@ func (app *App) processSubAppsRoutes() {
 			route := app.stack[m][i]
 			// Check if the route has a mounted app
 			if !route.mount {
-				routePos++
-				// If not, update the route's position and continue
-				route.pos = routePos
 				if !route.use || (route.use && m == 0) {
-					handlersCount += uint32(len(route.Handlers))
+					handlersCount += uint32(len(route.Handlers)) //nolint:gosec // Not a concern
 				}
 				continue
 			}
@@ -214,11 +211,7 @@ func (app *App) processSubAppsRoutes() {
 			copy(newStack[i+len(subRoutes):], app.stack[m][i+1:])
 			app.stack[m] = newStack
 
-			// Decrease the parent app's route count to account for the mounted app's original route
-			atomic.AddUint32(&app.routesCount, ^uint32(0))
 			i--
-			// Increase the parent app's route count to account for the sub-app's routes
-			atomic.AddUint32(&app.routesCount, uint32(len(subRoutes)))
 
 			// Mark the parent app's routes as refreshed
 			app.routesRefreshed = true

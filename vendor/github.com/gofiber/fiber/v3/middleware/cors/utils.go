@@ -18,7 +18,7 @@ func normalizeDomain(input string) string {
 	input = strings.TrimPrefix(strings.TrimPrefix(input, "http://"), "https://")
 
 	// Find and remove port, if present
-	if len(input) > 0 && input[0] != '[' {
+	if input != "" && input[0] != '[' {
 		if portIndex := strings.Index(input, ":"); portIndex != -1 {
 			input = input[:portIndex]
 		}
@@ -31,14 +31,9 @@ func normalizeDomain(input string) string {
 // and normalizes it by removing any path or trailing slash.
 // It returns a boolean indicating whether the origin is valid
 // and the normalized origin.
-func normalizeOrigin(origin string) (bool, string) {
+func normalizeOrigin(origin string) (valid bool, normalized string) { //nolint:nonamedreturns // gocritic unnamedResult prefers naming validity and normalized origin results
 	parsedOrigin, err := url.Parse(origin)
 	if err != nil {
-		return false, ""
-	}
-
-	// Validate the scheme is either http or https
-	if parsedOrigin.Scheme != "http" && parsedOrigin.Scheme != "https" {
 		return false, ""
 	}
 
@@ -67,5 +62,32 @@ type subdomain struct {
 }
 
 func (s subdomain) match(o string) bool {
-	return len(o) >= len(s.prefix)+len(s.suffix) && strings.HasPrefix(o, s.prefix) && strings.HasSuffix(o, s.suffix)
+	// Not a subdomain if not long enough for a dot separator.
+	if len(o) < len(s.prefix)+len(s.suffix)+1 {
+		return false
+	}
+
+	if !strings.HasPrefix(o, s.prefix) || !strings.HasSuffix(o, s.suffix) {
+		return false
+	}
+
+	// Check for the dot separator and validate that there is at least one
+	// non-empty label between prefix and suffix. Empty labels like
+	// "https://.example.com" or "https://..example.com" should not match.
+	suffixStartIndex := len(o) - len(s.suffix)
+	if suffixStartIndex <= len(s.prefix) {
+		return false
+	}
+	if o[suffixStartIndex-1] != '.' {
+		return false
+	}
+
+	// Extract the subdomain part (without the trailing dot) and ensure it
+	// doesn't contain empty labels.
+	sub := o[len(s.prefix) : suffixStartIndex-1]
+	if sub == "" || strings.HasPrefix(sub, ".") || strings.Contains(sub, "..") {
+		return false
+	}
+
+	return true
 }

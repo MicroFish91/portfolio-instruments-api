@@ -1,5 +1,5 @@
 // ⚡️ Fiber is an Express inspired web framework written in Go with ☕️
-// 🤖 Github Repository: https://github.com/gofiber/fiber
+// 🤖 GitHub Repository: https://github.com/gofiber/fiber
 // 📌 API Documentation: https://docs.gofiber.io
 
 package fiber
@@ -9,27 +9,30 @@ import (
 	"crypto/tls"
 	"crypto/x509"
 	"fmt"
+	"io"
 	"net"
 	"os"
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"slices"
 	"sort"
-	"strconv"
 	"strings"
 	"text/tabwriter"
+	"time"
 
 	"github.com/gofiber/fiber/v3/log"
 	"github.com/mattn/go-colorable"
 	"github.com/mattn/go-isatty"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 // Figlet text to show Fiber ASCII art on startup message
 var figletFiberText = `
-    _______ __             
+    _______ __
    / ____(_) /_  ___  _____
   / /_  / / __ \/ _ \/ ___/
- / __/ / / /_/ /  __/ /    
+ / __/ / / /_/ /  __/ /
 /_/   /_/_.___/\___/_/          %s`
 
 const (
@@ -37,33 +40,7 @@ const (
 )
 
 // ListenConfig is a struct to customize startup of Fiber.
-//
-// TODO: Add timeout for graceful shutdown.
 type ListenConfig struct {
-	// Known networks are "tcp", "tcp4" (IPv4-only), "tcp6" (IPv6-only)
-	// WARNING: When prefork is set to true, only "tcp4" and "tcp6" can be chosen.
-	//
-	// Default: NetworkTCP4
-	ListenerNetwork string `json:"listener_network"`
-
-	// CertFile is a path of certficate file.
-	// If you want to use TLS, you have to enter this field.
-	//
-	// Default : ""
-	CertFile string `json:"cert_file"`
-
-	// KeyFile is a path of certficate's private key.
-	// If you want to use TLS, you have to enter this field.
-	//
-	// Default : ""
-	CertKeyFile string `json:"cert_key_file"`
-
-	// CertClientFile is a path of client certficate.
-	// If you want to use mTLS, you have to enter this field.
-	//
-	// Default : ""
-	CertClientFile string `json:"cert_client_file"`
-
 	// GracefulContext is a field to shutdown Fiber by given context gracefully.
 	//
 	// Default: nil
@@ -84,6 +61,54 @@ type ListenConfig struct {
 	// Default: nil
 	BeforeServeFunc func(app *App) error `json:"before_serve_func"`
 
+	// AutoCertManager manages TLS certificates automatically using the ACME protocol,
+	// Enables integration with Let's Encrypt or other ACME-compatible providers.
+	//
+	// Default: nil
+	AutoCertManager *autocert.Manager `json:"auto_cert_manager"`
+
+	// Known networks are "tcp", "tcp4" (IPv4-only), "tcp6" (IPv6-only), "unix" (Unix Domain Sockets)
+	// WARNING: When prefork is set to true, only "tcp4" and "tcp6" can be chosen.
+	//
+	// Default: NetworkTCP4
+	ListenerNetwork string `json:"listener_network"`
+
+	// CertFile is a path of certificate file.
+	// If you want to use TLS, you have to enter this field.
+	//
+	// Default : ""
+	CertFile string `json:"cert_file"`
+
+	// KeyFile is a path of certificate's private key.
+	// If you want to use TLS, you have to enter this field.
+	//
+	// Default : ""
+	CertKeyFile string `json:"cert_key_file"`
+
+	// CertClientFile is a path of client certificate.
+	// If you want to use mTLS, you have to enter this field.
+	//
+	// Default : ""
+	CertClientFile string `json:"cert_client_file"`
+
+	// When the graceful shutdown begins, use this field to set the timeout
+	// duration. If the timeout is reached, OnPostShutdown will be called with the error.
+	// Set to 0 to disable the timeout and wait indefinitely.
+	//
+	// Default: 10 * time.Second
+	ShutdownTimeout time.Duration `json:"shutdown_timeout"`
+
+	// FileMode to set for Unix Domain Socket (ListenerNetwork must be "unix")
+	//
+	// Default: 0770
+	UnixSocketFileMode os.FileMode `json:"unix_socket_file_mode"`
+
+	// TLSMinVersion allows to set TLS minimum version.
+	//
+	// Default: tls.VersionTLS12
+	// WARNING: TLS1.0 and TLS1.1 versions are not supported.
+	TLSMinVersion uint16 `json:"tls_min_version"`
+
 	// When set to true, it will not print out the «Fiber» ASCII art and listening address.
 	//
 	// Default: false
@@ -98,27 +123,16 @@ type ListenConfig struct {
 	//
 	// Default: false
 	EnablePrintRoutes bool `json:"enable_print_routes"`
-
-	// OnShutdownError allows to customize error behavior when to graceful shutdown server by given signal.
-	//
-	// Print error with log.Fatalf() by default.
-	// Default: nil
-	OnShutdownError func(err error)
-
-	// OnShutdownSuccess allows to customize success behavior when to graceful shutdown server by given signal.
-	//
-	// Default: nil
-	OnShutdownSuccess func()
 }
 
 // listenConfigDefault is a function to set default values of ListenConfig.
 func listenConfigDefault(config ...ListenConfig) ListenConfig {
 	if len(config) < 1 {
 		return ListenConfig{
-			ListenerNetwork: NetworkTCP4,
-			OnShutdownError: func(err error) {
-				log.Fatalf("shutdown: %v", err) //nolint:revive // It's an optipn
-			},
+			TLSMinVersion:      tls.VersionTLS12,
+			ListenerNetwork:    NetworkTCP4,
+			UnixSocketFileMode: 0o770,
+			ShutdownTimeout:    10 * time.Second,
 		}
 	}
 
@@ -127,10 +141,16 @@ func listenConfigDefault(config ...ListenConfig) ListenConfig {
 		cfg.ListenerNetwork = NetworkTCP4
 	}
 
-	if cfg.OnShutdownError == nil {
-		cfg.OnShutdownError = func(err error) {
-			log.Fatalf("shutdown: %v", err) //nolint:revive // It's an optipn
-		}
+	if cfg.UnixSocketFileMode == 0 {
+		cfg.UnixSocketFileMode = 0o770
+	}
+
+	if cfg.TLSMinVersion == 0 {
+		cfg.TLSMinVersion = tls.VersionTLS12
+	}
+
+	if cfg.TLSMinVersion != tls.VersionTLS12 && cfg.TLSMinVersion != tls.VersionTLS13 {
+		panic("unsupported TLS version, please use tls.VersionTLS12 or tls.VersionTLS13")
 	}
 
 	return cfg
@@ -154,8 +174,8 @@ func (app *App) Listen(addr string, config ...ListenConfig) error {
 		}
 
 		tlsHandler := &TLSHandler{}
-		tlsConfig = &tls.Config{
-			MinVersion: tls.VersionTLS12,
+		tlsConfig = &tls.Config{ //nolint:gosec // This is a user input
+			MinVersion: cfg.TLSMinVersion,
 			Certificates: []tls.Certificate{
 				cert,
 			},
@@ -177,9 +197,15 @@ func (app *App) Listen(addr string, config ...ListenConfig) error {
 
 		// Attach the tlsHandler to the config
 		app.SetTLSHandler(tlsHandler)
+	} else if cfg.AutoCertManager != nil {
+		tlsConfig = &tls.Config{ //nolint:gosec // This is a user input
+			MinVersion:     cfg.TLSMinVersion,
+			GetCertificate: cfg.AutoCertManager.GetCertificate,
+			NextProtos:     []string{"http/1.1", "acme-tls/1"},
+		}
 	}
 
-	if cfg.TLSConfigFunc != nil {
+	if tlsConfig != nil && cfg.TLSConfigFunc != nil {
 		cfg.TLSConfigFunc(tlsConfig)
 	}
 
@@ -188,16 +214,16 @@ func (app *App) Listen(addr string, config ...ListenConfig) error {
 		ctx, cancel := context.WithCancel(cfg.GracefulContext)
 		defer cancel()
 
-		go app.gracefulShutdown(ctx, cfg)
+		go app.gracefulShutdown(ctx, &cfg)
 	}
 
 	// Start prefork
 	if cfg.EnablePrefork {
-		return app.prefork(addr, tlsConfig, cfg)
+		return app.prefork(addr, tlsConfig, &cfg)
 	}
 
 	// Configure Listener
-	ln, err := app.createListener(addr, tlsConfig, cfg)
+	ln, err := app.createListener(addr, tlsConfig, &cfg)
 	if err != nil {
 		return fmt.Errorf("failed to listen: %w", err)
 	}
@@ -205,11 +231,13 @@ func (app *App) Listen(addr string, config ...ListenConfig) error {
 	// prepare the server for the start
 	app.startupProcess()
 
+	listenData := app.prepareListenData(ln.Addr().String(), getTLSConfig(ln) != nil, &cfg, nil)
+
 	// run hooks
-	app.runOnListenHooks(app.prepareListenData(ln.Addr().String(), getTLSConfig(ln) != nil, cfg))
+	app.runOnListenHooks(listenData)
 
 	// Print startup message & routes
-	app.printMessages(cfg, ln)
+	app.printMessages(&cfg, listenData)
 
 	// Serve
 	if cfg.BeforeServeFunc != nil {
@@ -231,17 +259,19 @@ func (app *App) Listener(ln net.Listener, config ...ListenConfig) error {
 		ctx, cancel := context.WithCancel(cfg.GracefulContext)
 		defer cancel()
 
-		go app.gracefulShutdown(ctx, cfg)
+		go app.gracefulShutdown(ctx, &cfg)
 	}
 
 	// prepare the server for the start
 	app.startupProcess()
 
+	listenData := app.prepareListenData(ln.Addr().String(), getTLSConfig(ln) != nil, &cfg, nil)
+
 	// run hooks
-	app.runOnListenHooks(app.prepareListenData(ln.Addr().String(), getTLSConfig(ln) != nil, cfg))
+	app.runOnListenHooks(listenData)
 
 	// Print startup message & routes
-	app.printMessages(cfg, ln)
+	app.printMessages(&cfg, listenData)
 
 	// Serve
 	if cfg.BeforeServeFunc != nil {
@@ -259,9 +289,19 @@ func (app *App) Listener(ln net.Listener, config ...ListenConfig) error {
 }
 
 // Create listener function.
-func (*App) createListener(addr string, tlsConfig *tls.Config, cfg ListenConfig) (net.Listener, error) {
+func (*App) createListener(addr string, tlsConfig *tls.Config, cfg *ListenConfig) (net.Listener, error) {
+	if cfg == nil {
+		cfg = &ListenConfig{}
+	}
 	var listener net.Listener
 	var err error
+
+	// Remove previously created socket, to make sure it's possible to listen
+	if cfg.ListenerNetwork == NetworkUnix {
+		if err = os.Remove(addr); err != nil && !os.IsNotExist(err) {
+			return nil, fmt.Errorf("unexpected error when trying to remove unix socket file %q: %w", addr, err)
+		}
+	}
 
 	if tlsConfig != nil {
 		listener, err = tls.Listen(cfg.ListenerNetwork, addr, tlsConfig)
@@ -275,6 +315,12 @@ func (*App) createListener(addr string, tlsConfig *tls.Config, cfg ListenConfig)
 		return nil, fmt.Errorf("failed to listen: %w", err)
 	}
 
+	if cfg.ListenerNetwork == NetworkUnix {
+		if err = os.Chmod(addr, cfg.UnixSocketFileMode); err != nil {
+			return nil, fmt.Errorf("cannot chmod %#o for %q: %w", cfg.UnixSocketFileMode, addr, err)
+		}
+	}
+
 	if cfg.ListenerAddrFunc != nil {
 		cfg.ListenerAddrFunc(listener.Addr())
 	}
@@ -282,20 +328,16 @@ func (*App) createListener(addr string, tlsConfig *tls.Config, cfg ListenConfig)
 	return listener, nil
 }
 
-func (app *App) printMessages(cfg ListenConfig, ln net.Listener) {
-	// Print startup message
-	if !cfg.DisableStartupMessage {
-		app.startupMessage(ln.Addr().String(), getTLSConfig(ln) != nil, "", cfg)
-	}
+func (app *App) printMessages(cfg *ListenConfig, listenData *ListenData) {
+	app.startupMessage(listenData, cfg)
 
-	// Print routes
 	if cfg.EnablePrintRoutes {
 		app.printRoutesMessage()
 	}
 }
 
-// prepareListenData create an slice of ListenData
-func (*App) prepareListenData(addr string, isTLS bool, cfg ListenConfig) ListenData { //revive:disable-line:flag-parameter // Accepting a bool param named isTLS if fine here
+// prepareListenData creates a ListenData instance populated with the application metadata.
+func (app *App) prepareListenData(addr string, isTLS bool, cfg *ListenConfig, childPIDs []int) *ListenData { //revive:disable-line:flag-parameter // Accepting a bool param named isTLS is fine here
 	host, port := parseAddr(addr)
 	if host == "" {
 		if cfg.ListenerNetwork == NetworkTCP6 {
@@ -305,118 +347,148 @@ func (*App) prepareListenData(addr string, isTLS bool, cfg ListenConfig) ListenD
 		}
 	}
 
-	return ListenData{
-		Host: host,
-		Port: port,
-		TLS:  isTLS,
+	processCount := 1
+	if cfg.EnablePrefork {
+		processCount = runtime.GOMAXPROCS(0)
+	}
+
+	var clonedPIDs []int
+	if len(childPIDs) > 0 {
+		clonedPIDs = slices.Clone(childPIDs)
+	}
+
+	return &ListenData{
+		Host:         host,
+		Port:         port,
+		Version:      Version,
+		AppName:      app.config.AppName,
+		ColorScheme:  app.config.ColorScheme,
+		ChildPIDs:    clonedPIDs,
+		HandlerCount: int(app.handlersCount),
+		ProcessCount: processCount,
+		PID:          os.Getpid(),
+		TLS:          isTLS,
+		Prefork:      cfg.EnablePrefork,
 	}
 }
 
-// startupMessage prepares the startup message with the handler number, port, address and other information
-func (app *App) startupMessage(addr string, isTLS bool, pids string, cfg ListenConfig) { //nolint: revive // Accepting a bool param named isTLS if fine here
-	// ignore child processes
-	if IsChild() {
-		return
-	}
-
-	// Alias colors
-	colors := app.config.ColorScheme
-
-	host, port := parseAddr(addr)
-	if host == "" {
-		if cfg.ListenerNetwork == NetworkTCP6 {
-			host = "[::1]"
-		} else {
-			host = globalIpv4Addr
-		}
-	}
-
-	scheme := schemeHTTP
-	if isTLS {
-		scheme = schemeHTTPS
-	}
-
-	isPrefork := "Disabled"
-	if cfg.EnablePrefork {
-		isPrefork = "Enabled"
-	}
-
-	procs := strconv.Itoa(runtime.GOMAXPROCS(0))
-	if !cfg.EnablePrefork {
-		procs = "1"
-	}
+// startupMessage renders the startup banner using the provided listener metadata and configuration.
+func (app *App) startupMessage(listenData *ListenData, cfg *ListenConfig) {
+	preData := newPreStartupMessageData(listenData)
+	colors := listenData.ColorScheme
 
 	out := colorable.NewColorableStdout()
 	if os.Getenv("TERM") == "dumb" || os.Getenv("NO_COLOR") == "1" || (!isatty.IsTerminal(os.Stdout.Fd()) && !isatty.IsCygwinTerminal(os.Stdout.Fd())) {
 		out = colorable.NewNonColorable(os.Stdout)
 	}
 
-	fmt.Fprintf(out, "%s\n", fmt.Sprintf(figletFiberText, colors.Red+"v"+Version+colors.Reset)) //nolint:errcheck,revive // ignore error
-	fmt.Fprintf(out, strings.Repeat("-", 50)+"\n")                                              //nolint:errcheck,revive // ignore error
+	// Add default entries
+	scheme := schemeHTTP
+	if listenData.TLS {
+		scheme = schemeHTTPS
+	}
 
-	if host == "0.0.0.0" {
-		//nolint:errcheck,revive // ignore error
-		fmt.Fprintf(out,
-			"%sINFO%s Server started on: \t%s%s://127.0.0.1:%s%s (bound on host 0.0.0.0 and port %s)\n",
-			colors.Green, colors.Reset, colors.Blue, scheme, port, colors.Reset, port)
+	if listenData.Host == globalIpv4Addr {
+		preData.AddInfo("server_address", "Server started on", fmt.Sprintf("%s%s://127.0.0.1:%s%s (bound on host 0.0.0.0 and port %s)",
+			colors.Blue, scheme, listenData.Port, colors.Reset, listenData.Port), 10)
 	} else {
-		//nolint:errcheck,revive // ignore error
-		fmt.Fprintf(out,
-			"%sINFO%s Server started on: \t%s%s%s\n",
-			colors.Green, colors.Reset, colors.Blue, fmt.Sprintf("%s://%s:%s", scheme, host, port), colors.Reset)
+		preData.AddInfo("server_address", "Server started on", fmt.Sprintf("%s%s://%s:%s%s",
+			colors.Blue, scheme, listenData.Host, listenData.Port, colors.Reset), 10)
 	}
 
-	if app.config.AppName != "" {
-		fmt.Fprintf(out, "%sINFO%s Application name: \t\t%s%s%s\n", colors.Green, colors.Reset, colors.Blue, app.config.AppName, colors.Reset) //nolint:errcheck,revive // ignore error
+	if listenData.AppName != "" {
+		preData.AddInfo("app_name", "Application name", fmt.Sprintf("\t%s%s%s", colors.Blue, listenData.AppName, colors.Reset), 9)
 	}
 
-	//nolint:errcheck,revive // ignore error
-	fmt.Fprintf(out,
-		"%sINFO%s Total handlers count: \t%s%s%s\n",
-		colors.Green, colors.Reset, colors.Blue, strconv.Itoa(int(app.handlersCount)), colors.Reset)
+	preData.AddInfo("total_handlers", "Total handlers", fmt.Sprintf("\t%s%d%s", colors.Blue, listenData.HandlerCount, colors.Reset), 8)
 
-	if isPrefork == "Enabled" {
-		fmt.Fprintf(out, "%sINFO%s Prefork: \t\t\t%s%s%s\n", colors.Green, colors.Reset, colors.Blue, isPrefork, colors.Reset) //nolint:errcheck,revive // ignore error
+	if listenData.Prefork {
+		preData.AddInfo("prefork", "Prefork", fmt.Sprintf("\t\t%sEnabled%s", colors.Blue, colors.Reset), 7)
 	} else {
-		fmt.Fprintf(out, "%sINFO%s Prefork: \t\t\t%s%s%s\n", colors.Green, colors.Reset, colors.Red, isPrefork, colors.Reset) //nolint:errcheck,revive // ignore error
+		preData.AddInfo("prefork", "Prefork", fmt.Sprintf("\t\t%sDisabled%s", colors.Red, colors.Reset), 6)
 	}
 
-	fmt.Fprintf(out, "%sINFO%s PID: \t\t\t%s%v%s\n", colors.Green, colors.Reset, colors.Blue, os.Getpid(), colors.Reset)       //nolint:errcheck,revive // ignore error
-	fmt.Fprintf(out, "%sINFO%s Total process count: \t%s%s%s\n", colors.Green, colors.Reset, colors.Blue, procs, colors.Reset) //nolint:errcheck,revive // ignore error
+	preData.AddInfo("pid", "PID", fmt.Sprintf("\t\t%s%d%s", colors.Blue, listenData.PID, colors.Reset), 5)
 
-	if cfg.EnablePrefork {
-		// Turn the `pids` variable (in the form ",a,b,c,d,e,f,etc") into a slice of PIDs
-		pidSlice := make([]string, 0)
-		for _, v := range strings.Split(pids, ",") {
-			if v != "" {
-				pidSlice = append(pidSlice, v)
-			}
+	preData.AddInfo("process_count", "Total process count", fmt.Sprintf("%s%d%s", colors.Blue, listenData.ProcessCount, colors.Reset), 4)
+
+	if err := app.hooks.executeOnPreStartupMessageHooks(preData); err != nil {
+		log.Errorf("failed to call pre startup message hook: %v", err)
+	}
+
+	disabled := cfg.DisableStartupMessage
+	isChild := IsChild()
+	prevented := preData != nil && preData.PreventDefault
+
+	defer func() {
+		postData := newPostStartupMessageData(listenData, disabled, isChild, prevented)
+		if err := app.hooks.executeOnPostStartupMessageHooks(postData); err != nil {
+			log.Errorf("failed to call post startup message hook: %v", err)
 		}
+	}()
 
-		fmt.Fprintf(out, "%sINFO%s Child PIDs: \t\t%s", colors.Green, colors.Reset, colors.Blue) //nolint:errcheck,revive // ignore error
-		totalPids := len(pidSlice)
+	if preData == nil || disabled || isChild || prevented {
+		return
+	}
+
+	if preData.BannerHeader != "" {
+		header := preData.BannerHeader
+		fmt.Fprint(out, header)
+		if !strings.HasSuffix(header, "\n") {
+			fmt.Fprintln(out)
+		}
+	} else {
+		fmt.Fprintf(out, "%s\n", fmt.Sprintf(figletFiberText, colors.Red+"v"+listenData.Version+colors.Reset))
+		fmt.Fprintln(out, strings.Repeat("-", 50))
+	}
+
+	printStartupEntries(out, &colors, preData.entries)
+
+	app.logServices(app.servicesStartupCtx(), out, &colors)
+
+	if listenData.Prefork && len(listenData.ChildPIDs) > 0 {
+		fmt.Fprintf(out, "%sINFO%s Child PIDs: \t\t%s", colors.Green, colors.Reset, colors.Blue)
+
+		totalPIDs := len(listenData.ChildPIDs)
 		rowTotalPidCount := 10
 
-		for i := 0; i < totalPids; i += rowTotalPidCount {
+		for i := 0; i < totalPIDs; i += rowTotalPidCount {
 			start := i
-			end := i + rowTotalPidCount
+			end := min(i+rowTotalPidCount, totalPIDs)
 
-			if end > totalPids {
-				end = totalPids
-			}
-
-			for n, pid := range pidSlice[start:end] {
-				fmt.Fprintf(out, "%s", pid) //nolint:errcheck,revive // ignore error
-				if n+1 != len(pidSlice[start:end]) {
-					fmt.Fprintf(out, ", ") //nolint:errcheck,revive // ignore error
+			for idx, pid := range listenData.ChildPIDs[start:end] {
+				fmt.Fprintf(out, "%d", pid)
+				if idx+1 != len(listenData.ChildPIDs[start:end]) {
+					fmt.Fprint(out, ", ")
 				}
 			}
-			fmt.Fprintf(out, "\n%s", colors.Reset) //nolint:errcheck,revive // ignore error
+			fmt.Fprintf(out, "\n%s", colors.Reset)
 		}
 	}
 
-	// add new Line as spacer
-	fmt.Fprintf(out, "\n%s", colors.Reset) //nolint:errcheck,revive // ignore error
+	fmt.Fprintf(out, "\n%s", colors.Reset)
+}
+
+func printStartupEntries(out io.Writer, colors *Colors, entries []startupMessageEntry) {
+	// Sort entries by priority (higher priority first)
+	sort.Slice(entries, func(i, j int) bool {
+		return entries[i].priority > entries[j].priority
+	})
+
+	for _, entry := range entries {
+		var label string
+		var color string
+		switch entry.level {
+		case StartupMessageLevelWarning:
+			label, color = "WARN", colors.Yellow
+		case StartupMessageLevelError:
+			label, color = errString, colors.Red
+		default:
+			label, color = "INFO", colors.Green
+		}
+
+		fmt.Fprintf(out, "%s%s%s %s: \t%s%s%s\n", color, label, colors.Reset, entry.title, colors.Blue, entry.value, colors.Reset)
+	}
 }
 
 // printRoutesMessage print all routes with method, path, name and handlers
@@ -458,11 +530,10 @@ func (app *App) printRoutesMessage() {
 		return routes[i].path < routes[j].path
 	})
 
-	fmt.Fprintf(w, "%smethod\t%s| %spath\t%s| %sname\t%s| %shandlers\t%s\n", colors.Blue, colors.White, colors.Green, colors.White, colors.Cyan, colors.White, colors.Yellow, colors.Reset) //nolint:errcheck,revive // ignore error
-	fmt.Fprintf(w, "%s------\t%s| %s----\t%s| %s----\t%s| %s--------\t%s\n", colors.Blue, colors.White, colors.Green, colors.White, colors.Cyan, colors.White, colors.Yellow, colors.Reset) //nolint:errcheck,revive // ignore error
+	fmt.Fprintf(w, "%smethod\t%s| %spath\t%s| %sname\t%s| %shandlers\t%s\n", colors.Blue, colors.White, colors.Green, colors.White, colors.Cyan, colors.White, colors.Yellow, colors.Reset)
+	fmt.Fprintf(w, "%s------\t%s| %s----\t%s| %s----\t%s| %s--------\t%s\n", colors.Blue, colors.White, colors.Green, colors.White, colors.Cyan, colors.White, colors.Yellow, colors.Reset)
 
 	for _, route := range routes {
-		//nolint:errcheck,revive // ignore error
 		fmt.Fprintf(w, "%s%s\t%s| %s%s\t%s| %s%s\t%s| %s%s%s\n", colors.Blue, route.method, colors.White, colors.Green, route.path, colors.White, colors.Cyan, route.name, colors.White, colors.Yellow, route.handlers, colors.Reset)
 	}
 
@@ -470,14 +541,21 @@ func (app *App) printRoutesMessage() {
 }
 
 // shutdown goroutine
-func (app *App) gracefulShutdown(ctx context.Context, cfg ListenConfig) {
+func (app *App) gracefulShutdown(ctx context.Context, cfg *ListenConfig) {
 	<-ctx.Done()
 
-	if err := app.Shutdown(); err != nil { //nolint:contextcheck // TODO: Implement it
-		cfg.OnShutdownError(err)
+	var err error
+
+	if cfg != nil && cfg.ShutdownTimeout != 0 {
+		err = app.ShutdownWithTimeout(cfg.ShutdownTimeout) //nolint:contextcheck // TODO: Implement it
+	} else {
+		err = app.Shutdown() //nolint:contextcheck // TODO: Implement it
 	}
 
-	if success := cfg.OnShutdownSuccess; success != nil {
-		success()
+	if err != nil {
+		app.hooks.executeOnPostShutdownHooks(err)
+		return
 	}
+
+	app.hooks.executeOnPostShutdownHooks(nil)
 }

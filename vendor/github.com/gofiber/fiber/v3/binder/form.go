@@ -1,53 +1,71 @@
 package binder
 
 import (
-	"reflect"
-	"strings"
+	"mime/multipart"
 
 	"github.com/gofiber/utils/v2"
 	"github.com/valyala/fasthttp"
 )
 
-type formBinding struct{}
+const MIMEMultipartForm string = "multipart/form-data"
 
-func (*formBinding) Name() string {
+// FormBinding is the form binder for form request body.
+type FormBinding struct {
+	EnableSplitting bool
+}
+
+// Name returns the binding name.
+func (*FormBinding) Name() string {
 	return "form"
 }
 
-func (b *formBinding) Bind(reqCtx *fasthttp.RequestCtx, out any) error {
+// Bind parses the request body and returns the result.
+func (b *FormBinding) Bind(req *fasthttp.Request, out any) error {
 	data := make(map[string][]string)
-	var err error
 
-	reqCtx.PostArgs().VisitAll(func(key, val []byte) {
-		if err != nil {
-			return
-		}
+	// Handle multipart form
+	if FilterFlags(utils.UnsafeString(req.Header.ContentType())) == MIMEMultipartForm {
+		return b.bindMultipart(req, out)
+	}
 
+	for key, val := range req.PostArgs().All() {
 		k := utils.UnsafeString(key)
 		v := utils.UnsafeString(val)
-
-		if strings.Contains(k, "[") {
-			k, err = parseParamSquareBrackets(k)
+		if err := formatBindData(b.Name(), out, data, k, v, b.EnableSplitting, true); err != nil {
+			return err
 		}
-
-		if strings.Contains(v, ",") && equalFieldType(out, reflect.Slice, k) {
-			values := strings.Split(v, ",")
-			for i := 0; i < len(values); i++ {
-				data[k] = append(data[k], values[i])
-			}
-		} else {
-			data[k] = append(data[k], v)
-		}
-	})
+	}
 
 	return parse(b.Name(), out, data)
 }
 
-func (b *formBinding) BindMultipart(reqCtx *fasthttp.RequestCtx, out any) error {
-	data, err := reqCtx.MultipartForm()
+// bindMultipart parses the request body and returns the result.
+func (b *FormBinding) bindMultipart(req *fasthttp.Request, out any) error {
+	multipartForm, err := req.MultipartForm()
 	if err != nil {
 		return err
 	}
 
-	return parse(b.Name(), out, data.Value)
+	data := make(map[string][]string)
+	for key, values := range multipartForm.Value {
+		err = formatBindData(b.Name(), out, data, key, values, b.EnableSplitting, true)
+		if err != nil {
+			return err
+		}
+	}
+
+	files := make(map[string][]*multipart.FileHeader)
+	for key, values := range multipartForm.File {
+		err = formatBindData(b.Name(), out, files, key, values, b.EnableSplitting, true)
+		if err != nil {
+			return err
+		}
+	}
+
+	return parse(b.Name(), out, data, files)
+}
+
+// Reset resets the FormBinding binder.
+func (b *FormBinding) Reset() {
+	b.EnableSplitting = false
 }
