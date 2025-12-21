@@ -3,6 +3,7 @@ FROM golang:1.25.4-alpine
 WORKDIR /app
 
 COPY . .
+
 RUN chmod +x ./scripts/wait-for-it.sh
 
 ENV GOFLAGS="-mod=vendor"

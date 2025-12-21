@@ -7,8 +7,13 @@ WORKDIR /app
 # Copy the source code
 COPY . .
 
+# Environment variables
+ENV CGO_ENABLED=0
+ENV GOOS=linux
+ENV GOFLAGS="-mod=vendor"
+
 # Build
-RUN CGO_ENABLED=0 GOOS=linux go build -o /bin/portfolio-instruments ./cmd/api
+RUN go build -o /bin/portfolio-instruments ./cmd/api
 
 # Port
 EXPOSE 3000
