@@ -1,6 +1,8 @@
 package routes
 
 import (
+	"errors"
+
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/api/utils"
 	"github.com/gofiber/fiber/v3"
@@ -21,7 +23,7 @@ func RegisterRoutes(
 	})
 
 	app.All("/api/v1*", func(c fiber.Ctx) error {
-		return utils.SendJSON(c, fiber.StatusGone, fiber.Map{"message": "The v1 API has been officially deprecated, please use the v2 API"})
+		return utils.SendError(c, fiber.StatusGone, errors.New("The v1 API has been officially deprecated, please upgrade to the v2 API"))
 	})
 
 	routerV2 := app.Group("/api/v2")
