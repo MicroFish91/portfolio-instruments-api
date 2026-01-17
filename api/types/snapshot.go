@@ -14,6 +14,7 @@ type Snapshot struct {
 	Total                   float64   `json:"total"`
 	Weighted_er_pct         float64   `json:"weighted_er_pct"`
 	Rebalance_threshold_pct int       `json:"rebalance_threshold_pct"`
+	Value_order             []int     `json:"value_order,omitempty"`
 	Benchmark_id            int       `json:"benchmark_id,omitempty"`
 	User_id                 int       `json:"user_id"`
 	Created_at              time.Time `json:"created_at"`
@@ -27,6 +28,8 @@ type SnapshotHandler interface {
 	UpdateSnapshot(fiber.Ctx) error
 	DeleteSnapshot(fiber.Ctx) error
 	RebalanceSnapshot(fiber.Ctx) error
+
+	UpdateValueOrder(fiber.Ctx) error
 }
 
 type SnapshotStore interface {

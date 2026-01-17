@@ -36,6 +36,7 @@ func TestGetSnapshot(t *testing.T, snapshotId int, token string, expectedRespons
 				Snap_date:               getSnapshotResponse.Data.Snapshot.Snap_date,
 				Total:                   expectedResponse.Total,
 				Weighted_er_pct:         expectedResponse.WeightedErPct,
+				Value_order:             getSnapshotResponse.Data.Snapshot.Value_order,
 				Benchmark_id:            getSnapshotResponse.Data.Snapshot.Benchmark_id,
 				Rebalance_threshold_pct: getSnapshotResponse.Data.Snapshot.Rebalance_threshold_pct,
 				User_id:                 expectedUserId,

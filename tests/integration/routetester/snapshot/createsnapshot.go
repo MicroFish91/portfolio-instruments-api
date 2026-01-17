@@ -37,6 +37,7 @@ func TestCreateSnapshot(t *testing.T, payload any, token string, expectedRespons
 				Total:                   expectedResponse.Total,
 				Weighted_er_pct:         expectedResponse.WeightedErPct,
 				Rebalance_threshold_pct: p.Rebalance_threshold_pct,
+				Value_order:             nil,
 				Benchmark_id:            p.Benchmark_id,
 				User_id:                 expectedUserId,
 				Created_at:              createSnapshotResponse.Data.Snapshot.Created_at,

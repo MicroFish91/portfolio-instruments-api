@@ -1,0 +1,2 @@
+ALTER TABLE snapshots
+ADD COLUMN value_order integer[];

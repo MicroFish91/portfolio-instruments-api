@@ -28,6 +28,7 @@ func TestDeleteSnapshot(t *testing.T, snapshotId int, token string, expectedUser
 				Total:                   response.Data.Snapshot.Total,
 				Weighted_er_pct:         response.Data.Snapshot.Weighted_er_pct,
 				Rebalance_threshold_pct: response.Data.Snapshot.Rebalance_threshold_pct,
+				Value_order:             response.Data.Snapshot.Value_order,
 				Benchmark_id:            response.Data.Snapshot.Benchmark_id,
 				User_id:                 expectedUserId,
 				Created_at:              response.Data.Snapshot.Created_at,
