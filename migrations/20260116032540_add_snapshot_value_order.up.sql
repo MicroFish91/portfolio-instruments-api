@@ -1,2 +1,1 @@
-ALTER TABLE snapshots
-ADD COLUMN value_order integer[];
+ALTER TABLE snapshots ADD COLUMN value_order integer[];

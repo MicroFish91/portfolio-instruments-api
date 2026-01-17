@@ -1,2 +1,1 @@
-ALTER TABLE snapshots
-DROP COLUMN value_order;
+ALTER TABLE snapshots DROP COLUMN value_order;

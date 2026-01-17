@@ -47,6 +47,13 @@ func (h *SnapshotHandlerImpl) UpdateSnapshot(c fiber.Ctx) error {
 		valueOrder = snapshot.Value_order
 	}
 
+	if len(valueOrder) > 0 {
+		err = h.validateSnapshotValueOrder(c, snapshot.Snap_id, snapshot.User_id, valueOrder)
+		if err != nil {
+			return err
+		}
+	}
+
 	snapshot, err = h.snapshotStore.UpdateSnapshot(c.Context(), &types.Snapshot{
 		Snap_id:                 snapshot.Snap_id,
 		Description:             snapshotPayload.Description,
