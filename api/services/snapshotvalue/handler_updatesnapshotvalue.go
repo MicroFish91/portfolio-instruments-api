@@ -37,7 +37,7 @@ func (h *SnapshotValueHandlerImpl) UpdateSnapshotValue(c fiber.Ctx) error {
 	}
 
 	// Verify snapshot
-	if err := h.verifySnapshotById(c, svParams.Snap_id, userPayload.User_id); err != nil {
+	if _, err := h.verifySnapshotById(c, svParams.Snap_id, userPayload.User_id); err != nil {
 		return utils.SendError(c, fiber.StatusNotFound, err)
 	}
 

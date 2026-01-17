@@ -38,12 +38,13 @@ func (h *SnapshotValueHandlerImpl) CreateSnapshotValue(c fiber.Ctx) error {
 	}
 
 	// Verify snapshot
-	if err := h.verifySnapshotById(c, svParams.Snap_id, userPayload.User_id); err != nil {
+	snapshot, err := h.verifySnapshotById(c, svParams.Snap_id, userPayload.User_id)
+	if err != nil {
 		return utils.SendError(c, fiber.StatusNotFound, err)
 	}
 
-	// snapshotvalue
-	snapshotvalue, err := h.snapshotValueStore.CreateSnapshotValue(c.Context(), &types.SnapshotValue{
+	// snapshotValue
+	snapshotValue, err := h.snapshotValueStore.CreateSnapshotValue(c.Context(), &types.SnapshotValue{
 		Snap_id:        svParams.Snap_id,
 		Account_id:     svPayload.Account_id,
 		Holding_id:     svPayload.Holding_id,
@@ -55,17 +56,37 @@ func (h *SnapshotValueHandlerImpl) CreateSnapshotValue(c fiber.Ctx) error {
 		return utils.SendError(c, utils.StatusCodeFromError(err), err)
 	}
 
+	// If a value_order exists, append the newly created snapshot_value to the end of it
+	if len(snapshot.Value_order) > 0 {
+		valueOrder := append(snapshot.Value_order, snapshotValue.Snap_val_id)
+		_, err := h.snapshotStore.UpdateSnapshot(c.Context(), &types.Snapshot{
+			Snap_id:                 snapshot.Snap_id,
+			Description:             snapshot.Description,
+			Snap_date:               snapshot.Snap_date,
+			Total:                   snapshot.Total,
+			Weighted_er_pct:         snapshot.Weighted_er_pct,
+			Rebalance_threshold_pct: snapshot.Rebalance_threshold_pct,
+			Value_order:             valueOrder,
+			Benchmark_id:            snapshot.Benchmark_id,
+			User_id:                 snapshot.User_id,
+		})
+
+		if err != nil {
+			return utils.SendError(c, utils.StatusCodeFromError(err), fmt.Errorf("failed while attempting to update snapshot value_order: %s", err.Error()))
+		}
+	}
+
 	// Refresh snapshot total
 	if _, err = h.snapshotStore.RefreshSnapshotTotal(c.Context(), userPayload.User_id, svParams.Snap_id); err != nil {
-		return utils.SendError(c, utils.StatusCodeFromError(err), fmt.Errorf("failed to refresh snapshot total: %s", err.Error()))
+		return utils.SendError(c, utils.StatusCodeFromError(err), fmt.Errorf("failed while attempting to refresh snapshot total: %s", err.Error()))
 	}
 
 	// Refresh snapshot weighted_er
-	if _, err = h.snapshotStore.RefreshSnapshotWeightedER(c.Context(), snapshotvalue.User_id, svParams.Snap_id); err != nil {
-		return utils.SendError(c, utils.StatusCodeFromError(err), fmt.Errorf("failed to refresh snapshot weighted_er: %s", err.Error()))
+	if _, err = h.snapshotStore.RefreshSnapshotWeightedER(c.Context(), snapshotValue.User_id, svParams.Snap_id); err != nil {
+		return utils.SendError(c, utils.StatusCodeFromError(err), fmt.Errorf("failed while attempting to refresh snapshot weighted_er: %s", err.Error()))
 	}
 
-	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{"snapshot_value": snapshotvalue})
+	return utils.SendJSON(c, fiber.StatusCreated, fiber.Map{"snapshot_value": snapshotValue})
 }
 
 func (h *SnapshotValueHandlerImpl) verifyAccountById(c fiber.Ctx, accountId, userId int) error {
@@ -84,10 +105,10 @@ func (h *SnapshotValueHandlerImpl) verifyHoldingById(c fiber.Ctx, holdingId, use
 	return nil
 }
 
-func (h *SnapshotValueHandlerImpl) verifySnapshotById(c fiber.Ctx, snapshotId, userId int) error {
-	_, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotId, userId)
+func (h *SnapshotValueHandlerImpl) verifySnapshotById(c fiber.Ctx, snapshotId, userId int) (types.Snapshot, error) {
+	snapshot, err := h.snapshotStore.GetSnapshotById(c.Context(), snapshotId, userId)
 	if err != nil {
-		return fmt.Errorf(`specified snapshot with id "%d" not found for the current user`, snapshotId)
+		return types.Snapshot{}, fmt.Errorf(`specified snapshot with id "%d" not found for the current user`, snapshotId)
 	}
-	return nil
+	return snapshot, nil
 }
