@@ -48,9 +48,8 @@ func (h *SnapshotHandlerImpl) UpdateSnapshot(c fiber.Ctx) error {
 	}
 
 	if len(valueOrder) > 0 {
-		err = h.validateSnapshotValueOrder(c, snapshot.Snap_id, snapshot.User_id, valueOrder)
-		if err != nil {
-			return err
+		if code, err := h.validateSnapshotValueOrder(c, snapshot.Snap_id, snapshot.User_id, valueOrder); err != nil {
+			return utils.SendError(c, code, err)
 		}
 	}
 
