@@ -28,11 +28,12 @@ func (s *PostgresSnapshotStore) UpdateSnapshot(ctx context.Context, snap *types.
 				total = $3,
 				weighted_er_pct = $4,
 				rebalance_threshold_pct = $5,
-				benchmark_id = $6,
+				value_order = $6,
+				benchmark_id = $7,
 				updated_at = now()
 			where
-				snap_id = $7
-				and user_id = $8
+				snap_id = $8
+				and user_id = $9
 			returning
 				%s
 		`, snapshotColumns),
@@ -41,6 +42,7 @@ func (s *PostgresSnapshotStore) UpdateSnapshot(ctx context.Context, snap *types.
 		snap.Total,
 		snap.Weighted_er_pct,
 		snap.Rebalance_threshold_pct,
+		snap.Value_order,
 		snap.Benchmark_id,
 		snap.Snap_id,
 		snap.User_id,

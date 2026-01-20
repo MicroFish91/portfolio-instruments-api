@@ -33,6 +33,7 @@ func CoreSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v2/snapshots/:id", getSnapshotTest)
 	t.Run("GET://api/v2/snapshots/:id/rebalance", getSnapshotRebalanceTest)
 	t.Run("PUT://api/v2/snapshots/:id", updateSnapshotTest)
+	t.Run("PUT://api/v2/snapshots/:id/order", updateSnapshotValueOrderTest)
 	t.Run("DEL://api/v2/snapshots/:id", deleteSnapshotTest)
 	t.Run("Cleanup", snapshotServiceCleaner)
 }
@@ -186,7 +187,7 @@ func getSnapshotRebalanceTest(t *testing.T) {
 }
 
 func updateSnapshotTest(t *testing.T) {
-	for _, tc := range coreSnapshotTestCases.UpdateSnapshotTestCases(t, ss_core_snapid, ss_core_benchmarkid, ss_core_testuser.User_id, ss_core_testuser.Email) {
+	for _, tc := range coreSnapshotTestCases.UpdateSnapshotTestCases(t, ss_core_snapid, ss_core_svids, ss_core_benchmarkid, ss_core_testuser.User_id, ss_core_testuser.Email) {
 		t.Run(tc.Title, func(t2 *testing.T) {
 			tok := ss_core_token
 			if tc.ReplacementToken != "" {
@@ -194,6 +195,26 @@ func updateSnapshotTest(t *testing.T) {
 			}
 
 			snapshotTester.TestUpdateSnapshot(
+				t2,
+				tc.ParameterId,
+				tc.Payload,
+				tok,
+				ss_core_testuser.User_id,
+				tc.ExpectedStatusCode,
+			)
+		})
+	}
+}
+
+func updateSnapshotValueOrderTest(t *testing.T) {
+	for _, tc := range coreSnapshotTestCases.UpdateSnapshotValueOrderTestCases(t, ss_core_snapid, ss_core_svids, ss_core_benchmarkid, ss_core_testuser.User_id, ss_core_testuser.Email) {
+		t.Run(tc.Title, func(t2 *testing.T) {
+			tok := ss_core_token
+			if tc.ReplacementToken != "" {
+				tok = tc.ReplacementToken
+			}
+
+			snapshotTester.TestUpdateSnapshotValueOrder(
 				t2,
 				tc.ParameterId,
 				tc.Payload,

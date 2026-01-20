@@ -39,6 +39,20 @@ func (h *SnapshotHandlerImpl) UpdateSnapshot(c fiber.Ctx) error {
 		return utils.SendError(c, fiber.StatusNotFound, errors.New("snapshot with the provided id does not exist"))
 	}
 
+	// Don't require value order to be passed in the payload; if it's missing, just use whatever the previous value was
+	var valueOrder []int
+	if snapshotPayload.Value_order != nil {
+		valueOrder = snapshotPayload.Value_order
+	} else {
+		valueOrder = snapshot.Value_order
+	}
+
+	if len(valueOrder) > 0 {
+		if code, err := h.validateSnapshotValueOrder(c, snapshot.Snap_id, snapshot.User_id, valueOrder); err != nil {
+			return utils.SendError(c, code, err)
+		}
+	}
+
 	snapshot, err = h.snapshotStore.UpdateSnapshot(c.Context(), &types.Snapshot{
 		Snap_id:                 snapshot.Snap_id,
 		Description:             snapshotPayload.Description,
@@ -46,6 +60,7 @@ func (h *SnapshotHandlerImpl) UpdateSnapshot(c fiber.Ctx) error {
 		Total:                   snapshot.Total,
 		Weighted_er_pct:         snapshot.Weighted_er_pct,
 		Rebalance_threshold_pct: snapshotPayload.Rebalance_threshold_pct,
+		Value_order:             valueOrder,
 		Benchmark_id:            snapshotPayload.Benchmark_id,
 		User_id:                 snapshot.User_id,
 	})

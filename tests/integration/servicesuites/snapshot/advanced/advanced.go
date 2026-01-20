@@ -4,6 +4,7 @@ import (
 	"math"
 	"testing"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
@@ -12,6 +13,7 @@ import (
 	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/user"
 	advancedSnapshotTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshot/advanced"
 	"github.com/gofiber/fiber/v3"
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -35,6 +37,7 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v2/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
 	t.Run("GET://api/v2/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDateTest)
 	t.Run("GET://api/v2/snapshots/:id/rebalance", getSnapshotRebalanceTest)
+	t.Run("PUT://api/v2/snapshots/:id/order", snapshotValueOrderTest)
 
 	// snapshot_value
 	t.Run("PUT://api/v2/snapshots/:id/values/:id", updateSnapshotValueTest)
@@ -199,12 +202,103 @@ func getSnapshotRebalanceTest(t *testing.T) {
 	)
 }
 
+func snapshotValueOrderTest(t *testing.T) {
+	var snap types.Snapshot
+
+	// 1. Set the snapshot value_order
+	t.Run("200 PUT", func(t2 *testing.T) {
+		snapshotTester.TestUpdateSnapshotValueOrder(
+			t2,
+			ss_adv_snapid,
+			snapshot.UpdateValueOrderPayload{
+				Value_order: ss_adv_svids,
+			},
+			ss_adv_token,
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+	})
+
+	// 2. Test adding a new snapshot value
+	var newSvId int
+	t.Run("SV 202 POST", func(t2 *testing.T) {
+		newSvId = snapshotValueTester.TestCreateSnapshotValue(
+			t2,
+			snapshotvalue.CreateSnapshotValuePayload{
+				Account_id:     ss_adv_accountids[0],
+				Holding_id:     ss_adv_holdingids[8],
+				Total:          100,
+				Skip_rebalance: false,
+			},
+			ss_adv_token,
+			ss_adv_snapid,
+			ss_adv_testuser.User_id,
+			fiber.StatusCreated,
+		)
+	})
+
+	// Since a value_order should have already been added, we expect the newly created snapshot to add to the existing value_order list
+	newValueOrder := append([]int{}, ss_adv_svids...)
+	newValueOrder = append(newValueOrder, newSvId)
+
+	t.Run("200 GET Verify", func(t2 *testing.T) {
+		snap = snapshotTester.TestGetSnapshot(
+			t,
+			ss_adv_snapid,
+			ss_adv_token,
+			// Pass expected response with nil properties so we can skip the checks (only interested in the results of the GET call)
+			snapshotTester.ExpectedGetSnapshotResponse{
+				AccountIds:    nil,
+				HoldingIds:    nil,
+				Total:         0,
+				WeightedErPct: 0,
+			},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+
+		assert.ElementsMatch(t2, newValueOrder, snap.Value_order)
+	})
+
+	// 3. Test deleting a snapshot value
+	t.Run("SV 200 DEL", func(t2 *testing.T) {
+		snapshotValueTester.TestDeleteSnapshotValue(
+			t2,
+			ss_adv_snapid,
+			newSvId,
+			ss_adv_token,
+			snapshotValueTester.ExpectedDeleteSnapshotValueResponse{},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+	})
+
+	t.Run("200 GET Verify", func(t2 *testing.T) {
+		snap = snapshotTester.TestGetSnapshot(
+			t,
+			ss_adv_snapid,
+			ss_adv_token,
+			// Pass expected response with nil properties so we can skip the checks (only interested in the results of the GET call)
+			snapshotTester.ExpectedGetSnapshotResponse{
+				AccountIds:    nil,
+				HoldingIds:    nil,
+				Total:         0,
+				WeightedErPct: 0,
+			},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+
+		assert.ElementsMatch(t2, newValueOrder[0:len(newValueOrder)-1], snap.Value_order)
+	})
+}
+
 var updateSnapshotTotal float64
 var updateSnapshotExpenseRatio float64
 
 func updateSnapshotValueTest(t *testing.T) {
 	oldSvTotal := 10341.01 // See original create advanced snapshot test case
-	newSvTotal := 650.99   // New value we'll be using
+	newSvTotal := 650.99
 	expectedNewSnapshotTotal := advancedSnapshotTestCases.AdvancedSnapshotTotal - oldSvTotal + newSvTotal
 
 	// ER of holding 0 is 0
