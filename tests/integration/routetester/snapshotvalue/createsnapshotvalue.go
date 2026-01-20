@@ -40,5 +40,5 @@ func TestCreateSnapshotValue(t *testing.T, payload any, token string, sid, expec
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}
 
-	return 0
+	return response.Data.Snapshot_value.Snap_val_id
 }

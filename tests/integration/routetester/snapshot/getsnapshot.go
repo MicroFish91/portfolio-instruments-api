@@ -17,7 +17,7 @@ type ExpectedGetSnapshotResponse struct {
 	WeightedErPct float64
 }
 
-func TestGetSnapshot(t *testing.T, snapshotId int, token string, expectedResponse ExpectedGetSnapshotResponse, expectedUserId int, expectedStatusCode int) {
+func TestGetSnapshot(t *testing.T, snapshotId int, token string, expectedResponse ExpectedGetSnapshotResponse, expectedUserId int, expectedStatusCode int) types.Snapshot {
 	var route = fmt.Sprintf("/api/v2/snapshots/%d", snapshotId)
 
 	var getSnapshotResponse types.GetSnapshotResponse
@@ -26,6 +26,11 @@ func TestGetSnapshot(t *testing.T, snapshotId int, token string, expectedRespons
 	switch expectedStatusCode {
 	case 200:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
+
+		if expectedResponse.AccountIds == nil || expectedResponse.HoldingIds == nil {
+			// Don't check the values if the expected response values are passed in as nil
+			return getSnapshotResponse.Data.Snapshot
+		}
 
 		// Snapshot
 		assert.EqualExportedValues(
@@ -72,4 +77,6 @@ func TestGetSnapshot(t *testing.T, snapshotId int, token string, expectedRespons
 	default:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 	}
+
+	return getSnapshotResponse.Data.Snapshot
 }

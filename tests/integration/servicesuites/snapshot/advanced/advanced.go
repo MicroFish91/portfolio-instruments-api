@@ -4,6 +4,7 @@ import (
 	"math"
 	"testing"
 
+	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshot"
 	"github.com/MicroFish91/portfolio-instruments-api/api/services/snapshotvalue"
 	"github.com/MicroFish91/portfolio-instruments-api/api/types"
 	"github.com/MicroFish91/portfolio-instruments-api/tests/integration"
@@ -12,6 +13,7 @@ import (
 	userTester "github.com/MicroFish91/portfolio-instruments-api/tests/integration/routetester/user"
 	advancedSnapshotTestCases "github.com/MicroFish91/portfolio-instruments-api/tests/integration/testcases/snapshot/advanced"
 	"github.com/gofiber/fiber/v3"
+	"github.com/stretchr/testify/assert"
 )
 
 var (
@@ -23,6 +25,8 @@ var (
 	ss_adv_holdingids  []int
 	ss_adv_svids       []int
 	ss_adv_snapid      int
+
+	ss_adv_snapshot types.Snapshot
 )
 
 func AdvancedSnapshotScenarioTests(t *testing.T) {
@@ -35,8 +39,10 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v2/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
 	t.Run("GET://api/v2/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDateTest)
 	t.Run("GET://api/v2/snapshots/:id/rebalance", getSnapshotRebalanceTest)
+	t.Run("PUT://api/v2/snapshots/:id/order", updateSnapshotValueOrderTest)
 
 	// snapshot_value
+	t.Run("POST://api/v2/snapshots/:id/values/:id", createSnapshotValueTest)
 	t.Run("PUT://api/v2/snapshots/:id/values/:id", updateSnapshotValueTest)
 	t.Run("DEL://api/v2/snapshots/:id/values/:id", deleteSnapshotValueTest)
 
@@ -79,7 +85,7 @@ func getSnapshotTest(t *testing.T) {
 	expected.AccountIds = ss_adv_accountids
 	expected.HoldingIds = ss_adv_holdingids
 
-	snapshotTester.TestGetSnapshot(
+	ss_adv_snapshot = snapshotTester.TestGetSnapshot(
 		t,
 		ss_adv_snapid,
 		ss_adv_token,
@@ -199,12 +205,68 @@ func getSnapshotRebalanceTest(t *testing.T) {
 	)
 }
 
+func updateSnapshotValueOrderTest(t *testing.T) {
+	t.Run("200 PUT", func(t2 *testing.T) {
+		snapshotTester.TestUpdateSnapshotValueOrder(
+			t2,
+			ss_adv_snapid,
+			snapshot.UpdateValueOrderPayload{
+				Value_order: ss_adv_svids,
+			},
+			ss_adv_token,
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+	})
+}
+
+func createSnapshotValueTest(t *testing.T) {
+	var newSvId int
+	t.Run("200 POST", func(t2 *testing.T) {
+		newSvId = snapshotValueTester.TestCreateSnapshotValue(
+			t2,
+			snapshotvalue.CreateSnapshotValuePayload{
+				Account_id:     ss_adv_accountids[0],
+				Holding_id:     ss_adv_holdingids[8],
+				Total:          100,
+				Skip_rebalance: false,
+			},
+			ss_adv_token,
+			ss_adv_snapid,
+			ss_adv_testuser.User_id,
+			fiber.StatusCreated,
+		)
+	})
+
+	ss_adv_svids = append(ss_adv_svids, newSvId)
+
+	// Since a value_order should have already been added, we expect the newly created snapshot to add to the existing value_order list
+	t.Run("200 GET Verify", func(t2 *testing.T) {
+		ss_adv_snapshot = snapshotTester.TestGetSnapshot(
+			t,
+			ss_adv_snapid,
+			ss_adv_token,
+			// Pass expected response with nil properties so we can skip the checks (only interested in the results of the GET call)
+			snapshotTester.ExpectedGetSnapshotResponse{
+				AccountIds:    nil,
+				HoldingIds:    nil,
+				Total:         0,
+				WeightedErPct: 0,
+			},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+
+		assert.Equal(t2, ss_adv_svids, ss_adv_snapshot.Value_order)
+	})
+}
+
 var updateSnapshotTotal float64
 var updateSnapshotExpenseRatio float64
 
 func updateSnapshotValueTest(t *testing.T) {
 	oldSvTotal := 10341.01 // See original create advanced snapshot test case
-	newSvTotal := 650.99   // New value we'll be using
+	newSvTotal := 650.99
 	expectedNewSnapshotTotal := advancedSnapshotTestCases.AdvancedSnapshotTotal - oldSvTotal + newSvTotal
 
 	// ER of holding 0 is 0
@@ -283,7 +345,7 @@ func deleteSnapshotValueTest(t *testing.T) {
 	})
 
 	t.Run("200 GET Verify", func(t2 *testing.T) {
-		snapshotTester.TestGetSnapshot(
+		ss_adv_snapshot = snapshotTester.TestGetSnapshot(
 			t2,
 			ss_adv_snapid,
 			ss_adv_token,
@@ -296,6 +358,7 @@ func deleteSnapshotValueTest(t *testing.T) {
 			ss_adv_testuser.User_id,
 			fiber.StatusOK,
 		)
+		assert.EqualExportedValues(t2, ss_adv_svids[1:], ss_adv_snapshot.Value_order)
 	})
 }
 
