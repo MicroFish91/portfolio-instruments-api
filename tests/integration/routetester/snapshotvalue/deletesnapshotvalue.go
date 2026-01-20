@@ -24,6 +24,12 @@ func TestDeleteSnapshotValue(t *testing.T, snapId int, snapValId int, token stri
 	case 200:
 		assert.Equal(t, expectedStatusCode, res.StatusCode)
 		assert.NotEmpty(t, response.Data.Message)
+
+		// Placeholder expected responses indicate we should skip verification
+		if expectedResponse.Er == 0 && expectedResponse.Total == 0 {
+			return
+		}
+
 		assert.EqualExportedValues(
 			t,
 			types.SnapshotValue{

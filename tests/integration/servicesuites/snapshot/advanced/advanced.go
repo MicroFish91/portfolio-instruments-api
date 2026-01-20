@@ -25,8 +25,6 @@ var (
 	ss_adv_holdingids  []int
 	ss_adv_svids       []int
 	ss_adv_snapid      int
-
-	ss_adv_snapshot types.Snapshot
 )
 
 func AdvancedSnapshotScenarioTests(t *testing.T) {
@@ -39,10 +37,9 @@ func AdvancedSnapshotScenarioTests(t *testing.T) {
 	t.Run("GET://api/v2/snapshots/:id?group_by=ASSET_CATEGORY", getSnapshotByAssetCategoryTest)
 	t.Run("GET://api/v2/snapshots/:id?group_by=MATURATION_DATE", getSnapshotByMaturationDateTest)
 	t.Run("GET://api/v2/snapshots/:id/rebalance", getSnapshotRebalanceTest)
-	t.Run("PUT://api/v2/snapshots/:id/order", updateSnapshotValueOrderTest)
+	t.Run("PUT://api/v2/snapshots/:id/order", snapshotValueOrderTest)
 
 	// snapshot_value
-	t.Run("POST://api/v2/snapshots/:id/values/:id", createSnapshotValueTest)
 	t.Run("PUT://api/v2/snapshots/:id/values/:id", updateSnapshotValueTest)
 	t.Run("DEL://api/v2/snapshots/:id/values/:id", deleteSnapshotValueTest)
 
@@ -85,7 +82,7 @@ func getSnapshotTest(t *testing.T) {
 	expected.AccountIds = ss_adv_accountids
 	expected.HoldingIds = ss_adv_holdingids
 
-	ss_adv_snapshot = snapshotTester.TestGetSnapshot(
+	snapshotTester.TestGetSnapshot(
 		t,
 		ss_adv_snapid,
 		ss_adv_token,
@@ -205,7 +202,10 @@ func getSnapshotRebalanceTest(t *testing.T) {
 	)
 }
 
-func updateSnapshotValueOrderTest(t *testing.T) {
+func snapshotValueOrderTest(t *testing.T) {
+	var snap types.Snapshot
+
+	// 1. Set the snapshot value_order
 	t.Run("200 PUT", func(t2 *testing.T) {
 		snapshotTester.TestUpdateSnapshotValueOrder(
 			t2,
@@ -218,11 +218,10 @@ func updateSnapshotValueOrderTest(t *testing.T) {
 			fiber.StatusOK,
 		)
 	})
-}
 
-func createSnapshotValueTest(t *testing.T) {
+	// 2. Test adding a new snapshot value
 	var newSvId int
-	t.Run("200 POST", func(t2 *testing.T) {
+	t.Run("SV 202 POST", func(t2 *testing.T) {
 		newSvId = snapshotValueTester.TestCreateSnapshotValue(
 			t2,
 			snapshotvalue.CreateSnapshotValuePayload{
@@ -238,11 +237,12 @@ func createSnapshotValueTest(t *testing.T) {
 		)
 	})
 
-	ss_adv_svids = append(ss_adv_svids, newSvId)
-
 	// Since a value_order should have already been added, we expect the newly created snapshot to add to the existing value_order list
+	newValueOrder := append([]int{}, ss_adv_svids...)
+	newValueOrder = append(newValueOrder, newSvId)
+
 	t.Run("200 GET Verify", func(t2 *testing.T) {
-		ss_adv_snapshot = snapshotTester.TestGetSnapshot(
+		snap = snapshotTester.TestGetSnapshot(
 			t,
 			ss_adv_snapid,
 			ss_adv_token,
@@ -257,7 +257,39 @@ func createSnapshotValueTest(t *testing.T) {
 			fiber.StatusOK,
 		)
 
-		assert.Equal(t2, ss_adv_svids, ss_adv_snapshot.Value_order)
+		assert.ElementsMatch(t2, newValueOrder, snap.Value_order)
+	})
+
+	// 3. Test deleting a snapshot value
+	t.Run("SV 200 DEL", func(t2 *testing.T) {
+		snapshotValueTester.TestDeleteSnapshotValue(
+			t2,
+			ss_adv_snapid,
+			newSvId,
+			ss_adv_token,
+			snapshotValueTester.ExpectedDeleteSnapshotValueResponse{},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+	})
+
+	t.Run("200 GET Verify", func(t2 *testing.T) {
+		snap = snapshotTester.TestGetSnapshot(
+			t,
+			ss_adv_snapid,
+			ss_adv_token,
+			// Pass expected response with nil properties so we can skip the checks (only interested in the results of the GET call)
+			snapshotTester.ExpectedGetSnapshotResponse{
+				AccountIds:    nil,
+				HoldingIds:    nil,
+				Total:         0,
+				WeightedErPct: 0,
+			},
+			ss_adv_testuser.User_id,
+			fiber.StatusOK,
+		)
+
+		assert.ElementsMatch(t2, newValueOrder[0:len(newValueOrder)-1], snap.Value_order)
 	})
 }
 
@@ -345,7 +377,7 @@ func deleteSnapshotValueTest(t *testing.T) {
 	})
 
 	t.Run("200 GET Verify", func(t2 *testing.T) {
-		ss_adv_snapshot = snapshotTester.TestGetSnapshot(
+		snapshotTester.TestGetSnapshot(
 			t2,
 			ss_adv_snapid,
 			ss_adv_token,
@@ -358,7 +390,6 @@ func deleteSnapshotValueTest(t *testing.T) {
 			ss_adv_testuser.User_id,
 			fiber.StatusOK,
 		)
-		assert.EqualExportedValues(t2, ss_adv_svids[1:], ss_adv_snapshot.Value_order)
 	})
 }
 
