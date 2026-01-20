@@ -14,7 +14,8 @@ type UpdateValueOrderParams struct {
 
 func (p UpdateValueOrderPayload) Validate() error {
 	return validation.ValidateStruct(&p,
-		validation.Field(&p.Value_order, validation.Length(1, 0)),
+		// Required also ensure len > 0
+		validation.Field(&p.Value_order, validation.Required),
 	)
 }
 

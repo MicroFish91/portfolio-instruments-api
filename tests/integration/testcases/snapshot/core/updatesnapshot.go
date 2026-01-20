@@ -137,7 +137,7 @@ func UpdateSnapshotTestCases(t *testing.T, snapshotId int, svIds []int, benchmar
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title:       "400 Value Order 1",
+			Title:       "400 Value Order Type Mismatch",
 			ParameterId: snapshotId,
 			Payload: map[string]any{
 				"Snap_date":               utils.Calc_target_date(-10, -1),
@@ -148,23 +148,34 @@ func UpdateSnapshotTestCases(t *testing.T, snapshotId int, svIds []int, benchmar
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title:       "400 Value Order 2",
+			Title:       "400 Value Order Ids Mismatch",
 			ParameterId: snapshotId,
 			Payload: map[string]any{
 				"Snap_date":               utils.Calc_target_date(-10, -1),
 				"Benchmark_id":            benchmarkId,
-				"Value_order":             []int{1, 2, 3},
+				"Value_order":             []int{5, 3, 2, 1},
 				"Rebalance_threshold_pct": 10,
 			},
 			ExpectedStatusCode: fiber.StatusBadRequest,
 		},
 		{
-			Title:       "400 Value Order 3",
+			Title:       "400 Value Order Length Mismatch",
 			ParameterId: snapshotId,
 			Payload: map[string]any{
 				"Snap_date":               utils.Calc_target_date(-10, -1),
 				"Benchmark_id":            benchmarkId,
 				"Value_order":             svIds[:len(svIds)-1],
+				"Rebalance_threshold_pct": 10,
+			},
+			ExpectedStatusCode: fiber.StatusBadRequest,
+		},
+		{
+			Title:       "400 Value Order No Order",
+			ParameterId: snapshotId,
+			Payload: map[string]any{
+				"Snap_date":               utils.Calc_target_date(-10, -1),
+				"Benchmark_id":            benchmarkId,
+				"Value_order":             []int{},
 				"Rebalance_threshold_pct": 10,
 			},
 			ExpectedStatusCode: fiber.StatusBadRequest,

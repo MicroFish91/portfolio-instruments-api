@@ -203,6 +203,13 @@ type UpdateSnapshotResponse struct {
 	Error string `json:"error"`
 }
 
+type UpdateValueOrderResponse struct {
+	Data struct {
+		Snapshot Snapshot `json:"snapshot"`
+	} `json:"data"`
+	Error string `json:"error"`
+}
+
 type DeleteSnapshotResponse struct {
 	Data struct {
 		Message  string   `json:"message"`
