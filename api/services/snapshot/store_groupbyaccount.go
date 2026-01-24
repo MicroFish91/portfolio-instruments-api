@@ -41,8 +41,7 @@ func (s *PostgresSnapshotStore) GroupByAccount(ctx context.Context, snapId, user
 			INNER JOIN accounts
 			ON snapshots_values.account_id = accounts.account_id
 			WHERE snapshots_values.user_id = $1
-			AND snapshots_values.snap_id = $2 
-			AND is_deprecated is false
+			AND snapshots_values.snap_id = $2
 			GROUP BY accounts.%s`,
 			field, field,
 		),
