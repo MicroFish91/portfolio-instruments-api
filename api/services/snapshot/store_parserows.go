@@ -57,6 +57,7 @@ func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) ([]types.S
 	for rows.Next() {
 		var s types.Snapshot
 		var benchmark_id sql.NullInt64
+		var rebalance_threshold_pct sql.NullInt64
 
 		err := rows.Scan(
 			&s.Snap_id,
@@ -64,7 +65,7 @@ func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) ([]types.S
 			&s.Snap_date,
 			&s.Total,
 			&s.Weighted_er_pct,
-			&s.Rebalance_threshold_pct,
+			&rebalance_threshold_pct,
 			&s.Value_order,
 			&benchmark_id,
 			&s.User_id,
@@ -75,6 +76,12 @@ func (s *PostgresSnapshotStore) parseRowsIntoSnapshots(rows pgx.Rows) ([]types.S
 
 		if err != nil {
 			return nil, 0, err
+		}
+
+		if rebalance_threshold_pct.Valid {
+			s.Rebalance_threshold_pct = int(rebalance_threshold_pct.Int64)
+		} else {
+			s.Rebalance_threshold_pct = 0
 		}
 
 		if benchmark_id.Valid {
