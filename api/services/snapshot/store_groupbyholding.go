@@ -42,7 +42,6 @@ func (s *PostgresSnapshotStore) GroupByHolding(ctx context.Context, userId, snap
 	)
 	pgxb.AddQueryWithPositionals("WHERE snapshots_values.user_id = $x", []any{userId})
 	pgxb.AddQueryWithPositionals("AND snapshots_values.snap_id = $x", []any{snapId})
-	pgxb.AddQuery("AND is_deprecated is false")
 
 	if options.Omit_skip_reb {
 		pgxb.AddQuery("AND snapshots_values.skip_rebalance is false")
