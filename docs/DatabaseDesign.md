@@ -20,64 +20,59 @@
         enc_pw = 
         role = Default | Admin
 
-#### Settings:
-
-    | Column Name    | Datatype  | Not Null | Primary Key |
-    |----------------|-----------|----------|-------------|
-    | setting_id     | PKEY      | ✅       | ✅          |
-    | reb_thresh_pct | INTEGER   | ✅       |             |
-    | user_id        | INTEGER   | ✅       |             |
-    | benchmark_id   | INTEGER   |          |             |
-    | created_at     | TIMESTAMP | ✅       |             |
-    | updated_at     | TIMESTAMP | ✅       |             |
-
-    Example:
-        setting_id = 1
-        reb_thresh_pct = 10
-        user_id = 1
-        benchmark_id = 5
-
 #### Benchmarks:
 
-    | Column Name    | Datatype  | Not Null | Primary Key |
-    |----------------|-----------|----------|-------------|
-    | benchmark_id   | PKEY      | ✅       | ✅          |
-    | name           | TEXT      | ✅       |             |
-    | description    | TEXT      |          |             |
-    | std_dev_pct    | REAL      |          |             |
-    | real_return_pct| REAL      |          |             |
-    | drawdown_yrs   | INTEGER   |          |             |
-    | is_deprecated  | BOOLEAN   | ✅       |             |
-    | user_id        | INTEGER   | ✅       |             |
-    | created_at     | TIMESTAMP | ✅       |             |
-    | updated_at     | TIMESTAMP | ✅       |             |
+    | Column Name                    | Datatype  | Not Null | Primary Key |
+    |--------------------------------|-----------|----------|-------------|
+    | benchmark_id                   | PKEY      | ✅       | ✅          |
+    | name                           | TEXT      | ✅       |             |
+    | description                    | TEXT      |          |             |
+    | asset_allocation               | JSONB     | ✅       |             |
+    | std_dev_pct                    | REAL      |          |             |
+    | real_return_pct                | REAL      |          |             |
+    | drawdown_yrs                   | INTEGER   |          |             |
+    | rec_rebalance_threshold_pct    | INTEGER   |          |             |
+    | is_deprecated                  | BOOLEAN   | ✅       |             |
+    | user_id                        | INTEGER   | ✅       |             |
+    | created_at                     | TIMESTAMP | ✅       |             |
+    | updated_at                     | TIMESTAMP | ✅       |             |
 
     Example:
         benchmark_id = 1
         name = "Golden Butterfly"
         description: "A higher return portfolio based around the philosophies of the Permanent Portfolio"
+        asset_allocation: {"TSM": 20, "DSCV": 20, "LTB": 20, "STB": 20, "GOLD": 20}
         std_dev_pct: 11.2 
         real_return_pct: 7.4
         drawdown_yrs: 3
+        rec_rebalance_threshold_pct: 10
         is_deprecated: false
         user_id = 1
 
 #### Snapshots
 
-    | Column Name    | Datatype  | Not Null | Primary Key |
-    |----------------|-----------|----------|-------------|
-    | snap_id        | PKEY      | ✅       | ✅          |
-    | description    | TEXT      |          |             |
-    | snap_date      | DATE      | ✅       |             |
-    | total          | REAL      | ✅       |             |
-    | user_id        | INTEGER   | ✅       |             |
-    | created_at     | TIMESTAMP | ✅       |             |
-    | updated_at     | TIMESTAMP | ✅       |             |
+    | Column Name                | Datatype  | Not Null | Primary Key |
+    |----------------------------|-----------|----------|-------------|
+    | snap_id                    | PKEY      | ✅       | ✅          |
+    | description                | TEXT      |          |             |
+    | snap_date                  | DATE      | ✅       |             |
+    | total                      | REAL      |          |             |
+    | weighted_er_pct            | REAL      |          |             |
+    | benchmark_id               | INTEGER   |          |             |
+    | rebalance_threshold_pct    | INTEGER   |          |             |
+    | value_order                | INTEGER[] |          |             |
+    | user_id                    | INTEGER   | ✅       |             |
+    | created_at                 | TIMESTAMP | ✅       |             |
+    | updated_at                 | TIMESTAMP | ✅       |             |
 
     Example:
-        snapshot_id = 1
-        snapshot_date = 07/14/2024
-        total = 100.00
+        snap_id = 1
+        snap_date = 07/14/2024
+        total = 100000.00
+        weighted_er_pct = 0.125
+        benchmark_id = 1
+        rebalance_threshold_pct = 10
+        value_order = [1, 3, 2, 5, 4]
         user_id = 1
 
 #### SnapshotValues
@@ -96,11 +91,11 @@
 
     Example:
         snap_val_id = 1
-        snapshot_id = 1
+        snap_id = 1
         account_id = 1
         holding_id = 2 
         total = 5750.45
-        skip_rebalance = false // We want to rebalance by default
+        skip_rebalance = false
         user_id = 1
 
 #### Accounts:
@@ -144,12 +139,18 @@ A generalized data type typically used to represent a mutual fund/ETF holding, i
     | created_at     | TIMESTAMP | ✅       |             |
     | updated_at     | TIMESTAMP | ✅       |             |
     
+    Asset Categories (ENUM):
+        CASH, BILLS, STB, ITB, LTB, COMMODITIES, GOLD, REITS, TSM,
+        DLCB, DLCG, DLCV, DLCM, DMCB, DMCG, DMCV, DMCM, DSCG, DSCB, DSCV, DSCM,
+        ILCB, ILCG, ILCV, ILCM, IMCB, IMCG, IMCV, IMCM, ISCB, ISCG, ISCV, ISCM,
+        CRYPTO, OTHER
+
     Example:
         holding_id = 1
         name = Vanguard Total Stock Market Index
         ticker = VTSAX
         asset_category = TSM 
-        expense_ratio = 0.08
+        expense_ratio_pct = 0.08
         is_deprecated = false
         user_id = 1   
 
@@ -158,6 +159,6 @@ A generalized data type typically used to represent a mutual fund/ETF holding, i
         name = OTC Bond 05/2026
         asset_category = STB
         maturation_date = 05/01/2026
-        interest_rate = 4.5
+        interest_rate_pct = 4.5
         is_deprecated = false
         user_id = 1
