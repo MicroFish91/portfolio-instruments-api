@@ -11,12 +11,10 @@ The swagger tool I want to use is only supported through Fiber v2, so I will wai
 * `GET /api/v2/me`
 
 ### Users
+* `GET /api/v2/users` (Admin only)
 * `GET /api/v2/users/:id`
-* `PUT /api/v2/users/:id`
+* `PUT /api/v2/users/:id/verify` (Admin only)
 * `DEL /api/v2/users/:id`
-
-* `GET /api/v2/users/:id/settings`
-* `PUT /api/v2/users/:id/settings`
 
 ### Benchmarks
 * `POST /api/v2/benchmarks`
@@ -33,11 +31,11 @@ The swagger tool I want to use is only supported through Fiber v2, so I will wai
 * `DEL /api/v2/accounts/:id`
 
 ### Holdings
-* `POST /api/v2/accounts`
-* `GET /api/v2/accounts`
-* `GET /api/v2/accounts/:id`
-* `PUT /api/v2/accounts/:id`
-* `DEL /api/v2/accounts/:id`
+* `POST /api/v2/holdings`
+* `GET /api/v2/holdings`
+* `GET /api/v2/holdings/:id`
+* `PUT /api/v2/holdings/:id`
+* `DEL /api/v2/holdings/:id`
 
 ### Snapshots
 * `POST /api/v2/snapshots`
@@ -45,11 +43,12 @@ The swagger tool I want to use is only supported through Fiber v2, so I will wai
 * `GET /api/v2/snapshots/:id`
 * `GET /api/v2/snapshots/:id/rebalance`
 * `PUT /api/v2/snapshots/:id`
+* `PUT /api/v2/snapshots/:id/order`
 * `DEL /api/v2/snapshots/:id`
 
 ### SnapshotValues
-* `POST /api/v2/snapshots/:s_id/values`
-* `GET /api/v2/snapshots/:s_id/values`
-* `GET /api/v2/snapshots/:s_id/values/:sv_id`
-* `PUT /api/v2/snapshots/:s_id/values/:sv_id`
-* `DEL /api/v2/snapshots/:s_id/values/:sv_id`
+* `POST /api/v2/snapshots/:snap_id/values`
+* `GET /api/v2/snapshots/:snap_id/values`
+* `GET /api/v2/snapshots/:snap_id/values/:snap_val_id`
+* `PUT /api/v2/snapshots/:snap_id/values/:snap_val_id`
+* `DEL /api/v2/snapshots/:snap_id/values/:snap_val_id`
