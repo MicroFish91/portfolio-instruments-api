@@ -1,0 +1,15 @@
+name: portfolio-instruments-api
+services:
+  api:
+    project: ./api
+    host: containerapp
+    docker:
+      path: ../Dockerfile
+      registry: $(infra.outputs.acrLoginServer)
+      image: portfolio-instruments-api
+      tag: latest
+    image: $(infra.outputs.acrLoginServer)/portfolio-instruments-api:latest
+
+infra:
+  path: ./infra/main.bicep
+  parameters: ./infra/main.parameters.json
