@@ -21,7 +21,6 @@ const (
 
 var (
 	zstdDecoderPool            sync.Pool
-	zstdEncoderPool            sync.Pool
 	realZstdWriterPoolMap      = newCompressWriterPoolMap()
 	stacklessZstdWriterPoolMap = newCompressWriterPoolMap()
 )
@@ -42,21 +41,6 @@ func releaseZstdReader(zr *zstd.Decoder) {
 	zstdDecoderPool.Put(zr)
 }
 
-func acquireZstdWriter(w io.Writer, level int) (*zstd.Encoder, error) {
-	v := zstdEncoderPool.Get()
-	if v == nil {
-		return zstd.NewWriter(w, zstd.WithEncoderLevel(zstd.EncoderLevel(level)))
-	}
-	zw := v.(*zstd.Encoder)
-	zw.Reset(w)
-	return zw, nil
-}
-
-func releaseZstdWriter(zw *zstd.Encoder) { //nolint:unused
-	zw.Close()
-	zstdEncoderPool.Put(zw)
-}
-
 func acquireStacklessZstdWriter(w io.Writer, compressLevel int) stackless.Writer {
 	nLevel := normalizeZstdCompressLevel(compressLevel)
 	p := stacklessZstdWriterPoolMap[nLevel]
@@ -71,9 +55,9 @@ func acquireStacklessZstdWriter(w io.Writer, compressLevel int) stackless.Writer
 	return sw
 }
 
-func releaseStacklessZstdWriter(zf stackless.Writer, zstdDefault int) {
+func releaseStacklessZstdWriter(zf stackless.Writer, level int) {
 	zf.Close()
-	nLevel := normalizeZstdCompressLevel(zstdDefault)
+	nLevel := normalizeZstdCompressLevel(level)
 	p := stacklessZstdWriterPoolMap[nLevel]
 	p.Put(zf)
 }
@@ -83,7 +67,7 @@ func acquireRealZstdWriter(w io.Writer, level int) *zstd.Encoder {
 	p := realZstdWriterPoolMap[nLevel]
 	v := p.Get()
 	if v == nil {
-		zw, err := acquireZstdWriter(w, level)
+		zw, err := zstd.NewWriter(w, zstd.WithEncoderLevel(zstd.EncoderLevel(level)))
 		if err != nil {
 			panic(err)
 		}
@@ -94,7 +78,7 @@ func acquireRealZstdWriter(w io.Writer, level int) *zstd.Encoder {
 	return zw
 }
 
-func releaseRealZstdWrter(zw *zstd.Encoder, level int) {
+func releaseRealZstdWriter(zw *zstd.Encoder, level int) {
 	zw.Close()
 	nLevel := normalizeZstdCompressLevel(level)
 	p := realZstdWriterPoolMap[nLevel]
@@ -102,7 +86,7 @@ func releaseRealZstdWrter(zw *zstd.Encoder, level int) {
 }
 
 func AppendZstdBytesLevel(dst, src []byte, level int) []byte {
-	w := &byteSliceWriter{dst}
+	w := &byteSliceWriter{b: dst}
 	WriteZstdLevel(w, src, level) //nolint:errcheck
 	return w.b
 }
@@ -144,7 +128,7 @@ func nonblockingWriteZstd(ctxv any) {
 	ctx := ctxv.(*compressCtx)
 	zw := acquireRealZstdWriter(ctx.w, ctx.level)
 	zw.Write(ctx.p) //nolint:errcheck
-	releaseRealZstdWrter(zw, ctx.level)
+	releaseRealZstdWriter(zw, ctx.level)
 }
 
 // AppendZstdBytes appends zstd src to dst and returns the resulting dst.
@@ -155,7 +139,7 @@ func AppendZstdBytes(dst, src []byte) []byte {
 // WriteUnzstd writes unzstd p to w and returns the number of uncompressed
 // bytes written to w.
 func WriteUnzstd(w io.Writer, p []byte) (int, error) {
-	r := &byteSliceReader{p}
+	r := &byteSliceReader{b: p}
 	zr, err := acquireZstdReader(r)
 	if err != nil {
 		return 0, err
@@ -171,7 +155,7 @@ func WriteUnzstd(w io.Writer, p []byte) (int, error) {
 
 // AppendUnzstdBytes appends unzstd src to dst and returns the resulting dst.
 func AppendUnzstdBytes(dst, src []byte) ([]byte, error) {
-	w := &byteSliceWriter{dst}
+	w := &byteSliceWriter{b: dst}
 	_, err := WriteUnzstd(w, src)
 	return w.b, err
 }

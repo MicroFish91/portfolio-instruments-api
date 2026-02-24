@@ -1,6 +1,8 @@
 package limiter
 
 import (
+	"context"
+	"fmt"
 	"sync"
 	"time"
 
@@ -8,8 +10,9 @@ import (
 	"github.com/gofiber/fiber/v3/internal/memory"
 )
 
-// go:generate msgp
 // msgp -file="manager.go" -o="manager_msgp.go" -tests=false -unexported
+//
+//go:generate msgp -o=manager_msgp.go -tests=false -unexported
 type item struct {
 	currHits int
 	prevHits int
@@ -18,12 +21,15 @@ type item struct {
 
 //msgp:ignore manager
 type manager struct {
-	pool    sync.Pool
-	memory  *memory.Storage
-	storage fiber.Storage
+	pool       sync.Pool
+	memory     *memory.Storage
+	storage    fiber.Storage
+	redactKeys bool
 }
 
-func newManager(storage fiber.Storage) *manager {
+const redactedKey = "[redacted]"
+
+func newManager(storage fiber.Storage, redactKeys bool) *manager {
 	// Create new storage handler
 	manager := &manager{
 		pool: sync.Pool{
@@ -31,6 +37,7 @@ func newManager(storage fiber.Storage) *manager {
 				return new(item)
 			},
 		},
+		redactKeys: redactKeys,
 	}
 	if storage != nil {
 		// Use provided storage if provided
@@ -44,7 +51,7 @@ func newManager(storage fiber.Storage) *manager {
 
 // acquire returns an *entry from the sync.Pool
 func (m *manager) acquire() *item {
-	return m.pool.Get().(*item) //nolint:forcetypeassert // We store nothing else in the pool
+	return m.pool.Get().(*item) //nolint:forcetypeassert,errcheck // We store nothing else in the pool
 }
 
 // release and reset *entry to sync.Pool
@@ -56,37 +63,59 @@ func (m *manager) release(e *item) {
 }
 
 // get data from storage or memory
-func (m *manager) get(key string) *item {
-	var it *item
+func (m *manager) get(ctx context.Context, key string) (*item, error) {
 	if m.storage != nil {
-		it = m.acquire()
-		raw, err := m.storage.Get(key)
+		raw, err := m.storage.GetWithContext(ctx, key)
 		if err != nil {
-			return it
+			return nil, fmt.Errorf("limiter: failed to get key %q from storage: %w", m.logKey(key), err)
 		}
 		if raw != nil {
+			it := m.acquire()
 			if _, err := it.UnmarshalMsg(raw); err != nil {
-				return it
+				m.release(it)
+				return nil, fmt.Errorf("limiter: failed to unmarshal key %q: %w", m.logKey(key), err)
 			}
+			return it, nil
 		}
-		return it
+		return m.acquire(), nil
 	}
-	if it, _ = m.memory.Get(key).(*item); it == nil { //nolint:errcheck // We store nothing else in the pool
-		it = m.acquire()
-		return it
+
+	value := m.memory.Get(key)
+	if value == nil {
+		return m.acquire(), nil
 	}
-	return it
+
+	it, ok := value.(*item)
+	if !ok {
+		return nil, fmt.Errorf("limiter: unexpected entry type %T for key %q", value, m.logKey(key))
+	}
+
+	return it, nil
 }
 
 // set data to storage or memory
-func (m *manager) set(key string, it *item, exp time.Duration) {
+func (m *manager) set(ctx context.Context, key string, it *item, exp time.Duration) error {
 	if m.storage != nil {
-		if raw, err := it.MarshalMsg(nil); err == nil {
-			_ = m.storage.Set(key, raw, exp) //nolint:errcheck // TODO: Handle error here
+		raw, err := it.MarshalMsg(nil)
+		if err != nil {
+			m.release(it)
+			return fmt.Errorf("limiter: failed to marshal key %q: %w", m.logKey(key), err)
 		}
-		// we can release data because it's serialized to database
+		if err := m.storage.SetWithContext(ctx, key, raw, exp); err != nil {
+			m.release(it)
+			return fmt.Errorf("limiter: failed to store key %q: %w", m.logKey(key), err)
+		}
 		m.release(it)
-	} else {
-		m.memory.Set(key, it, exp)
+		return nil
 	}
+
+	m.memory.Set(key, it, exp)
+	return nil
+}
+
+func (m *manager) logKey(key string) string {
+	if m.redactKeys {
+		return redactedKey
+	}
+	return key
 }

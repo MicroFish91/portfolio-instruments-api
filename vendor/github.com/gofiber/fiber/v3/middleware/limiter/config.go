@@ -6,17 +6,35 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
+const defaultLimiterMax = 5
+
 // Config defines the config for middleware.
 type Config struct {
+	// Store is used to store the state of the middleware
+	//
+	// Default: an in memory store for this process only
+	Storage fiber.Storage
+
+	// LimiterMiddleware is the struct that implements a limiter middleware.
+	//
+	// Default: a new Fixed Window Rate Limiter
+	LimiterMiddleware Handler
 	// Next defines a function to skip this middleware when returned true.
 	//
 	// Optional. Default: nil
 	Next func(c fiber.Ctx) bool
 
-	// Max number of recent connections during `Expiration` seconds before sending a 429 response
+	// A function to dynamically calculate the max requests supported by the rate limiter middleware
 	//
-	// Default: 5
-	Max int
+	// Default: func(c fiber.Ctx) int {
+	//   return c.Max
+	// }
+	MaxFunc func(c fiber.Ctx) int
+
+	// A function to dynamically calculate the expiration time for rate limiter entries
+	//
+	// Default: A function that returns the static `Expiration` value from the config.
+	ExpirationFunc func(c fiber.Ctx) time.Duration
 
 	// KeyGenerator allows you to generate custom keys, by default c.IP() is used
 	//
@@ -25,17 +43,22 @@ type Config struct {
 	// }
 	KeyGenerator func(fiber.Ctx) string
 
-	// Expiration is the time on how long to keep records of requests in memory
-	//
-	// Default: 1 * time.Minute
-	Expiration time.Duration
-
 	// LimitReached is called when a request hits the limit
 	//
 	// Default: func(c fiber.Ctx) error {
 	//   return c.SendStatus(fiber.StatusTooManyRequests)
 	// }
 	LimitReached fiber.Handler
+
+	// Max number of recent connections during `Expiration` seconds before sending a 429 response
+	//
+	// Default: 5
+	Max int
+
+	// Expiration is the time on how long to keep records of requests in memory
+	//
+	// Default: 1 * time.Minute
+	Expiration time.Duration
 
 	// When set to true, requests with StatusCode >= 400 won't be counted.
 	//
@@ -47,21 +70,26 @@ type Config struct {
 	// Default: false
 	SkipSuccessfulRequests bool
 
-	// Store is used to store the state of the middleware
+	// When set to true, the middleware will not include the rate limit headers (X-RateLimit-* and Retry-After) in the response.
 	//
-	// Default: an in memory store for this process only
-	Storage fiber.Storage
+	// Default: false
+	DisableHeaders bool
 
-	// LimiterMiddleware is the struct that implements a limiter middleware.
+	// DisableValueRedaction turns off masking limiter keys in logs and error messages when set to true.
 	//
-	// Default: a new Fixed Window Rate Limiter
-	LimiterMiddleware Handler
+	// Default: false
+	DisableValueRedaction bool
 }
 
 // ConfigDefault is the default config
 var ConfigDefault = Config{
-	Max:        5,
+	Max:        defaultLimiterMax,
 	Expiration: 1 * time.Minute,
+	MaxFunc: func(_ fiber.Ctx) int {
+		return defaultLimiterMax
+	},
+	// Note: ExpirationFunc is intentionally nil here so that configDefault()
+	// can create a proper closure that references the configured Expiration value.
 	KeyGenerator: func(c fiber.Ctx) string {
 		return c.IP()
 	},
@@ -70,18 +98,20 @@ var ConfigDefault = Config{
 	},
 	SkipFailedRequests:     false,
 	SkipSuccessfulRequests: false,
+	DisableHeaders:         false,
+	DisableValueRedaction:  false,
 	LimiterMiddleware:      FixedWindow{},
 }
 
 // Helper function to set default values
 func configDefault(config ...Config) Config {
-	// Return default config if nothing provided
+	// Use default config if nothing provided
+	var cfg Config
 	if len(config) < 1 {
-		return ConfigDefault
+		cfg = ConfigDefault
+	} else {
+		cfg = config[0]
 	}
-
-	// Override default config
-	cfg := config[0]
 
 	// Set default values
 	if cfg.Next == nil {
@@ -101,6 +131,16 @@ func configDefault(config ...Config) Config {
 	}
 	if cfg.LimiterMiddleware == nil {
 		cfg.LimiterMiddleware = ConfigDefault.LimiterMiddleware
+	}
+	if cfg.MaxFunc == nil {
+		cfg.MaxFunc = func(_ fiber.Ctx) int {
+			return cfg.Max
+		}
+	}
+	if cfg.ExpirationFunc == nil {
+		cfg.ExpirationFunc = func(_ fiber.Ctx) time.Duration {
+			return cfg.Expiration
+		}
 	}
 	return cfg
 }
