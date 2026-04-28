@@ -16,12 +16,19 @@ type Config struct {
 	// dynamic evaluation of allowed origins. Note if AllowCredentials is true, wildcard origins
 	// will be not have the 'Access-Control-Allow-Credentials' header set to 'true'.
 	//
+	// The function receives serialized origins (scheme + host) or the literal "null" string.
+	// According to the CORS specification (https://developer.mozilla.org/en-US/docs/Web/HTTP/Guides/CORS#origin),
+	// browsers send "null" for privacy-sensitive contexts like sandboxed iframes or file:// URLs.
+	//
+	// Origins with userinfo, paths, queries, fragments, or wildcards are rejected and will not
+	// be passed to this function.
+	//
 	// Optional. Default: nil
 	AllowOriginsFunc func(origin string) bool
 
 	// AllowOrigin defines a list of origins that may access the resource.
 	//
-	// This supports subdomains wildcarding by prefixing the domain with a `*.`
+	// This supports wildcard matching for subdomains by prefixing the domain with a `*.`
 	// e.g. "http://.domain.com". This will allow all level of subdomains of domain.com to access the resource.
 	//
 	// If the special wildcard `"*"` is present in the list, all origins will be allowed.
@@ -41,16 +48,7 @@ type Config struct {
 	// Optional. Default value []string{}
 	AllowHeaders []string
 
-	// AllowCredentials indicates whether or not the response to the request
-	// can be exposed when the credentials flag is true. When used as part of
-	// a response to a preflight request, this indicates whether or not the
-	// actual request can be made using credentials. Note: If true, AllowOrigins
-	// cannot be set to true to prevent security vulnerabilities.
-	//
-	// Optional. Default value false.
-	AllowCredentials bool
-
-	// ExposeHeaders defines a whitelist headers that clients are allowed to
+	// ExposeHeaders defines an allowlist of headers that clients are allowed to
 	// access.
 	//
 	// Optional. Default value []string{}.
@@ -65,6 +63,21 @@ type Config struct {
 	// Optional. Default value 0.
 	MaxAge int
 
+	// DisableValueRedaction turns off redaction of configuration values and origins in logs and panics.
+	//
+	// Optional. Default: false
+	DisableValueRedaction bool
+
+	// AllowCredentials indicates whether or not the response to the request
+	// can be exposed when the credentials flag is true. When used as part of
+	// a response to a preflight request, this indicates whether or not the
+	// actual request can be made using credentials. Note: if true, the
+	// AllowOrigins setting cannot contain the wildcard "*" to prevent
+	// security vulnerabilities.
+	//
+	// Optional. Default value false.
+	AllowCredentials bool
+
 	// AllowPrivateNetwork indicates whether the Access-Control-Allow-Private-Network
 	// response header should be set to true, allowing requests from private networks.
 	//
@@ -74,9 +87,10 @@ type Config struct {
 
 // ConfigDefault is the default config
 var ConfigDefault = Config{
-	Next:             nil,
-	AllowOriginsFunc: nil,
-	AllowOrigins:     []string{"*"},
+	Next:                  nil,
+	AllowOriginsFunc:      nil,
+	AllowOrigins:          []string{"*"},
+	DisableValueRedaction: false,
 	AllowMethods: []string{
 		fiber.MethodGet,
 		fiber.MethodPost,
