@@ -17,7 +17,7 @@ func (d *userData) Set(key, value any) {
 	}
 	args := *d
 	n := len(args)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		kv := &args[i]
 		if kv.key == key {
 			kv.value = value
@@ -56,7 +56,7 @@ func (d *userData) Get(key any) any {
 	}
 	args := *d
 	n := len(args)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		kv := &args[i]
 		if kv.key == key {
 			return kv.value
@@ -72,11 +72,13 @@ func (d *userData) GetBytes(key []byte) any {
 func (d *userData) Reset() {
 	args := *d
 	n := len(args)
-	for i := 0; i < n; i++ {
+	for i := range n {
 		v := args[i].value
 		if vc, ok := v.(io.Closer); ok {
 			vc.Close()
 		}
+		(*d)[i].value = nil
+		(*d)[i].key = nil
 	}
 	*d = (*d)[:0]
 }
@@ -92,6 +94,7 @@ func (d *userData) Remove(key any) {
 		if kv.key == key {
 			n--
 			args[i], args[n] = args[n], args[i]
+			args[n].key = nil
 			args[n].value = nil
 			args = args[:n]
 			*d = args
